@@ -1,1 +1,1 @@
-# News-Smart
+# Recipe-Sharing
