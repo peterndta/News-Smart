@@ -152,6 +152,8 @@ const CommonHeader = () => {
                                     pr: 6,
                                     justifyContent: 'flex-start',
                                 }}
+                                component={Link}
+                                to="/login"
                             >
                                 <IconButton aria-label="delete" size="large" sx={{ p: 0 }}>
                                     <AccountCircleIcon
