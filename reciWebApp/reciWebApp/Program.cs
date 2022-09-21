@@ -22,12 +22,12 @@ builder.Services.AddAuthentication(options =>
     {
         IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
         options.ClientId = googleAuthNSection["ClientId"];
-        options.ClientSecret = googleAuthNSection["ClientSecret"];
-        options.Scope.Add("profile");   
+        options.ClientSecret = googleAuthNSection["ClientSecret"];  
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.SaveTokens = true;
         options.ReturnUrlParameter = "~/";
-    });
+    })
+    .AddCookie();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
