@@ -69,7 +69,7 @@ const Routes = (
                             )}
                             {hybridRoutes.map(
                                 ({ layout, ...route }) =>
-                                    layout === 'admin' && (
+                                    layout === 'common' && (
                                         <HybridRoute key={route.name} exact={true} {...route} />
                                     )
                             )}

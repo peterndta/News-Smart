@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import queryString from 'query-string'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import GoogleButton from '../../components/Buttons/GoogleButton'
 import Carousel from '../../components/Carousel'
@@ -6,7 +7,7 @@ import Copyright from '../../components/Copyright'
 import { Typography, Grid, CssBaseline, Box, Avatar, Paper } from '@mui/material'
 
 import Logo from '../../assets/images/logo.png'
-import Loading from '../Loading'
+import { APP_API_URL } from '../../config'
 
 const imageList = [
     {
@@ -28,11 +29,19 @@ const imageList = [
 ]
 
 const Login = () => {
-    const [isLoading, setIsLoading] = useState(false)
+    const { search } = useLocation()
+    const history = useHistory()
+    const { email } = queryString.parse(search)
 
-    return isLoading ? (
-        <Loading />
-    ) : (
+    if (email) {
+        history.push('/')
+    }
+
+    const googleClickHandler = () => {
+        window.location.assign(`${APP_API_URL}/api/Authentication`)
+    }
+
+    return (
         <Grid container component="main" height="100vh" overflow="hidden">
             <CssBaseline />
             <Grid item xs={0} sm={4} md={7} position="relative" overflow="hidden">
@@ -83,7 +92,7 @@ const Login = () => {
                         Start the <strong>day</strong> with a better <strong>taste!</strong>
                     </Typography>
                     <Box sx={{ mt: 1 }}>
-                        <GoogleButton />
+                        <GoogleButton onClick={googleClickHandler} />
                     </Box>
                 </Box>
                 <Copyright />
