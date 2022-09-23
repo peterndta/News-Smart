@@ -68,7 +68,7 @@ const mostFavoritePosts = [
 const Home = () => {
     return (
         <React.Fragment>
-            <Box mb={10}>
+            <Box mt={8}>
                 <Box
                     component="img"
                     alt="meal"
