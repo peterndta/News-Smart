@@ -15,11 +15,6 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               width: 200,
               height: 120,
-              // child: const CircleAvatar(
-              //   radius: 50,
-              //   backgroundImage: NetworkImage(
-              //       'https://9mobi.vn/cf/images/2015/03/nkk/hinh-anh-dep-1.jpg'),
-              // ),
               child: Image(
                 image: AssetImage('assets/logo.png'),
               ),
@@ -37,12 +32,6 @@ class LoginPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // const Image(
-                  //   image: NetworkImage(
-                  //       'https://play-lh.googleusercontent.com/aFWiT2lTa9CYBpyPjfgfNHd0r5puwKRGj2rHpdPTNrz2N9LXgN_MbLjePd1OTc0E8Rl1'),
-                  //   width: 30,
-                  //   height: 30,
-                  // ),
                   ElevatedButton.icon(
                     onPressed: () {
                       GoogleSignIn().signIn();
