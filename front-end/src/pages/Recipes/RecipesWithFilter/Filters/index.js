@@ -20,7 +20,7 @@ const Filter = () => {
     const [categories, setCategories] = React.useState([])
     const [methods, setMethods] = React.useState([])
     const selectHandler = (value, type) => () => {
-        if (type === categoryList.type) {
+        if (type === CATEGORY_LIST.type) {
             const currentIndex = categories.indexOf(value)
             const newCategories = [...categories]
 
@@ -31,7 +31,7 @@ const Filter = () => {
             }
 
             setCategories(newCategories)
-        } else if (type === methodList.type) {
+        } else if (type === METHOD_LIST.type) {
             const currentIndex = methods.indexOf(value)
             const newMethods = [...methods]
 
