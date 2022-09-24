@@ -29,6 +29,12 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Recipes')),
         layout: 'common',
     },
+    {
+        path: '/bookmark',
+        name: 'bookmark',
+        component: lazy(() => import('../pages/Bookmark')),
+        layout: 'common',
+    },
 ]
 
 const Routes = (

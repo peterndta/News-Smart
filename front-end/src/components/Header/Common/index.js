@@ -100,7 +100,6 @@ const CommonHeader = () => {
                                         textDecoration: 'none',
                                         color: grey[100],
                                         position: 'relative',
-                                        pb: 0.5,
                                         '&:hover:after': {
                                             width: '100%',
                                         },
@@ -119,7 +118,6 @@ const CommonHeader = () => {
                                         textDecoration: 'none',
                                         color: grey[100],
                                         position: 'relative',
-                                        pb: 0.5,
                                         '&:hover:after': {
                                             width: '100%',
                                         },
@@ -147,7 +145,7 @@ const CommonHeader = () => {
                                 sx={{
                                     color: '#fefefe',
                                     border: '1px solid #fefefe',
-                                    ml: 2,
+                                    ml: 1,
                                     borderRadius: 2.5,
                                     pr: 6,
                                     justifyContent: 'flex-start',
