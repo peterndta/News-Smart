@@ -9,10 +9,12 @@ import {
     InputBase,
     InputLabel,
     MenuItem,
+    Pagination,
     Select,
 } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { blueGrey } from '@mui/material/colors'
 
+import { MOST_FAVORITE_POSTS } from '../../../Elixir'
 import Bookmarks from './Bookmarks'
 
 const BookmarkList = () => {
@@ -31,7 +33,8 @@ const BookmarkList = () => {
                         display: 'flex',
                         alignItems: 'center',
                         width: 400,
-                        border: `1px solid ${grey[800]}`,
+                        border: `1px solid ${blueGrey[200]}`,
+                        borderRadius: 0.5,
                     }}
                 >
                     <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
@@ -58,7 +61,8 @@ const BookmarkList = () => {
                 </FormControl>
             </Box>
             <NumberItemPagination from={1} to={6} all={15} />
-            <Bookmarks />
+            <Bookmarks posts={MOST_FAVORITE_POSTS} />
+            <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
         </React.Fragment>
     )
 }

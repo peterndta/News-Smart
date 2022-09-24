@@ -1,21 +1,31 @@
 import React, { useState } from 'react'
 
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 
 const ITEM_HEIGHT = 48
 
 const FilterCompo = ({ filter }) => {
     const [anchorEl, setAnchorEl] = useState(null)
+    const [expendOpen, setExpandOpen] = useState(false)
     const open = Boolean(anchorEl)
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
+        setExpandOpen(!expendOpen)
     }
     const handleClose = () => {
         setAnchorEl(null)
     }
     return (
         <Box sx={{ ml: 3 }}>
-            <Button variant="text" onClick={handleClick} sx={{ color: '#fefefe' }}>
+            <Button
+                variant="text"
+                onClick={handleClick}
+                sx={{ color: '#fefefe' }}
+                endIcon={open ? <ExpandLess fontSize="large" /> : <ExpandMore fontSize="large" />}
+                size="large"
+            >
                 <Typography variant="h5" sx={{ fontFamily: 'Roboto' }}>
                     {filter.title}
                 </Typography>

@@ -28,6 +28,10 @@ const Navs = () => {
                 bgcolor: 'background.paper',
                 border: `1px solid ${blueGrey[200]}`,
                 borderRadius: 1,
+                '& .active span': {
+                    color: (theme) => theme.palette.primary.main,
+                    fontWeight: 700,
+                },
             }}
         >
             <Box
@@ -37,7 +41,7 @@ const Navs = () => {
                 py={1}
                 sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}
             >
-                <Avatar variant="square" src={BTH} sx={{ width: 50, height: 50 }} />
+                <Avatar variant="square" src={BTH} sx={{ width: 40, height: 40 }} />
                 <Box display="flex" flexDirection="column" ml={1.5}>
                     <Typography component="span" fontWeight={700} sx={{ color: blueGrey[900] }}>
                         Hi,
