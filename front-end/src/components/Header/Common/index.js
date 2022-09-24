@@ -17,8 +17,8 @@ import {
 import { grey, yellow } from '@mui/material/colors'
 
 import logo from '../../../assets/images/logo.png'
+import Search from '../../Search'
 import Filter from './Filter'
-import Search from './Search'
 
 const filters = [
     {

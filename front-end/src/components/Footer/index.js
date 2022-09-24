@@ -32,7 +32,7 @@ const Footer = () => {
         })
     }
     return (
-        <Box sx={{ backgroundColor: grey[800] }} py={8}>
+        <Box sx={{ backgroundColor: grey[800] }} py={8} mt={10}>
             <Container maxWidth="xl">
                 <Box display="flex" alignItems="center" justifyContent="center">
                     <Stack
