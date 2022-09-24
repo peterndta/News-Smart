@@ -13,23 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final foods = [
-  //   {
-  //     'image':
-  //'https://pixabay.com/vi/photos/%c4%91%e1%bb%93i-n%c3%bai-ch%c3%a8-l%c3%a1-tr%c3%a0-%c4%91%e1%bb%93i-n%c3%bai-v%c6%b0%e1%bb%9dn-5112952/',
-  //     'name': 'Lasagna',
-  //     'author': 'Kevin',
-  //     'content': 'short description ...',
-  //   },
-  //   {
-  //     'image':
-  //       'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixahive.com%2Fportfolio%2Faswinjm%2Fpage%2F11%2F&psig=AOvVaw2DQZxScQhkdDwAU16VU7Ku&ust=1664028705960000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJCb0pCMq_oCFQAAAAAdAAAAABAJ',
-  //     'name': 'Ratatoulie',
-  //     'author': 'Tommy',
-  //     'content': 'short description ...',
-  //   }
-  // ]
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
