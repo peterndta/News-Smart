@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
+import 'home_page.dart';
+import 'user_profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +36,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const LoginPage();
+    return const UserProfile();
   }
 }

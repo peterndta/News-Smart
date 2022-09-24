@@ -15,7 +15,7 @@ class _HeadBarState extends State<HeadBar> {
     return AppBar(
       elevation: 5,
       titleSpacing: -12,
-      title: const Image(image: AssetImage('assets/Main_Reci_Logo.png')),
+      title: const Image(image: AssetImage('assets/logo.png')),
       leading: IconButton(
         icon: Icon(
           Icons.menu,
