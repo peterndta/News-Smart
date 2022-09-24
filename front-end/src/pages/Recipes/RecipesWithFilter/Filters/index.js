@@ -12,18 +12,9 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
+import { CATEGORY_LIST, METHOD_LIST } from '../../../../Elixir'
 import CategoriesFilter from './CategoriesFilter'
 import MethodsFilter from './MethodsFilter'
-
-const categoryList = {
-    type: 'Categories',
-    list: ['Beef', 'Chicken', 'Egg', 'SeaFood', 'Pork'],
-}
-
-const methodList = {
-    type: 'Cooking Methods',
-    list: ['Boil', 'Fry', 'Roast'],
-}
 
 const Filter = () => {
     const [categories, setCategories] = React.useState([])
@@ -102,7 +93,7 @@ const Filter = () => {
                     }}
                 />
                 <CategoriesFilter
-                    categories={categoryList}
+                    categories={CATEGORY_LIST}
                     checks={categories}
                     selectHandler={selectHandler}
                 />
@@ -110,7 +101,7 @@ const Filter = () => {
                     sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
                 />
                 <MethodsFilter
-                    methods={methodList}
+                    methods={METHOD_LIST}
                     checks={methods}
                     selectHandler={selectHandler}
                 />
