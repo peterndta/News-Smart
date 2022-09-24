@@ -13,6 +13,8 @@ import {
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
+import Bookmarks from './Bookmarks'
+
 const BookmarkList = () => {
     const [type, setType] = React.useState('')
 
@@ -56,6 +58,7 @@ const BookmarkList = () => {
                 </FormControl>
             </Box>
             <NumberItemPagination from={1} to={6} all={15} />
+            <Bookmarks />
         </React.Fragment>
     )
 }

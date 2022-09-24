@@ -15,7 +15,7 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { blueGrey } from '@mui/material/colors'
 
 import BTH from '../../assets/members/BTH.jpg'
 
@@ -26,7 +26,8 @@ const Navs = () => {
                 width: '100%',
                 maxWidth: 360,
                 bgcolor: 'background.paper',
-                border: `1px solid ${grey[800]}`,
+                border: `1px solid ${blueGrey[200]}`,
+                borderRadius: 1,
             }}
         >
             <Box
@@ -34,7 +35,7 @@ const Navs = () => {
                 alignItems="center"
                 px={2}
                 py={1}
-                sx={{ borderBottom: `1px solid ${grey[800]}` }}
+                sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}
             >
                 <Avatar variant="square" src={BTH} sx={{ width: 50, height: 50 }} />
                 <Box display="flex" flexDirection="column" ml={1.5}>
@@ -47,7 +48,7 @@ const Navs = () => {
                 </Box>
             </Box>
             <List sx={{ py: 0 }}>
-                <ListItem disablePadding sx={{ borderBottom: `1px solid ${grey[800]}` }}>
+                <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
                     <ListItemButton component={NavLink} to="/profile">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <AccountCircle color="secondary" />
@@ -55,7 +56,7 @@ const Navs = () => {
                         <ListItemText primary="Personal Info" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding sx={{ borderBottom: `1px solid ${grey[800]}` }}>
+                <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
                     <ListItemButton component={NavLink} to="/bookmark">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <Bookmark color="secondary" />
@@ -63,7 +64,7 @@ const Navs = () => {
                         <ListItemText primary="Saved recipes" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding sx={{ borderBottom: `1px solid ${grey[800]}` }}>
+                <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
                     <ListItemButton component={NavLink} to="/my-rating">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <StarRateOutlined color="secondary" />
