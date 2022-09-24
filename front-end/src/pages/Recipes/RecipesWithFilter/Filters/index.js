@@ -46,7 +46,7 @@ const Filter = () => {
     }
     return (
         <Grid item md={3}>
-            <Box p={3} sx={{ border: `1px solid ${blueGrey[800]}` }}>
+            <Box p={3} sx={{ border: `1px solid ${blueGrey[200]}`, borderRadius: 1 }}>
                 <Box
                     display="flex"
                     justifyContent="space-between"
