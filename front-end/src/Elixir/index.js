@@ -87,12 +87,17 @@ const variables = {
     ],
     CATEGORY_LIST: {
         type: 'Categories',
-        list: ['Beef', 'Chicken', 'Egg', 'SeaFood', 'Pork'],
+        list: ['All', 'Beef', 'Chicken', 'Egg', 'SeaFood', 'Pork'],
     },
     METHOD_LIST: {
         type: 'Cooking Methods',
-        list: ['Boil', 'Fry', 'Roast'],
+        list: ['All', 'Boil', 'Fry', 'Roast'],
+    },
+    COURSE_LIST: {
+        type: 'Courses',
+        list: ['All', 'Main Dish', 'Side Dish', 'Snack', 'Appetizer', 'Breakfast'],
     },
 }
 
-export const { MOST_FAVORITE_POSTS, LATEST_POSTS, CATEGORY_LIST, METHOD_LIST } = variables
+export const { MOST_FAVORITE_POSTS, LATEST_POSTS, CATEGORY_LIST, METHOD_LIST, COURSE_LIST } =
+    variables
