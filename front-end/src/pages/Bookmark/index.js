@@ -1,8 +1,9 @@
 import React from 'react'
 
+import Navs from '../../components/Navs'
 import { Box, Grid } from '@mui/material'
 
-import Navs from './Navs'
+import BookmarkList from './BookmarkList'
 
 const Bookmark = () => {
     return (
@@ -11,7 +12,9 @@ const Bookmark = () => {
                 <Grid item md={3}>
                     <Navs />
                 </Grid>
-                <Grid item md={9}></Grid>
+                <Grid item md={9}>
+                    <BookmarkList />
+                </Grid>
             </Grid>
         </Box>
     )
