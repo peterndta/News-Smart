@@ -69,7 +69,7 @@ const Navs = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
-                    <ListItemButton component={NavLink} to="/my-rating">
+                    <ListItemButton component={NavLink} to="/my-ratings">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <StarRateOutlined color="secondary" />
                         </ListItemIcon>
