@@ -12,7 +12,7 @@ const Bookmark = () => {
                 <Grid item md={3}>
                     <Navs />
                 </Grid>
-                <Grid item md={9}>
+                <Grid item md={9} display="flex" flexDirection="column">
                     <BookmarkList />
                 </Grid>
             </Grid>
