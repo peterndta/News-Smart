@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ButtonAddRecipe from '../../../../components/AddRecipe'
 import {
     Box,
     Button,
@@ -149,6 +150,7 @@ const Filter = () => {
                     checks={courses}
                     selectHandler={selectHandler}
                 />
+                <ButtonAddRecipe />
             </Box>
         </Grid>
     )

@@ -47,6 +47,12 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Rating')),
         layout: 'common',
     },
+    {
+        path: '/profile',
+        name: 'my profile',
+        component: lazy(() => import('../pages/Profile')),
+        layout: 'common',
+    },
 ]
 
 const Routes = (
