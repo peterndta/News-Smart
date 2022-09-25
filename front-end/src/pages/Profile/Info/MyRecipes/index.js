@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Box, Pagination, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
+
+import { Box, Button, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
@@ -13,8 +15,16 @@ const MyRecipes = () => {
                 Recently Recipes
             </Typography>
             <RecipeList posts={MOST_FAVORITE_POSTS} />
-            <Box display="flex" justifyContent="center">
-                <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
+            <Box display="flex" justifyContent="center" mt={6}>
+                <Button
+                    variant="contained"
+                    size="large"
+                    sx={{ color: grey[100] }}
+                    component={Link}
+                    to="/my-recipes"
+                >
+                    Show more
+                </Button>
             </Box>
         </Box>
     )
