@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Grid, Rating, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-const BookmarkCompo = ({ name, description, rating, author, image }) => {
+const RecipeCompo = ({ name, description, rating, author, image }) => {
     return (
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -61,4 +61,4 @@ const BookmarkCompo = ({ name, description, rating, author, image }) => {
     )
 }
 
-export default BookmarkCompo
+export default RecipeCompo

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ButtonAddRecipe from '../../../../components/AddRecipe'
 import {
     Box,
     Button,
@@ -12,38 +13,74 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-import { CATEGORY_LIST, METHOD_LIST } from '../../../../Elixir'
+import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST } from '../../../../Elixir'
 import CategoriesFilter from './CategoriesFilter'
+import CoursesFilter from './CoursesFilter'
 import MethodsFilter from './MethodsFilter'
 
 const Filter = () => {
     const [categories, setCategories] = React.useState([])
     const [methods, setMethods] = React.useState([])
+    const [courses, setCourses] = React.useState([])
+
     const selectHandler = (value, type) => () => {
         if (type === CATEGORY_LIST.type) {
-            const currentIndex = categories.indexOf(value)
             const newCategories = [...categories]
-
-            if (currentIndex === -1) {
-                newCategories.push(value)
+            const currentIndex = categories.indexOf(value)
+            if (value === CATEGORY_LIST.list[0]) {
+                if (currentIndex === -1) {
+                    CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
+                } else {
+                    CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
+                }
             } else {
-                newCategories.splice(currentIndex, 1)
+                if (currentIndex === -1) {
+                    newCategories.push(value)
+                } else {
+                    newCategories.splice(currentIndex, 1)
+                }
             }
 
             setCategories(newCategories)
         } else if (type === METHOD_LIST.type) {
             const currentIndex = methods.indexOf(value)
             const newMethods = [...methods]
-
-            if (currentIndex === -1) {
-                newMethods.push(value)
+            if (value === METHOD_LIST.list[0]) {
+                if (currentIndex === -1) {
+                    METHOD_LIST.list.forEach((method) => newMethods.push(method))
+                } else {
+                    METHOD_LIST.list.forEach((method) => newMethods.pop(method))
+                }
             } else {
-                newMethods.splice(currentIndex, 1)
+                if (currentIndex === -1) {
+                    newMethods.push(value)
+                } else {
+                    newMethods.splice(currentIndex, 1)
+                }
             }
 
             setMethods(newMethods)
+        } else if (type === COURSE_LIST.type) {
+            const currentIndex = courses.indexOf(value)
+            const newCourses = [...courses]
+            if (value === COURSE_LIST.list[0]) {
+                if (currentIndex === -1) {
+                    COURSE_LIST.list.forEach((course) => newCourses.push(course))
+                } else {
+                    COURSE_LIST.list.forEach((course) => newCourses.pop(course))
+                }
+            } else {
+                if (currentIndex === -1) {
+                    newCourses.push(value)
+                } else {
+                    newCourses.splice(currentIndex, 1)
+                }
+            }
+
+            setCourses(newCourses)
         }
     }
+
     return (
         <Grid item md={3}>
             <Box p={3} sx={{ border: `1px solid ${blueGrey[200]}`, borderRadius: 1 }}>
@@ -105,6 +142,15 @@ const Filter = () => {
                     checks={methods}
                     selectHandler={selectHandler}
                 />
+                <Divider
+                    sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
+                />
+                <CoursesFilter
+                    methods={COURSE_LIST}
+                    checks={courses}
+                    selectHandler={selectHandler}
+                />
+                <ButtonAddRecipe />
             </Box>
         </Grid>
     )

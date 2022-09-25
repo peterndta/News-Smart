@@ -15,9 +15,9 @@ import {
 import { blueGrey } from '@mui/material/colors'
 
 import { MOST_FAVORITE_POSTS } from '../../../Elixir'
-import Bookmarks from './Bookmarks'
+import Ratings from './Ratings'
 
-const BookmarkList = () => {
+const RatingList = () => {
     const [type, setType] = React.useState('')
 
     const handleChange = (event) => {
@@ -61,10 +61,10 @@ const BookmarkList = () => {
                 </FormControl>
             </Box>
             <NumberItemPagination from={1} to={6} all={15} />
-            <Bookmarks posts={MOST_FAVORITE_POSTS} />
+            <Ratings posts={MOST_FAVORITE_POSTS} />
             <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
         </React.Fragment>
     )
 }
 
-export default BookmarkList
+export default RatingList
