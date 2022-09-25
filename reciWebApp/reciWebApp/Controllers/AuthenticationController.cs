@@ -17,12 +17,10 @@ namespace reciWebApp.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        public readonly ReciContext _reciContext;
         public readonly IAuthService _authService;
         public readonly IRepositoryManager _repoManager;
-        public AuthenticationController(ReciContext reciContext, AuthService authService, RepositoryManager repoManager)
+        public AuthenticationController(IAuthService authService, IRepositoryManager repoManager)
         {
-            _reciContext = reciContext;
             _authService = authService;
             _repoManager = repoManager;
         }
@@ -42,23 +40,31 @@ namespace reciWebApp.Controllers
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var userLogin = _authService.GetUser(result);
+
             if (userLogin == null)
             {
-                return Redirect($"http://localhost:7297/error=invalid");
+                return Redirect($"http://localhost:7297?error=invalid");
             }
+
             if (await _repoManager.User.GetUserAsync(userLogin.Email) == null)
             {
+                userLogin.Role = "user";
                 _repoManager.User.CreateUser(userLogin);
             }
-            else
+
+            var user = await _repoManager.User.GetUserAsync(userLogin.Email);
+
+            if (user.BanTime != null)
             {
-                var user = await _repoManager.User.GetUserAsync(userLogin.Email);
-                if (user.BanTime != null)
-                {
-                    return Redirect($"http://localhost:7297/error=inactive-user");
-                }
+               return Redirect($"http://localhost:7297?error=inactive-user");
             }
-            return Redirect($"http://localhost:7297/email={email}");
+
+            var accessToken = await _authService.GenerateToken(user);
+            Response.Cookies.Append("jwt", accessToken, new CookieOptions
+            {
+                HttpOnly = true
+            });
+            return Redirect($"http://localhost:7279?token={accessToken}");
         }
     }   
 }

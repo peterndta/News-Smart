@@ -5,8 +5,8 @@ namespace reciWebApp.Data.Models
 {
     public partial class UserInteract
     {
-        public string Id { get; set; } = null!;
-        public string? UserId { get; set; }
+        public int Id { get; set; }
+        public int? UserId { get; set; }
         public string? PostsId { get; set; }
         public DateTime? CreateDate { get; set; }
         public bool? Bookmark { get; set; }

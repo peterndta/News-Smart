@@ -1,15 +1,19 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Repositories;
 using reciWebApp.Services;
 using reciWebApp.Services.Interfaces;
 using System.Security.Claims;
+using System.Text;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 var builder = WebApplication.CreateBuilder(args);
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
 // Add services to the container.
 
@@ -20,8 +24,27 @@ builder.Services.AddDbContext<ReciContext>(options =>
 });
 builder.Services.AddAuthentication(options =>
 {
-
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
 })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("SecretKey"))),
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ClockSkew = TimeSpan.Zero,
+            ValidIssuer = jwtSettings.GetSection("ValidIssuer").Value,
+            ValidAudience = jwtSettings.GetSection("ValidAudience").Value
+        };
+    })
     .AddGoogle(options =>
     {
         IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
@@ -30,6 +53,7 @@ builder.Services.AddAuthentication(options =>
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.SaveTokens = true;
         options.ReturnUrlParameter = "~/";
+        options.Scope.Add("profile");
         options.Events.OnCreatingTicket = context =>
         {
             var picture = context.User.GetProperty("picture").GetString();

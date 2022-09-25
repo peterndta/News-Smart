@@ -1,21 +1,38 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace reciWebApp.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly IConfiguration _configuration;
+        private readonly IRepositoryManager _repoManager;
+        public readonly DateTime EXPIRED_AT = DateTime.UtcNow.AddMinutes(20);
+
+        public AuthService(IConfiguration config, IRepositoryManager repoManager)
+        {
+            _configuration = config;
+            _repoManager = repoManager;
+        }
         public JwtSecurityToken DecodeToken(string token)
         {
-            throw new NotImplementedException();
+            var handler = new JwtSecurityTokenHandler();
+            return handler.ReadJwtToken(token);
         }
 
-        public Task<string> GenerateToken(User user)
+        public async Task<string> GenerateToken(User user)
         {
-            throw new NotImplementedException();
+            var signinCredentials = GetSigninCredentials();
+            var claims = await GetClaims(user);
+            var tokenOptions = GenerateTokenOptions(signinCredentials, claims);
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
         public string GetEmail(HttpRequest request)
@@ -33,10 +50,47 @@ namespace reciWebApp.Services
                 return new User
                 {
                     Name = userName.Value,
-                    Email = email.Value,                   
+                    Email = email.Value,  
+                    ImageUrl = imageUrl.Value,
                 };
             }
             return null;
+        }
+
+        private SigningCredentials GetSigninCredentials()
+        {
+            var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey"));
+            var secret = new SymmetricSecurityKey(key);
+
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+        }
+
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+
+            var tokenOptions = new JwtSecurityToken
+            (
+                jwtSettings.GetSection("ValidIssuer").Value,
+                jwtSettings.GetSection("ValidAudience").Value,
+                claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                signingCredentials: signingCredentials
+            );
+
+            return tokenOptions;
+        }
+
+        private Task<List<Claim>> GetClaims(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new("email", user.Email),
+                new("name", user.Name),
+                new("role", user.Role),
+            };
+
+            return Task.FromResult(claims);
         }
     }
 }

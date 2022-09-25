@@ -7,15 +7,19 @@ namespace reciWebApp.Data.Models
     {
         public User()
         {
+            PostReports = new HashSet<PostReport>();
             Posts = new HashSet<Post>();
             UserInteracts = new HashSet<UserInteract>();
         }
 
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
         public DateTime? BanTime { get; set; }
+        public string? Role { get; set; }
+        public string? ImageUrl { get; set; }
 
+        public virtual ICollection<PostReport> PostReports { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<UserInteract> UserInteracts { get; set; }
     }

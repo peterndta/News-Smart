@@ -10,7 +10,7 @@ namespace reciWebApp.Data.Models
             FoodCollections = new HashSet<FoodCollection>();
         }
 
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
         public string? CollectionName { get; set; }
 
         public virtual ICollection<FoodCollection> FoodCollections { get; set; }

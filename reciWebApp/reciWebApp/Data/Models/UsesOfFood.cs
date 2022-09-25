@@ -5,8 +5,8 @@ namespace reciWebApp.Data.Models
 {
     public partial class UsesOfFood
     {
-        public string Id { get; set; } = null!;
-        public string? UsesId { get; set; }
+        public int Id { get; set; }
+        public int? UsesId { get; set; }
         public string? PostsId { get; set; }
 
         public virtual Post? Posts { get; set; }
