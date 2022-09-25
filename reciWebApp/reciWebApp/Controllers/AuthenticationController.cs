@@ -34,7 +34,7 @@ namespace reciWebApp.Controllers
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             string email = result.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-            return Redirect($"https://localhost:7297/email={email}");
+            return Redirect($"http://localhost:7297/email={email}");
         }
     }   
 }
