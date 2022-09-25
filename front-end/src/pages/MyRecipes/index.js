@@ -1,7 +1,9 @@
 import React from 'react'
 
 import Navs from '../../components/Navs'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid } from '@mui/material'
+
+import Mine from './Mine'
 
 const MyRecipes = () => {
     return (
@@ -11,7 +13,7 @@ const MyRecipes = () => {
                     <Navs />
                 </Grid>
                 <Grid item md={9} display="flex" flexDirection="column">
-                    <Typography>My Recipes</Typography>
+                    <Mine />
                 </Grid>
             </Grid>
         </Box>
