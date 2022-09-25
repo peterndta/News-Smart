@@ -10,7 +10,7 @@ import {
     OutlinedInput,
     Typography,
 } from '@mui/material'
-import { blueGrey } from '@mui/material/colors'
+import { blueGrey, grey } from '@mui/material/colors'
 
 import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST } from '../../../../Elixir'
 import CategoriesFilter from './CategoriesFilter'
@@ -149,6 +149,11 @@ const Filter = () => {
                     checks={courses}
                     selectHandler={selectHandler}
                 />
+                <Box width="100%" display="flex" justifyContent="center" mt={3}>
+                    <Button variant="contained" sx={{ color: grey[100] }}>
+                        SHOW RESULTS
+                    </Button>
+                </Box>
             </Box>
         </Grid>
     )

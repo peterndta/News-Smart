@@ -1,3 +1,5 @@
+import BTH from '../assets/members/BTH.jpg'
+
 const variables = {
     MOST_FAVORITE_POSTS: [
         {
@@ -97,7 +99,15 @@ const variables = {
         type: 'Courses',
         list: ['All', 'Main Dish', 'Side Dish', 'Snack', 'Appetizer', 'Breakfast'],
     },
+    USER: {
+        name: 'Bùi Thế Hiển',
+        email: 'hienbui25g@gmail.com',
+        image: BTH,
+        totalRecipe: 3,
+        totalBookmark: 5,
+        totalReview: 15,
+    },
 }
 
-export const { MOST_FAVORITE_POSTS, LATEST_POSTS, CATEGORY_LIST, METHOD_LIST, COURSE_LIST } =
+export const { MOST_FAVORITE_POSTS, LATEST_POSTS, CATEGORY_LIST, METHOD_LIST, COURSE_LIST, USER } =
     variables
