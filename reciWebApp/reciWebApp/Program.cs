@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Repositories;
+using reciWebApp.Services;
+using reciWebApp.Services.Interfaces;
+using System.Security.Claims;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +30,17 @@ builder.Services.AddAuthentication(options =>
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.SaveTokens = true;
         options.ReturnUrlParameter = "~/";
+        options.Events.OnCreatingTicket = context =>
+        {
+            var picture = context.User.GetProperty("picture").GetString();
+            context.Identity.AddClaim(new Claim("picture", picture));
+
+            return Task.CompletedTask;
+        };
     })
     .AddCookie();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;
