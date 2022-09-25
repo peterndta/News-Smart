@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'sidebar_menu.dart';
 
 class HeadBar extends StatefulWidget {
   const HeadBar({super.key});
@@ -13,16 +14,22 @@ class _HeadBarState extends State<HeadBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      //backgroundColor: Colors.amber,
       elevation: 5,
       titleSpacing: -12,
-      title: const Image(image: AssetImage('assets/logo.png')),
-      leading: IconButton(
-        icon: Icon(
-          Icons.menu,
-          color: Colors.white,
+      title: const Image(image: AssetImage('assets/Main_Reci_Logo.png')),
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
         ),
-        onPressed: () {},
       ),
+
       actions: [
         Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
