@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'components/head_bar.dart';
 import 'components/copyright.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ReciepReview {

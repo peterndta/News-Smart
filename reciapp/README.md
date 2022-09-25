@@ -1,16 +1,19 @@
 # reciapp
 
-A new Flutter project.
+Flutter project.
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
+### 1. Install flutter
 
-A few resources to get you started if this is your first Flutter project:
+[Link Download](https://docs.flutter.dev/get-started/install)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 2. Setup for running flutter packages
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In VS Code, then go to:
+
+- Menu ``File -> Preferences -> Settings``
+- Search for **"Flutter run additional args"**
+- Then click **Add Item**
+- Now type `--no-sound-null-safety`
+- Click `OK`
