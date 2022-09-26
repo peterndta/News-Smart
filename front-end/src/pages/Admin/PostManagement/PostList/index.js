@@ -1,6 +1,6 @@
 import React from 'react'
 
-import NumberItemPagination from '../../../components/NumberItemPagination'
+import NumberItemPagination from '../../../../components/NumberItemPagination'
 import { Search } from '@mui/icons-material'
 import {
     Box,
@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-import { MOST_FAVORITE_POSTS } from '../../../Elixir'
+import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
 import PostLists from './PostLists'
 
 const PostList = () => {
