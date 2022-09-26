@@ -23,6 +23,54 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Home')),
         layout: 'common',
     },
+    {
+        path: '/recipes',
+        name: 'recipes',
+        component: lazy(() => import('../pages/Recipes')),
+        layout: 'common',
+    },
+    {
+        path: '/bookmark',
+        name: 'bookmark',
+        component: lazy(() => import('../pages/Bookmark')),
+        layout: 'common',
+    },
+    {
+        path: '/recipes/:id',
+        name: 'recipe detail',
+        component: lazy(() => import('../pages/RecipeDetail')),
+        layout: 'common',
+    },
+    {
+        path: '/my-ratings',
+        name: 'rating recipes',
+        component: lazy(() => import('../pages/Rating')),
+        layout: 'common',
+    },
+    {
+        path: '/profile',
+        name: 'my profile',
+        component: lazy(() => import('../pages/Profile')),
+        layout: 'common',
+    },
+    {
+        path: '/my-recipes',
+        name: 'my Recipes',
+        component: lazy(() => import('../pages/MyRecipes')),
+        layout: 'common',
+    },
+    {
+        path: '/course',
+        name: 'course',
+        component: lazy(() => import('../pages/Course')),
+        layout: 'common',
+    },
+    {
+        path: '/categories',
+        name: 'categories',
+        component: lazy(() => import('../pages/Categories')),
+        layout: 'common',
+    },
 ]
 
 const Routes = (
