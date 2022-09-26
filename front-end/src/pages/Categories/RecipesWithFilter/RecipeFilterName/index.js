@@ -25,7 +25,7 @@ const RecipeFilterName = () => {
                 }}
             >
                 <Typography variant="h4" fontWeight={700} sx={{ color: blueGrey[800] }}>
-                    Course
+                    Categories
                 </Typography>
             </Box>
         </Box>
