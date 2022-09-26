@@ -72,22 +72,22 @@ const hybridRoutes = [
         layout: 'common',
     },
     {
-        path: '/users-management',
+        path: '/admin/users',
         name: 'users-management',
-        component: lazy(() => import('../pages/UserManagement')),
-        layout: 'common',
+        component: lazy(() => import('../pages/Admin/UserManagement')),
+        layout: 'admin',
     },
     {
-        path: '/user-details',
-        name: 'user-detais',
-        component: lazy(() => import('../pages/AdminViewProfile')),
-        layout: 'common',
+        path: '/admin/users/detail',
+        name: 'user-details',
+        component: lazy(() => import('../pages/Admin/AdminViewProfile')),
+        layout: 'admin',
     },
     {
-        path: '/posts-management',
+        path: '/admin',
         name: 'posts-management',
-        component: lazy(() => import('../pages/PostManagement')),
-        layout: 'common',
+        component: lazy(() => import('../pages/Admin/PostManagement')),
+        layout: 'admin',
     },
 ]
 

@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST } from '../../../Elixir'
+import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST } from '../../../../Elixir'
 import CategoriesFilter from './CategoriesFilter'
 import CoursesFilter from './CoursesFilter'
 import MethodsFilter from './MethodsFilter'

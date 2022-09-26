@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace reciWebApp.Data.Models
 {
-    public partial class RecipeType
+    public partial class RecipeRegion
     {
-        public RecipeType()
+        public RecipeRegion()
         {
             Posts = new HashSet<Post>();
         }
 
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
         public string? Country { get; set; }
         public string? Region { get; set; }
 

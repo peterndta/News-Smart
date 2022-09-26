@@ -5,14 +5,18 @@ namespace reciWebApp.Data.Models
 {
     public partial class Step
     {
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
         public string? Description { get; set; }
-        public string? UrlVideo { get; set; }
-        public string? UrlImage { get; set; }
         public string? PostsId { get; set; }
-        public string? StepsTypeId { get; set; }
+        public string? Ingredient { get; set; }
+        public string? Processing { get; set; }
+        public string? Cooking { get; set; }
+        public string? Tool { get; set; }
+        public int? ProcessingTime { get; set; }
+        public int? CookingTime { get; set; }
+        public int? PreparingTime { get; set; }
+        public int? Serving { get; set; }
 
         public virtual Post? Posts { get; set; }
-        public virtual StepsType? StepsType { get; set; }
     }
 }

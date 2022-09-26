@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import Label from '../../../components/Label'
-import AdminStudentMoreMenu from '../../../components/MoreMenu'
+import Label from '../../../../components/Label'
+import AdminStudentMoreMenu from '../../../../components/MoreMenu'
 import {
     Paper,
     Table,

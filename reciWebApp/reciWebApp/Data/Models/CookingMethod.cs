@@ -10,7 +10,7 @@ namespace reciWebApp.Data.Models
             Posts = new HashSet<Post>();
         }
 
-        public string Id { get; set; } = null!;
+        public int Id { get; set; }
         public string? Method { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }

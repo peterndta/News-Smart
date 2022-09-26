@@ -1,13 +1,18 @@
+import { useEffect, useState } from 'react'
+
 import queryString from 'query-string'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import GoogleButton from '../../components/Buttons/GoogleButton'
 import Carousel from '../../components/Carousel'
 import Copyright from '../../components/Copyright'
 import { Typography, Grid, CssBaseline, Box, Avatar, Paper } from '@mui/material'
 
+import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Logo from '../../assets/images/logo.png'
 import { APP_API_URL } from '../../config'
+import { useAuthAction } from '../../recoil/auth'
+import Loading from '../Loading'
 
 const imageList = [
     {
@@ -30,18 +35,41 @@ const imageList = [
 
 const Login = () => {
     const { search } = useLocation()
-    const history = useHistory()
-    const { email } = queryString.parse(search)
-
-    if (email) {
-        history.push('/')
-    }
+    const authAction = useAuthAction()
+    const { token, error } = queryString.parse(search)
+    const [isLoading, setIsLoading] = useState(token ? true : false)
+    const showSnackbar = useSnackbar()
 
     const googleClickHandler = () => {
         window.location.assign(`${APP_API_URL}/api/Authentication`)
     }
 
-    return (
+    useEffect(() => {
+        if (error && error === 'inactive-user') {
+            showSnackbar({
+                severity: 'error',
+                children: 'Your email is banned, please contact Admin to unban.',
+            })
+        } else if (error) {
+            showSnackbar({
+                severity: 'error',
+                children: 'Something went wrong, please try again later.',
+            })
+        } else if (token) {
+            authAction.login(token).catch(() => {
+                showSnackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+                setIsLoading(false)
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    return isLoading ? (
+        <Loading />
+    ) : (
         <Grid container component="main" height="100vh" overflow="hidden">
             <CssBaseline />
             <Grid item xs={0} sm={4} md={7} position="relative" overflow="hidden">

@@ -4,7 +4,7 @@ import { Assignment, Search } from '@mui/icons-material'
 import { Box, IconButton, InputBase, Pagination, Typography } from '@mui/material'
 import { grey, blueGrey } from '@mui/material/colors'
 
-import { MOST_FAVORITE_POSTS } from '../../../Elixir'
+import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
 import RecipeList from './RecipeList'
 
 const MyRecipes = () => {

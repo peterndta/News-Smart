@@ -3,16 +3,12 @@ import { useRef, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { RemoveCircle, Visibility, MoreVert } from '@mui/icons-material'
-// material
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 
-// ----------------------------------------------------------------------
-
-const AdminStudentMoreMenu = (props) => {
+const AdminStudentMoreMenu = () => {
     const ref = useRef(null)
     const [isOpen, setIsOpen] = useState(false)
-    const { stID } = props
-    // console.log(stID);
+
     return (
         <>
             <IconButton ref={ref} onClick={() => setIsOpen(true)}>

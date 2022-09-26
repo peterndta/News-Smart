@@ -4,7 +4,7 @@ import { BookmarkOutlined, Description, StarOutlined } from '@mui/icons-material
 import { Avatar, Box, Divider, Typography } from '@mui/material'
 import { blue, blueGrey, grey, red, yellow } from '@mui/material/colors'
 
-import { USER } from '../../Elixir'
+import { USER } from '../../../Elixir'
 import MyRecipes from './MyRecipes'
 
 const AdminViewProfile = () => {
