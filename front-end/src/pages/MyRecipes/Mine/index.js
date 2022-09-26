@@ -55,6 +55,7 @@ const Mine = () => {
                         label="Type"
                         onChange={handleChange}
                     >
+                        <MenuItem value={'popularity'}>Popularity</MenuItem>
                         <MenuItem value={'newest'}>Newest</MenuItem>
                         <MenuItem value={'oldest'}>Oldest</MenuItem>
                     </Select>

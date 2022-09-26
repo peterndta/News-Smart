@@ -28,7 +28,7 @@ const filters = [
     },
     {
         key: 2,
-        title: 'INGREDIENT',
+        title: 'CATEGORIES',
         list: ['Beef', 'Chicken', 'Egg', 'Seafood', 'Pork'],
     },
     {

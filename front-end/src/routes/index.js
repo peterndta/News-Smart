@@ -65,6 +65,12 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Course')),
         layout: 'common',
     },
+    {
+        path: '/categories',
+        name: 'categories',
+        component: lazy(() => import('../pages/Categories')),
+        layout: 'common',
+    },
 ]
 
 const Routes = (
