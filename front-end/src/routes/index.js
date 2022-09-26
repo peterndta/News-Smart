@@ -80,7 +80,7 @@ const hybridRoutes = [
     {
         path: '/user-details',
         name: 'user-detais',
-        component: lazy(() => import('../pages/UserManagement')),
+        component: lazy(() => import('../pages/AdminViewProfile')),
         layout: 'common',
     },
 ]
