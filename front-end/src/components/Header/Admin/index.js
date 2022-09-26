@@ -37,7 +37,7 @@ const AdminHeader = () => {
                                     py: 0.5,
                                 }}
                             >
-                                <Link to="/admin">
+                                <Link to="/admin/users">
                                     <Box>
                                         <Avatar
                                             sx={{ height: 50, width: 150 }}

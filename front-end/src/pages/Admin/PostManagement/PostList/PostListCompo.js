@@ -1,7 +1,9 @@
 import React from 'react'
 
+import { Link as RouterLink } from 'react-router-dom'
+
 import { Delete, Edit } from '@mui/icons-material'
-import { Box, Grid, IconButton, Rating, Typography } from '@mui/material'
+import { Box, Grid, IconButton, Rating, Typography, Link } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
 const PostListCompo = ({ name, description, rating, author, image }) => {
@@ -9,18 +11,26 @@ const PostListCompo = ({ name, description, rating, author, image }) => {
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
                 <Box display="flex" width="100%">
-                    <Box
-                        component="img"
-                        width={120}
-                        height={120}
-                        sx={{ aspectRatio: '1 / 1' }}
-                        src={image}
-                    />
+                    <RouterLink to={`${window.location.pathname}/${1}`}>
+                        <Box
+                            component="img"
+                            width={120}
+                            height={120}
+                            sx={{ aspectRatio: '1 / 1' }}
+                            src={image}
+                        />
+                    </RouterLink>
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
+                            <Link
+                                href={`${window.location.pathname}/${1}`}
+                                underline="hover"
+                                variant="h5"
+                                fontWeight={700}
+                                sx={{ color: blueGrey[700] }}
+                            >
                                 {name}
-                            </Typography>
+                            </Link>
                             <Box>
                                 <IconButton component="label" size="large">
                                     <Edit color="warning" />

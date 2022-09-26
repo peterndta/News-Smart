@@ -27,7 +27,7 @@ const AdminStudentMoreMenu = () => {
             >
                 <MenuItem
                     component={RouterLink}
-                    to="/user-details"
+                    to={`${window.location.pathname}/${1}`}
                     sx={{ color: 'text.secondary' }}
                 >
                     <ListItemIcon>
