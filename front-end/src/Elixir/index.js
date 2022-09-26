@@ -92,7 +92,7 @@ const variables = {
         list: ['All', 'Beef', 'Chicken', 'Egg', 'SeaFood', 'Pork'],
     },
     METHOD_LIST: {
-        type: 'Cooking Methods',
+        type: 'Methods',
         list: ['All', 'Boil', 'Fry', 'Roast'],
     },
     COURSE_LIST: {
