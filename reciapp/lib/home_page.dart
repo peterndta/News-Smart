@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'components/copyright.dart';
 import 'components/head_bar.dart';
 import 'components/sidebar_menu.dart';
+import 'components/back_to_top_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +14,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ScrollController scrollController = ScrollController();
+  bool showbtn = false;
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      //scroll listener
+      double showoffset =
+          10.0; //Back to top botton will show on scroll offset 10.0
+
+      if (scrollController.offset > showoffset) {
+        showbtn = true;
+        setState(() {
+          //update state
+        });
+      } else {
+        showbtn = false;
+        setState(() {
+          //update state
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,32 +48,49 @@ class _HomePageState extends State<HomePage> {
         child: HeadBar(),
       ),
       body: Container(
-        width: 600,
         margin: EdgeInsets.symmetric(horizontal: 5),
         child: ListView(
+          controller: scrollController,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
+            SizedBox(
+              //width: MediaQuery.of(context).size.width * 0.01,
+              height: MediaQuery.of(context).size.height * 0.4,
+              //height: 170,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Latest Post',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      fontFamily: 'Times New Roman',
-                    ),
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
                   ),
+                  Text('Ratatoulie is the best',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('If you hadn\'t watch the movie yet, watch it!')
                 ],
               ),
+            ),
+            Row(
+              children: [
+                Text(
+                  'Latest Post',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Times New Roman',
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             Row(
               children: [
                 Image(
                   image: NetworkImage(
                       'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: 130,
-                  height: 70,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.14,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,62 +115,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Image(
-                    image: NetworkImage(
-                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                    width: 130,
-                    height: 70,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ratatoulie',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.end,
-                      ),
-                      Text('short description'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('by '),
-                          Text(
-                            'Tommy',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Text(
-                    'Recipes You\'ll Love',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      fontFamily: 'Times New Roman',
-                    ),
-                  ),
-                ],
-              ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             Row(
               children: [
                 Image(
                   image: NetworkImage(
                       'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: 130,
-                  height: 70,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.14,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,47 +149,89 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Image(
-                    image: NetworkImage(
-                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                    width: 130,
-                    height: 70,
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            Row(
+              children: [
+                Text(
+                  'Recipes You\'ll Love',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Times New Roman',
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ratatoulie',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.end,
-                      ),
-                      Text('short description'),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('by '),
-                          Text(
-                            'Tommy',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            Row(
+              children: [
+                Image(
+                  image: NetworkImage(
+                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.14,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ratatoulie',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.end,
+                    ),
+                    Text('short description'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('by '),
+                        Text(
+                          'Tommy',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            Row(
+              children: [
+                Image(
+                  image: NetworkImage(
+                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.14,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ratatoulie',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.end,
+                    ),
+                    Text('short description'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('by '),
+                        Text(
+                          'Tommy',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {},
-      ),
+      floatingActionButton: BackToTopButton(scrollController, showbtn),
       bottomNavigationBar: Copyright(),
     );
   }
