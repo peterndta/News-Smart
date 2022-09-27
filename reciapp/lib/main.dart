@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'login_page.dart';
-import 'home_page.dart';
-import 'recipe_detail.dart';
-import 'user_profile.dart';
 
 void main() {
   runApp(const MyApp());
