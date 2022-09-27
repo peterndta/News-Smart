@@ -64,8 +64,11 @@ class _HomePageState extends State<HomePage> {
                         'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
                   ),
                   Text('Ratatoulie is the best',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('If you hadn\'t watch the movie yet, watch it!')
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 18)),
+                  Text('If you hadn\'t watched the movie yet, watch it!')
                 ],
               ),
             ),
@@ -75,8 +78,8 @@ class _HomePageState extends State<HomePage> {
                   'Latest Post',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Times New Roman',
+                    fontSize: 18,
+                    fontFamily: 'Inter',
                   ),
                 ),
               ],
@@ -84,70 +87,106 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01,
             ),
-            Row(
-              children: [
-                Image(
-                  image: NetworkImage(
-                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.14,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ratatoulie',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.end,
-                    ),
-                    Text('short description'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('by '),
-                        Text(
-                          'Tommy',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                      top: BorderSide(color: Colors.grey, width: 0.5))),
+              child: Row(
+                children: [
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.14,
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Chicken and Broccoli Stir-Fry',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                        textAlign: TextAlign.end,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                        ],
+                      ),
+                      Text(
+                        'short descriptionn',
+                      ),
+                      Row(
+                        children: [
+                          Text('By '),
+                          Text(
+                            'Tommy',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            Row(
-              children: [
-                Image(
-                  image: NetworkImage(
-                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.14,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ratatoulie',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.end,
-                    ),
-                    Text('short description'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('by '),
-                        Text(
-                          'Tommy',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                      top: BorderSide(color: Colors.grey, width: 0.5))),
+              child: Row(
+                children: [
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.14,
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'World\'s Best Lasagna',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                        textAlign: TextAlign.end,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                        ],
+                      ),
+                      Text(
+                        'short descriptionn',
+                      ),
+                      Row(
+                        children: [
+                          Text('By '),
+                          Text(
+                            'Tommy',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Row(
@@ -156,77 +195,113 @@ class _HomePageState extends State<HomePage> {
                   'Recipes You\'ll Love',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Times New Roman',
+                    fontSize: 18,
+                    fontFamily: 'Inter',
                   ),
                 ),
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            Row(
-              children: [
-                Image(
-                  image: NetworkImage(
-                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.14,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ratatoulie',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.end,
-                    ),
-                    Text('short description'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('by '),
-                        Text(
-                          'Tommy',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                      top: BorderSide(color: Colors.grey, width: 0.5))),
+              child: Row(
+                children: [
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.14,
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'World\'s Best Lasagna',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                        textAlign: TextAlign.end,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                        ],
+                      ),
+                      Text(
+                        'short descriptionn',
+                      ),
+                      Row(
+                        children: [
+                          Text('By '),
+                          Text(
+                            'Tommy',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            Row(
-              children: [
-                Image(
-                  image: NetworkImage(
-                      'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.14,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ratatoulie',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.end,
-                    ),
-                    Text('short description'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('by '),
-                        Text(
-                          'Tommy',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                      top: BorderSide(color: Colors.grey, width: 0.5))),
+              child: Row(
+                children: [
+                  Image(
+                    image: NetworkImage(
+                        'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.14,
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Chicken and Broccoli Stir-Fry',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                        textAlign: TextAlign.end,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                          Icon(Icons.star, color: Colors.amber[600]),
+                        ],
+                      ),
+                      Text(
+                        'short descriptionn',
+                      ),
+                      Row(
+                        children: [
+                          Text('By '),
+                          Text(
+                            'Tommy',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
