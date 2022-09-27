@@ -9,11 +9,20 @@ class HomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Home', style: TextStyle(color: Colors.white, fontSize: 25))
-        ],
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.home,
+              color: Colors.white,
+              size: 30,
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+            Text('Home', style: TextStyle(color: Colors.white, fontSize: 25))
+          ],
+        ),
       ),
     );
   }
@@ -24,11 +33,20 @@ class RecipeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Recipe', style: TextStyle(color: Colors.white, fontSize: 25)),
-        ],
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.menu_book,
+              color: Colors.white,
+              size: 30,
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+            Text('Recipe', style: TextStyle(color: Colors.white, fontSize: 25)),
+          ],
+        ),
       ),
     );
   }
@@ -48,6 +66,12 @@ class _CourseButtonState extends State<CourseButton> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Icon(
+            Icons.schedule,
+            color: Colors.white,
+            size: 30,
+          ),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.03),
           Row(
             children: [
               DropdownButtonHideUnderline(
@@ -92,6 +116,12 @@ class _CategoryButtonState extends State<CategoryButton> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Icon(
+            Icons.soup_kitchen,
+            color: Colors.white,
+            size: 30,
+          ),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.03),
           Row(
             children: [
               DropdownButtonHideUnderline(
@@ -125,7 +155,7 @@ class MethodsButton extends StatefulWidget {
 }
 
 class _MethodsButtonState extends State<MethodsButton> {
-  List<String> CourseItem = ['Methods', 'Chiên', 'Xào', 'Hấp', 'Luộc'];
+  List<String> CourseItem = ['Methods', 'Frizzle', 'Stir fry', 'Steam', 'Boil'];
 
   String? selectedItem = 'Methods';
 
@@ -137,6 +167,12 @@ class _MethodsButtonState extends State<MethodsButton> {
         children: [
           Row(
             children: [
+              Icon(
+                Icons.book,
+                color: Colors.white,
+                size: 30,
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
               DropdownButtonHideUnderline(
                 child: DropdownButton(
                     iconEnabledColor: Colors.white,
@@ -166,16 +202,26 @@ class AboutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              SizedBox(width: 10),
-              Text('About', style: TextStyle(color: Colors.white, fontSize: 25))
-            ],
-          )
-        ],
+      onTap: () {},
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.people,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                Text('About',
+                    style: TextStyle(color: Colors.white, fontSize: 25))
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -187,27 +233,58 @@ class SideBarMenu extends StatefulWidget {
 }
 
 class _SideBarMenuState extends State<SideBarMenu> {
-  List<String> CourseItem = ['Dinner', 'Lunch', 'Breakfast'];
-  String? selectedItem = 'Dinner';
   @override
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.orange,
-      width: 220,
+      width: MediaQuery.of(context).size.width * 0.45,
       child: ListView(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          HomeButton(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          RecipeButton(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          CourseButton(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          CategoryButton(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          MethodsButton(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-          AboutButton(),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: HomeButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: RecipeButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(
+                  color: Colors.white,
+                  width: 1,
+                ),
+              )),
+              child: CourseButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: CategoryButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: MethodsButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: AboutButton()),
         ],
       ),
     );
