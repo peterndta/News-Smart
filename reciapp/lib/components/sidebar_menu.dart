@@ -1,14 +1,18 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:reciapp/user_profile.dart';
+import 'package:reciapp/home_page.dart';
 
 class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ));
+      },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
         child: Row(
@@ -227,6 +231,39 @@ class AboutButton extends StatelessWidget {
   }
 }
 
+class ProfileButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => UserProfile(),
+        ));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                Text('Profile',
+                    style: TextStyle(color: Colors.white, fontSize: 25))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SideBarMenu extends StatefulWidget {
   @override
   State<SideBarMenu> createState() => _SideBarMenuState();
@@ -278,6 +315,13 @@ class _SideBarMenuState extends State<SideBarMenu> {
                 bottom: BorderSide(color: Colors.white, width: 1),
               )),
               child: MethodsButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: ProfileButton()),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Container(
               decoration: BoxDecoration(

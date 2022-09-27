@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'components/copyright.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -35,7 +35,9 @@ class LoginPage extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      GoogleSignIn().signIn();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
                     },
                     style: ButtonStyle(
                         foregroundColor:
