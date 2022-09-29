@@ -71,6 +71,36 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Categories')),
         layout: 'common',
     },
+    {
+        path: '/create',
+        name: 'create recipe',
+        component: lazy(() => import('../pages/CreateRecipe')),
+        layout: 'common',
+    },
+    {
+        path: '/admin/users',
+        name: 'users management',
+        component: lazy(() => import('../pages/Admin/UserManagement')),
+        layout: 'admin',
+    },
+    {
+        path: '/admin/users/:id',
+        name: 'user details',
+        component: lazy(() => import('../pages/Admin/AdminViewProfile')),
+        layout: 'admin',
+    },
+    {
+        path: '/admin/posts-management',
+        name: 'posts management',
+        component: lazy(() => import('../pages/Admin/PostManagement')),
+        layout: 'admin',
+    },
+    {
+        path: '/admin/posts-management/:id',
+        name: 'posts management',
+        component: lazy(() => import('../pages/Admin/PostDetail')),
+        layout: 'admin',
+    },
 ]
 
 const Routes = (

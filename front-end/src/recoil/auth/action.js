@@ -2,7 +2,7 @@ import jwt_decode from 'jwt-decode'
 import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 
-import { post } from '../../utils/ApiCaller'
+import { get } from '../../utils/ApiCaller'
 import LocalStorageUtils from '../../utils/LocalStorageUtils'
 import authAtom from './atom'
 
@@ -42,8 +42,8 @@ const useAuthAction = () => {
     }
 
     const login = (token) =>
-        post({
-            endpoint: '/api/authentication/auth',
+        get({
+            endpoint: '/sigin-google',
             headers: { Authorization: `Bearer ${token}` },
         }).then((response) => {
             if (response?.data?.status === 'success') {
