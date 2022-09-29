@@ -74,12 +74,19 @@ class _HomePageState extends State<HomePage> {
             ),
             Row(
               children: [
-                Text(
-                  'Latest Post',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    fontFamily: 'Inter',
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 0.8))),
+                  child: Text(
+                    'Latest Post',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontFamily: 'Inter',
+                    ),
                   ),
                 ),
               ],
@@ -191,12 +198,19 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Row(
               children: [
-                Text(
-                  'Recipes You\'ll Love',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    fontFamily: 'Inter',
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 0.8))),
+                  child: Text(
+                    'Recipes You\'ll Love',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontFamily: 'Inter',
+                    ),
                   ),
                 ),
               ],
