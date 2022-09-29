@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'components/head_bar.dart';
-import 'components/copyright.dart';
+import '../components/head_bar.dart';
+import '../components/copyright.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-import 'components/sidebar_menu.dart';
+import '../components/sidebar_menu.dart';
 
 class ReciepReview {
   final String image;

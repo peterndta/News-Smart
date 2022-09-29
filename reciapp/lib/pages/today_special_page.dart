@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import '../components/sidebar_menu.dart';
+import '../../components/sidebar_menu.dart';
 
-import '../components/back_to_top_button.dart';
-import '../components/copyright.dart';
-import '../components/head_bar.dart';
+import '../../components/back_to_top_button.dart';
+import '../../components/copyright.dart';
+import '../../components/head_bar.dart';
 
 class TodaySpecialPage extends StatefulWidget {
   const TodaySpecialPage({super.key});
