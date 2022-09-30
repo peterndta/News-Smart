@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'components/head_bar.dart';
-import 'components/copyright.dart';
+import '../components/head_bar.dart';
+import '../components/copyright.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+import '../components/sidebar_menu.dart';
 
 class ReciepReview {
   final String image;
@@ -68,6 +70,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideBarMenu(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
         child: HeadBar(),
@@ -288,30 +291,27 @@ class ListRecipeReview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (list.length == 0)? 
-    Container(
-      padding: EdgeInsets.all(5),
-      alignment: Alignment.topLeft,
-      child: Text(
-        'No posts were found.',
-        style: TextStyle(
-          fontSize: 20
-        ),
-        )
-    ) 
-    : Container(
-      height: 400,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return RecipeReviewItem(
-            image: list[index].image,
-            title: list[index].title,
-            start: list[index].start,
-            description: list[index].description,
+    return (list.length == 0)
+        ? Container(
+            padding: EdgeInsets.all(5),
+            alignment: Alignment.topLeft,
+            child: Text(
+              'No posts were found.',
+              style: TextStyle(fontSize: 20),
+            ))
+        : Container(
+            height: 400,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return RecipeReviewItem(
+                  image: list[index].image,
+                  title: list[index].title,
+                  start: list[index].start,
+                  description: list[index].description,
+                );
+              },
+              itemCount: list.length,
+            ),
           );
-        },
-        itemCount: list.length,
-      ),
-    );
   }
 }
