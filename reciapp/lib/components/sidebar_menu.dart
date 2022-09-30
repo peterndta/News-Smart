@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/user_profile.dart';
-import 'package:reciapp/home_page.dart';
+import 'package:reciapp/pages/user_profile.dart';
+import 'package:reciapp/pages/home_page.dart';
 
 class HomeButton extends StatelessWidget {
   @override
