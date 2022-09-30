@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
+
+import queryString from 'query-string'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import {
     Box,
@@ -18,9 +21,13 @@ import CoursesFilter from './CoursesFilter'
 import MethodsFilter from './MethodsFilter'
 
 const Filter = () => {
+    const { search: query } = useLocation()
+    const { q } = queryString.parse(query)
+    const history = useHistory('')
     const [categories, setCategories] = React.useState([])
     const [methods, setMethods] = React.useState([])
     const [courses, setCourses] = React.useState([])
+    const [searchValue, setSearchValue] = useState(q ? q : '')
 
     const selectHandler = (value, type) => () => {
         if (type === CATEGORY_LIST.type) {
@@ -80,6 +87,18 @@ const Filter = () => {
         }
     }
 
+    const searchChangeHandler = (event) => {
+        setSearchValue(event.target.value)
+    }
+
+    const searchSubmitHandler = (event) => {
+        if (event.key === 'Enter') {
+            if (searchValue.trim().length !== 0) {
+                history.push(`/recipes?q=${searchValue}`)
+            }
+        }
+    }
+
     return (
         <Grid item md={3}>
             <Box p={3} sx={{ border: `1px solid ${blueGrey[200]}`, borderRadius: 1 }}>
@@ -118,7 +137,13 @@ const Filter = () => {
                         <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
                             Keyword
                         </InputLabel>
-                        <OutlinedInput id="component-outlined" label="Keyword" />
+                        <OutlinedInput
+                            id="component-outlined"
+                            label="Keyword"
+                            value={searchValue}
+                            onChange={searchChangeHandler}
+                            onKeyDown={searchSubmitHandler}
+                        />
                     </FormControl>
                 </Box>
                 <Divider

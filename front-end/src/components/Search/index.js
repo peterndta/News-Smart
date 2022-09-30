@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+
+import { useHistory } from 'react-router-dom'
 
 import SearchIcon from '@mui/icons-material/Search'
 import { InputBase } from '@mui/material'
@@ -41,12 +43,32 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Search = () => {
+    const [value, setValue] = useState('')
+    const history = useHistory()
+
+    const changeHandler = (event) => setValue(event.target.value)
+
+    const searchHandler = (event) => {
+        if (event.key === 'Enter') {
+            if (value.trim().length !== 0) {
+                history.push(`recipes?q=${value}`)
+                setValue('')
+            }
+        }
+    }
+
     return (
         <SearchCompo>
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Find a recipe" inputProps={{ 'aria-label': 'search' }} />
+            <StyledInputBase
+                placeholder="Find a recipe"
+                inputProps={{ 'aria-label': 'search' }}
+                value={value}
+                onChange={changeHandler}
+                onKeyDown={searchHandler}
+            />
         </SearchCompo>
     )
 }
