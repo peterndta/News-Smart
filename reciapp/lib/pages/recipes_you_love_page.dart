@@ -8,14 +8,14 @@ import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
 
-class RecipesResult extends StatefulWidget {
-  const RecipesResult({Key? key}) : super(key: key);
+class RecipesYouLove extends StatefulWidget {
+  const RecipesYouLove({Key? key}) : super(key: key);
 
   @override
-  _RecipesResultState createState() => _RecipesResultState();
+  _RecipesYouLoveState createState() => _RecipesYouLoveState();
 }
 
-class _RecipesResultState extends State<RecipesResult> {
+class _RecipesYouLoveState extends State<RecipesYouLove> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
 
@@ -68,7 +68,7 @@ class _RecipesResultState extends State<RecipesResult> {
                     top: 20,
                     left: 20,
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.42,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border:
@@ -77,7 +77,7 @@ class _RecipesResultState extends State<RecipesResult> {
                           margin:
                               EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                           child: Text(
-                            'Recipes Result',
+                            'Result You\'ll Love',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
