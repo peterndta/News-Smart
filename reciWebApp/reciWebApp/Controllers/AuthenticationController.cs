@@ -8,11 +8,13 @@ using reciWebApp.Services.Interfaces;
 using reciWebApp.Services;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Repositories;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace reciWebApp.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -33,14 +35,12 @@ namespace reciWebApp.Controllers
             props.RedirectUri = callback;
             return Challenge(props, "Google");
         }
-
-        [HttpGet]
-        [Route("~/sigin-google")]
+       
+        [HttpGet("signin-google")]
         public async Task<IActionResult> ExternalLoginCallBack()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var userLogin = _authService.GetUser(result);
-
             if (userLogin == null)
             {
                 return Redirect($"http://localhost:7297?error=invalid");
@@ -56,7 +56,7 @@ namespace reciWebApp.Controllers
 
             if (user.BanTime != null)
             {
-               return Redirect($"http://localhost:7297?error=inactive-user");
+                return Redirect($"http://localhost:7297?error=inactive-user");
             }
 
             var accessToken = await _authService.GenerateToken(user);
@@ -64,7 +64,7 @@ namespace reciWebApp.Controllers
             {
                 HttpOnly = true
             });
-            return Redirect($"http://localhost:7279?token={accessToken}");
+            return Redirect($"http://localhost:7297/login?token={accessToken}");
         }
     }   
 }
