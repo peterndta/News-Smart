@@ -43,7 +43,7 @@ namespace reciWebApp.Controllers
             var userLogin = _authService.GetUser(result);
             if (userLogin == null)
             {
-                return Redirect($"https://reciapp.azurewebsites.net?error=invalid");
+                return Redirect($"http://localhost:7297?error=invalid");
             }
 
             if (await _repoManager.User.GetUserAsync(userLogin.Email) == null)
@@ -56,7 +56,7 @@ namespace reciWebApp.Controllers
 
             if (user.BanTime != null)
             {
-                return Redirect($"https://reciapp.azurewebsites.net?error=inactive-user");
+                return Redirect($"http://localhost:7297?error=inactive-user");
             }
 
             var accessToken = await _authService.GenerateToken(user);
@@ -64,7 +64,7 @@ namespace reciWebApp.Controllers
             {
                 HttpOnly = true
             });
-            return Redirect($"https://reciapp.azurewebsites.net?token={accessToken}");
+            return Redirect($"http://localhost:7297/login?token={accessToken}");
         }
     }   
 }

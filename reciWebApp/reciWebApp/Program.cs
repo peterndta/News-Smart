@@ -44,7 +44,9 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuer = true,
             ClockSkew = TimeSpan.Zero,
             ValidIssuer = "ReciApp",
-            ValidAudience = "http://localhost:7297",
+            ValidAudience = "https://reciapp.azurewebsites.net",
+            //ValidIssuer = jwtSettings.GetSection("ValidIssuer").Value,
+            //ValidAudience = jwtSettings.GetSection("ValidAudience").Value
         };
     })
     .AddGoogle(options =>

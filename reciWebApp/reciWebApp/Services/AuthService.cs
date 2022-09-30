@@ -72,7 +72,7 @@ namespace reciWebApp.Services
             var tokenOptions = new JwtSecurityToken
             (
                 "ReciApp",
-                "http://localhost:7297",
+                "https://reciapp.azurewebsites.net",
                 //jwtSettings.GetSection("ValidIssuer").Value,
                 //jwtSettings.GetSection("ValidAudience").Value,
                 claims,
