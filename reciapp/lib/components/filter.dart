@@ -54,9 +54,10 @@ class _FilterState extends State<Filter> {
                             },
                           ),
                           Text(
-                            'Filter',
+                            'Filters',
                             style: TextStyle(
                               fontSize: 30,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           Container(
