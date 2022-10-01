@@ -23,6 +23,7 @@ namespace reciWebApp.Services
         }
         public JwtSecurityToken DecodeToken(string token)
         {
+            var parsedToken = token.Replace("Bearer ", string.Empty);
             var handler = new JwtSecurityTokenHandler();
             return handler.ReadJwtToken(token);
         }
