@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'sidebar_menu.dart';
+import '../pages/collection_page.dart';
 
 class HeadBar extends StatefulWidget {
   const HeadBar({super.key});
@@ -40,7 +40,7 @@ class _HeadBarState extends State<HeadBar> {
                 child: TextField(
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
-                    labelText: 'Search',
+                    hintText: 'Search',
                     labelStyle: TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
@@ -53,8 +53,12 @@ class _HeadBarState extends State<HeadBar> {
                   ),
                 ),
               ),
-              TextButton(
-                  onPressed: () {},
+              SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CollectionPage()));
+                  },
                   child: Icon(
                     Icons.bookmark,
                     color: Colors.white,
