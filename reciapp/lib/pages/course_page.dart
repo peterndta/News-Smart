@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import '../components/sidebar_menu.dart';
@@ -6,6 +6,7 @@ import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
+import '../components/filter.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -17,6 +18,7 @@ class CoursePage extends StatefulWidget {
 class _CoursePageState extends State<CoursePage> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  bool isSelected = false;
 
   @override
   void initState() {
@@ -167,7 +169,16 @@ class _CoursePageState extends State<CoursePage> {
           ],
         ),
       ),
-      floatingActionButton: BackToTopButton(scrollController, showbtn),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          BackToTopButton(scrollController, showbtn),
+          SizedBox(
+            width: 5,
+          ),
+          Filter(isSelected)
+        ],
+      ),
       bottomNavigationBar: Copyright(),
     );
   }
