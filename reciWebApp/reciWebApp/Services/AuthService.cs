@@ -25,7 +25,7 @@ namespace reciWebApp.Services
         {
             var parsedToken = token.Replace("Bearer ", string.Empty);
             var handler = new JwtSecurityTokenHandler();
-            return handler.ReadJwtToken(token);
+            return handler.ReadJwtToken(parsedToken);
         }
 
         public async Task<string> GenerateToken(User user)

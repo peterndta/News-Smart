@@ -44,7 +44,7 @@ namespace reciWebApp.Controllers
             var userLogin = _authService.GetUser(result);
             if (userLogin == null)
             {
-                return Redirect($"http://localhost:3000?error=invalid");
+                return Redirect($"https://recipe-sharing.vercel.app?error=invalid");
             }
 
             if (await _repoManager.User.GetUserAsync(userLogin.Email) == null)
@@ -57,7 +57,7 @@ namespace reciWebApp.Controllers
 
             if (user.BanTime != null)
             {
-                return Redirect($"http://localhost:3000?error=inactive-user");
+                return Redirect($"https://recipe-sharing.vercel.app?error=inactive-user");
             }
 
             var accessToken = await _authService.GenerateToken(user);
@@ -65,10 +65,10 @@ namespace reciWebApp.Controllers
             {
                 HttpOnly = true
             });
-            return Redirect($"http://localhost:3000/login?token={accessToken}");
+            return Redirect($"https://recipe-sharing.vercel.app/login?token={accessToken}");
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("auth")]
         public async Task<IActionResult> IsAuthenticated()
         {
@@ -84,24 +84,24 @@ namespace reciWebApp.Controllers
 
                     var userBasedEmail = await _repoManager.User.GetUserAsync(emailClaim);
 
-                    if (userBasedEmail != null && userBasedEmail.Role != roleClaim)
+                    if (userBasedEmail != null)
                     {
-                        return Unauthorized(new Response("You don't have permission for this request"));
+                        if (!userBasedEmail.Role.Equals(roleClaim))
+                            return Unauthorized(new Response("You don't have permission for this request"));
                     }
                     else
                     {
                         return BadRequest(new Response("Invalid token"));
                     }
 
-                    return Ok(new Response("","Authorized"));
+                    return Ok(new Response("", "Authorized"));
                 }
-
                 return BadRequest(new Response("Fail"));
             }
             catch (Exception ex)
-            {   
+            {
                 return BadRequest(new Response(ex.Message));
-            }            
+            }
         }
     }   
 }
