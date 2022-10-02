@@ -26,6 +26,7 @@ export const get = ({ endpoint, params = {}, headers = {} }) => {
 }
 
 export function post({ endpoint, body = {}, params = {}, headers = {} }) {
+    console.log(APP_API_URL)
     return request(endpoint, 'POST', headers, params, body)
 }
 
