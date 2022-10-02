@@ -1,6 +1,6 @@
 ﻿namespace reciWebApp.DTOs
 {
-    public class PostDTO
+    public class CreatePostDTO
     {
         public string Id { get; set; }
         public string? Name { get; set; }

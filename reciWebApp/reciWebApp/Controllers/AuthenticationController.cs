@@ -16,7 +16,7 @@ using reciWebApp.Services.Utils;
 namespace reciWebApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -92,14 +92,16 @@ namespace reciWebApp.Controllers
                     {
                         return BadRequest(new Response("Invalid token"));
                     }
+
+                    return Ok(new Response("","Authorized"));
                 }
+
+                return BadRequest(new Response("Fail"));
             }
             catch (Exception ex)
-            {
+            {   
                 return BadRequest(new Response(ex.Message));
-            }
-
-            return Ok(new Response("Authorized"));
+            }            
         }
     }   
 }

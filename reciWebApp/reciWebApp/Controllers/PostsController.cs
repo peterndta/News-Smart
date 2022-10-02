@@ -14,15 +14,14 @@ namespace reciWebApp.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
-        //private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public PostsController(IRepositoryManager repoManager/*, IMapper mapper*/)
+        public PostsController(IRepositoryManager repoManager, IMapper mapper)
         {
             _repoManager = repoManager;
-            //_mapper = mapper;
+            _mapper = mapper;
         }
 
-        // GET api/<PostsController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -43,15 +42,15 @@ namespace reciWebApp.Controllers
             }
         }
 
-        // POST api/<PostsController>
-        [HttpGet("users/{id}")]
-        public async Task<IActionResult> Get([FromBody] int id)
+        [Route("~/api/user/{id}/post")]
+        [HttpGet]
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var posts = _repoManager.Post.GetPostByUserId(id);
+                var posts = await _repoManager.Post.GetPostByUserId(id);
                 
-                if (posts == null)
+                if (!posts.Any())
                 {
                     return BadRequest(new Response("User do not have any post"));
                 }
@@ -64,37 +63,36 @@ namespace reciWebApp.Controllers
             }
         }
 
-        //[HttpPost("user/{id}")]
-        //public async Task<IActionResult> Post(int id, [FromBody] PostDTO postDTO)
-        //{
-        //    try
-        //    {
-        //        var user = await _repoManager.User.GetUserByIdAsync(id);
+        [Route("~/api/user/{id}/post")]
+        [HttpPost]
+        public async Task<IActionResult> Post(int id, [FromBody] CreatePostDTO postDTO)
+        {
+            try
+            {
+                var user = await _repoManager.User.GetUserByIdAsync(id);
 
-        //        if (user == null)
-        //        {
-        //            return BadRequest(new Response("User id does not existed"));
-        //        }
+                if (user == null)
+                {
+                    return BadRequest(new Response("User id does not existed"));
+                }
 
-        //        var post = _mapper.Map<Post>(postDTO);
-        //        post.UserId = id;
-        //        _repoManager.Post.CreatePost(post);
-        //        _repoManager.SaveChangesAsyns();
-        //        return Ok(new Response(post));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new Response(ex.Message));
-        //    }
-        //}
+                var post = _mapper.Map<Post>(postDTO);
+                post.UserId = id;
+                _repoManager.Post.CreatePost(post);
+                _repoManager.SaveChangesAsyns();
+                return Ok(new Response(post));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(ex.Message));
+            }
+        }
 
-        // PUT api/<PostsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<PostsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
