@@ -18,7 +18,11 @@ namespace reciWebApp.Data.Repositories
         public void CreateUser(User user)
         {
             Create(user);
-            _reciContext.SaveChanges();
+        }
+
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
         }
     }
 }

@@ -12,17 +12,18 @@ namespace reciWebApp.Services
 {
     public class AuthService : IAuthService
     {
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IRepositoryManager _repoManager;
         public readonly DateTime EXPIRED_AT = DateTime.UtcNow.AddMinutes(20);
 
-        public AuthService(IRepositoryManager repoManager/*, IConfiguration config*/)
+        public AuthService(IRepositoryManager repoManager, IConfiguration config)
         {
             _repoManager = repoManager;
-            //_configuration = config;
+            _configuration = config;
         }
         public JwtSecurityToken DecodeToken(string token)
         {
+            var parsedToken = token.Replace("Bearer ", string.Empty);
             var handler = new JwtSecurityTokenHandler();
             return handler.ReadJwtToken(token);
         }
@@ -59,8 +60,7 @@ namespace reciWebApp.Services
 
         private SigningCredentials GetSigninCredentials()
         {
-            var key = Encoding.UTF8.GetBytes("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");
-            //var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey"));
+            var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey"));
             var secret = new SymmetricSecurityKey(key);
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
@@ -68,16 +68,13 @@ namespace reciWebApp.Services
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
-            //var jwtSettings = _configuration.GetSection("JwtSettings");
+            var jwtSettings = _configuration.GetSection("JwtSettings");
             var tokenOptions = new JwtSecurityToken
             (
-                "ReciApp",
-                "https://reciapp.azurewebsites.net",
-                //jwtSettings.GetSection("ValidIssuer").Value,
-                //jwtSettings.GetSection("ValidAudience").Value,
+                jwtSettings.GetSection("ValidIssuer").Value,
+                jwtSettings.GetSection("ValidAudience").Value,
                 claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(129600)),
-                //expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
                 signingCredentials: signingCredentials
             );
 
