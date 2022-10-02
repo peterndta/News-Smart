@@ -2,7 +2,7 @@ import jwt_decode from 'jwt-decode'
 import { useHistory } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 
-import { get } from '../../utils/ApiCaller'
+import { post } from '../../utils/ApiCaller'
 import LocalStorageUtils from '../../utils/LocalStorageUtils'
 import authAtom from './atom'
 
@@ -20,7 +20,6 @@ const useAuthAction = () => {
                     token,
                     email: user.email,
                     name: user.name,
-                    organization: user.organization,
                     image: user.image,
                     role: user.role,
                     exp: user.exp,
@@ -33,7 +32,6 @@ const useAuthAction = () => {
                 token: null,
                 email: '',
                 name: '',
-                organization: '',
                 image: '',
                 role: '',
                 exp: 0,
@@ -42,14 +40,14 @@ const useAuthAction = () => {
     }
 
     const login = (token) =>
-        get({
-            endpoint: '/sigin-google',
+        post({
+            endpoint: '/api/authentication/auth',
             headers: { Authorization: `Bearer ${token}` },
         }).then((response) => {
-            if (response?.data?.status === 'success') {
+            if (response?.data?.isSuccess) {
                 LocalStorageUtils.setUser(token)
-                const { email, name, organization, image, role, exp } = jwt_decode(token)
-                setAuth({ token, email, name, organization, image, role, exp })
+                const { email, name, image, role, exp } = jwt_decode(token)
+                setAuth({ token, email, name, image, role, exp })
                 if (role === 'Admin') {
                     history.push('/admin')
                 } else history.push('/')
@@ -64,7 +62,6 @@ const useAuthAction = () => {
             token: null,
             email: '',
             name: '',
-            organization: '',
             image: '',
             role: '',
             exp: 0,

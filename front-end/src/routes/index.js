@@ -101,6 +101,12 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Admin/PostDetail')),
         layout: 'admin',
     },
+    {
+        path: '/admin/posts',
+        name: 'posts management',
+        component: lazy(() => import('../pages/Admin/PostManagement')),
+        layout: 'admin',
+    },
 ]
 
 const Routes = (

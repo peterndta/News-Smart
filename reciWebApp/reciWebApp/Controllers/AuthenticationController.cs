@@ -9,13 +9,14 @@ using reciWebApp.Services;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
+using reciWebApp.Services.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace reciWebApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -43,7 +44,7 @@ namespace reciWebApp.Controllers
             var userLogin = _authService.GetUser(result);
             if (userLogin == null)
             {
-                return Redirect($"http://localhost:7297?error=invalid");
+                return Redirect($"https://recipe-sharing.vercel.app?error=invalid");
             }
 
             if (await _repoManager.User.GetUserAsync(userLogin.Email) == null)
@@ -56,7 +57,7 @@ namespace reciWebApp.Controllers
 
             if (user.BanTime != null)
             {
-                return Redirect($"http://localhost:7297?error=inactive-user");
+                return Redirect($"https://recipe-sharing.vercel.app?error=inactive-user");
             }
 
             var accessToken = await _authService.GenerateToken(user);
@@ -64,7 +65,43 @@ namespace reciWebApp.Controllers
             {
                 HttpOnly = true
             });
-            return Redirect($"http://localhost:7297/login?token={accessToken}");
+            return Redirect($"https://recipe-sharing.vercel.app/login?token={accessToken}");
+        }
+
+        [HttpPost]
+        [Route("auth")]
+        public async Task<IActionResult> IsAuthenticated()
+        {
+            try
+            {
+                if (Request.Headers.TryGetValue(HeaderNames.Authorization, out var headers))
+                {
+                    var token = headers.First();
+                    var jwtToken = _authService.DecodeToken(token);
+
+                    var emailClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == "email").Value;
+                    var roleClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
+
+                    var userBasedEmail = await _repoManager.User.GetUserAsync(emailClaim);
+
+                    if (userBasedEmail != null)
+                    {
+                        if (!userBasedEmail.Role.Equals(roleClaim))
+                            return Unauthorized(new Response("You don't have permission for this request"));
+                    }
+                    else
+                    {
+                        return BadRequest(new Response("Invalid token"));
+                    }
+
+                    return Ok(new Response("", "Authorized"));
+                }
+                return BadRequest(new Response("Fail"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(ex.Message));
+            }
         }
     }   
 }
