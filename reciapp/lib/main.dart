@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/today_special_page.dart';
 import 'pages/home_page.dart';
+import 'pages/course_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +36,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return CoursePage();
   }
 }

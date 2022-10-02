@@ -1,24 +1,23 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../components/sidebar_menu.dart';
-import '../object/food_list.dart';
+
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
-import '../components/filter.dart';
+import '../components/sidebar_menu.dart';
+import '../object/food_list.dart';
 
-class CoursePage extends StatefulWidget {
-  const CoursePage({super.key});
+class CourseBreakfastPage extends StatefulWidget {
+  const CourseBreakfastPage({Key? key}) : super(key: key);
 
   @override
-  State<CoursePage> createState() => _CoursePageState();
+  _CourseBreakfastPageState createState() => _CourseBreakfastPageState();
 }
 
-class _CoursePageState extends State<CoursePage> {
+class _CourseBreakfastPageState extends State<CourseBreakfastPage> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
-  bool isSelected = false;
 
   @override
   void initState() {
@@ -69,7 +68,7 @@ class _CoursePageState extends State<CoursePage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.45,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border:
@@ -84,7 +83,6 @@ class _CoursePageState extends State<CoursePage> {
                               fontSize: 18,
                               fontFamily: 'Inter',
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         )),
                   ),
@@ -94,6 +92,7 @@ class _CoursePageState extends State<CoursePage> {
             Row(
               children: [
                 Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
@@ -113,72 +112,13 @@ class _CoursePageState extends State<CoursePage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: FoodList(),
-            ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 0.8))),
-                  child: Text(
-                    'Lunch',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: FoodList(),
-            ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 0.8))),
-                  child: Text(
-                    'Dinner',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.33,
               child: FoodList(),
             ),
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          BackToTopButton(scrollController, showbtn),
-          SizedBox(
-            width: 5,
-          ),
-          Filter(isSelected)
-        ],
-      ),
+      floatingActionButton: BackToTopButton(scrollController, showbtn),
       bottomNavigationBar: Copyright(),
     );
   }

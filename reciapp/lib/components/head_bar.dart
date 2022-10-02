@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'sidebar_menu.dart';
+import '../pages/collection_page.dart';
 
 class HeadBar extends StatefulWidget {
   const HeadBar({super.key});
@@ -15,9 +15,12 @@ class _HeadBarState extends State<HeadBar> {
   Widget build(BuildContext context) {
     return AppBar(
       //backgroundColor: Colors.amber,
+
       elevation: 5,
       titleSpacing: -12,
-      title: const Image(image: AssetImage('assets/Main_Reci_Logo.png')),
+      title: Container(
+          margin: EdgeInsets.symmetric(horizontal: 7),
+          child: Image(image: AssetImage('assets/logo.png'))),
       leading: Builder(
         builder: (context) => IconButton(
           icon: Icon(
@@ -32,16 +35,17 @@ class _HeadBarState extends State<HeadBar> {
 
       actions: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          width: 200,
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          width: MediaQuery.of(context).size.width * 0.5,
           child: Row(
             children: [
               Flexible(
                 child: TextField(
-                  style: TextStyle(color: Colors.black),
+                  textAlignVertical: TextAlignVertical.bottom,
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    labelText: 'Search',
-                    labelStyle: TextStyle(color: Colors.white),
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Colors.white, fontSize: 18),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
                     focusedBorder: OutlineInputBorder(
@@ -53,8 +57,12 @@ class _HeadBarState extends State<HeadBar> {
                   ),
                 ),
               ),
-              TextButton(
-                  onPressed: () {},
+              SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CollectionPage()));
+                  },
                   child: Icon(
                     Icons.bookmark,
                     color: Colors.white,
