@@ -14,6 +14,8 @@ import { APP_API_URL } from '../../config'
 import { useAuthAction } from '../../recoil/auth'
 import Loading from '../Loading'
 
+console.log(APP_API_URL)
+
 const imageList = [
     {
         src: 'https://i.pinimg.com/564x/d9/29/56/d92956dbc1695426300ea0981122d2d0.jpg',
