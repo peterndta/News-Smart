@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Services.Interfaces;
@@ -36,9 +37,37 @@ namespace reciWebApp.Services
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
-        public string GetEmail(HttpRequest request)
+        public async Task<User?> GetUser(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var email = GetEmail(request);
+            if (email != null)
+            {
+                var user = await _repoManager.User.GetUserByEmailAsync(email);
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        public string? GetEmail(HttpRequest request)
+        {
+            string currentUser = null;
+            try
+            {
+                if (request.Headers.TryGetValue(HeaderNames.Authorization, out var headers))
+                {
+                    var token = headers.First();
+                    currentUser = DecodeToken(token).Claims.FirstOrDefault(e => e.Type == "email").Value;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return currentUser;
         }
 
         public User? GetUser(AuthenticateResult result)

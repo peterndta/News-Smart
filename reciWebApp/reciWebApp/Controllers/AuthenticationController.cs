@@ -20,12 +20,12 @@ namespace reciWebApp.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        public readonly IAuthService _authService;
         public readonly IRepositoryManager _repoManager;
-        public AuthenticationController(IAuthService authService, IRepositoryManager repoManager)
+        public readonly IServicesManager _serviceManager;
+        public AuthenticationController(IRepositoryManager repoManager, IServicesManager serviceManager)
         {
-            _authService = authService;
             _repoManager = repoManager;
+            _serviceManager = serviceManager;   
         }
 
         [HttpGet("")]
@@ -41,26 +41,26 @@ namespace reciWebApp.Controllers
         public async Task<IActionResult> ExternalLoginCallBack()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var userLogin = _authService.GetUser(result);
+            var userLogin = _serviceManager.AuthService.GetUser(result);
             if (userLogin == null)
             {
                 return Redirect($"http://recipe-sharing.vercel.app?error=invalid");
             }
 
-            if (await _repoManager.User.GetUserAsync(userLogin.Email) == null)
+            if (await _repoManager.User.GetUserByEmailAsync(userLogin.Email) == null)
             {
                 userLogin.Role = "user";
                 _repoManager.User.CreateUser(userLogin);
             }
 
-            var user = await _repoManager.User.GetUserAsync(userLogin.Email);
+            var user = await _repoManager.User.GetUserByEmailAsync(userLogin.Email);
 
             if (user.BanTime != null)
             {
                 return Redirect($"http://recipe-sharing.vercel.app?error=inactive-user");
             }
 
-            var accessToken = await _authService.GenerateToken(user);
+            var accessToken = await _serviceManager.AuthService.GenerateToken(user);
             Response.Cookies.Append("jwt", accessToken, new CookieOptions
             {
                 HttpOnly = true
@@ -77,30 +77,30 @@ namespace reciWebApp.Controllers
                 if (Request.Headers.TryGetValue(HeaderNames.Authorization, out var headers))
                 {
                     var token = headers.First();
-                    var jwtToken = _authService.DecodeToken(token);
+                    var jwtToken = _serviceManager.AuthService.DecodeToken(token);
 
                     var emailClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == "email").Value;
                     var roleClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
 
-                    var userBasedEmail = await _repoManager.User.GetUserAsync(emailClaim);
+                    var userBasedEmail = await _repoManager.User.GetUserByEmailAsync(emailClaim);
 
                     if (userBasedEmail != null)
                     {
                         if (!userBasedEmail.Role.Equals(roleClaim))
-                            return Unauthorized(new Response("You don't have permission for this request"));
+                            return Unauthorized(new Response(401, "You don't have permission for this request"));
                     }
                     else
                     {
-                        return BadRequest(new Response("Invalid token"));
+                        return BadRequest(new Response(400, "Invalid token"));
                     }
 
-                    return Ok(new Response("", "Authorized"));
+                    return Ok(new Response(200, "Authorized"));
                 }
-                return BadRequest(new Response("Fail"));
+                return BadRequest(new Response(400, "Fail"));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex.Message));
+                return BadRequest(new Response(500, ex.Message));
             }
         }
     }   

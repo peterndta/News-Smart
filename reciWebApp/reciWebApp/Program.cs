@@ -66,7 +66,7 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IServicesManager, ServicesManager>();
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;

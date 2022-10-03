@@ -9,6 +9,8 @@ namespace reciWebApp.Configs
         public MappingProfile()
         {
             CreateMap<CreatePostDTO, Post>();
+            CreateMap<Post, ShowPostDTO>();
+            CreateMap<UpdatePostDTO, Post>();
         }
     }
 }
