@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs;
+using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,12 +15,14 @@ namespace reciWebApp.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;
+        private readonly IServicesManager _servicesManager;
         private readonly IMapper _mapper;
 
-        public PostsController(IRepositoryManager repoManager, IMapper mapper)
+        public PostsController(IRepositoryManager repoManager, IMapper mapper, IServicesManager servicesManager)
         {
             _repoManager = repoManager;
             _mapper = mapper;
+            _servicesManager = servicesManager;
         }
 
         [HttpGet("{id}")]
@@ -27,18 +30,19 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var post = await _repoManager.Post.GetPostById(id);
+                var post = await _repoManager.Post.GetPostByIdAsyns(id);
 
                 if (post == null)
                 {
-                    return BadRequest(new Response("Post id does not existed"));
+                    return BadRequest(new Response(400, "Post id does not existed"));
                 }
 
-                return Ok(new Response(post));
+                var showPost = _mapper.Map<ShowPostDTO>(post);
+                return Ok(new Response(200, showPost));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex.Message));
+                return BadRequest(new Response(500, ex.Message));
             }
         }
 
@@ -48,18 +52,19 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var posts = await _repoManager.Post.GetPostByUserId(id);
+                var posts = await _repoManager.Post.GetPostByUserIdAsyns(id);
                 
                 if (!posts.Any())
                 {
-                    return BadRequest(new Response("User do not have any post"));
+                    return BadRequest(new Response(400, "User do not have any post"));
                 }
 
-                return Ok(new Response(posts));
+                var showPost = _mapper.Map<List<ShowPostDTO>>(posts);
+                return Ok(new Response(200, showPost));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex.Message));
+                return BadRequest(new Response(500, ex.Message));
             }
         }
 
@@ -73,29 +78,89 @@ namespace reciWebApp.Controllers
 
                 if (user == null)
                 {
-                    return BadRequest(new Response("User id does not existed"));
+                    return BadRequest(new Response(400, "User id does not existed"));
                 }
 
-                var post = _mapper.Map<Post>(postDTO);
-                post.UserId = id;
-                _repoManager.Post.CreatePost(post);
+                var createPost = _mapper.Map<Post>(postDTO);
+                createPost.UserId = id;
+                createPost.Id = "phat123";
+                _repoManager.Post.CreatePost(createPost);
                 _repoManager.SaveChangesAsyns();
-                return Ok(new Response(post));
+                return Ok(new Response(200));
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response(ex.Message));
+                return BadRequest(new Response(500, ex.Message));
             }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(string id, [FromBody] UpdatePostDTO updatePostDTO)
         {
+            try
+            {
+                var user = await _servicesManager.AuthService.GetUser(Request);
+
+                if (user == null)
+                {
+                    return BadRequest(new Response(400, "Invalid user"));
+                }
+
+                var post = await _repoManager.Post.GetPostByIdAsyns(id);
+                if (post == null)
+                {
+                    return BadRequest(new Response(400, "Invalid post id"));
+                }
+
+                if (!_servicesManager.PostService.CheckPostAuthority(4, id))
+                {
+                    return BadRequest(new Response(400, "You do not have permission"));
+                }
+
+                post = _mapper.Map<Post>(updatePostDTO);
+                _repoManager.Post.UpdatePost(post);
+                _repoManager.SaveChangesAsyns();
+                return Ok(post);
+                return Ok(new Response(200, "Update successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            try
+            {
+                var user = await _servicesManager.AuthService.GetUser(Request);
+
+                if (user == null)
+                {
+                    return BadRequest(new Response(400, "Invalid user"));
+                }
+
+                var post = await _repoManager.Post.GetPostByIdAsyns(id);
+                if (post == null)
+                {
+                    return BadRequest(new Response(400, "Invalid post id"));
+                }
+
+                if (!_servicesManager.PostService.CheckPostAuthority(user.Id, id))
+                {
+                    return BadRequest(new Response(400, "You do not have permission"));
+                }
+
+                _repoManager.Post.DeletePost(post);
+                _repoManager.SaveChangesAsyns();
+
+                return Ok(new Response(200, "Delete successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
         }
     }
 }

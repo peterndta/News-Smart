@@ -10,7 +10,7 @@ namespace reciWebApp.Data.Repositories
         {
         }
 
-        public async Task<User> GetUserAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             return await GetByCondition(x => x.Email == email).SingleOrDefaultAsync();
         }
@@ -23,6 +23,11 @@ namespace reciWebApp.Data.Repositories
         public async Task<User> GetUserByIdAsync(int id)
         {
             return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
+        }
+
+        public User GetUserById(int id)
+        {
+            return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
     }
 }

@@ -15,14 +15,29 @@ namespace reciWebApp.Data.Repositories
             Create(post);
         }
 
-        public async Task<Post> GetPostById(string id)
+        public void DeletePost(Post post)
         {
-            return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
+            Delete(post);
         }
 
-        public async Task<List<Post>?> GetPostByUserId(int id)
+        public Post GetPostById(string id)
+        {
+            return GetByCondition(x => x.Id.Equals(id)).FirstOrDefault();
+        }
+
+        public async Task<Post> GetPostByIdAsyns(string id)
+        {
+            return await GetByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+        }
+
+        public async Task<List<Post>?> GetPostByUserIdAsyns(int id)
         {
             return await GetByCondition(x => x.UserId == id).ToListAsync();
+        }
+
+        public void UpdatePost(Post post)
+        {
+            Update(post);
         }
     }
 }
