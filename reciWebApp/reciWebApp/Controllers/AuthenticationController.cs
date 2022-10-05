@@ -94,7 +94,7 @@ namespace reciWebApp.Controllers
                         return BadRequest(new Response(400, "Invalid token"));
                     }
 
-                    return Ok(new Response(200, "Authorized"));
+                    return Ok(new Response(200,"","Authorized"));
                 }
                 return BadRequest(new Response(400, "Fail"));
             }
