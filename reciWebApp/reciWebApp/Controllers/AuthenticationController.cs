@@ -10,6 +10,8 @@ using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using reciWebApp.Services.Utils;
+using reciWebApp.DTOs;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,12 +22,14 @@ namespace reciWebApp.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        public readonly IRepositoryManager _repoManager;
-        public readonly IServicesManager _serviceManager;
-        public AuthenticationController(IRepositoryManager repoManager, IServicesManager serviceManager)
+        private readonly IRepositoryManager _repoManager;
+        private readonly IServicesManager _serviceManager;
+        private readonly IMapper _mapper;
+        public AuthenticationController(IRepositoryManager repoManager, IServicesManager serviceManager, IMapper mapper)
         {
             _repoManager = repoManager;
-            _serviceManager = serviceManager;   
+            _serviceManager = serviceManager; 
+            _mapper = mapper;
         }
 
         [HttpGet("")]
@@ -97,6 +101,34 @@ namespace reciWebApp.Controllers
                     return Ok(new Response(200,"","Authorized"));
                 }
                 return BadRequest(new Response(400, "Fail"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpPost("mobile")]
+        public async Task<IActionResult> Post([FromBody] AuthMobile authMobile)
+        {
+            try
+            {
+                var userAuth = await _repoManager.User.GetUserByEmailAsync(authMobile.Email);
+                if (userAuth == null)
+                {
+                    userAuth = _mapper.Map<User>(authMobile);
+                    userAuth.Role = "user";
+                    _repoManager.User.CreateUser(userAuth);
+                }
+
+                var user = await _repoManager.User.GetUserByEmailAsync(authMobile.Email);
+                if (user.BanTime != null)
+                {
+                    return BadRequest(new Response(400, "Inactive user"));
+                }
+
+                var accessToken = await _serviceManager.AuthService.GenerateToken(user);
+                return Ok(new Response(200, accessToken, ""));
             }
             catch (Exception ex)
             {
