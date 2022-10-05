@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs;
@@ -83,6 +84,7 @@ namespace reciWebApp.Controllers
 
                 var createPost = _mapper.Map<Post>(postDTO);
                 createPost.UserId = id;
+                createPost.Id = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 _repoManager.Post.CreatePost(createPost);
                 _repoManager.SaveChangesAsyns();
                 return Ok(new Response(200));
