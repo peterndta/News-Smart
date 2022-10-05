@@ -48,7 +48,7 @@ const useAuthAction = () => {
                 LocalStorageUtils.setUser(token)
                 const { email, name, image, role, exp } = jwt_decode(token)
                 setAuth({ token, email, name, image, role, exp })
-                if (role === 'Admin') {
+                if (role === 'admin') {
                     history.push('/admin')
                 } else history.push('/')
             } else {
