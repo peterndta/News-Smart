@@ -83,7 +83,6 @@ namespace reciWebApp.Controllers
 
                 var createPost = _mapper.Map<Post>(postDTO);
                 createPost.UserId = id;
-                createPost.Id = "phat123";
                 _repoManager.Post.CreatePost(createPost);
                 _repoManager.SaveChangesAsyns();
                 return Ok(new Response(200));
