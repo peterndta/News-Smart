@@ -3,11 +3,15 @@ import { BrowserRouter } from 'react-router-dom'
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import { ThemeProvider, useTheme } from '@mui/material/styles'
 
+import { useAuthAction } from '../recoil/auth'
 import Routes from '../routes'
 import Theme from '../theme'
 import './App.css'
 
 function App() {
+    const authAction = useAuthAction()
+    authAction.autoLogin()
+
     const theme = useTheme()
     const matches = useMediaQuery(theme.breakpoints.up('lg'))
 
