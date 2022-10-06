@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { InfoRounded, CameraAlt } from '@mui/icons-material'
 import {
@@ -19,7 +19,36 @@ import { blueGrey, grey } from '@mui/material/colors'
 
 const src = 'https://res.cloudinary.com/dq7l8216n/image/upload/v1642158763/FPTU.png'
 
-const CreateRecipeForm = () => {
+const CreateRecipeForm = ({ createRecipeHandler }) => {
+    const [poster, setPoster] = useState({ src, file: null })
+
+    useEffect(() => {
+        return () => {
+            poster.src && URL.revokeObjectURL(poster.src)
+        }
+    }, [poster])
+
+    const submitHandler = (event) => {
+        event.preventDefault()
+        createRecipeHandler(poster)
+    }
+
+    const uploadImageHandler = (event) => {
+        const file = event.target.files[0]
+        if (!file) return
+
+        const { type } = file
+        if (!(type.endsWith('jpeg') || !type.endsWith('png') || !type.endsWith('jpg'))) {
+            showSnackbar({
+                severity: 'error',
+                children: 'Event poster can only be jpeg, png and jpg file.',
+            })
+            return
+        }
+
+        const imageUrl = URL.createObjectURL(event.target.files[0])
+        setPoster({ src: imageUrl, file })
+    }
     return (
         <Container maxWidth="xl" sx={{ mt: 3 }}>
             <Grid container component={Paper} elevation={3}>
@@ -29,7 +58,7 @@ const CreateRecipeForm = () => {
                             <Box
                                 component="img"
                                 alt="school-image"
-                                src={src}
+                                src={poster.src}
                                 sx={{
                                     width: '100%',
                                     aspectRatio: '1 / 1',
@@ -38,7 +67,7 @@ const CreateRecipeForm = () => {
                         </Box>
                     </Grid>
                     <Grid item md={7}>
-                        <Box component="form" p={4} autoComplete="off">
+                        <Box component="form" p={4} autoComplete="off" onSubmit={submitHandler}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-outlined">Name of dish</InputLabel>
                                 <OutlinedInput id="component-outlined" label="Name of dish" />
@@ -57,6 +86,7 @@ const CreateRecipeForm = () => {
                                         style={{ opacity: 0, maxWidth: 0.5 }}
                                         id="upload-photo"
                                         type="file"
+                                        onChange={uploadImageHandler}
                                         accept="image/*"
                                     />
                                     <Button
@@ -83,6 +113,11 @@ const CreateRecipeForm = () => {
                                     multiline
                                 />
                             </FormControl>
+                            <Box sx={{ mt: 3 }} display="flex" justifyContent="flex-end">
+                                <Button variant="contained" type="submit" sx={{ color: grey[100] }}>
+                                    Submit
+                                </Button>
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
@@ -94,7 +129,7 @@ const CreateRecipeForm = () => {
                     }}
                     light
                 />
-                <Grid item={12} container>
+                <Grid item md={12} container>
                     <Box p={4} width="1">
                         <Typography
                             variant="h4"
