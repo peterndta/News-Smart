@@ -36,7 +36,7 @@ namespace reciWebApp.Data.Repositories
             }
         }
 
-        public Task SaveChangesAsyns()
+        public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();
         }
