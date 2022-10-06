@@ -75,11 +75,13 @@ namespace reciWebApp.Data.Models
                 entity.HasOne(d => d.Collection)
                     .WithMany(p => p.FoodCollections)
                     .HasForeignKey(d => d.CollectionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FoodCollections_Collections");
 
                 entity.HasOne(d => d.Posts)
                     .WithMany(p => p.FoodCollections)
                     .HasForeignKey(d => d.PostsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FoodCollections_Posts");
             });
 
@@ -167,11 +169,13 @@ namespace reciWebApp.Data.Models
                 entity.HasOne(d => d.Posts)
                     .WithMany(p => p.PostReports)
                     .HasForeignKey(d => d.PostsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PostReports_Posts");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.PostReports)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PostReports_Users");
             });
 
@@ -213,6 +217,7 @@ namespace reciWebApp.Data.Models
                 entity.HasOne(d => d.Posts)
                     .WithMany(p => p.Steps)
                     .HasForeignKey(d => d.PostsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Steps_Posts");
             });
 
@@ -258,16 +263,22 @@ namespace reciWebApp.Data.Models
 
                 entity.Property(e => e.Rating).HasColumnName("rating");
 
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("update_date");
+
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.Posts)
                     .WithMany(p => p.UserInteracts)
                     .HasForeignKey(d => d.PostsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserInteracts_Posts");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserInteracts)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserInteracts_Users");
             });
 
@@ -286,11 +297,13 @@ namespace reciWebApp.Data.Models
                 entity.HasOne(d => d.Posts)
                     .WithMany(p => p.UsesOfFoods)
                     .HasForeignKey(d => d.PostsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UsesOfFood_Posts");
 
                 entity.HasOne(d => d.Uses)
                     .WithMany(p => p.UsesOfFoods)
                     .HasForeignKey(d => d.UsesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UsesOfFood_Uses");
             });
 

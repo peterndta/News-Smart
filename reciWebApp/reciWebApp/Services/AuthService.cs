@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Services.Interfaces;
@@ -16,15 +17,16 @@ namespace reciWebApp.Services
         private readonly IRepositoryManager _repoManager;
         public readonly DateTime EXPIRED_AT = DateTime.UtcNow.AddMinutes(20);
 
-        public AuthService(IConfiguration config, IRepositoryManager repoManager)
+        public AuthService(IRepositoryManager repoManager, IConfiguration config)
         {
-            _configuration = config;
             _repoManager = repoManager;
+            _configuration = config;
         }
         public JwtSecurityToken DecodeToken(string token)
         {
+            var parsedToken = token.Replace("Bearer ", string.Empty);
             var handler = new JwtSecurityTokenHandler();
-            return handler.ReadJwtToken(token);
+            return handler.ReadJwtToken(parsedToken);
         }
 
         public async Task<string> GenerateToken(User user)
@@ -35,9 +37,37 @@ namespace reciWebApp.Services
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
-        public string GetEmail(HttpRequest request)
+        public async Task<User?> GetUser(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var email = GetEmail(request);
+            if (email != null)
+            {
+                var user = await _repoManager.User.GetUserByEmailAsync(email);
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        public string? GetEmail(HttpRequest request)
+        {
+            string currentUser = null;
+            try
+            {
+                if (request.Headers.TryGetValue(HeaderNames.Authorization, out var headers))
+                {
+                    var token = headers.First();
+                    currentUser = DecodeToken(token).Claims.FirstOrDefault(e => e.Type == "email").Value;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return currentUser;
         }
 
         public User? GetUser(AuthenticateResult result)
@@ -68,7 +98,6 @@ namespace reciWebApp.Services
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-
             var tokenOptions = new JwtSecurityToken
             (
                 jwtSettings.GetSection("ValidIssuer").Value,
@@ -88,6 +117,7 @@ namespace reciWebApp.Services
                 new("email", user.Email),
                 new("name", user.Name),
                 new("role", user.Role),
+                new("image", user.ImageUrl)
             };
 
             return Task.FromResult(claims);

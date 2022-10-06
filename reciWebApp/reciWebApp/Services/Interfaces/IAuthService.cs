@@ -9,6 +9,6 @@ namespace reciWebApp.Services.Interfaces
         public Task<string> GenerateToken(User user);
         public JwtSecurityToken DecodeToken(string token);
         public User? GetUser(AuthenticateResult result);
-        public string GetEmail(HttpRequest request);
+        public Task<User?> GetUser(HttpRequest request);
     }
 }
