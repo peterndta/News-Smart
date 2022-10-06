@@ -25,18 +25,6 @@ const hybridRoutes = [
         layout: 'common',
     },
     {
-        path: '/recipes',
-        name: 'recipes',
-        component: lazy(() => import('../pages/Recipes')),
-        layout: 'common',
-    },
-    {
-        path: '/recipes/:id',
-        name: 'recipe detail',
-        component: lazy(() => import('../pages/RecipeDetail')),
-        layout: 'common',
-    },
-    {
         path: '/recipes/course',
         name: 'course',
         component: lazy(() => import('../pages/Course')),
@@ -46,6 +34,18 @@ const hybridRoutes = [
         path: '/recipes/category',
         name: 'categories',
         component: lazy(() => import('../pages/Categories')),
+        layout: 'common',
+    },
+    {
+        path: '/recipes',
+        name: 'recipes',
+        component: lazy(() => import('../pages/Recipes')),
+        layout: 'common',
+    },
+    {
+        path: '/recipes/:id',
+        name: 'recipe detail',
+        component: lazy(() => import('../pages/RecipeDetail')),
         layout: 'common',
     },
 ]
@@ -130,13 +130,13 @@ const Routes = (
                 ({ layout, ...route }) =>
                     !layout && <PublicRoute key={route.name} exact={true} {...route} />
             )}
-            {hybridRoutes.map(
-                ({ layout, ...route }) =>
-                    !layout && <HybridRoute key={route.name} exact={true} {...route} />
-            )}
             {privateRoutes.map(
                 ({ layout, ...route }) =>
                     !layout && <PrivateRoute key={route.name} exact={true} {...route} />
+            )}
+            {hybridRoutes.map(
+                ({ layout, ...route }) =>
+                    !layout && <HybridRoute key={route.name} exact={true} {...route} />
             )}
             <Route path="/admin">
                 <AdminLayout>

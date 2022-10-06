@@ -159,7 +159,11 @@ const CommonHeader = () => {
                         </Box>
                         <Box display="flex" alignItems="center">
                             <Filter filters={filters} />
-                            <Box component={Link} to="/bookmark" sx={{ textDecoration: ' none' }}>
+                            <Box
+                                component={Link}
+                                to="/recipes/bookmark"
+                                sx={{ textDecoration: ' none' }}
+                            >
                                 <IconButton component="label" size="large" sx={{ ml: 3 }}>
                                     <BookmarkBorderIcon
                                         fontSize="large"

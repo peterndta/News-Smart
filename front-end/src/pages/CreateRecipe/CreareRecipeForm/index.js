@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import { InfoRounded, CameraAlt } from '@mui/icons-material'
+import { InfoRounded, CameraAlt, OndemandVideo } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -17,16 +17,28 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
+import SelectCategories from './SelectCategories'
+import SelectMethods from './SelectMethods'
+
 const src = 'https://res.cloudinary.com/dq7l8216n/image/upload/v1642158763/FPTU.png'
 
 const CreateRecipeForm = ({ createRecipeHandler }) => {
     const [poster, setPoster] = useState({ src, file: null })
+    const [videoUrl, setVideoUrl] = useState({ src: null, file: null })
+    const [categories, setCategories] = useState([])
+    const [method, setMethod] = useState('')
+    const videoRef = useRef()
 
     useEffect(() => {
         return () => {
             poster.src && URL.revokeObjectURL(poster.src)
+            videoUrl.src && URL.revokeObjectURL(videoUrl.src)
         }
-    }, [poster])
+    }, [poster, videoUrl])
+
+    useEffect(() => {
+        videoRef?.current?.load()
+    }, [videoUrl])
 
     const submitHandler = (event) => {
         event.preventDefault()
@@ -49,10 +61,19 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
         const imageUrl = URL.createObjectURL(event.target.files[0])
         setPoster({ src: imageUrl, file })
     }
+
+    const uploadVideoHandler = (event) => {
+        const file = event.target.files[0]
+        if (!file) return
+
+        const imageUrl = URL.createObjectURL(event.target.files[0])
+        setVideoUrl({ src: imageUrl, file })
+    }
+
     return (
         <Container maxWidth="xl" sx={{ mt: 3 }}>
             <Grid container component={Paper} elevation={3}>
-                <Box component="form" autoComplete="off" onSubmit={submitHandler}>
+                <Box component="form" autoComplete="off" onSubmit={submitHandler} width="1">
                     <Grid md={12} item container>
                         <Grid item md={5}>
                             <Box display="flex" alignItems="center" height="100%">
@@ -69,7 +90,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                         </Grid>
                         <Grid item md={7}>
                             <Box p={4}>
-                                <FormControl fullWidth>
+                                <FormControl fullWidth required>
                                     <InputLabel htmlFor="component-outlined">
                                         Name of dish
                                     </InputLabel>
@@ -132,13 +153,22 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                     />
                     <Grid item md={12} container>
                         <Box p={4} width="1">
-                            <Typography
-                                variant="h4"
-                                fontWeight={700}
-                                sx={{ color: blueGrey[600], mb: 1 }}
-                            >
-                                Directions
-                            </Typography>
+                            <Box display="flex" justifyContent="space-between">
+                                <Typography
+                                    variant="h4"
+                                    fontWeight={700}
+                                    sx={{ color: blueGrey[600], mb: 1 }}
+                                >
+                                    Directions
+                                </Typography>
+                                <Box display="flex">
+                                    <SelectCategories
+                                        categories={categories}
+                                        setCategories={setCategories}
+                                    />
+                                    <SelectMethods method={method} setMethod={setMethod} />
+                                </Box>
+                            </Box>
                             <Chip label="Step 1: Preparation" color="primary" variant="outlined" />
                             <Grid container item my={3} columnSpacing={5}>
                                 <Grid item md={6}>
@@ -183,7 +213,40 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
 "
                                 />
                             </FormControl>
-                            <Box sx={{ mt: 3 }} display="flex" justifyContent="flex-end">
+                            <InputLabel
+                                htmlFor="upload-video"
+                                sx={{ display: 'inline-block', mt: 3 }}
+                            >
+                                <input
+                                    required
+                                    style={{ opacity: 0, maxWidth: 0.5 }}
+                                    id="upload-video"
+                                    type="file"
+                                    onChange={uploadVideoHandler}
+                                    accept="video/*"
+                                />
+                                <Button
+                                    variant="outlined"
+                                    component="span"
+                                    startIcon={<OndemandVideo />}
+                                >
+                                    Upload Video
+                                </Button>
+                            </InputLabel>
+                            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
+                                <Box
+                                    ref={videoRef}
+                                    component="video"
+                                    controls
+                                    sx={{
+                                        width: 500,
+                                        height: 240,
+                                    }}
+                                >
+                                    <source src={videoUrl.src} type="video/mp4" />
+                                </Box>
+                            </Box>
+                            <Box sx={{ mt: 5 }} display="flex" justifyContent="flex-end">
                                 <Button variant="contained" type="submit" sx={{ color: grey[100] }}>
                                     Submit
                                 </Button>
