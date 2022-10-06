@@ -55,6 +55,7 @@ namespace reciWebApp.Controllers
             {
                 userLogin.Role = "user";
                 _repoManager.User.CreateUser(userLogin);
+                await _repoManager.SaveChangesAsync();
             }
 
             var user = await _repoManager.User.GetUserByEmailAsync(userLogin.Email);
@@ -113,12 +114,12 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var userAuth = await _repoManager.User.GetUserByEmailAsync(authMobile.Email);
-                if (userAuth == null)
+                if (await _repoManager.User.GetUserByEmailAsync(authMobile.Email) == null)
                 {
-                    userAuth = _mapper.Map<User>(authMobile);
+                    User userAuth = _mapper.Map<User>(authMobile);
                     userAuth.Role = "user";
                     _repoManager.User.CreateUser(userAuth);
+                    await _repoManager.SaveChangesAsync();
                 }
 
                 var user = await _repoManager.User.GetUserByEmailAsync(authMobile.Email);

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using reciWebApp.Data.Pagination;
+using System.Runtime.InteropServices;
 
 namespace reciWebApp.Services.Utils
 {
@@ -8,20 +9,22 @@ namespace reciWebApp.Services.Utils
         public object data { get; set; }
         public string message { get; set; }
         public bool isSuccess { get; set; }
+        public PaginationMeta meta { get; set; }
 
-        public Response(int statusCode, [Optional] object data, [Optional] string message)
+        public Response(int statusCode, [Optional] object data, [Optional] string message, [Optional] PaginationMeta meta)
         {
             this.statusCode = statusCode;
-            isSuccess = true;
+            this.isSuccess = true;
             this.data = data;
             this.message = message;
+            this.meta = meta;
         }
 
         public Response(int statusCode, string message)
         {
             this.statusCode = statusCode;
             this.message = message;
-            isSuccess = false;
+            this.isSuccess = false;
         }
     }
 }

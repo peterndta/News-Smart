@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
@@ -31,7 +32,7 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var post = await _repoManager.Post.GetPostByIdAsyns(id);
+                var post = await _repoManager.Post.GetPostByIdAsync(id);
 
                 if (post == null)
                 {
@@ -53,7 +54,7 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var posts = await _repoManager.Post.GetPostByUserIdAsyns(id);
+                var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
                 
                 if (!posts.Any())
                 {
@@ -86,7 +87,7 @@ namespace reciWebApp.Controllers
                 createPost.UserId = id;
                 createPost.Id = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 _repoManager.Post.CreatePost(createPost);
-                _repoManager.SaveChangesAsyns();
+                await _repoManager.SaveChangesAsync();
                 return Ok(new Response(200));
             }
             catch (Exception ex)
@@ -107,7 +108,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid user"));
                 }
 
-                var post = await _repoManager.Post.GetPostByIdAsyns(id);
+                var post = await _repoManager.Post.GetPostByIdAsync(id);
                 if (post == null)
                 {
                     return BadRequest(new Response(400, "Invalid post id"));
@@ -120,7 +121,7 @@ namespace reciWebApp.Controllers
 
                 post = _mapper.Map<Post>(updatePostDTO);
                 _repoManager.Post.UpdatePost(post);
-                _repoManager.SaveChangesAsyns();
+                await _repoManager.SaveChangesAsync();
                 return Ok(post);
                 return Ok(new Response(200, "Update successfully"));
             }
@@ -142,7 +143,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid user"));
                 }
 
-                var post = await _repoManager.Post.GetPostByIdAsyns(id);
+                var post = await _repoManager.Post.GetPostByIdAsync(id);
                 if (post == null)
                 {
                     return BadRequest(new Response(400, "Invalid post id"));
@@ -154,9 +155,31 @@ namespace reciWebApp.Controllers
                 }
 
                 _repoManager.Post.DeletePost(post);
-                _repoManager.SaveChangesAsyns();
+                await _repoManager.SaveChangesAsync();
 
                 return Ok(new Response(200, "Delete successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpGet("page/{pageNumber}")]
+        public async Task<IActionResult> Post([FromQuery] PostParams postParams)
+        {
+            try
+            {
+                //var user = await _servicesManager.AuthService.GetUser(Request);
+
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+
+                var post = await _repoManager.Post.GetAllPostsAsync(postParams);
+
+                return Ok(new Response(200, post, "", post.Meta));
             }
             catch (Exception ex)
             {
