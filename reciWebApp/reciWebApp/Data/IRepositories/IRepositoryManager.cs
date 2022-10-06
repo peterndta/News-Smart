@@ -4,6 +4,6 @@
     {
         IUserRepository User { get; }
         IPostRepository Post { get; }
-        Task SaveChangesAsyns();
+        Task SaveChangesAsync();
     }
 }

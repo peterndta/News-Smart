@@ -29,6 +29,11 @@ namespace reciWebApp.Data.Repositories
         {
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return GetByCondition(x => x.Email == email).FirstOrDefault();
+        }
     }
 }
     

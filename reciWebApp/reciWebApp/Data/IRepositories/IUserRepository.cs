@@ -8,5 +8,6 @@ namespace reciWebApp.Data.IRepositories
         Task<User> GetUserByIdAsync(int id);
         void CreateUser(User user);
         User GetUserById(int id);
+        User GetUserByEmail(string email);
     }
 }
