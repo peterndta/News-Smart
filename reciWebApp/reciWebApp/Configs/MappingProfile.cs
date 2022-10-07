@@ -15,6 +15,7 @@ namespace reciWebApp.Configs
             CreateMap<CreateStepDTO, Step>();
             CreateMap<Step, ShowPostDTO>();
             CreateMap<UpdateStepDTO, Step>();
+            CreateMap<Category, ShowCategoryDTO>();
         }
     }
 }
