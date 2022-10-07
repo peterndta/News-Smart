@@ -68,23 +68,24 @@ class _CourseLunchPageState extends State<CourseLunchPage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border:
-                                Border.all(color: Colors.black, width: 0.5)),
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                          child: Text(
-                            'Course',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              fontFamily: 'Inter',
-                            ),
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black, width: 0.5)),
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        child: Text(
+                          'Course',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontFamily: 'Inter',
                           ),
-                        )),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
