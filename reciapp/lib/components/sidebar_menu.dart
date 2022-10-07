@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/course_page.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
 
@@ -36,7 +38,11 @@ class RecipeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => RecipesResult(),
+        ));
+      },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
         child: Row(
@@ -56,49 +62,79 @@ class RecipeButton extends StatelessWidget {
   }
 }
 
-class CourseButton extends StatefulWidget {
-  @override
-  State<CourseButton> createState() => _CourseButtonState();
-}
+//class CourseButton extends StatefulWidget {
+//   @override
+//   State<CourseButton> createState() => _CourseButtonState();
+// }
+//class _CourseButtonState extends State<CourseButton> {
+//   List<String> CourseItem = ['Course', 'Dinner', 'Lunch', 'Breakfast'];
+//   String? selectedItem = 'Course';
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Icon(
+//             Icons.schedule,
+//             color: Colors.white,
+//             size: 30,
+//           ),
+//           SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+//           Row(
+//             children: [
+//               DropdownButtonHideUnderline(
+//                 child: DropdownButton(
+//                     //iconDisabledColor: Colors.white,
+//                     iconEnabledColor: Colors.white,
+//                     focusColor: Colors.orange,
+//                     dropdownColor: Colors.orange,
+//                     value: selectedItem,
+//                     items: CourseItem.map((item) {
+//                       return DropdownMenuItem<String>(
+//                         value: item,
+//                         child: Text(
+//                           item,
+//                           style: TextStyle(color: Colors.white, fontSize: 25),
+//                         ),
+//                       );
+//                     }).toList(),
+//                     onChanged: (item) => setState(() => selectedItem = item)),
+//               ),
+//             ],
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _CourseButtonState extends State<CourseButton> {
-  List<String> CourseItem = ['Course', 'Dinner', 'Lunch', 'Breakfast'];
-  String? selectedItem = 'Course';
+class CourseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.schedule,
-            color: Colors.white,
-            size: 30,
-          ),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-          Row(
-            children: [
-              DropdownButtonHideUnderline(
-                child: DropdownButton(
-                    //iconDisabledColor: Colors.white,
-                    iconEnabledColor: Colors.white,
-                    focusColor: Colors.orange,
-                    dropdownColor: Colors.orange,
-                    value: selectedItem,
-                    items: CourseItem.map((item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: TextStyle(color: Colors.white, fontSize: 25),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (item) => setState(() => selectedItem = item)),
-              ),
-            ],
-          )
-        ],
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CoursePage(),
+        ));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.schedule,
+              color: Colors.white,
+              size: 30,
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+            // Container(
+            //   width: MediaQuery.of(context).size.width * 0.3,
+            Text('Course', style: TextStyle(color: Colors.white, fontSize: 25)),
+            //),
+          ],
+        ),
       ),
     );
   }
@@ -291,7 +327,7 @@ class _SideBarMenuState extends State<SideBarMenu> {
                 bottom: BorderSide(color: Colors.white, width: 1),
               )),
               child: RecipeButton()),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Container(
               decoration: BoxDecoration(
                   border: Border(
