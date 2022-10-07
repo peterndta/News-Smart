@@ -12,6 +12,7 @@ namespace reciWebApp.Configs
             CreateMap<Post, ShowPostDTO>();
             CreateMap<UpdatePostDTO, Post>();
             CreateMap<AuthMobile, User>();
+            CreateMap<Category, ShowCategoryDTO>();
         }
     }
 }

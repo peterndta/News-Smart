@@ -4,6 +4,8 @@
     {
         IUserRepository User { get; }
         IPostRepository Post { get; }
+        ICategoryRepository Category { get; }
+        ICookingMethodRepository CookingMethod { get; }
         Task SaveChangesAsync();
     }
 }
