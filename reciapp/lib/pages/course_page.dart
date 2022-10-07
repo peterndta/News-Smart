@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/course_breakfast_page.dart';
+import 'package:reciapp/pages/course_dinner_page.dart';
+import 'package:reciapp/pages/course_lunch_page.dart';
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
@@ -69,24 +74,24 @@ class _CoursePageState extends State<CoursePage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border:
-                                Border.all(color: Colors.black, width: 0.5)),
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                          child: Text(
-                            'Course',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              fontFamily: 'Inter',
-                            ),
-                            textAlign: TextAlign.center,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black, width: 0.5)),
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        child: Text(
+                          'Course',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontFamily: 'Inter',
                           ),
-                        )),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -99,12 +104,19 @@ class _CoursePageState extends State<CoursePage> {
                           bottom: BorderSide(
                               color: Theme.of(context).primaryColor,
                               width: 0.8))),
-                  child: Text(
-                    'Breakfast',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CourseBreakfastPage(),
+                      ));
+                    },
+                    child: Text(
+                      'Breakfast',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: 'Inter',
+                      ),
                     ),
                   ),
                 ),
@@ -124,12 +136,19 @@ class _CoursePageState extends State<CoursePage> {
                           bottom: BorderSide(
                               color: Theme.of(context).primaryColor,
                               width: 0.8))),
-                  child: Text(
-                    'Lunch',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CourseLunchPage(),
+                      ));
+                    },
+                    child: Text(
+                      'Lunch',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: 'Inter',
+                      ),
                     ),
                   ),
                 ),
@@ -149,12 +168,19 @@ class _CoursePageState extends State<CoursePage> {
                           bottom: BorderSide(
                               color: Theme.of(context).primaryColor,
                               width: 0.8))),
-                  child: Text(
-                    'Dinner',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CourseDinnerPage(),
+                      ));
+                    },
+                    child: Text(
+                      'Dinner',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: 'Inter',
+                      ),
                     ),
                   ),
                 ),

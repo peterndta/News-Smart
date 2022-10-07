@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import '../components/filter.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
@@ -18,6 +19,7 @@ class RecipesResult extends StatefulWidget {
 class _RecipesResultState extends State<RecipesResult> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  bool isSelected = false;
 
   @override
   void initState() {
@@ -83,6 +85,7 @@ class _RecipesResultState extends State<RecipesResult> {
                               fontSize: 18,
                               fontFamily: 'Inter',
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         )),
                   ),
@@ -98,7 +101,16 @@ class _RecipesResultState extends State<RecipesResult> {
           ],
         ),
       ),
-      floatingActionButton: BackToTopButton(scrollController, showbtn),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          BackToTopButton(scrollController, showbtn),
+          SizedBox(
+            width: 5,
+          ),
+          Filter(isSelected)
+        ],
+      ),
       bottomNavigationBar: Copyright(),
     );
   }

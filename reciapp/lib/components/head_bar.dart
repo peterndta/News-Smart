@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/home_page.dart';
 import '../pages/collection_page.dart';
 
 class HeadBar extends StatefulWidget {
@@ -11,16 +12,22 @@ class HeadBar extends StatefulWidget {
 }
 
 class _HeadBarState extends State<HeadBar> {
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      //backgroundColor: Colors.amber,
-
       elevation: 5,
       titleSpacing: -12,
       title: Container(
           margin: EdgeInsets.symmetric(horizontal: 7),
-          child: Image(image: AssetImage('assets/logo.png'))),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomePage()));
+            },
+            child: Image(image: AssetImage('assets/logo.png')),
+          )),
       leading: Builder(
         builder: (context) => IconButton(
           icon: Icon(
@@ -32,7 +39,6 @@ class _HeadBarState extends State<HeadBar> {
           },
         ),
       ),
-
       actions: [
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -41,6 +47,7 @@ class _HeadBarState extends State<HeadBar> {
             children: [
               Flexible(
                 child: TextField(
+                  controller: _controller,
                   textAlignVertical: TextAlignVertical.bottom,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
@@ -54,11 +61,18 @@ class _HeadBarState extends State<HeadBar> {
                       Icons.search,
                       color: Colors.white,
                     ),
+                    suffixIcon: IconButton(
+                      onPressed: _controller.clear,
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-              GestureDetector(
+              InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => CollectionPage()));
