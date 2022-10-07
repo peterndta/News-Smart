@@ -15,7 +15,7 @@ const usePrompt = (message) => {
         <Prompt
             when={formIsTouched}
             message={(location) => {
-                return location.pathname === '/events/create' ? false : message
+                return location.pathname === '/recipes/create' ? false : message
             }}
         />
     )

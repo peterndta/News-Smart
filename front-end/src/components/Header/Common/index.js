@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { NavLink, Link, useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
@@ -160,7 +159,11 @@ const CommonHeader = () => {
                         </Box>
                         <Box display="flex" alignItems="center">
                             <Filter filters={filters} />
-                            <Box component={Link} to="/bookmark" sx={{ textDecoration: ' none' }}>
+                            <Box
+                                component={Link}
+                                to="/recipes/bookmark"
+                                sx={{ textDecoration: ' none' }}
+                            >
                                 <IconButton component="label" size="large" sx={{ ml: 3 }}>
                                     <BookmarkBorderIcon
                                         fontSize="large"
@@ -242,7 +245,7 @@ const CommonHeader = () => {
                                         </Box>
 
                                         <MenuItem
-                                            sx={{ display: 'flex', px: 5 }}
+                                            sx={{ display: 'flex', pr: 5 }}
                                             onClick={() => history.push('/recipes/me')}
                                         >
                                             <ListItemIcon>
@@ -252,7 +255,7 @@ const CommonHeader = () => {
                                         </MenuItem>
 
                                         <MenuItem
-                                            sx={{ display: 'flex', px: 5 }}
+                                            sx={{ display: 'flex', pr: 5 }}
                                             onClick={() => history.push('/recipes/bookmark')}
                                         >
                                             <ListItemIcon>
@@ -262,7 +265,7 @@ const CommonHeader = () => {
                                         </MenuItem>
 
                                         <MenuItem
-                                            sx={{ display: 'flex', px: 5 }}
+                                            sx={{ display: 'flex', pr: 5 }}
                                             onClick={() => history.push('/recipes/create')}
                                         >
                                             <ListItemIcon>
@@ -272,7 +275,7 @@ const CommonHeader = () => {
                                         </MenuItem>
 
                                         <MenuItem
-                                            sx={{ display: 'flex', px: 5 }}
+                                            sx={{ display: 'flex', pr: 5 }}
                                             onClick={() => history.push('/profile')}
                                         >
                                             <ListItemIcon>
@@ -282,7 +285,7 @@ const CommonHeader = () => {
                                         </MenuItem>
 
                                         <MenuItem
-                                            sx={{ display: 'flex', px: 5 }}
+                                            sx={{ display: 'flex', pr: 5 }}
                                             onClick={handleClickLogout}
                                         >
                                             <ListItemIcon>
