@@ -122,7 +122,6 @@ namespace reciWebApp.Controllers
                 post = _mapper.Map<Post>(updatePostDTO);
                 _repoManager.Post.UpdatePost(post);
                 await _repoManager.SaveChangesAsync();
-                return Ok(post);
                 return Ok(new Response(200, "Update successfully"));
             }
             catch (Exception ex)

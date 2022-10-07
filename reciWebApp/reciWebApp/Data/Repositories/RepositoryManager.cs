@@ -8,6 +8,7 @@ namespace reciWebApp.Data.Repositories
         private readonly ReciContext _context;
         private IUserRepository _userRepository;
         private IPostRepository _postRepository;
+        private IStepRepository _stepRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -33,6 +34,18 @@ namespace reciWebApp.Data.Repositories
                     _postRepository = new PostRepository(_context);
                 }
                 return _postRepository;
+            }
+        }
+
+        public IStepRepository Step
+        {
+            get
+            {
+                if (_stepRepository == null)
+                {
+                    _stepRepository = new StepRepository(_context);
+                }
+                return _stepRepository;
             }
         }
 
