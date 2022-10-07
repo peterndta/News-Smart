@@ -58,7 +58,7 @@ class _HeadBarState extends State<HeadBar> {
                 ),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-              GestureDetector(
+              InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => CollectionPage()));
