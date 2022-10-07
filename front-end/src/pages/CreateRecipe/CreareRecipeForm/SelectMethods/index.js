@@ -10,7 +10,7 @@ const SelectMethods = ({ method, setMethod }) => {
     }
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 150 }}>
+        <FormControl sx={{ minWidth: 150 }} required size="small">
             <InputLabel id="method">Method</InputLabel>
             <Select
                 labelId="method"
@@ -19,6 +19,7 @@ const SelectMethods = ({ method, setMethod }) => {
                 onChange={handleChange}
                 autoWidth
                 label="Method"
+                required
             >
                 {METHOD_LIST.list.map((name, index) => (
                     <MenuItem key={index} value={name}>

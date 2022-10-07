@@ -12,7 +12,7 @@ import {
 } from '../config'
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: FIREBASE_apiKey,
     authDomain: FIREBASE_authDomain,
     projectId: FIREBASE_projectId,

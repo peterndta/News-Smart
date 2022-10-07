@@ -25,28 +25,39 @@ const MenuProps = {
 }
 
 const SelectCategories = ({ categories, setCategories }) => {
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event
-        setCategories(typeof value === 'string' ? value.split(',') : value)
+    const handleChange = (value) => {
+        const currentIndex = categories.indexOf(value)
+        const newCategories = [...categories]
+        if (value === CATEGORY_LIST.list[0]) {
+            if (currentIndex === -1) {
+                CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
+            } else {
+                CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
+            }
+        } else {
+            if (currentIndex === -1) {
+                newCategories.push(value)
+            } else {
+                newCategories.splice(currentIndex, 1)
+            }
+        }
+        setCategories(newCategories)
     }
 
     return (
-        <FormControl sx={{ m: 1, width: 300 }} required>
+        <FormControl sx={{ width: 300, mr: 3 }} required size="small">
             <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
             <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
                 value={categories}
-                onChange={handleChange}
                 input={<OutlinedInput label="Tag" />}
                 renderValue={(selected) => selected.join(', ')}
                 MenuProps={MenuProps}
             >
                 {CATEGORY_LIST.list.map((name, index) => (
-                    <MenuItem key={index} value={name}>
+                    <MenuItem key={index} value={name} onClick={() => handleChange(name)}>
                         <Checkbox checked={categories.indexOf(name) > -1} />
                         <ListItemText primary={name} />
                     </MenuItem>
