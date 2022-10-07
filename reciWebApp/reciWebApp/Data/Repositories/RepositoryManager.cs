@@ -39,6 +39,42 @@ namespace reciWebApp.Data.Repositories
             }
         }
 
+        public IStepRepository Step
+        {
+            get
+            {
+                if (_stepRepository == null)
+                {
+                    _stepRepository = new StepRepository(_context);
+                }
+                return _stepRepository;
+            }
+        }
+
+        public ICategoryRepository Category
+        {
+            get
+            {
+                if (_categoryRepository == null)
+                {
+                    _categoryRepository = new CategoryRepository(_context);
+                }
+                return _categoryRepository;
+            }
+        }
+
+        public ICookingMethodRepository CookingMethod
+        {
+            get
+            {
+                if (_cookingMethodRepository == null)
+                {
+                    _cookingMethodRepository = new CookingMethodRepository(_context);
+                }
+                return _cookingMethodRepository;
+            }
+        }
+
         public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();
