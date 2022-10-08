@@ -11,8 +11,7 @@ namespace reciWebApp.Data.Models
         }
 
         public int Id { get; set; }
-        public string? Country { get; set; }
-        public string? Region { get; set; }
+        public string? Continents { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
     }

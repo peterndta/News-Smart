@@ -11,6 +11,7 @@ namespace reciWebApp.Data.Repositories
         private IStepRepository _stepRepository;
         private ICategoryRepository _categoryRepository;
         private ICookingMethodRepository _cookingMethodRepository; 
+        private IRecipeRegionRepository _recipeRegionRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -72,6 +73,18 @@ namespace reciWebApp.Data.Repositories
                     _cookingMethodRepository = new CookingMethodRepository(_context);
                 }
                 return _cookingMethodRepository;
+            }
+        }
+
+        public IRecipeRegionRepository RecipeRegion
+        {
+            get
+            {
+                if (_recipeRegionRepository == null)
+                {
+                    _recipeRegionRepository = new RecipeRegionRepository(_context);
+                }
+                return _recipeRegionRepository;
             }
         }
 

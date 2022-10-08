@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
-using reciWebApp.DTOs;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -40,6 +41,7 @@ namespace reciWebApp.Controllers
                 }
 
                 var showPost = _mapper.Map<ShowPostDTO>(post);
+                showPost = _servicesManager.PostService.GetPostInfo(showPost);
                 return Ok(new Response(200, showPost));
             }
             catch (Exception ex)
@@ -48,21 +50,27 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/post")]
+        //View list my recipes
+        [Route("~/api/user/{id}/post/page/{pageNumber}")]
         [HttpGet]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] PostParams postParams)
         {
             try
             {
-                var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(postParams, id);
                 
                 if (!posts.Any())
                 {
                     return BadRequest(new Response(400, "User do not have any post"));
                 }
 
-                var showPost = _mapper.Map<List<ShowPostDTO>>(posts);
-                return Ok(new Response(200, showPost));
+                postParams.PageNumber = pageNumber;
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+                return Ok(new Response(200, showPosts, "", posts.Meta));
             }
             catch (Exception ex)
             {
@@ -70,6 +78,7 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Create recipe
         [Route("~/api/user/{id}/post")]
         [HttpPost]
         public async Task<IActionResult> Post(int id, [FromBody] CreatePostDTO postDTO)
@@ -96,6 +105,7 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Update recipe
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody] UpdatePostDTO updatePostDTO)
         {
@@ -114,7 +124,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid post id"));
                 }
 
-                if (!_servicesManager.PostService.CheckPostAuthority(4, id))
+                if (!_servicesManager.PostService.CheckPostAuthority(user.Id, id))
                 {
                     return BadRequest(new Response(400, "You do not have permission"));
                 }
@@ -130,6 +140,7 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Delete Recipe
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -165,7 +176,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet("page/{pageNumber}")]
-        public async Task<IActionResult> Post([FromQuery] PostParams postParams)
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] PostParams postParams)
         {
             try
             {
@@ -175,10 +186,14 @@ namespace reciWebApp.Controllers
                 //{
                 //    return BadRequest(new Response(400, "Invalid user"));
                 //}
-
-                var post = await _repoManager.Post.GetAllPostsAsync(postParams);
-
-                return Ok(new Response(200, post, "", post.Meta));
+                postParams.PageNumber = pageNumber;
+                var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+                return Ok(new Response(200, showPosts, "", posts.Meta));
             }
             catch (Exception ex)
             {
