@@ -2,26 +2,20 @@ import React, { useEffect, useState } from 'react'
 
 import { useParams } from 'react-router-dom'
 
-import {
-    StarRateOutlined,
-    BookmarkBorder,
-    ShoppingCart,
-    Kitchen,
-    RestaurantMenu,
-} from '@mui/icons-material'
+import { BookmarkBorder, Kitchen, ShoppingCart, StarRateOutlined } from '@mui/icons-material'
 import GroupIcon from '@mui/icons-material/Group'
 import {
-    Breadcrumbs,
-    Typography,
-    Link,
     Box,
-    Rating,
+    Breadcrumbs,
+    Divider,
     Grid,
+    Link,
     List,
     ListItem,
     ListItemButton,
     ListItemIcon,
-    Divider,
+    Rating,
+    Typography,
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
@@ -68,13 +62,102 @@ const RecipeDetail = () => {
             <Typography mt={4} variant="h3" fontWeight={700} sx={{ color: blueGrey[800] }}>
                 {recipe?.name}
             </Typography>
-            <Box display="flex">
+            <Box mt={4} display="flex">
+                <Typography
+                    variant="subtitle1"
+                    sx={{ fontSize: 20, mt: 0.35, color: blueGrey[700] }}
+                    fontWeight={700}
+                    mr={1.2}
+                >
+                    Rating:{' '}
+                </Typography>
                 <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} />
             </Box>
-            <Typography mt={1} variant="subtitle1" sx={{ fontSize: 18, width: '84%' }}>
-                Homemade chicken soup - but you do not have to be sick to deserve or enjoy it - you
-                do, so do! Good for body and soul!
+
+            <Box display="flex">
+                {/* <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} /> */}
+                <Box display="flex">
+                    <Typography
+                        // ml={3}
+                        variant="subtitle1"
+                        sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                        fontWeight={700}
+                    >
+                        Method:{' '}
+                    </Typography>
+                    <Typography
+                        ml={1}
+                        variant="subtitle1"
+                        fontWeight={400}
+                        sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                    >
+                        {recipe?.method}
+                    </Typography>
+                </Box>
+                <Box display="flex">
+                    <Typography
+                        ml={3}
+                        variant="subtitle1"
+                        sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                        fontWeight={700}
+                    >
+                        Continents:{' '}
+                    </Typography>
+                    <Typography
+                        ml={1}
+                        variant="subtitle1"
+                        fontWeight={400}
+                        sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                    >
+                        {recipe?.continents}
+                    </Typography>
+                </Box>
+            </Box>
+            <Box display="flex">
+                <Typography
+                    variant="subtitle1"
+                    sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                    fontWeight={700}
+                    mr={1}
+                >
+                    Categories:{' '}
+                </Typography>
+                <Typography
+                    variant="subtitle1"
+                    fontWeight={400}
+                    sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                >
+                    Vegetable, Egg, Beef
+                </Typography>
+            </Box>
+            <Typography
+                mt={4}
+                variant="h4"
+                fontWeight={700}
+                sx={{
+                    color: blueGrey[800],
+                    pb: 0.125,
+                    // borderBottom: (theme) => `5px solid ${theme.palette.primary.main}`,
+                    display: 'inline-block',
+                }}
+            >
+                About this recipe
             </Typography>
+            <Box display="flex" mt={1.5} sx={{ width: '84%' }}>
+                <Divider
+                    orientation="vertical"
+                    flexItem
+                    variant="middle"
+                    sx={{
+                        borderRightWidth: '5px',
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                    }}
+                />
+                <Typography ml={1} variant="subtitle1" sx={{ fontSize: 21 }}>
+                    Homemade chicken soup - but you do not have to be sick to deserve or enjoy it -
+                    you do, so do! Good for body and soul!
+                </Typography>
+            </Box>
             <Grid mt={3} container columnSpacing={4}>
                 <Grid item md={1}>
                     <List sx={{ pl: 1 }}>
@@ -314,9 +397,9 @@ const RecipeDetail = () => {
                                 display: 'inline-block',
                             }}
                         >
-                            Nutrition Facts
+                            Video
                         </Typography>
-                        <Box mt={3} mb={8} ml={3} display="flex" alignItems="center">
+                        {/* <Box mt={3} mb={8} ml={3} display="flex" alignItems="center">
                             <RestaurantMenu fontSize="medium" sx={{ color: blueGrey[800] }} />
                             <Typography
                                 ml={1}
@@ -326,7 +409,7 @@ const RecipeDetail = () => {
                                 152 calories; protein 13.1g; carbohydrates 4.2g; fat 8.9g;
                                 cholesterol 36.9mg; sodium 67.6mg.
                             </Typography>
-                        </Box>
+                        </Box> */}
                     </Box>
                     <Box mt={10} mb={8} ml={80} display="flex">
                         <Typography variant="body1" sx={{ fontSize: 15, color: blueGrey[600] }}>
