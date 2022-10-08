@@ -3,13 +3,14 @@
 import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/filter_course.dart';
 
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
-import '../components/filter.dart';
+import '../components/filter_recipe_result.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -109,7 +110,7 @@ class _CoursePageState extends State<CoursePage> {
           SizedBox(
             width: 5,
           ),
-          Filter(isSelected)
+          FilterCourse(isSelected)
         ],
       ),
       bottomNavigationBar: Copyright(),

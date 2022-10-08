@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import 'checkbox.dart';
 
-class Filter extends StatefulWidget {
+class FilterRecipeResult extends StatefulWidget {
   bool isSelected;
 
-  Filter(this.isSelected);
+  FilterRecipeResult(this.isSelected);
 
   @override
-  State<Filter> createState() => _FilterState();
+  State<FilterRecipeResult> createState() => _FilterRecipeResultState();
 }
 
-class _FilterState extends State<Filter> {
+class _FilterRecipeResultState extends State<FilterRecipeResult> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
@@ -54,7 +54,7 @@ class _FilterState extends State<Filter> {
                             },
                           ),
                           Text(
-                            'Filters',
+                            'FilterRecipeResults',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
@@ -63,8 +63,7 @@ class _FilterState extends State<Filter> {
                           Container(
                             margin: EdgeInsets.only(right: 10),
                             child: OutlinedButton(
-                              onPressed: () {
-                              },
+                              onPressed: () {},
                               style: OutlinedButton.styleFrom(
                                 padding: EdgeInsets.all(5),
                                 side: BorderSide(
