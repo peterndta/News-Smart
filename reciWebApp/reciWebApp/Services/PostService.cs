@@ -1,6 +1,8 @@
 ﻿using reciWebApp.Data.IRepositories;
+using reciWebApp.Data.Models;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Interfaces;
+using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Services
 {
@@ -27,12 +29,12 @@ namespace reciWebApp.Services
             return checkAuthority;
         }
 
-        //public async List<ShowPostDTO> GetPostInfo(List<ShowPostDTO> showPostDTOs)
-        //{
-        //    for (int i = 0; i < showPostDTOs.Count; i++)
-        //    {
-        //    }
-        //    return showPostDTOs;
-        //}
+        public ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO)
+        {
+            showPostDTO.Type = _repoManager.Category.GetCategoryById(showPostDTO.CategoryId).Type;
+            showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.CategoryId).Continents;
+            showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CategoryId).Method;
+            return showPostDTO;
+        }
     }
 }

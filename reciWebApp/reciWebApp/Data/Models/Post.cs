@@ -18,13 +18,13 @@ namespace reciWebApp.Data.Models
         public string? Name { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public int? CookingMethodId { get; set; }
-        public int? RecipeRegionId { get; set; }
-        public int? UserId { get; set; }
+        public int CookingMethodId { get; set; }
+        public int RecipeRegionId { get; set; }
+        public int UserId { get; set; }
         public int? Status { get; set; }
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public int? UsesId { get; set; }
 
         public virtual Category? Category { get; set; }

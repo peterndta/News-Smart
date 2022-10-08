@@ -7,6 +7,7 @@
         IStepRepository Step {get; }
         ICategoryRepository Category { get; }
         ICookingMethodRepository CookingMethod { get; }
+        IRecipeRegionRepository RecipeRegion { get; }
         Task SaveChangesAsync();
     }
 }

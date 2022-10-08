@@ -41,6 +41,7 @@ namespace reciWebApp.Controllers
                 }
 
                 var showPost = _mapper.Map<ShowPostDTO>(post);
+                showPost = _servicesManager.PostService.GetPostInfo(showPost);
                 return Ok(new Response(200, showPost));
             }
             catch (Exception ex)
@@ -65,6 +66,10 @@ namespace reciWebApp.Controllers
 
                 postParams.PageNumber = pageNumber;
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
                 return Ok(new Response(200, showPosts, "", posts.Meta));
             }
             catch (Exception ex)
@@ -182,10 +187,13 @@ namespace reciWebApp.Controllers
                 //    return BadRequest(new Response(400, "Invalid user"));
                 //}
                 postParams.PageNumber = pageNumber;
-                var post = await _repoManager.Post.GetAllPostsAsync(postParams);
-                var showPosts = _mapper.Map<List<ShowPostDTO>>(post);
-
-                return Ok(new Response(200, showPosts, "", post.Meta));
+                var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+                return Ok(new Response(200, showPosts, "", posts.Meta));
             }
             catch (Exception ex)
             {

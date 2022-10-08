@@ -8,5 +8,7 @@ namespace reciWebApp.Data.IRepositories
         void UpdateRecipeRegion(RecipeRegion recipeRegion); 
         void DeleteRecipeRegion(RecipeRegion recipeRegion);
         Task<List<RecipeRegion>?> GetAllRecipeRegionsAsync();
+        RecipeRegion? GetRecipeRegionsById(int id);
+
     }
 }

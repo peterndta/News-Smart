@@ -25,6 +25,11 @@ namespace reciWebApp.Data.Repositories
             return await GetAll().ToListAsync();
         }
 
+        public RecipeRegion? GetRecipeRegionsById(int id)
+        {
+            return GetByCondition(x => x.Id == id).FirstOrDefault();
+        }
+
         public void UpdateRecipeRegion(RecipeRegion recipeRegion)
         {
             Update(recipeRegion);

@@ -190,8 +190,6 @@ namespace reciWebApp.Data.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Continents).HasColumnName("continents");
-
-                entity.Property(e => e.Region).HasColumnName("region");
             });
 
             modelBuilder.Entity<Step>(entity =>
