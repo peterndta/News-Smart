@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_course.dart';
 import 'package:reciapp/components/filter_new_old_popular.dart';
@@ -11,7 +9,6 @@ import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
-import '../components/filter_recipe_result.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
