@@ -9,7 +9,23 @@ import 'package:path/path.dart';
 import 'package:reciapp/components/copyright.dart';
 
 class CreateRecipePage extends StatefulWidget {
-  const CreateRecipePage({super.key});
+  String title;
+  String description;
+  String tools;
+  String ingredients;
+  String processing;
+  String cooking;
+  String linkVideo;
+  CreateRecipePage({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.tools,
+    required this.ingredients,
+    required this.processing,
+    required this.cooking,
+    required this.linkVideo,
+  });
 
   @override
   State<CreateRecipePage> createState() => _CreateRecipePageState();
@@ -24,6 +40,17 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   TextEditingController processing = TextEditingController();
   TextEditingController cooking = TextEditingController();
   TextEditingController linkVideo = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    title = TextEditingController(text: widget.title);
+    description = TextEditingController(text: widget.description);
+    tools = TextEditingController(text: widget.tools);
+    ingredients = TextEditingController(text: widget.ingredients);
+    processing = TextEditingController(text: widget.processing);
+    cooking = TextEditingController(text: widget.cooking);
+    linkVideo = TextEditingController(text: widget.linkVideo);
+  }
 
   final List<String> category = [
     'All',
