@@ -99,6 +99,14 @@ const variables = {
         type: 'Courses',
         list: ['All', 'Main Dish', 'Side Dish', 'Snack', 'Appetizer', 'Breakfast'],
     },
+    USES_LIST: {
+        type: 'Uses',
+        list: ['Health', 'For full', 'Diet'],
+    },
+    CONTINENTS_LIST: {
+        type: 'Continents',
+        list: ['Asia', 'Africa', 'Antarctica', 'Australia', 'Europe', 'North America'],
+    },
     USER: {
         name: 'Bùi Thế Hiển',
         email: 'hienbui25g@gmail.com',
@@ -109,5 +117,13 @@ const variables = {
     },
 }
 
-export const { MOST_FAVORITE_POSTS, LATEST_POSTS, CATEGORY_LIST, METHOD_LIST, COURSE_LIST, USER } =
-    variables
+export const {
+    MOST_FAVORITE_POSTS,
+    LATEST_POSTS,
+    CATEGORY_LIST,
+    METHOD_LIST,
+    COURSE_LIST,
+    USER,
+    USES_LIST,
+    CONTINENTS_LIST,
+} = variables
