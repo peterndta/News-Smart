@@ -37,6 +37,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return CreateRecipePage();
+    return CreateRecipePage(
+      title: 'Name of dish',
+      description: 'Description of the dish',
+      tools: 'Tools of the dish',
+      ingredients: 'Ingredients of the dish',
+      processing: 'Details of the dish processing',
+      cooking: 'Details of the dish cooking',
+      linkVideo: 'https://www.dish.com/videos',
+    );
   }
 }

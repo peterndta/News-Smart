@@ -91,6 +91,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   int? selectedTimeCooking;
   int? selectedTimeProcessing;
   int? selectedTimePreparing;
+  final _formKey = GlobalKey<FormState>();
 
   Future pickImage(ImageSource source) async {
     try {
@@ -119,676 +120,563 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       appBar: AppBar(
         title: const Text('CreateRecipePage'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 20, top: 15),
-                alignment: Alignment.center,
-                child: const Text(
-                  'CREATE RECIPE',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.orange),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20, top: 15),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'CREATE RECIPE',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.orange),
+                  ),
                 ),
-              ),
-              TextField(
-                  controller: title,
-                  decoration: const InputDecoration(
-                    hintText: 'Name of dish',
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Title',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                TextFormField(
+                    controller: title,
+                    decoration: const InputDecoration(
+                      hintText: 'Name of dish',
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Title',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              TextField(
-                  maxLines: 7,
-                  controller: description,
-                  decoration: const InputDecoration(
-                    hintText: 'Description of dish',
-                    alignLabelWithHint: true,
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Description',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                TextFormField(
+                    maxLines: 7,
+                    controller: description,
+                    decoration: const InputDecoration(
+                      hintText: 'Description of dish',
+                      alignLabelWithHint: true,
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Description',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                image != null
+                    ? Image.file(
+                        image!,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        color: Colors.grey,
+                        child: const Text(
+                          'Poster',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      ),
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.orange, width: 2),
+                  ),
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                  ),
+                  label: const Text('Upload Photo',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () => pickImage(ImageSource.gallery),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Category',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ],
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              image != null
-                  ? Image.file(
-                      image!,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      color: Colors.grey,
-                      child: const Text(
-                        'Poster',
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButtonFormField2(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select gender.';
+                      }
+                    },
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        '  Select Categories',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
-                      ),
-                    ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.orange, width: 2),
-                ),
-                icon: const Icon(
-                  Icons.camera_alt,
-                  size: 20,
-                ),
-                label: const Text('Upload Photo',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                onPressed: () => pickImage(ImageSource.gallery),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Category',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                    ),
+                    items: category.map((item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        //disable default onTap to avoid closing menu when selecting an item
+                        enabled: false,
+                        child: StatefulBuilder(
+                          builder: (context, menuSetState) {
+                            final _isSelected =
+                                selectedCategorys.contains(item);
+                            return InkWell(
+                              onTap: () {
+                                _isSelected
+                                    ? selectedCategorys.remove(item)
+                                    : selectedCategorys.add(item);
+                                //This rebuilds the StatefulWidget to update the button's text
+                                setState(() {});
+                                //This rebuilds the dropdownMenu Widget to update the check mark
+                                menuSetState(() {});
+                              },
+                              child: Container(
+                                height: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    _isSelected
+                                        ? const Icon(Icons.check_box_outlined)
+                                        : const Icon(
+                                            Icons.check_box_outline_blank),
+                                    const SizedBox(width: 16),
+                                    Text(
+                                      '  $item',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    ],
+                      );
+                    }).toList(),
+                    //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                    value: selectedCategorys.isEmpty
+                        ? null
+                        : selectedCategorys.last,
+                    onChanged: (value) {},
+                    buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Colors.black26,
+                        ),
+                        color: Colors.white),
+                    itemHeight: 40,
+                    buttonElevation: 2,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    dropdownElevation: 8,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                    selectedItemBuilder: (context) {
+                      return category.map(
+                        (item) {
+                          return Container(
+                            alignment: AlignmentDirectional.center,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              selectedCategorys.join(', '),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                          );
+                        },
+                      ).toList();
+                    },
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  hint: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      '  Select Categories',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Method',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  items: category.map((item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      //disable default onTap to avoid closing menu when selecting an item
-                      enabled: false,
-                      child: StatefulBuilder(
-                        builder: (context, menuSetState) {
-                          final _isSelected = selectedCategorys.contains(item);
-                          return InkWell(
-                            onTap: () {
-                              _isSelected
-                                  ? selectedCategorys.remove(item)
-                                  : selectedCategorys.add(item);
-                              //This rebuilds the StatefulWidget to update the button's text
-                              setState(() {});
-                              //This rebuilds the dropdownMenu Widget to update the check mark
-                              menuSetState(() {});
-                            },
-                            child: Container(
-                              height: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Row(
-                                children: [
-                                  _isSelected
-                                      ? const Icon(Icons.check_box_outlined)
-                                      : const Icon(
-                                          Icons.check_box_outline_blank),
-                                  const SizedBox(width: 16),
-                                  Text(
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        '  Select Method',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    items: methods
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                '  $item',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedMethod = value as String;
+                      });
+                    },
+                    buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Colors.black26,
+                        ),
+                        color: Colors.white),
+                    itemHeight: 40,
+                    buttonElevation: 2,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    dropdownElevation: 8,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Uses',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        '  Select use',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    items: uses
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                '  $item',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedUse,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedUse = value as String;
+                      });
+                    },
+                    buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Colors.black26,
+                        ),
+                        color: Colors.white),
+                    itemHeight: 40,
+                    buttonElevation: 2,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    dropdownElevation: 8,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Continent',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        '  Select Continent',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    items: continents
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                '  $item',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedContinent,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedContinent = value as String;
+                      });
+                    },
+                    buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Colors.black26,
+                        ),
+                        color: Colors.white),
+                    itemHeight: 40,
+                    buttonElevation: 2,
+                    itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                    dropdownMaxHeight: 200,
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    dropdownElevation: 8,
+                    scrollbarRadius: const Radius.circular(40),
+                    scrollbarThickness: 6,
+                    scrollbarAlwaysShow: true,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Serving',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                Row(
+                  children: [
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: serving
+                            .map((item) => DropdownMenuItem<int>(
+                                  value: item,
+                                  child: Text(
                                     '  $item',
                                     style: const TextStyle(
                                       fontSize: 14,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }).toList(),
-                  //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-                  value:
-                      selectedCategorys.isEmpty ? null : selectedCategorys.last,
-                  onChanged: (value) {},
-                  buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: Colors.white),
-                  itemHeight: 40,
-                  buttonElevation: 2,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                  selectedItemBuilder: (context) {
-                    return category.map(
-                      (item) {
-                        return Container(
-                          alignment: AlignmentDirectional.center,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            selectedCategorys.join(', '),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            maxLines: 1,
-                          ),
-                        );
-                      },
-                    ).toList();
-                  },
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Method',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  hint: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      '  Select Method',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  ),
-                  items: methods
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              '  $item',
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedMethod,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedMethod = value as String;
-                    });
-                  },
-                  buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: Colors.white),
-                  itemHeight: 40,
-                  buttonElevation: 2,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Uses',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  hint: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      '  Select use',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  ),
-                  items: uses
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              '  $item',
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedUse,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedUse = value as String;
-                    });
-                  },
-                  buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: Colors.white),
-                  itemHeight: 40,
-                  buttonElevation: 2,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Continent',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  hint: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      '  Select Continent',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  ),
-                  items: continents
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              '  $item',
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedContinent,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedContinent = value as String;
-                    });
-                  },
-                  buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
-                      color: Colors.white),
-                  itemHeight: 40,
-                  buttonElevation: 2,
-                  itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                  dropdownMaxHeight: 200,
-                  dropdownDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  dropdownElevation: 8,
-                  scrollbarRadius: const Radius.circular(40),
-                  scrollbarThickness: 6,
-                  scrollbarAlwaysShow: true,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Serving',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              Row(
-                children: [
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Text(
-                          '  Select',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-                      ),
-                      items: serving
-                          .map((item) => DropdownMenuItem<int>(
-                                value: item,
-                                child: Text(
-                                  '  $item',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      value: selectedServe,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedServe = value as int;
-                        });
-                      },
-                      buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                      buttonWidth: MediaQuery.of(context).size.width * 0.25,
-                      buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: Colors.black26,
-                          ),
-                          color: Colors.white),
-                      itemHeight: 40,
-                      buttonElevation: 2,
-                      itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                      dropdownMaxHeight: 200,
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      dropdownElevation: 8,
-                      scrollbarRadius: const Radius.circular(40),
-                      scrollbarThickness: 6,
-                      scrollbarAlwaysShow: true,
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  const Text(
-                    'Number of person for serving',
-                    style: TextStyle(
-                        color: Colors.grey, fontStyle: FontStyle.italic),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  'Direction',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 5),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24.0),
-                      border: Border.all(color: Colors.orange)),
-                  child: const Center(
-                    child: Text(
-                      'Step 1: Preparation',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                        height: 1,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Time Preparing',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red, fontSize: 15),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.006,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            '  Select Time',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).hintColor,
-                            ),
-                          ),
-                        ),
-                        items: times
-                            .map((item) => DropdownMenuItem<int>(
-                                  value: item,
-                                  child: Text(
-                                    '  $item minutes',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
                                 ))
                             .toList(),
-                        value: selectedTimePreparing,
+                        value: selectedServe,
                         onChanged: (value) {
                           setState(() {
-                            selectedTimePreparing = value as int;
+                            selectedServe = value as int;
                           });
                         },
-                        buttonHeight: MediaQuery.of(context).size.height * 0.04,
-                        buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width * 0.25,
                         buttonDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
@@ -808,397 +696,535 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         scrollbarAlwaysShow: true,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              TextField(
-                  maxLines: 5,
-                  controller: tools,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Tool Needed',
-                    alignLabelWithHint: true,
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Tool Needed',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              TextField(
-                  maxLines: 5,
-                  controller: ingredients,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Ingredients Needed',
-                    alignLabelWithHint: true,
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Ingredients Needed',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 5),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24.0),
-                      border: Border.all(color: Colors.orange)),
-                  child: const Center(
-                    child: Text(
-                      'Step 2: Processing',
+                    const Text(
+                      'Number of person for serving',
                       style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                        height: 1,
+                          color: Colors.grey, fontStyle: FontStyle.italic),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Direction',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 5),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.035,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24.0),
+                        border: Border.all(color: Colors.orange)),
+                    child: const Center(
+                      child: Text(
+                        'Step 1: Preparation',
+                        style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange,
+                          height: 1,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Time Processing',
-                              style: TextStyle(fontSize: 15),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Preparing',
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red, fontSize: 15),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 15),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.006,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            '  Select Time',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).hintColor,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              '  Select Time',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
                             ),
                           ),
-                        ),
-                        items: times
-                            .map((item) => DropdownMenuItem<int>(
-                                  value: item,
-                                  child: Text(
-                                    '  $item minutes',
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                          items: times
+                              .map((item) => DropdownMenuItem<int>(
+                                    value: item,
+                                    child: Text(
+                                      '  $item minutes',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedTimeProcessing,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedTimeProcessing = value as int;
-                          });
-                        },
-                        buttonHeight: MediaQuery.of(context).size.height * 0.04,
-                        buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                        buttonDecoration: BoxDecoration(
+                                  ))
+                              .toList(),
+                          value: selectedTimePreparing,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedTimePreparing = value as int;
+                            });
+                          },
+                          buttonHeight:
+                              MediaQuery.of(context).size.height * 0.04,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                          buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.black26,
+                              ),
+                              color: Colors.white),
+                          itemHeight: 40,
+                          buttonElevation: 2,
+                          itemPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                          dropdownMaxHeight: 200,
+                          dropdownDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            color: Colors.white),
-                        itemHeight: 40,
-                        buttonElevation: 2,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          ),
+                          dropdownElevation: 8,
+                          scrollbarRadius: const Radius.circular(40),
+                          scrollbarThickness: 6,
+                          scrollbarAlwaysShow: true,
                         ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              TextField(
-                  maxLines: 5,
-                  controller: processing,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Details',
-                    alignLabelWithHint: true,
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Details',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                TextField(
+                    maxLines: 5,
+                    controller: tools,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Tool Needed',
+                      alignLabelWithHint: true,
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Tool Needed',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.006,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 5),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24.0),
-                      border: Border.all(color: Colors.orange)),
-                  child: const Center(
-                    child: Text(
-                      'Step 3: Cooking     ',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                        height: 1,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
-                      textAlign: TextAlign.start,
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                TextField(
+                    maxLines: 5,
+                    controller: ingredients,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Ingredients Needed',
+                      alignLabelWithHint: true,
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Ingredients Needed',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 5),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.035,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24.0),
+                        border: Border.all(color: Colors.orange)),
+                    child: const Center(
+                      child: Text(
+                        'Step 2: Processing',
+                        style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange,
+                          height: 1,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: const Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Time Cooking',
-                              style: TextStyle(fontSize: 15),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Processing',
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red, fontSize: 15),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 15),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.006,
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            '  Select Time',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).hintColor,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              '  Select Time',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
                             ),
                           ),
-                        ),
-                        items: times
-                            .map((item) => DropdownMenuItem<int>(
-                                  value: item,
-                                  child: Text(
-                                    '  $item minutes',
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                          items: times
+                              .map((item) => DropdownMenuItem<int>(
+                                    value: item,
+                                    child: Text(
+                                      '  $item minutes',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedTimeCooking,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedTimeCooking = value as int;
-                          });
-                        },
-                        buttonHeight: MediaQuery.of(context).size.height * 0.04,
-                        buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                        buttonDecoration: BoxDecoration(
+                                  ))
+                              .toList(),
+                          value: selectedTimeProcessing,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedTimeProcessing = value as int;
+                            });
+                          },
+                          buttonHeight:
+                              MediaQuery.of(context).size.height * 0.04,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                          buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.black26,
+                              ),
+                              color: Colors.white),
+                          itemHeight: 40,
+                          buttonElevation: 2,
+                          itemPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                          dropdownMaxHeight: 200,
+                          dropdownDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            color: Colors.white),
-                        itemHeight: 40,
-                        buttonElevation: 2,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          ),
+                          dropdownElevation: 8,
+                          scrollbarRadius: const Radius.circular(40),
+                          scrollbarThickness: 6,
+                          scrollbarAlwaysShow: true,
                         ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                TextField(
+                    maxLines: 5,
+                    controller: processing,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Details',
+                      alignLabelWithHint: true,
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Details',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.006,
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 5),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.035,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24.0),
+                        border: Border.all(color: Colors.orange)),
+                    child: const Center(
+                      child: Text(
+                        'Step 3: Cooking     ',
+                        style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange,
+                          height: 1,
+                        ),
+                        textAlign: TextAlign.start,
                       ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              TextField(
-                  maxLines: 5,
-                  controller: cooking,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Details',
-                    alignLabelWithHint: true,
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
-                            child: Text(
-                              'Details',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Cooking',
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 15),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
                     ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              TextField(
-                  controller: linkVideo,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Link',
-                    label: Text.rich(
-                      TextSpan(
-                        children: <InlineSpan>[
-                          WidgetSpan(
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Align(
+                            alignment: AlignmentDirectional.centerStart,
                             child: Text(
-                              'Link Video',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              '  Select Time',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
                             ),
                           ),
-                          WidgetSpan(
-                            child: Text(
-                              '*',
-                              style: TextStyle(color: Colors.red),
-                            ),
+                          items: times
+                              .map((item) => DropdownMenuItem<int>(
+                                    value: item,
+                                    child: Text(
+                                      '  $item minutes',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: selectedTimeCooking,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedTimeCooking = value as int;
+                            });
+                          },
+                          buttonHeight:
+                              MediaQuery.of(context).size.height * 0.04,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                          buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.black26,
+                              ),
+                              color: Colors.white),
+                          itemHeight: 40,
+                          buttonElevation: 2,
+                          itemPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                          dropdownMaxHeight: 200,
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                        ],
+                          dropdownElevation: 8,
+                          scrollbarRadius: const Radius.circular(40),
+                          scrollbarThickness: 6,
+                          scrollbarAlwaysShow: true,
+                        ),
                       ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                child: const Text('SUBMIT',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                onPressed: () {},
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              const Copyright()
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                TextField(
+                    maxLines: 5,
+                    controller: cooking,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Details',
+                      alignLabelWithHint: true,
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Details',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                TextField(
+                    controller: linkVideo,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Link',
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Link Video',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                  child: const Text('SUBMIT',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                const Copyright()
+              ],
+            ),
           ),
         ),
       ),
