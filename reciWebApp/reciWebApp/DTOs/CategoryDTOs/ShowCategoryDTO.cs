@@ -1,4 +1,4 @@
-﻿namespace reciWebApp.DTOs
+﻿namespace reciWebApp.DTOs.CategoryDTOs
 {
     public class ShowCategoryDTO
     {

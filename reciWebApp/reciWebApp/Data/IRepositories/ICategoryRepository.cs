@@ -9,5 +9,6 @@ namespace reciWebApp.Data.IRepositories
         void UpdateCategory(Category category);
         void DeleteCategory(Category category);
         Task<List<Category>?> GetAllCategoryAsync();
+        Category? GetCategoryById(int id);
     }
 }

@@ -25,18 +25,18 @@ namespace reciWebApp.Controllers
             {
                 new Category
                 {
-                    Type = "Breakfast",
+                    Type = "Meat",
                 },
                 new Category
                 {
-                    Type = "Launch",
+                    Type = "Vegetables",
                 }, new Category
                 {
-                    Type = "Beverages",
+                    Type = "Seafood",
                 },
                 new Category
                 {
-                    Type = "Appetizers",
+                    Type = "Fruit",
                 },
                 new Category
                 {
@@ -44,23 +44,31 @@ namespace reciWebApp.Controllers
                 },
                 new Category
                 {
-                    Type = "Salads",
+                    Type = "Diary",
                 },
                 new Category
                 {
-                    Type = "Desserts",
+                    Type = "Bread",
                 },
                 new Category
                 {
-                    Type = "Breads",
+                    Type = "Pasta",
                 },
                 new Category
                 {
-                    Type = "Main dishes",
+                    Type = "Nut",
                 },
                 new Category
                 {
-                    Type = "Holidays",
+                    Type = "Jam",
+                },
+                new Category
+                {
+                    Type = "Canned food",
+                },
+                new Category
+                {
+                    Type = "Others",
                 }
             };
             for (int i = 0; i < categories.Count(); i++)
@@ -108,6 +116,10 @@ namespace reciWebApp.Controllers
                 new CookingMethod
                 {
                     Method = "Frying",
+                },
+                new CookingMethod
+                {
+                    Method = "Others",
                 }
             };
 
@@ -119,54 +131,32 @@ namespace reciWebApp.Controllers
             {
                 new RecipeRegion
             {
-                Country = "Viet Nam",
-                Region = "North side",
+                Continents = "Asia",
             },
                 new RecipeRegion
             {
-                Country = "Viet Nam",
-                Region = "South side",
+                Continents = "Africa",
             },
                 new RecipeRegion
             {
-                Country = "Viet Nam",
-                Region = "West side",
+                Continents= "Antarctica",
             },
                 new RecipeRegion
             {
-                Country = "Viet Nam",
-                Region = "East side",
+                Continents = "Australia",
             },
                 new RecipeRegion
             {
-                Country = "America",
-                Region = "North side",
+                Continents = "Europe",
             },
                 new RecipeRegion
             {
-                Country = "America",
-                Region = "South side",
+                Continents = "North America",
             },
                 new RecipeRegion
             {
-                Country = "America",
-                Region = "West side",
-            },
-                new RecipeRegion
-            {
-                Country = "America",
-                Region = "East side",
-            },
-                new RecipeRegion
-            {
-                Country = "Japan",
-                Region = "Nort side",
-            },
-                new RecipeRegion
-            {
-                Country = "Japan",
-                Region = "South side",
-            },
+                Continents = "South America",
+            }
             };
             for (int i = 0; i < reciRegions.Count(); i++)
             {
@@ -215,6 +205,10 @@ namespace reciWebApp.Controllers
                 {
                     UsesOfFood = "Weight loss",
                 },
+                new Use
+                {
+                    UsesOfFood = "Others",
+                }
             };
             for (int i = 0; i < use.Count(); i++)
             {
@@ -225,12 +219,12 @@ namespace reciWebApp.Controllers
             {
                 new Post
             {
-                Id = "a1",
+                Id = "b1",
                 Name = "Delicious Egg Salad for Sandwiches",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 1,
-                RecipeTypeId = 1,
+                RecipeRegionId = 1,
                 UserId = 1,
                 Status = 1,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -239,12 +233,12 @@ namespace reciWebApp.Controllers
             },
                 new Post
             {
-                Id = "a2",
+                Id = "b2",
                 Name = "Old Fashioned Potato Salad",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 2,
-                RecipeTypeId = 2,
+                RecipeRegionId = 2,
                 UserId = 2,
                 Status = 2,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -254,12 +248,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a3",
+                Id = "b3",
                 Name = "Pasta Salad",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 3,
-                RecipeTypeId = 3,
+                RecipeRegionId = 3,
                 UserId = 3,
                 Status = 3,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -269,12 +263,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a4",
+                Id = "b4",
                 Name = "Homemade Corn Dogs",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 4,
-                RecipeTypeId = 4,
+                RecipeRegionId = 4,
                 UserId = 4,
                 Status = 4,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -284,12 +278,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a5",
+                Id = "b5",
                 Name = "Day-After-Thanksgiving Turkey Carcass Soup",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 5,
-                RecipeTypeId = 5,
+                RecipeRegionId = 5,
                 UserId = 5,
                 Status = 5,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -299,12 +293,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a6",
+                Id = "b6",
                 Name = "Slow Cooker Italian Beef for Sandwiches",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 6,
-                RecipeTypeId = 6,
+                RecipeRegionId = 6,
                 UserId = 6,
                 Status = 6,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -314,12 +308,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a7",
+                Id = "b7",
                 Name = "Slow Cooker Italian Beef for Sandwiches",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 7,
-                RecipeTypeId = 7,
+                RecipeRegionId = 7,
                 UserId = 7,
                 Status = 7,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -329,12 +323,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a8",
+                Id = "b8",
                 Name = "Lemon Chicken Orzo Soup",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 8,
-                RecipeTypeId = 8,
+                RecipeRegionId = 1,
                 UserId = 8,
                 Status = 8,
                 ImageUrl = "https://st.depositphotos.com/1257064/2519/v/600/depositphotos_25195223-stock-illustration-pea-soup.jpg",
@@ -343,12 +337,12 @@ namespace reciWebApp.Controllers
             },
                 new Post
             {
-                Id = "a9",
+                Id = "b9",
                 Name = "Bahama Mama",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 9,
-                RecipeTypeId = 9,
+                RecipeRegionId = 2,
                 UserId = 9,
                 Status = 9,
                 ImageUrl = "https://recipes.timesofindia.com/thumb/61589069.cms?width=1200&height=900",
@@ -358,12 +352,12 @@ namespace reciWebApp.Controllers
                 new Post
             {
 
-                Id = "a10",
+                Id = "b10",
                 Name = "Mai Tai",
                 CreateDate = new DateTime (2022, 09, 27),
                 UpdateDate = new DateTime (2022, 09, 28),
                 CookingMethodId = 10,
-                RecipeTypeId = 10,
+                RecipeRegionId = 3,
                 UserId = 10,
                 Status = 10,
                 ImageUrl = "https://recipes.timesofindia.com/thumb/61589069.cms?width=1200&height=900",
@@ -375,63 +369,7 @@ namespace reciWebApp.Controllers
             {
                 _reciContext.Posts.Add(posts[i]);
             }
-            var useOfFoods = new List<UsesOfFood>()
-            {
-                new UsesOfFood
-                {
-                   UsesId = 1,
-                   PostsId = "001",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 2,
-                    PostsId = "002",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 3,
-                    PostsId = "003",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 4,
-                    PostsId = "004",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 5,
-                    PostsId = "005",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 6,
-                    PostsId = "006",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 7,
-                    PostsId = "007",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 8,
-                    PostsId = "008",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 9,
-                    PostsId = "009",
-                },
-                new UsesOfFood
-                {
-                    UsesId = 10,
-                    PostsId = "010",
-                }
-            };
-            for (int i = 0; i < useOfFoods.Count(); i++)
-            {
-                _reciContext.UsesOfFoods.Add(useOfFoods[i]);
-            }
+
             var step = new List<Step>()
             {
                 new Step

@@ -28,25 +28,6 @@ import logo from '../../../assets/images/logo.png'
 import { useAuthAction } from '../../../recoil/auth'
 import authAtom from '../../../recoil/auth/atom'
 import Search from '../../Search'
-import Filter from './Filter'
-
-const filters = [
-    {
-        key: 1,
-        title: 'COURSE',
-        list: ['Main Dish', 'Side Dish', 'Snack', 'Appetizer', 'Breakfast'],
-    },
-    {
-        key: 2,
-        title: 'CATEGORIES',
-        list: ['Beef', 'Chicken', 'Egg', 'Seafood', 'Pork'],
-    },
-    {
-        key: 3,
-        title: 'METHODS',
-        list: ['Boil', 'Fry', 'Roast'],
-    },
-]
 
 const CommonHeader = () => {
     const auth = useRecoilValue(authAtom)
@@ -140,6 +121,7 @@ const CommonHeader = () => {
                                 <Box
                                     component={NavLink}
                                     to="/recipes"
+                                    exact
                                     sx={{
                                         textDecoration: 'none',
                                         color: grey[100],
@@ -157,8 +139,89 @@ const CommonHeader = () => {
                                 </Box>
                             </Box>
                         </Box>
-                        <Box display="flex" alignItems="center">
-                            <Filter filters={filters} />
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            sx={{
+                                '& > a:after': {
+                                    content: '""',
+                                    display: 'block',
+                                    position: 'absolute',
+                                    width: 0,
+                                    height: '2px',
+                                    backgroundColor: grey[100],
+                                    left: 0,
+                                    bottom: 0,
+                                    transition: 'all 0.3s linear',
+                                },
+                                display: 'flex',
+                                alignItems: 'center',
+                                '& > .active > span': {
+                                    color: yellow[400],
+                                    fontWeight: 700,
+                                },
+                                '& > .active:after': {
+                                    backgroundColor: yellow[400],
+                                },
+                            }}
+                        >
+                            <Box
+                                component={NavLink}
+                                exact
+                                to="/recipes/course"
+                                sx={{
+                                    textDecoration: 'none',
+                                    color: grey[100],
+                                    position: 'relative',
+                                    '&:hover:after': {
+                                        width: '100%',
+                                    },
+                                    ml: 5,
+                                    fontFamily: 'Roboto',
+                                }}
+                            >
+                                <Typography component="span" variant="h5">
+                                    COLLECTION
+                                </Typography>
+                            </Box>
+                            <Box
+                                component={NavLink}
+                                to="/recipes/category"
+                                exact
+                                sx={{
+                                    textDecoration: 'none',
+                                    color: grey[100],
+                                    position: 'relative',
+                                    '&:hover:after': {
+                                        width: '100%',
+                                    },
+                                    ml: 5,
+                                    fontFamily: 'Roboto',
+                                }}
+                            >
+                                <Typography component="span" variant="h5">
+                                    CATEGORY
+                                </Typography>
+                            </Box>
+                            <Box
+                                component={NavLink}
+                                to="/recipes/method"
+                                sx={{
+                                    textDecoration: 'none',
+                                    color: grey[100],
+                                    position: 'relative',
+                                    '&:hover:after': {
+                                        width: '100%',
+                                    },
+                                    ml: 5,
+                                    fontFamily: 'Roboto',
+                                }}
+                            >
+                                <Typography component="span" variant="h5">
+                                    METHOD
+                                </Typography>
+                            </Box>
+                            {/* <Filter filters={filters} /> */}
                             <Box
                                 component={Link}
                                 to="/recipes/bookmark"

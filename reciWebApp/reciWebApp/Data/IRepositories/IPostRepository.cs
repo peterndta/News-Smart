@@ -13,5 +13,6 @@ namespace reciWebApp.Data.IRepositories
         void DeletePost(Post post); 
         void UpdatePost(Post post);
         Task<PaginatedList<Post>?> GetAllPostsAsync(PostParams postParams);
+        Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId);
     }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_course.dart';
+import 'package:reciapp/components/filter_new_old_popular.dart';
 
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
@@ -92,6 +93,12 @@ class _CoursePageState extends State<CoursePage> {
                 ],
               ),
             ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 11),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [FilterNewOldPopular()])),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.35,

@@ -20,9 +20,14 @@ namespace reciWebApp.Data.Repositories
             Delete(cookingMethod);
         }
 
-        public async Task<List<CookingMethod?>> GetAllCookingMethodsAsync()
+        public async Task<List<CookingMethod>?> GetAllCookingMethodsAsync()
         {
             return await GetAll().ToListAsync();
+        }
+
+        public CookingMethod? GetCookingMethodById(int id)
+        {
+            return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
         public void UpdateCookingMethod(CookingMethod cookingMethod)

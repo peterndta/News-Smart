@@ -53,5 +53,16 @@ namespace reciWebApp.Data.Repositories
                 .ToListAsync();
             return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
         }
+
+        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId)
+        {
+            var post = await GetByCondition(x => x.UserId == userId)
+                .FilterPostByName(_reciContext, postParams.Name)
+                .FilterPostByCategoryId(_reciContext, postParams.CategoryId)
+                .FilterPostByCookingMethodId(_reciContext, postParams.CookingMethodId)
+                .FilterPostByRecipeTypeId(_reciContext, postParams.RecipeTypeId)
+                .ToListAsync();
+            return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
+        }
     }
 }
