@@ -19,6 +19,12 @@ const publicRoutes = [
 
 const hybridRoutes = [
     {
+        path: '/recipes',
+        name: 'recipes',
+        component: lazy(() => import('../pages/Recipes')),
+        layout: 'common',
+    },
+    {
         path: '/',
         name: 'home',
         component: lazy(() => import('../pages/Home')),
@@ -34,12 +40,6 @@ const hybridRoutes = [
         path: '/recipes/category',
         name: 'categories',
         component: lazy(() => import('../pages/Categories')),
-        layout: 'common',
-    },
-    {
-        path: '/recipes',
-        name: 'recipes',
-        component: lazy(() => import('../pages/Recipes')),
         layout: 'common',
     },
     {

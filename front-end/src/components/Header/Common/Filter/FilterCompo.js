@@ -7,12 +7,10 @@ const ITEM_HEIGHT = 48
 
 const FilterCompo = ({ filter }) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const [expendOpen, setExpandOpen] = useState(false)
     const open = Boolean(anchorEl)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
-        setExpandOpen(!expendOpen)
     }
     const handleClose = () => {
         setAnchorEl(null)
