@@ -137,7 +137,7 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Course',
+                            'Cooking Methods',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
