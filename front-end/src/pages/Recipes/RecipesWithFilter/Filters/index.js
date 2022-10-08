@@ -15,8 +15,9 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST } from '../../../../Elixir'
+import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST, CONTINENTS_LIST } from '../../../../Elixir'
 import CategoriesFilter from './CategoriesFilter'
+import ContinentsFilter from './Continents'
 import CoursesFilter from './CoursesFilter'
 import MethodsFilter from './MethodsFilter'
 
@@ -27,6 +28,7 @@ const Filter = () => {
     const [categories, setCategories] = React.useState([])
     const [methods, setMethods] = React.useState([])
     const [courses, setCourses] = React.useState([])
+    const [continents, setContinents] = React.useState([])
     const [searchValue, setSearchValue] = useState(q ? q : '')
 
     const selectHandler = (value, type) => () => {
@@ -84,6 +86,24 @@ const Filter = () => {
             }
 
             setCourses(newCourses)
+        } else if (type === CONTINENTS_LIST.type) {
+            const currentIndex = continents.indexOf(value)
+            const newContinents = [...continents]
+            if (value === CONTINENTS_LIST.list[0]) {
+                if (currentIndex === -1) {
+                    CONTINENTS_LIST.list.forEach((continent) => newContinents.push(continent))
+                } else {
+                    CONTINENTS_LIST.list.forEach((continent) => newContinents.pop(continent))
+                }
+            } else {
+                if (currentIndex === -1) {
+                    newContinents.push(value)
+                } else {
+                    newContinents.splice(currentIndex, 1)
+                }
+            }
+
+            setContinents(newContinents)
         }
     }
 
@@ -172,6 +192,14 @@ const Filter = () => {
                 <CoursesFilter
                     methods={COURSE_LIST}
                     checks={courses}
+                    selectHandler={selectHandler}
+                />
+                <Divider
+                    sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
+                />
+                <ContinentsFilter
+                    continents={CONTINENTS_LIST}
+                    checks={continents}
                     selectHandler={selectHandler}
                 />
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>

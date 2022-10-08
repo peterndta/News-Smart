@@ -105,7 +105,7 @@ const variables = {
     },
     CONTINENTS_LIST: {
         type: 'Continents',
-        list: ['Asia', 'Africa', 'Antarctica', 'Australia', 'Europe', 'North America'],
+        list: ['All', 'Asia', 'Africa', 'Antarctica', 'Australia', 'Europe', 'North America'],
     },
     USER: {
         name: 'Bùi Thế Hiển',
