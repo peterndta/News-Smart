@@ -43,7 +43,7 @@ namespace reciWebApp.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest (new Response(400, e.Message));
+                return BadRequest (new Response(500, e.Message));
             }
         }
 
