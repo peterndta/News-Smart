@@ -25,6 +25,11 @@ namespace reciWebApp.Data.Repositories
             return await GetAll().ToListAsync();
         }
 
+        public async Task<Category> GetCategoryByIdAsync(int id)
+        {
+            return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
+        }
+
         public void UpdateCategory(Category category)
         {
             Update(category);

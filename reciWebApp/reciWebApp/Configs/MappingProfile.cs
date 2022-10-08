@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs;
+using reciWebApp.DTOs.CategoryDTOs;
+using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.StepDTOs;
 
 namespace reciWebApp.Configs
 {

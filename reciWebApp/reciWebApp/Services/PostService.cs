@@ -1,4 +1,5 @@
 ﻿using reciWebApp.Data.IRepositories;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Interfaces;
 
 namespace reciWebApp.Services
@@ -25,5 +26,13 @@ namespace reciWebApp.Services
             }
             return checkAuthority;
         }
+
+        //public async List<ShowPostDTO> GetPostInfo(List<ShowPostDTO> showPostDTOs)
+        //{
+        //    for (int i = 0; i < showPostDTOs.Count; i++)
+        //    {
+        //    }
+        //    return showPostDTOs;
+        //}
     }
 }

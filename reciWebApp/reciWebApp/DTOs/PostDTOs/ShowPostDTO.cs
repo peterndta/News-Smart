@@ -1,4 +1,4 @@
-﻿namespace reciWebApp.DTOs
+﻿namespace reciWebApp.DTOs.PostDTOs
 {
     public class ShowPostDTO
     {
@@ -7,11 +7,15 @@
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public int? CookingMethodId { get; set; }
-        public int? RecipeTypeId { get; set; }
+        public string? Method { get; set; }
+        public int? RecipeRegionId { get; set; }
+        public string? Continents { get; set; }
+        public string? Region { get; set; }
         public int? UserId { get; set; }
         public int? Status { get; set; }
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
         public int? CategoryId { get; set; }
+        public string? Type { get; set; }
     }
 }

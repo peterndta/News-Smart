@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
-using reciWebApp.DTOs;
+using reciWebApp.DTOs.CategoryDTOs;
 using reciWebApp.Services.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
