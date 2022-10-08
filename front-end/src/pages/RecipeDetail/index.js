@@ -1,4 +1,6 @@
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { useParams } from 'react-router-dom'
 
 import {
     StarRateOutlined,
@@ -23,7 +25,29 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
+import { useSnackbar } from '../../HOCs/SnackbarContext'
+import { useRecipe } from '../../recoil/recipe'
+
 const RecipeDetail = () => {
+    const [recipe, setRecipe] = useState({})
+    const { id } = useParams()
+    const { getRecipe } = useRecipe()
+    const showSackbar = useSnackbar()
+    useEffect(() => {
+        getRecipe(id)
+            .then((resposne) => {
+                const data = resposne.data.data
+                console.log(data)
+                setRecipe(data)
+            })
+            .catch(() => {
+                showSackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     const breadcrumbs = [
         <Link underline="hover" key="1" color="inherit" href="/" fontWeight={700}>
             Home
@@ -32,7 +56,7 @@ const RecipeDetail = () => {
             Recipes
         </Link>,
         <Typography key="3" color="text.primary" fontWeight={700}>
-            Homemade Chicken Soup
+            {recipe?.name}
         </Typography>,
     ]
 
@@ -42,7 +66,7 @@ const RecipeDetail = () => {
                 {breadcrumbs}
             </Breadcrumbs>
             <Typography mt={4} variant="h3" fontWeight={700} sx={{ color: blueGrey[800] }}>
-                Homemade Chicken Soup
+                {recipe?.name}
             </Typography>
             <Box display="flex">
                 <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} />
@@ -87,7 +111,7 @@ const RecipeDetail = () => {
                     <Box
                         component="img"
                         alt="food"
-                        src="https://s3-alpha-sig.figma.com/img/cc01/ed52/b633bef4961d3740fab0677957c63908?Expires=1664755200&Signature=e6c09hY0e2w7-gEvO74edrI0MSNhBA6KroHPs3QvSDcxpgIj2u960wnxwBV1l7eIKWTGxUmRbtIjnJol2HpqHeIBNmvc89sp0Rf4MIe5yLC6sgbBpEW~y6~ZKCiwjZFgcjJXQc7jcUv5pSV04vwpyVfWbHQsBmNZbXKwEnWndcvTXVpqr48c9eKLKPRHyo3l5Q1sxrtg9Ps3~N~RapACKgatOUzykkYbnXuzLqu5spAxcM5blYy60-XeRzXJ8dXqSjZafIFehZKQgv21mZLaeFyl3KzMwZPwZQotquQaNldlynsP5oMCxKIBnF~fwRLSHzKTZEguK3m1ut1g5hAFQw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+                        src={recipe?.imageUrl}
                         sx={{
                             width: '77%',
                             aspectRatio: '16 / 9',
