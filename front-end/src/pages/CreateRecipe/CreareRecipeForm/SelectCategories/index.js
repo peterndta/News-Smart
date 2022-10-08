@@ -46,13 +46,13 @@ const SelectCategories = ({ categories, setCategories }) => {
 
     return (
         <FormControl sx={{ width: 300, mr: 3 }} required size="small">
-            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <InputLabel id="demo-multiple-checkbox-label">Category</InputLabel>
             <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
                 value={categories}
-                input={<OutlinedInput label="Tag" />}
+                input={<OutlinedInput label="Category" />}
                 renderValue={(selected) => selected.join(', ')}
                 MenuProps={MenuProps}
             >

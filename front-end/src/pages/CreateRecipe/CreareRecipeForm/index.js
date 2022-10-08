@@ -23,7 +23,9 @@ import { blueGrey, grey } from '@mui/material/colors'
 import defaultPost from '../../../assets/images/defaultPoster.png'
 import usePrompt from '../../../hooks/use-prompt'
 import SelectCategories from './SelectCategories'
+import SelectContinents from './SelectContinents'
 import SelectMethods from './SelectMethods'
+import SelectUses from './SelectUses'
 
 const isEmpty = (incomeValue) => incomeValue.trim().length === 0
 const defaultTextFieldValue = { value: '', isTouched: false }
@@ -34,6 +36,8 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
     const [youtubeUrl, setYoutubeUrl] = useState({ ...defaultTextFieldValue, isValid: false })
     const [categories, setCategories] = useState([])
     const [method, setMethod] = useState('')
+    const [uses, setUses] = useState('')
+    const [continents, setContinents] = useState('')
     const [name, setName] = useState(defaultTextFieldValue)
     const [description, setDescription] = useState(defaultTextFieldValue)
     const [toolsPreparation, setToolsPreparation] = useState(defaultTextFieldValue)
@@ -282,6 +286,11 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                         setCategories={setCategories}
                                     />
                                     <SelectMethods method={method} setMethod={setMethod} />
+                                    <SelectUses uses={uses} setUses={setUses} />
+                                    <SelectContinents
+                                        continents={continents}
+                                        setContinents={setContinents}
+                                    />
                                 </Box>
                             </Box>
                         </Grid>
@@ -380,24 +389,28 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                 helperText={cookIsInvalid ? 'Process must not be empty' : ''}
                                 error={cookIsInvalid}
                             />
-                            <FormControl required mt={3} size="small" sx={{ width: '36%' }}>
-                                <InputLabel htmlFor="component-outlined">Youtube Url</InputLabel>
-                                <OutlinedInput
-                                    id="component-outlined"
-                                    label="Youtube Url"
-                                    value={youtubeUrl.value}
-                                    onBlur={urlVideoToucheHandler}
-                                    onChange={urlVideoChangeHandler}
-                                    error={youtubeUrlIsInvalid}
-                                />
-                            </FormControl>
+                            <Box display="flex" justifyContent="space-between" mt={3}>
+                                <FormControl required mt={3} size="small" sx={{ width: '36%' }}>
+                                    <InputLabel htmlFor="component-outlined">
+                                        Youtube Url
+                                    </InputLabel>
+                                    <OutlinedInput
+                                        id="component-outlined"
+                                        label="Youtube Url"
+                                        value={youtubeUrl.value}
+                                        onBlur={urlVideoToucheHandler}
+                                        onChange={urlVideoChangeHandler}
+                                        error={youtubeUrlIsInvalid}
+                                    />
+                                </FormControl>
+                            </Box>
                             {youtubeUrlIsInvalid && (
                                 <FormHelperText error={youtubeUrlIsInvalid}>
                                     Youtube Url must not be empty
                                 </FormHelperText>
                             )}
                             <Box display="flex" sx={{ mt: 3 }}>
-                                <Box display="flex">
+                                <Box display="flex" width="1">
                                     {youtubeUrl.isValid ? (
                                         <ReactPlayer
                                             url={youtubeUrl.value}
@@ -419,7 +432,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                             </Typography>
                                         </Box>
                                     )}
-                                    <Box ml={5}>
+                                    <Box ml={5} width="0.5">
                                         <FormControl required fullWidth size="small">
                                             <InputLabel htmlFor="component-outlined">
                                                 Serving
@@ -432,7 +445,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
                                                     min: 1,
-                                                    max: 1200,
+                                                    max: 10,
                                                 }}
                                                 value={servingPeople}
                                                 onChange={(event) =>
@@ -455,7 +468,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
                                                     min: 1,
-                                                    max: 1200,
+                                                    max: 120,
                                                 }}
                                                 value={preparingTime}
                                                 onChange={(event) =>
@@ -478,7 +491,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
                                                     min: 1,
-                                                    max: 1200,
+                                                    max: 120,
                                                 }}
                                                 value={processingTime}
                                                 onChange={(event) =>
@@ -501,7 +514,7 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
                                                     min: 1,
-                                                    max: 1200,
+                                                    max: 180,
                                                 }}
                                                 value={cookingTime}
                                                 onChange={(event) =>
