@@ -116,6 +116,10 @@ namespace reciWebApp.Controllers
                 new CookingMethod
                 {
                     Method = "Frying",
+                },
+                new CookingMethod
+                {
+                    Method = "Others",
                 }
             };
 
@@ -201,6 +205,10 @@ namespace reciWebApp.Controllers
                 {
                     UsesOfFood = "Weight loss",
                 },
+                new Use
+                {
+                    UsesOfFood = "Others",
+                }
             };
             for (int i = 0; i < use.Count(); i++)
             {
