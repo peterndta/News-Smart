@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../components/filter.dart';
+import '../components/filter_recipe_result.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
@@ -108,7 +108,7 @@ class _RecipesResultState extends State<RecipesResult> {
           SizedBox(
             width: 5,
           ),
-          Filter(isSelected)
+          FilterRecipeResult(isSelected)
         ],
       ),
       bottomNavigationBar: Copyright(),
