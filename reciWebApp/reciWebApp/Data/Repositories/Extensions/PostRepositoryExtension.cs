@@ -10,7 +10,7 @@ namespace reciWebApp.Data.Repositories.Extensions
         {
             return string.IsNullOrWhiteSpace(name) 
                 ? posts
-                : posts.Where(x => name.Contains(x.Name));
+                : posts.Where(x => x.Name.Contains(name));
         }
 
         public static IQueryable<Post> FilterPostByCookingMethodId(this IQueryable<Post> posts, ReciContext context,
@@ -26,7 +26,7 @@ namespace reciWebApp.Data.Repositories.Extensions
         {
             return id == null
                 ? posts
-                : posts.Where(x => x.RecipeTypeId == id);
+                : posts.Where(x => x.RecipeRegionId == id);
         }
 
         public static IQueryable<Post> FilterPostByCategoryId(this IQueryable<Post> posts, ReciContext context,

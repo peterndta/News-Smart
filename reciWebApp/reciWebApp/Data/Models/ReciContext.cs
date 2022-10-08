@@ -28,7 +28,6 @@ namespace reciWebApp.Data.Models
         public virtual DbSet<Use> Uses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserInteract> UserInteracts { get; set; } = null!;
-        public virtual DbSet<UsesOfFood> UsesOfFoods { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -103,7 +102,7 @@ namespace reciWebApp.Data.Models
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
-                entity.Property(e => e.RecipeTypeId).HasColumnName("recipe_type_id");
+                entity.Property(e => e.RecipeRegionId).HasColumnName("recipe_region_id");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
@@ -112,6 +111,8 @@ namespace reciWebApp.Data.Models
                     .HasColumnName("update_date");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.Property(e => e.UsesId).HasColumnName("uses_id");
 
                 entity.Property(e => e.VideoUrl).HasColumnName("video_url");
 
@@ -125,15 +126,20 @@ namespace reciWebApp.Data.Models
                     .HasForeignKey(d => d.CookingMethodId)
                     .HasConstraintName("FK_Posts_CookingMethods");
 
-                entity.HasOne(d => d.RecipeType)
+                entity.HasOne(d => d.RecipeRegion)
                     .WithMany(p => p.Posts)
-                    .HasForeignKey(d => d.RecipeTypeId)
+                    .HasForeignKey(d => d.RecipeRegionId)
                     .HasConstraintName("FK_Posts_RecipeRegions");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Posts_Users");
+
+                entity.HasOne(d => d.Uses)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.UsesId)
+                    .HasConstraintName("FK_Posts_Uses");
             });
 
             modelBuilder.Entity<PostMetum>(entity =>
@@ -183,9 +189,7 @@ namespace reciWebApp.Data.Models
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Country).HasColumnName("country");
-
-                entity.Property(e => e.Region).HasColumnName("region");
+                entity.Property(e => e.Continents).HasColumnName("continents");
             });
 
             modelBuilder.Entity<Step>(entity =>
@@ -280,31 +284,6 @@ namespace reciWebApp.Data.Models
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserInteracts_Users");
-            });
-
-            modelBuilder.Entity<UsesOfFood>(entity =>
-            {
-                entity.ToTable("UsesOfFood");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.PostsId)
-                    .HasMaxLength(50)
-                    .HasColumnName("posts_id");
-
-                entity.Property(e => e.UsesId).HasColumnName("uses_id");
-
-                entity.HasOne(d => d.Posts)
-                    .WithMany(p => p.UsesOfFoods)
-                    .HasForeignKey(d => d.PostsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UsesOfFood_Posts");
-
-                entity.HasOne(d => d.Uses)
-                    .WithMany(p => p.UsesOfFoods)
-                    .HasForeignKey(d => d.UsesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UsesOfFood_Uses");
             });
 
             OnModelCreatingPartial(modelBuilder);

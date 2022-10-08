@@ -7,12 +7,12 @@ namespace reciWebApp.Data.Models
     {
         public Use()
         {
-            UsesOfFoods = new HashSet<UsesOfFood>();
+            Posts = new HashSet<Post>();
         }
 
         public int Id { get; set; }
         public string? UsesOfFood { get; set; }
 
-        public virtual ICollection<UsesOfFood> UsesOfFoods { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

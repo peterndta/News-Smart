@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import 'checkbox.dart';
 
-class Filter extends StatefulWidget {
+class FilterCookingMethods extends StatefulWidget {
   bool isSelected;
 
-  Filter(this.isSelected);
+  FilterCookingMethods(this.isSelected);
 
   @override
-  State<Filter> createState() => _FilterState();
+  State<FilterCookingMethods> createState() => _FilterCookingMethodsState();
 }
 
-class _FilterState extends State<Filter> {
+class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
@@ -54,7 +54,7 @@ class _FilterState extends State<Filter> {
                             },
                           ),
                           Text(
-                            'Filters',
+                            'Filter',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
@@ -63,8 +63,7 @@ class _FilterState extends State<Filter> {
                           Container(
                             margin: EdgeInsets.only(right: 10),
                             child: OutlinedButton(
-                              onPressed: () {
-                              },
+                              onPressed: () {},
                               style: OutlinedButton.styleFrom(
                                 padding: EdgeInsets.all(5),
                                 side: BorderSide(
@@ -130,60 +129,8 @@ class _FilterState extends State<Filter> {
                       // color: Colors.yellow,
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: 5, left: 15),
                       height: MediaQuery.of(context).size.height * 0.24,
-                      // color: Colors.red,
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Category',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                            ),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Beef'),
-                                  CheckBox(isSelected, 'Chicken'),
-                                  CheckBox(isSelected, 'Pork'),
-                                ],
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Egg'),
-                                  CheckBox(isSelected, 'Seafood'),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.002,
-                          ),
-                          Divider(
-                            color: Colors.orange,
-                            height: 3,
-                            thickness: 2,
-                            indent: 50,
-                            endIndent: 60,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.17,
-                      // color: Colors.green,
+                      // color: Colors.yellow,
                       padding: EdgeInsets.only(top: 5, left: 15),
                       alignment: Alignment.topLeft,
                       child: Column(
@@ -196,77 +143,24 @@ class _FilterState extends State<Filter> {
                               fontSize: 25,
                             ),
                           ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02,
+                          ),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Boil'),
-                                  CheckBox(isSelected, 'Fry'),
-                                ],
-                              ),
+                              CheckBox(isSelected, 'Boil'),
+                              CheckBox(isSelected, 'Fry'),
+                              CheckBox(isSelected, 'Roast'),
+                              CheckBox(isSelected, 'Frizzy'),
+                              CheckBox(isSelected, 'Steam'),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Roast'),
-                                ],
-                              )
                             ],
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.002,
-                          ),
-                          Divider(
-                            color: Colors.orange,
-                            height: 3,
-                            thickness: 2,
-                            indent: 50,
-                            endIndent: 60,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.24,
-                      // color: Colors.yellow,
-                      padding: EdgeInsets.only(top: 5, left: 15),
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Course',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                            ),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Dinner'),
-                                  CheckBox(isSelected, 'Breakfast'),
-                                ],
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CheckBox(isSelected, 'Lunch'),
-                                ],
-                              )
-                            ],
+                            height: MediaQuery.of(context).size.height * 0.04,
                           ),
                           Center(
                             child: ElevatedButton(

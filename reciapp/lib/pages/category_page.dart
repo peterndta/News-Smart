@@ -1,23 +1,24 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/filter_course.dart';
-import 'package:reciapp/components/filter_new_old_popular.dart';
+import 'package:reciapp/components/filter_cooking_methods.dart';
 
+import '../components/filter_category.dart';
+import '../components/filter_new_old_popular.dart';
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 
-class CoursePage extends StatefulWidget {
-  const CoursePage({super.key});
+class CategoryPage extends StatefulWidget {
+  const CategoryPage({super.key});
 
   @override
-  State<CoursePage> createState() => _CoursePageState();
+  State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CoursePageState extends State<CoursePage> {
+class _CategoryPageState extends State<CategoryPage> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
   bool isSelected = false;
@@ -79,7 +80,7 @@ class _CoursePageState extends State<CoursePage> {
                         margin:
                             EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         child: Text(
-                          'Course',
+                          'Category',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -114,7 +115,7 @@ class _CoursePageState extends State<CoursePage> {
           SizedBox(
             width: 5,
           ),
-          FilterCourse(isSelected)
+          FilterCategory(isSelected)
         ],
       ),
       bottomNavigationBar: Copyright(),

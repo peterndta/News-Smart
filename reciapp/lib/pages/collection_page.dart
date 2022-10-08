@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/filter_new_old_popular.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
@@ -14,8 +15,6 @@ class CollectionPage extends StatefulWidget {
 }
 
 class _CollectionPageState extends State<CollectionPage> {
-  final List<String> dropdownItems = ['Newest', 'Oldest'];
-  String? selectedItem = 'Newest';
   final _textController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
@@ -93,33 +92,7 @@ class _CollectionPageState extends State<CollectionPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.13,
                   ),
-                  DropdownButtonHideUnderline(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 0.5)),
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5),
-                        child: DropdownButton(
-                            iconEnabledColor:
-                                Color.fromARGB(255, 124, 112, 112),
-                            focusColor: Colors.white,
-                            value: selectedItem,
-                            items: dropdownItems.map((item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 124, 112, 112),
-                                      fontSize: 25),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (item) =>
-                                setState(() => selectedItem = item)),
-                      ),
-                    ),
-                  ),
+                  FilterNewOldPopular(),
                 ],
               ),
               Container(

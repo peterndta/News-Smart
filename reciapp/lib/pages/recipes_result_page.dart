@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../components/filter.dart';
+import '../components/filter_new_old_popular.dart';
+import '../components/filter_recipe_result.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
@@ -92,7 +93,12 @@ class _RecipesResultState extends State<RecipesResult> {
                 ],
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 11),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [FilterNewOldPopular()])),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.33,
@@ -108,7 +114,7 @@ class _RecipesResultState extends State<RecipesResult> {
           SizedBox(
             width: 5,
           ),
-          Filter(isSelected)
+          FilterRecipeResult(isSelected)
         ],
       ),
       bottomNavigationBar: Copyright(),
