@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/course_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
@@ -189,7 +190,7 @@ class CategoryButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CoursePage(),
+          builder: (context) => CategoryPage(),
         ));
       },
       child: Container(
