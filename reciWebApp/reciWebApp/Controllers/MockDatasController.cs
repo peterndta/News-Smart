@@ -25,18 +25,18 @@ namespace reciWebApp.Controllers
             {
                 new Category
                 {
-                    Type = "Breakfast",
+                    Type = "Meat",
                 },
                 new Category
                 {
-                    Type = "Launch",
+                    Type = "Vegetables",
                 }, new Category
                 {
-                    Type = "Beverages",
+                    Type = "Seafood",
                 },
                 new Category
                 {
-                    Type = "Appetizers",
+                    Type = "Fruit",
                 },
                 new Category
                 {
@@ -44,23 +44,31 @@ namespace reciWebApp.Controllers
                 },
                 new Category
                 {
-                    Type = "Salads",
+                    Type = "Diary",
                 },
                 new Category
                 {
-                    Type = "Desserts",
+                    Type = "Bread",
                 },
                 new Category
                 {
-                    Type = "Breads",
+                    Type = "Pasta",
                 },
                 new Category
                 {
-                    Type = "Main dishes",
+                    Type = "Nut",
                 },
                 new Category
                 {
-                    Type = "Holidays",
+                    Type = "Jam",
+                },
+                new Category
+                {
+                    Type = "Canned food",
+                },
+                new Category
+                {
+                    Type = "Others",
                 }
             };
             for (int i = 0; i < categories.Count(); i++)
@@ -120,52 +128,52 @@ namespace reciWebApp.Controllers
                 new RecipeRegion
             {
                 Country = "Viet Nam",
-                Region = "North side",
-            },
-                new RecipeRegion
-            {
-                Country = "Viet Nam",
-                Region = "South side",
-            },
-                new RecipeRegion
-            {
-                Country = "Viet Nam",
-                Region = "West side",
-            },
-                new RecipeRegion
-            {
-                Country = "Viet Nam",
-                Region = "East side",
-            },
-                new RecipeRegion
-            {
-                Country = "America",
-                Region = "North side",
-            },
-                new RecipeRegion
-            {
-                Country = "America",
-                Region = "South side",
-            },
-                new RecipeRegion
-            {
-                Country = "America",
-                Region = "West side",
-            },
-                new RecipeRegion
-            {
-                Country = "America",
-                Region = "East side",
+                Region = "Asia",
             },
                 new RecipeRegion
             {
                 Country = "Japan",
-                Region = "Nort side",
+                Region = "Asia",
             },
                 new RecipeRegion
             {
-                Country = "Japan",
-                Region = "South side",
+                Country = "Korea",
+                Region = "Asia",
+            },
+                new RecipeRegion
+            {
+                Country = "America",
+                Region = "South America",
+            },
+                new RecipeRegion
+            {
+                Country = "Mexico",
+                Region = "North side",
+            },
+                new RecipeRegion
+            {
+                Country = "Italia",
+                Region = "Eutope",
+            },
+                new RecipeRegion
+            {
+                Country = "Russia",
+                Region = "Europe",
+            },
+                new RecipeRegion
+            {
+                Country = "Egypt",
+                Region = "Africa",
+            },
+                new RecipeRegion
+            {
+                Country = "Australia",
+                Region = "Australia",
+            },
+                new RecipeRegion
+            {
+                Country = "India",
+                Region = "Asia",
             },
             };
             for (int i = 0; i < reciRegions.Count(); i++)
