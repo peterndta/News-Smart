@@ -3,16 +3,16 @@
 import 'package:flutter/material.dart';
 import 'checkbox.dart';
 
-class FilterCourse extends StatefulWidget {
+class FilterCookingMethods extends StatefulWidget {
   bool isSelected;
 
-  FilterCourse(this.isSelected);
+  FilterCookingMethods(this.isSelected);
 
   @override
-  State<FilterCourse> createState() => _FilterCourseState();
+  State<FilterCookingMethods> createState() => _FilterCookingMethodsState();
 }
 
-class _FilterCourseState extends State<FilterCourse> {
+class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
@@ -149,9 +149,11 @@ class _FilterCourseState extends State<FilterCourse> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CheckBox(isSelected, 'Dinner'),
-                              CheckBox(isSelected, 'Breakfast'),
-                              CheckBox(isSelected, 'Lunch'),
+                              CheckBox(isSelected, 'Boil'),
+                              CheckBox(isSelected, 'Fry'),
+                              CheckBox(isSelected, 'Roast'),
+                              CheckBox(isSelected, 'Frizzy'),
+                              CheckBox(isSelected, 'Steam'),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                               ),
