@@ -4,7 +4,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Checkbox, Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const CategoriesFilter = ({ categories, checks, selectHandler }) => {
+const MethodsFilter = ({ methods, checks, selectHandler }) => {
     const [open, setOpen] = React.useState(true)
 
     const handleClick = () => setOpen(!open)
@@ -13,7 +13,7 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} component="nav">
             <ListItemButton onClick={handleClick}>
                 <ListItemText
-                    primary={categories.type}
+                    primary={methods.type}
                     sx={{
                         '& > span': {
                             fontWeight: 700,
@@ -26,18 +26,18 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {categories.list.map((category) => (
+                    {methods.list.map((method) => (
                         <ListItemButton
-                            key={category.id}
+                            key={method.id}
                             dense
-                            onClick={selectHandler(category.type)}
+                            onClick={selectHandler(method.method)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(category.type) !== -1}
+                                checked={checks.indexOf(method.method) !== -1}
                             />
-                            <ListItemText primary={category.type} />
+                            <ListItemText primary={method.method} />
                         </ListItemButton>
                     ))}
                 </List>
@@ -46,4 +46,4 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
     )
 }
 
-export default CategoriesFilter
+export default MethodsFilter

@@ -31,12 +31,12 @@ const UsesFilter = ({ uses, checks, selectHandler }) => {
                         <ListItemButton
                             key={use.id}
                             dense
-                            onClick={selectHandler(use.id, typeList)}
+                            onClick={selectHandler(use.usesOfFood, typeList)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(use.id) !== -1}
+                                checked={checks.indexOf(use.usesOfFood) !== -1}
                             />
                             <ListItemText primary={use.usesOfFood} />
                         </ListItemButton>

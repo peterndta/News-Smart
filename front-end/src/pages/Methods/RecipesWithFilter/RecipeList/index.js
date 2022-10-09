@@ -1,42 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import queryString from 'query-string'
-import { useHistory, useLocation } from 'react-router-dom'
-
-// import queryString from 'query-string'
-// import { useLocation } from 'react-router-dom'
 import { FormControl, Grid, InputLabel, MenuItem, Pagination, Select } from '@mui/material'
 
 import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
 import Recipes from './RecipesCompo'
 
 const RecipeList = () => {
-    const history = useHistory()
-    const { search: query, pathname } = useLocation()
-    const { use, continent, search, time } = queryString.parse(query)
-    const [type, setType] = React.useState(time ? time : '')
+    const [type, setType] = React.useState('')
+
     const handleChange = (event) => {
         setType(event.target.value)
     }
-
-    const filterHandler = () => {
-        let route = pathname + '?'
-        if (search) route += '&search=' + search
-
-        if (continent?.length !== 0)
-            continent?.forEach((continent) => (route += `&continent=${continent}`))
-
-        if (use?.length !== 0) use?.forEach((use) => (route += `&use=${use}`))
-
-        if (type) route += `&time=${type}`
-
-        history.push(route)
-    }
-
-    useEffect(() => {
-        filterHandler()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type])
     return (
         <Grid item md={9} display="flex" flexDirection="column">
             <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">

@@ -168,7 +168,7 @@ const CommonHeader = () => {
                             <Box
                                 component={NavLink}
                                 exact
-                                to="/recipes/course"
+                                to="/recipes/collection"
                                 sx={{
                                     textDecoration: 'none',
                                     color: grey[100],

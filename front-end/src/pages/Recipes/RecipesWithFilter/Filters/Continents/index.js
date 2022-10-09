@@ -31,12 +31,12 @@ const ContinentsFilter = ({ continents, checks, selectHandler }) => {
                         <ListItemButton
                             key={continent.id}
                             dense
-                            onClick={selectHandler(continent.id, typeList)}
+                            onClick={selectHandler(continent.continents, typeList)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(continent.id) !== -1}
+                                checked={checks.indexOf(continent.continents) !== -1}
                             />
                             <ListItemText primary={continent.continents} />
                         </ListItemButton>
