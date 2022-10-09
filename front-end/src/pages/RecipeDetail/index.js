@@ -26,16 +26,15 @@ const RecipeDetail = () => {
     const [recipe, setRecipe] = useState({})
     const { id } = useParams()
     const { getRecipe } = useRecipe()
-    const showSackbar = useSnackbar()
+    const showSnackbar = useSnackbar()
     useEffect(() => {
         getRecipe(id)
-            .then((resposne) => {
-                const data = resposne.data.data
-                console.log(data)
+            .then((response) => {
+                const data = response.data.data
                 setRecipe(data)
             })
             .catch(() => {
-                showSackbar({
+                showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later.',
                 })

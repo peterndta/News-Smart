@@ -30,6 +30,8 @@ import SelectUses from './SelectUses'
 const isEmpty = (incomeValue) => incomeValue.trim().length === 0
 const defaultTextFieldValue = { value: '', isTouched: false }
 const youtubeUrlPattern = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/
+const min = 1
+const max = 120
 
 const CreateRecipeForm = ({ createRecipeHandler }) => {
     const [poster, setPoster] = useState({ src: defaultPost, file: null })
@@ -123,7 +125,26 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
 
     const submitHandler = (event) => {
         event.preventDefault()
-        createRecipeHandler(poster)
+        const categoriesId = categories.map((cate) => cate.id)
+        const recipeInfo = {
+            name: name.value,
+            cookingMethodId: method,
+            recipeRegionId: continents,
+            videoUrl: youtubeUrl.value,
+            usesId: uses,
+            categoriesId: categoriesId,
+            description: description.value,
+            ingredient: ingredientsPreparation.value,
+            tool: toolsPreparation.value,
+            processing: process.value,
+            cooking: cook.value,
+            processingTime: +processingTime,
+            cookingTime: +cookingTime,
+            preparingTime: +preparingTime,
+            serving: +servingPeople,
+        }
+
+        createRecipeHandler(poster, recipeInfo)
     }
 
     const uploadImageHandler = (event) => {
@@ -467,8 +488,8 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     type: 'number',
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
-                                                    min: 1,
-                                                    max: 120,
+                                                    min: min,
+                                                    max: max,
                                                 }}
                                                 value={preparingTime}
                                                 onChange={(event) =>
@@ -490,8 +511,8 @@ const CreateRecipeForm = ({ createRecipeHandler }) => {
                                                     type: 'number',
                                                     inputMode: 'numeric',
                                                     pattern: '[0-9]*',
-                                                    min: 1,
-                                                    max: 120,
+                                                    min: min,
+                                                    max: max,
                                                 }}
                                                 value={processingTime}
                                                 onChange={(event) =>

@@ -1,4 +1,6 @@
-﻿namespace reciWebApp.DTOs.PostDTOs
+﻿using reciWebApp.DTOs.CategoryDTOs;
+
+namespace reciWebApp.DTOs.PostDTOs
 {
     public class ShowPostDTO
     {
@@ -14,7 +16,7 @@
         public int? Status { get; set; }
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
-        public int CategoryId { get; set; }
-        public string? Type { get; set; }
+        public List<ShowCategoryDTO> ListCategories { get; set; }
+        public string UserName { get; set; }
     }
 }
