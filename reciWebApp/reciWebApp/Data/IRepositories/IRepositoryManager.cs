@@ -8,6 +8,7 @@
         ICategoryRepository Category { get; }
         ICookingMethodRepository CookingMethod { get; }
         IRecipeRegionRepository RecipeRegion { get; }
+        IPostCategoryRepository PostCategory { get; }
         Task SaveChangesAsync();
     }
 }

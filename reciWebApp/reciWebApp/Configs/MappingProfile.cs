@@ -23,6 +23,7 @@ namespace reciWebApp.Configs
             CreateMap<Category, ShowCategoryDTO>();
             CreateMap<CookingMethod, ShowCookingMethodDTO>();
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();
+            CreateMap<CreatePostDTO, Step>();
         }
     }
 }
