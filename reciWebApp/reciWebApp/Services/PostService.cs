@@ -32,8 +32,8 @@ namespace reciWebApp.Services
         public ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO)
         {
             showPostDTO.Type = _repoManager.Category.GetCategoryById(showPostDTO.CategoryId).Type;
-            showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.CategoryId).Continents;
-            showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CategoryId).Method;
+            showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.RecipeRegionId).Continents;
+            showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CookingMethodId).Method;
             return showPostDTO;
         }
     }
