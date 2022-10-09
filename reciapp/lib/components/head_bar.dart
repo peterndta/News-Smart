@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/home_page.dart';
-import '../pages/collection_page.dart';
+import '../pages/bookmark_page.dart';
 
 class HeadBar extends StatefulWidget {
   const HeadBar({super.key});

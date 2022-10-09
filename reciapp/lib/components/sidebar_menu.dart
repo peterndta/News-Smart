@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
-import 'package:reciapp/pages/course_page.dart';
+import 'package:reciapp/pages/collection_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
@@ -117,7 +117,7 @@ class CourseButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CoursePage(),
+          builder: (context) => CollectionPage(),
         ));
       },
       child: Container(
@@ -131,7 +131,8 @@ class CourseButton extends StatelessWidget {
               size: 30,
             ),
             SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-            Text('Course', style: TextStyle(color: Colors.white, fontSize: 25)),
+            Text('Collection',
+                style: TextStyle(color: Colors.white, fontSize: 25)),
           ],
         ),
       ),
@@ -350,6 +351,39 @@ class ProfileButton extends StatelessWidget {
   }
 }
 
+class LogoutButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => UserProfile(),
+        // ));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 11),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                Text('Profile',
+                    style: TextStyle(color: Colors.white, fontSize: 25))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SideBarMenu extends StatefulWidget {
   @override
   State<SideBarMenu> createState() => _SideBarMenuState();
@@ -415,6 +449,13 @@ class _SideBarMenuState extends State<SideBarMenu> {
                 bottom: BorderSide(color: Colors.white, width: 1),
               )),
               child: AboutButton()),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                bottom: BorderSide(color: Colors.white, width: 1),
+              )),
+              child: LogoutButton()),
         ],
       ),
     );

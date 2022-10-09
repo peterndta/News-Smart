@@ -1,23 +1,25 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/filter_new_old_popular.dart';
+import 'package:reciapp/components/filter_course.dart';
 
+import '../components/sidebar_menu.dart';
+import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
-import '../object/food_list.dart';
+import '../components/head_bar.dart';
 
 class CollectionPage extends StatefulWidget {
-  const CollectionPage({Key? key}) : super(key: key);
+  const CollectionPage({super.key});
 
   @override
   State<CollectionPage> createState() => _CollectionPageState();
 }
 
 class _CollectionPageState extends State<CollectionPage> {
-  final _textController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  bool isSelected = false;
 
   @override
   void initState() {
@@ -44,96 +46,71 @@ class _CollectionPageState extends State<CollectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Theme.of(context).primaryColor,
-        centerTitle: true,
-        title: Text(
-          'Your Collection',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+      drawer: SideBarMenu(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: HeadBar(),
       ),
       body: SingleChildScrollView(
         controller: scrollController,
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-          child: Column(
-            children: [
-              Row(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.09,
+              child: Stack(
                 children: [
-                  Flexible(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: TextField(
-                        controller: _textController,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _textController.clear();
-                            },
+                  Positioned(
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      color: Color.fromARGB(255, 255, 231, 185),
+                    ),
+                  ),
+                  Positioned(
+                    top: 20,
+                    left: 20,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black, width: 0.5)),
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        child: Text(
+                          'Course',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontFamily: 'Inter',
                           ),
-                          hintText: 'Search',
-                          labelStyle: TextStyle(
-                              color: Colors.grey, fontStyle: FontStyle.italic),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.13,
-                  ),
-                  FilterNewOldPopular(),
                 ],
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: [
-                    Text('Showing '),
-                    Text(
-                      '1 ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text('to '),
-                    Text(
-                      '6 ',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text('of '),
-                    Text(
-                      '15',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 3),
+              height: MediaQuery.of(context).size.height * 0.35,
+              child: FoodList(),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: BackToTopButton(scrollController, showbtn),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          BackToTopButton(scrollController, showbtn),
+          SizedBox(
+            width: 5,
+          ),
+          FilterCourse(isSelected)
+        ],
+      ),
       bottomNavigationBar: Copyright(),
     );
   }

@@ -94,11 +94,6 @@ class _CategoryPageState extends State<CategoryPage> {
                 ],
               ),
             ),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 11),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [FilterNewOldPopular()])),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
