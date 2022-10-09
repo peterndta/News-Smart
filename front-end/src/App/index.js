@@ -11,6 +11,7 @@ import { useAuthAction } from '../recoil/auth'
 import categoryAtom, { useCategoryAction } from '../recoil/categories'
 import continentAtom, { useContinentsAction } from '../recoil/continents'
 import methodAtom, { useMethodsAction } from '../recoil/methods'
+import usesAtom, { usesAction } from '../recoil/uses'
 import Routes from '../routes'
 import Theme from '../theme'
 import './App.css'
@@ -18,11 +19,13 @@ import './App.css'
 function App() {
     const authAction = useAuthAction()
     const methodAction = useMethodsAction()
+    const categoryAction = useCategoryAction()
+    const continentAction = useContinentsAction()
+    const useAction = usesAction()
     const setMethods = useSetRecoilState(methodAtom)
     const setCategories = useSetRecoilState(categoryAtom)
     const setContinents = useSetRecoilState(continentAtom)
-    const categoryAction = useCategoryAction()
-    const continentAction = useContinentsAction()
+    const setUses = useSetRecoilState(usesAtom)
     const showSnackBar = useSnackbar()
 
     useEffect(() => {
@@ -57,6 +60,19 @@ function App() {
             .then((res) => {
                 const data = res.data.data
                 setContinents({ type: 'Continent', list: data })
+            })
+            .catch(() => {
+                showSnackBar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+
+        useAction
+            .getUses()
+            .then((res) => {
+                const data = res.data.data
+                setUses({ type: 'Use', list: data })
             })
             .catch(() => {
                 showSnackBar({

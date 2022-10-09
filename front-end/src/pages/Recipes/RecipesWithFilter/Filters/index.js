@@ -21,7 +21,8 @@ import ContinentsFilter from './Continents'
 
 const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
-    const { search: query } = useLocation()
+    const { search: query, pathname } = useLocation()
+
     const { q } = queryString.parse(query)
     const history = useHistory('')
     const [continents, setContinents] = React.useState([])
@@ -41,14 +42,15 @@ const Filter = () => {
     }
 
     const searchChangeHandler = (event) => {
-        setSearchValue(event.target.value)
+        const searchText = event.target.value.trim()
+        if (searchText !== '') {
+            setSearchValue(event.target.value)
+        }
     }
 
-    const searchSubmitHandler = (event) => {
-        if (event.key === 'Enter') {
-            if (searchValue.trim().length !== 0) {
-                history.push(`/recipes?q=${searchValue}`)
-            }
+    const searchSubmitHandler = () => {
+        if (searchValue.trim().length !== 0) {
+            history.push(`/recipes?q=${searchValue}`)
         }
     }
 
@@ -95,7 +97,6 @@ const Filter = () => {
                             label="Keyword"
                             value={searchValue}
                             onChange={searchChangeHandler}
-                            onKeyDown={searchSubmitHandler}
                         />
                     </FormControl>
                 </Box>
@@ -112,7 +113,11 @@ const Filter = () => {
                     selectHandler={selectHandler}
                 />
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
-                    <Button variant="contained" sx={{ color: grey[100] }}>
+                    <Button
+                        variant="contained"
+                        sx={{ color: grey[100] }}
+                        onClick={searchSubmitHandler}
+                    >
                         SHOW RESULTS
                     </Button>
                 </Box>

@@ -23,6 +23,7 @@ const useAuthAction = () => {
                     image: user.image,
                     role: user.role,
                     exp: user.exp,
+                    userId: user.userId,
                 })
             } else {
                 logout()
@@ -35,6 +36,7 @@ const useAuthAction = () => {
                 image: '',
                 role: '',
                 exp: 0,
+                userId: null,
             })
         }
     }
@@ -46,8 +48,8 @@ const useAuthAction = () => {
         }).then((response) => {
             if (response?.data?.isSuccess) {
                 LocalStorageUtils.setUser(token)
-                const { email, name, image, role, exp } = jwt_decode(token)
-                setAuth({ token, email, name, image, role, exp })
+                const { email, name, image, role, exp, userId } = jwt_decode(token)
+                setAuth({ token, email, name, image, role, exp, userId: userId })
                 if (role === 'admin') {
                     history.push('/admin')
                 } else history.push('/')
@@ -65,6 +67,7 @@ const useAuthAction = () => {
             image: '',
             role: '',
             exp: 0,
+            userId: null,
         })
     }
 
