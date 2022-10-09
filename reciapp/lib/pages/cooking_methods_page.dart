@@ -71,7 +71,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.black, width: 0.5)),

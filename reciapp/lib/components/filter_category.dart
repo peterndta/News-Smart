@@ -137,7 +137,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Filter',
+                            'Categories',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,

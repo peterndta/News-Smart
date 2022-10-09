@@ -2,44 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_new_old_popular.dart';
+import 'package:reciapp/object/test_infinite_scroll.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../object/food_list.dart';
 
-class CollectionPage extends StatefulWidget {
-  const CollectionPage({Key? key}) : super(key: key);
+class BookmarkPage extends StatefulWidget {
+  const BookmarkPage({Key? key}) : super(key: key);
 
   @override
-  State<CollectionPage> createState() => _CollectionPageState();
+  State<BookmarkPage> createState() => _BookmarkPageState();
 }
 
-class _CollectionPageState extends State<CollectionPage> {
+class _BookmarkPageState extends State<BookmarkPage> {
   final _textController = TextEditingController();
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
-
-  @override
-  void initState() {
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +31,7 @@ class _CollectionPageState extends State<CollectionPage> {
         ),
       ),
       body: SingleChildScrollView(
-        controller: scrollController,
+        physics: NeverScrollableScrollPhysics(),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
           child: Column(
@@ -118,22 +95,12 @@ class _CollectionPageState extends State<CollectionPage> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.33,
-                child: FoodList(),
-              ),
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: TestInfiniteScroll()),
             ],
           ),
         ),
       ),
-      floatingActionButton: BackToTopButton(scrollController, showbtn),
       bottomNavigationBar: Copyright(),
     );
   }
