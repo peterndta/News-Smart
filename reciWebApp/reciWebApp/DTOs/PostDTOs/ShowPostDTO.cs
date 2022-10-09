@@ -17,7 +17,6 @@ namespace reciWebApp.DTOs.PostDTOs
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
         public List<ShowCategoryDTO> ListCategories { get; set; }
-        public string? Type { get; set; }
         public string UserName { get; set; }
     }
 }

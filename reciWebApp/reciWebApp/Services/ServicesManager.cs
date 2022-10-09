@@ -1,4 +1,5 @@
-﻿using reciWebApp.Data.IRepositories;
+﻿using AutoMapper;
+using reciWebApp.Data.IRepositories;
 using reciWebApp.Services.Interfaces;
 
 namespace reciWebApp.Services
@@ -9,11 +10,13 @@ namespace reciWebApp.Services
         private IConfiguration _config;
         private IAuthService _authService;
         private IPostService _postService;
+        private IMapper _mapper;
 
-        public ServicesManager(IRepositoryManager repoManager, IConfiguration config)
+        public ServicesManager(IRepositoryManager repoManager, IConfiguration config, IMapper mapper)
         {
             _repoManager = repoManager;
             _config = config;
+            _mapper = mapper;
         }
 
         public IAuthService AuthService
@@ -34,7 +37,7 @@ namespace reciWebApp.Services
             {
                 if (_postService == null)
                 {
-                    _postService = new PostService(_repoManager, _config);
+                    _postService = new PostService(_repoManager, _config, _mapper);
                 }
                 return _postService;
             }
