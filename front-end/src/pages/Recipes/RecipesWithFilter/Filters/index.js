@@ -25,7 +25,7 @@ const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
     const usesList = useRecoilValue(usesAtom)
     const { search: query, pathname } = useLocation()
-    const { search, continent, use, time } = queryString.parse(query)
+    const { search, continent, use, time, status } = queryString.parse(query)
     const history = useHistory('')
     const [continents, setContinents] = React.useState(continent ? continent : [])
     const [uses, setUses] = React.useState(use ? use : [])
@@ -75,8 +75,11 @@ const Filter = () => {
 
         if (time) route += `&time=${time}`
 
+        if (status) route += `&status=${status}`
+
         history.push(route)
     }
+
     return (
         <Grid item md={3}>
             <Box p={3} sx={{ border: `1px solid ${blueGrey[200]}`, borderRadius: 1 }}>
