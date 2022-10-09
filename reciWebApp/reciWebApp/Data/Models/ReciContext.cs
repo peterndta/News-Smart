@@ -21,6 +21,7 @@ namespace reciWebApp.Data.Models
         public virtual DbSet<CookingMethod> CookingMethods { get; set; } = null!;
         public virtual DbSet<FoodCollection> FoodCollections { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
+        public virtual DbSet<PostCategory> PostCategories { get; set; } = null!;
         public virtual DbSet<PostMetum> PostMeta { get; set; } = null!;
         public virtual DbSet<PostReport> PostReports { get; set; } = null!;
         public virtual DbSet<RecipeRegion> RecipeRegions { get; set; } = null!;
@@ -90,13 +91,13 @@ namespace reciWebApp.Data.Models
                     .HasMaxLength(50)
                     .HasColumnName("id");
 
-                entity.Property(e => e.CategoryId).HasColumnName("category_id");
-
                 entity.Property(e => e.CookingMethodId).HasColumnName("cooking_method_id");
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("smalldatetime")
                     .HasColumnName("create_date");
+
+                entity.Property(e => e.Description).HasColumnName("description");
 
                 entity.Property(e => e.ImageUrl).HasColumnName("image_url");
 
@@ -116,30 +117,51 @@ namespace reciWebApp.Data.Models
 
                 entity.Property(e => e.VideoUrl).HasColumnName("video_url");
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Posts)
-                    .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK_Posts_Categories");
-
                 entity.HasOne(d => d.CookingMethod)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.CookingMethodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Posts_CookingMethods");
 
                 entity.HasOne(d => d.RecipeRegion)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.RecipeRegionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Posts_RecipeRegions");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Posts_Users");
 
                 entity.HasOne(d => d.Uses)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.UsesId)
                     .HasConstraintName("FK_Posts_Uses");
+            });
+
+            modelBuilder.Entity<PostCategory>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CategoryId).HasColumnName("category_id");
+
+                entity.Property(e => e.PostId)
+                    .HasMaxLength(50)
+                    .HasColumnName("post_id");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.PostCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PostCategories_Categories");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.PostCategories)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PostCategories_Posts");
             });
 
             modelBuilder.Entity<PostMetum>(entity =>
@@ -199,8 +221,6 @@ namespace reciWebApp.Data.Models
                 entity.Property(e => e.Cooking).HasColumnName("cooking");
 
                 entity.Property(e => e.CookingTime).HasColumnName("cooking_time");
-
-                entity.Property(e => e.Description).HasColumnName("description");
 
                 entity.Property(e => e.Ingredient).HasColumnName("ingredient");
 

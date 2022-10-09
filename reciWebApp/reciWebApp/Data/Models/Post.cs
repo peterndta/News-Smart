@@ -8,6 +8,7 @@ namespace reciWebApp.Data.Models
         public Post()
         {
             FoodCollections = new HashSet<FoodCollection>();
+            PostCategories = new HashSet<PostCategory>();
             PostMeta = new HashSet<PostMetum>();
             PostReports = new HashSet<PostReport>();
             Steps = new HashSet<Step>();
@@ -15,7 +16,7 @@ namespace reciWebApp.Data.Models
         }
 
         public string Id { get; set; } = null!;
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public int CookingMethodId { get; set; }
@@ -24,15 +25,15 @@ namespace reciWebApp.Data.Models
         public int? Status { get; set; }
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
-        public int CategoryId { get; set; }
         public int? UsesId { get; set; }
+        public string? Description { get; set; }
 
-        public virtual Category? Category { get; set; }
-        public virtual CookingMethod? CookingMethod { get; set; }
-        public virtual RecipeRegion? RecipeRegion { get; set; }
-        public virtual User? User { get; set; }
+        public virtual CookingMethod CookingMethod { get; set; } = null!;
+        public virtual RecipeRegion RecipeRegion { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         public virtual Use? Uses { get; set; }
         public virtual ICollection<FoodCollection> FoodCollections { get; set; }
+        public virtual ICollection<PostCategory> PostCategories { get; set; }
         public virtual ICollection<PostMetum> PostMeta { get; set; }
         public virtual ICollection<PostReport> PostReports { get; set; }
         public virtual ICollection<Step> Steps { get; set; }

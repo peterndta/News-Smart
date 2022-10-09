@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import {
     Checkbox,
     FormControl,
@@ -10,7 +12,7 @@ import {
     Select,
 } from '@mui/material'
 
-import { CATEGORY_LIST } from '../../../../Elixir'
+import categoryAtom from '../../../../recoil/categories'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -25,21 +27,16 @@ const MenuProps = {
 }
 
 const SelectCategories = ({ categories, setCategories }) => {
+    const categoryList = useRecoilValue(categoryAtom)
+
     const handleChange = (value) => {
-        const currentIndex = categories.indexOf(value)
+        const categoriesId = categories.map((cate) => cate.id)
+        const currentIndex = categoriesId.indexOf(value.id)
         const newCategories = [...categories]
-        if (value === CATEGORY_LIST.list[0]) {
-            if (currentIndex === -1) {
-                CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
-            } else {
-                CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
-            }
+        if (currentIndex === -1) {
+            newCategories.push(value)
         } else {
-            if (currentIndex === -1) {
-                newCategories.push(value)
-            } else {
-                newCategories.splice(currentIndex, 1)
-            }
+            newCategories.splice(currentIndex, 1)
         }
         setCategories(newCategories)
     }
@@ -51,15 +48,17 @@ const SelectCategories = ({ categories, setCategories }) => {
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
-                value={categories}
+                value={categories.map((cate) => cate.type)}
                 input={<OutlinedInput label="Category" />}
                 renderValue={(selected) => selected.join(', ')}
                 MenuProps={MenuProps}
             >
-                {CATEGORY_LIST.list.map((name, index) => (
-                    <MenuItem key={index} value={name} onClick={() => handleChange(name)}>
-                        <Checkbox checked={categories.indexOf(name) > -1} />
-                        <ListItemText primary={name} />
+                {categoryList.list.map((cate) => (
+                    <MenuItem key={cate.id} value={cate.id} onClick={() => handleChange(cate)}>
+                        <Checkbox
+                            checked={categories.map((cate) => cate.id).indexOf(cate.id) > -1}
+                        />
+                        <ListItemText primary={cate.type} />
                     </MenuItem>
                 ))}
             </Select>

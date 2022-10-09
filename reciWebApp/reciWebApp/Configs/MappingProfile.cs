@@ -6,6 +6,7 @@ using reciWebApp.DTOs.CookingMethodDTOs;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.RecipeRegionDTOs;
 using reciWebApp.DTOs.StepDTOs;
+using reciWebApp.DTOs.UseDTOs;
 
 namespace reciWebApp.Configs
 {
@@ -23,6 +24,8 @@ namespace reciWebApp.Configs
             CreateMap<Category, ShowCategoryDTO>();
             CreateMap<CookingMethod, ShowCookingMethodDTO>();
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();
+            CreateMap<CreatePostDTO, Step>();
+            CreateMap<Use, ShowUseDTO>();
         }
     }
 }

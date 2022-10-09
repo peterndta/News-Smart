@@ -1,18 +1,24 @@
 import React from 'react'
 
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { useHistory } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import { v4 } from 'uuid'
 
 import { Box, Typography } from '@mui/material'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
+import authAtom from '../../recoil/auth'
+import useRecipe from '../../recoil/recipe/action'
 import { storage } from '../../utils/Firebase'
 import CreateRecipeForm from './CreareRecipeForm'
 
 const CreateRecipe = () => {
     const showSnackbar = useSnackbar()
-
-    const createRecipeHandler = (poster) => {
+    const auth = useRecoilValue(authAtom)
+    const recipeAction = useRecipe()
+    const history = useHistory()
+    const createRecipeHandler = (poster, recipe) => {
         if (poster.file) {
             let fileType = 'png'
             if (poster.file.type.endsWith('jpg')) fileType = 'jpg'
@@ -30,7 +36,25 @@ const CreateRecipe = () => {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref)
-                        .then(() => {})
+                        .then((url) => {
+                            recipe.imageUrl = url
+                            recipeAction
+                                .createRecipe(+auth.userId, recipe)
+                                .then(() => {
+                                    showSnackbar({
+                                        severity: 'success',
+                                        children: 'Create recipe successfully',
+                                    })
+                                    history.push('/recipes/me')
+                                })
+                                .catch(() => {
+                                    showSnackbar({
+                                        severity: 'error',
+                                        children:
+                                            'Something went wrong, cannot upload recipe image.',
+                                    })
+                                })
+                        })
                         .catch(() => {
                             showSnackbar({
                                 severity: 'error',

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 import {
     Box,
@@ -15,107 +16,41 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import { CATEGORY_LIST, METHOD_LIST, COURSE_LIST, CONTINENTS_LIST } from '../../../../Elixir'
-import CategoriesFilter from './CategoriesFilter'
+import continentAtom from '../../../../recoil/continents'
 import ContinentsFilter from './Continents'
-import CoursesFilter from './CoursesFilter'
-import MethodsFilter from './MethodsFilter'
 
 const Filter = () => {
-    const { search: query } = useLocation()
+    const continentsList = useRecoilValue(continentAtom)
+    const { search: query, pathname } = useLocation()
+
     const { q } = queryString.parse(query)
     const history = useHistory('')
-    const [categories, setCategories] = React.useState([])
-    const [methods, setMethods] = React.useState([])
-    const [courses, setCourses] = React.useState([])
     const [continents, setContinents] = React.useState([])
     const [searchValue, setSearchValue] = useState(q ? q : '')
 
     const selectHandler = (value, type) => () => {
-        if (type === CATEGORY_LIST.type) {
-            const newCategories = [...categories]
-            const currentIndex = categories.indexOf(value)
-            if (value === CATEGORY_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
-                } else {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
-                }
-            } else {
-                if (currentIndex === -1) {
-                    newCategories.push(value)
-                } else {
-                    newCategories.splice(currentIndex, 1)
-                }
-            }
-
-            setCategories(newCategories)
-        } else if (type === METHOD_LIST.type) {
-            const currentIndex = methods.indexOf(value)
-            const newMethods = [...methods]
-            if (value === METHOD_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    METHOD_LIST.list.forEach((method) => newMethods.push(method))
-                } else {
-                    METHOD_LIST.list.forEach((method) => newMethods.pop(method))
-                }
-            } else {
-                if (currentIndex === -1) {
-                    newMethods.push(value)
-                } else {
-                    newMethods.splice(currentIndex, 1)
-                }
-            }
-
-            setMethods(newMethods)
-        } else if (type === COURSE_LIST.type) {
-            const currentIndex = courses.indexOf(value)
-            const newCourses = [...courses]
-            if (value === COURSE_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    COURSE_LIST.list.forEach((course) => newCourses.push(course))
-                } else {
-                    COURSE_LIST.list.forEach((course) => newCourses.pop(course))
-                }
-            } else {
-                if (currentIndex === -1) {
-                    newCourses.push(value)
-                } else {
-                    newCourses.splice(currentIndex, 1)
-                }
-            }
-
-            setCourses(newCourses)
-        } else if (type === CONTINENTS_LIST.type) {
+        if (continentsList.type === type) {
             const currentIndex = continents.indexOf(value)
             const newContinents = [...continents]
-            if (value === CONTINENTS_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    CONTINENTS_LIST.list.forEach((continent) => newContinents.push(continent))
-                } else {
-                    CONTINENTS_LIST.list.forEach((continent) => newContinents.pop(continent))
-                }
+            if (currentIndex === -1) {
+                newContinents.push(value)
             } else {
-                if (currentIndex === -1) {
-                    newContinents.push(value)
-                } else {
-                    newContinents.splice(currentIndex, 1)
-                }
+                newContinents.splice(currentIndex, 1)
             }
-
             setContinents(newContinents)
         }
     }
 
     const searchChangeHandler = (event) => {
-        setSearchValue(event.target.value)
+        const searchText = event.target.value.trim()
+        if (searchText !== '') {
+            setSearchValue(event.target.value)
+        }
     }
 
-    const searchSubmitHandler = (event) => {
-        if (event.key === 'Enter') {
-            if (searchValue.trim().length !== 0) {
-                history.push(`/recipes?q=${searchValue}`)
-            }
+    const searchSubmitHandler = () => {
+        if (searchValue.trim().length !== 0) {
+            history.push(`/recipes?q=${searchValue}`)
         }
     }
 
@@ -162,7 +97,6 @@ const Filter = () => {
                             label="Keyword"
                             value={searchValue}
                             onChange={searchChangeHandler}
-                            onKeyDown={searchSubmitHandler}
                         />
                     </FormControl>
                 </Box>
@@ -173,37 +107,17 @@ const Filter = () => {
                         mt: 2,
                     }}
                 />
-                <CategoriesFilter
-                    categories={CATEGORY_LIST}
-                    checks={categories}
-                    selectHandler={selectHandler}
-                />
-                <Divider
-                    sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
-                />
-                <MethodsFilter
-                    methods={METHOD_LIST}
-                    checks={methods}
-                    selectHandler={selectHandler}
-                />
-                <Divider
-                    sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
-                />
-                <CoursesFilter
-                    methods={COURSE_LIST}
-                    checks={courses}
-                    selectHandler={selectHandler}
-                />
-                <Divider
-                    sx={{ backgroundColor: (theme) => theme.palette.primary.main, height: 2 }}
-                />
                 <ContinentsFilter
-                    continents={CONTINENTS_LIST}
+                    continents={continentsList}
                     checks={continents}
                     selectHandler={selectHandler}
                 />
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
-                    <Button variant="contained" sx={{ color: grey[100] }}>
+                    <Button
+                        variant="contained"
+                        sx={{ color: grey[100] }}
+                        onClick={searchSubmitHandler}
+                    >
                         SHOW RESULTS
                     </Button>
                 </Box>
