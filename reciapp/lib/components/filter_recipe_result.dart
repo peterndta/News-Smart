@@ -54,7 +54,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                             },
                           ),
                           Text(
-                            'FilterRecipeResults',
+                            'Filter',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
