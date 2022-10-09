@@ -11,6 +11,7 @@ namespace reciWebApp.DTOs.PostDTOs
         public int CookingMethodId { get; set; }
         public string? Method { get; set; }
         public int RecipeRegionId { get; set; }
+        public string? Description { get; set; }
         public string? Continents { get; set; }
         public int UserId { get; set; }
         public int? Status { get; set; }
