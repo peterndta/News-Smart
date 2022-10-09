@@ -32,9 +32,7 @@ namespace reciWebApp.Data.Repositories.Extensions
         public static IQueryable<Post> FilterPostByCategoryId(this IQueryable<Post> posts, ReciContext context,
             int? id)
         {
-            return id == null
-                ? posts
-                : posts.Where(x => x.CategoryId == id);
+            return posts;
         }
     }
 }

@@ -13,5 +13,10 @@ namespace reciWebApp.Data.Repositories
         {
             Create(postCategory);
         }
+
+        public List<PostCategory> GetPostCategoriesByPostId(string id)
+        {
+            return GetByCondition(x => x.PostId == id).ToList();
+        }
     }
 }
