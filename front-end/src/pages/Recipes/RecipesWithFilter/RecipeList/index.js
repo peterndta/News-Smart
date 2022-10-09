@@ -15,6 +15,7 @@ const RecipeList = () => {
     const { search: query, pathname } = useLocation()
     const { use, continent, search, time } = queryString.parse(query)
     const [type, setType] = React.useState(time ? time : '')
+
     const handleChange = (event) => {
         setType(event.target.value)
     }
@@ -28,7 +29,10 @@ const RecipeList = () => {
 
         if (use?.length !== 0) use?.forEach((use) => (route += `&use=${use}`))
 
-        if (type) route += `&time=${type}`
+        if (!!type) {
+            if (type === 'Popularity') route += `&status=${type}`
+            else route += `&time=${type}`
+        }
 
         history.push(route)
     }
