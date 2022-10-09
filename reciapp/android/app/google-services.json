@@ -1,31 +1,39 @@
 {
     "project_info": {
-        "project_number": "35735969334",
-        "project_id": "signin-363208",
-        "storage_bucket": "signin-363208.appspot.com"
+      "project_number": "584516125468",
+      "project_id": "upload-image-33cfc",
+      "storage_bucket": "upload-image-33cfc.appspot.com"
     },
-    "client": [{
+    "client": [
+      {
         "client_info": {
-            "mobilesdk_app_id": "1:35735969334:android:b98defa87dba3c100e4297",
-            "android_client_info": {
-                "package_name": "com.example.reciapp"
-            }
+          "mobilesdk_app_id": "1:584516125468:android:cb3124b84e8bb961a1b0d9",
+          "android_client_info": {
+            "package_name": "com.example.reciapp"
+          }
         },
-        "oauth_client": [{
-            "client_id": "35735969334-lkj9l3rujfp60d43muc19u2vsmss2fak.apps.googleusercontent.com",
+        "oauth_client": [
+          {
+            "client_id": "584516125468-72l9ij7le1hrq6u7h3r3neim88idimlq.apps.googleusercontent.com",
             "client_type": 3
-        }],
-        "api_key": [{
-            "current_key": "AIzaSyA66Ynkko4mOYVqrywHjJ_2qYYOPna372E"
-        }],
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDPz3U9h0Jv72DkGoTb9J5TwCTGlw2nOxs"
+          }
+        ],
         "services": {
-            "appinvite_service": {
-                "other_platform_oauth_client": [{
-                    "client_id": "35735969334-lkj9l3rujfp60d43muc19u2vsmss2fak.apps.googleusercontent.com",
-                    "client_type": 3
-                }]
-            }
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "584516125468-72l9ij7le1hrq6u7h3r3neim88idimlq.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
         }
-    }],
+      }
+    ],
     "configuration_version": "1"
-}
+  }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,6 +36,8 @@ class CreateRecipePage extends StatefulWidget {
 
 class _CreateRecipePageState extends State<CreateRecipePage> {
   File? image;
+  UploadTask? uploadTask;
+  bool checkImage = true;
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController tools = TextEditingController();
@@ -55,7 +58,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   }
 
   final List<String> category = [
-    'All',
     'Beef',
     'Egg',
     'Chicken',
@@ -65,7 +67,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   List<String> selectedCategorys = [];
 
   final List<String> methods = [
-    'All',
     'Boil',
     'Fry',
     'Roast',
@@ -78,7 +79,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   ];
   String? selectedUse;
   final List<String> continents = [
-    'All',
     'Asia',
     'Africa',
     'Antarctica',
@@ -114,6 +114,18 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     final name = basename(path);
     final image = File('${directory.path}/$name');
     return File(path).copy(image.path);
+  }
+
+  Future<String> uploadFile() async {
+    final pathUpload = 'images/${image!.path}';
+    final ref = FirebaseStorage.instance.ref().child(pathUpload);
+
+    uploadTask = ref.putFile(image!);
+    final snapshot = await uploadTask!.whenComplete(() {});
+
+    final imageUrl = await snapshot.ref.getDownloadURL();
+    print(imageUrl);
+    return imageUrl;
   }
 
   @override
@@ -240,6 +252,14 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   onPressed: () => pickImage(ImageSource.gallery),
                 ),
+                !checkImage
+                    ? const Text(
+                        'Please upload image!',
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.01,
+                      ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -1257,8 +1277,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 ),
                 TextFormField(
                     validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter link Video'
+                      final youtubeValidator = RegExp(
+                          r'^https:\/\/(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$');
+                      return (value == null ||
+                              value.isEmpty ||
+                              !youtubeValidator.hasMatch(value))
+                          ? 'Please enter valid link Video'
                           : null;
                     },
                     controller: linkVideo,
@@ -1301,6 +1325,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                     }
+                    // final url = uploadFile();
+                    // print(url);
                   },
                 ),
                 SizedBox(

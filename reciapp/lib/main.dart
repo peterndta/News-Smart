@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'pages/create_recipe_page.dart';
 import 'pages/home_page.dart';
 import 'pages/course_page.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
