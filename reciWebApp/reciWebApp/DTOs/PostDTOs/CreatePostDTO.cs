@@ -9,9 +9,9 @@
         public string? VideoUrl { get; set; }
         public DateTime? CreateDate { get; } = DateTime.Now;
         public DateTime? UpdateDate { get; } = DateTime.Now;
+        public int? UsesId { get; set; }
         public string? Description { get; set; }
         public List<int> CategoriesId { get; set; }
-        public string DescriptionStep { get; set; }
         public string Ingredient { get; set; }
         public string Processing { get; set; }
         public string Cooking { get; set; }

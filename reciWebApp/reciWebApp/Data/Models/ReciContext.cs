@@ -224,8 +224,6 @@ namespace reciWebApp.Data.Models
 
                 entity.Property(e => e.CookingTime).HasColumnName("cooking_time");
 
-                entity.Property(e => e.Description).HasColumnName("description");
-
                 entity.Property(e => e.Ingredient).HasColumnName("ingredient");
 
                 entity.Property(e => e.PostsId)
