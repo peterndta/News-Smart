@@ -9,14 +9,16 @@ import 'package:path/path.dart';
 import 'package:reciapp/components/copyright.dart';
 
 class CreateRecipePage extends StatefulWidget {
-  String title;
-  String description;
-  String tools;
-  String ingredients;
-  String processing;
-  String cooking;
-  String linkVideo;
-  CreateRecipePage({
+  String? title;
+  String? description;
+  String? tools;
+  String? ingredients;
+  String? processing;
+  String? cooking;
+  String? linkVideo;
+  CreateRecipePage({super.key});
+
+  CreateRecipePage.fromForm({
     super.key,
     required this.title,
     required this.description,
@@ -139,6 +141,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   ),
                 ),
                 TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter name of dish'
+                          : null;
+                    },
                     controller: title,
                     decoration: const InputDecoration(
                       hintText: 'Name of dish',
@@ -168,6 +175,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
                 TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter description of dish'
+                          : null;
+                    },
                     maxLines: 7,
                     controller: description,
                     decoration: const InputDecoration(
@@ -263,8 +275,9 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   child: DropdownButtonFormField2(
                     validator: (value) {
                       if (value == null) {
-                        return 'Please select gender.';
+                        return 'Please select category.';
                       }
+                      return null;
                     },
                     isExpanded: true,
                     hint: Align(
@@ -398,7 +411,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   height: MediaQuery.of(context).size.height * 0.006,
                 ),
                 DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                  child: DropdownButtonFormField2(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select method.';
+                      }
+                      return null;
+                    },
                     isExpanded: true,
                     hint: Align(
                       alignment: AlignmentDirectional.centerStart,
@@ -480,7 +499,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   height: MediaQuery.of(context).size.height * 0.006,
                 ),
                 DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                  child: DropdownButtonFormField2(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select use.';
+                      }
+                      return null;
+                    },
                     isExpanded: true,
                     hint: Align(
                       alignment: AlignmentDirectional.centerStart,
@@ -562,7 +587,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   height: MediaQuery.of(context).size.height * 0.006,
                 ),
                 DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                  child: DropdownButtonFormField2(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select continent.';
+                      }
+                      return null;
+                    },
                     isExpanded: true,
                     hint: Align(
                       alignment: AlignmentDirectional.centerStart,
@@ -645,55 +676,65 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 ),
                 Row(
                   children: [
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                            '  Select',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).hintColor,
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField2(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please Select serve';
+                            }
+                            return null;
+                          },
+                          isExpanded: true,
+                          hint: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              '  Select',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
                             ),
                           ),
-                        ),
-                        items: serving
-                            .map((item) => DropdownMenuItem<int>(
-                                  value: item,
-                                  child: Text(
-                                    '  $item',
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                          items: serving
+                              .map((item) => DropdownMenuItem<int>(
+                                    value: item,
+                                    child: Text(
+                                      '  $item',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedServe,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedServe = value as int;
-                          });
-                        },
-                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
-                        buttonWidth: MediaQuery.of(context).size.width * 0.25,
-                        buttonDecoration: BoxDecoration(
+                                  ))
+                              .toList(),
+                          value: selectedServe,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedServe = value as int;
+                            });
+                          },
+                          buttonHeight:
+                              MediaQuery.of(context).size.height * 0.05,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.25,
+                          buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.black26,
+                              ),
+                              color: Colors.white),
+                          itemHeight: 40,
+                          buttonElevation: 2,
+                          itemPadding:
+                              const EdgeInsets.only(left: 14, right: 14),
+                          dropdownMaxHeight: 200,
+                          dropdownDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                            color: Colors.white),
-                        itemHeight: 40,
-                        buttonElevation: 2,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
+                          ),
+                          dropdownElevation: 8,
+                          scrollbarRadius: const Radius.circular(40),
+                          scrollbarThickness: 6,
+                          scrollbarAlwaysShow: true,
                         ),
-                        dropdownElevation: 8,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
                       ),
                     ),
                     SizedBox(
@@ -770,7 +811,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
+                        child: DropdownButtonFormField2(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please Select time';
+                            }
+                            return null;
+                          },
                           isExpanded: true,
                           hint: Align(
                             alignment: AlignmentDirectional.centerStart,
@@ -828,7 +875,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextField(
+                TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter tool of dish'
+                          : null;
+                    },
                     maxLines: 5,
                     controller: tools,
                     decoration: const InputDecoration(
@@ -859,7 +911,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextField(
+                TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter ingredient of dish'
+                          : null;
+                    },
                     maxLines: 5,
                     controller: ingredients,
                     decoration: const InputDecoration(
@@ -944,7 +1001,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
+                        child: DropdownButtonFormField2(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please Select time';
+                            }
+                            return null;
+                          },
                           isExpanded: true,
                           hint: Align(
                             alignment: AlignmentDirectional.centerStart,
@@ -1002,7 +1065,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextField(
+                TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter details'
+                          : null;
+                    },
                     maxLines: 5,
                     controller: processing,
                     decoration: const InputDecoration(
@@ -1087,7 +1155,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
+                        child: DropdownButtonFormField2(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please Select time';
+                            }
+                            return null;
+                          },
                           isExpanded: true,
                           hint: Align(
                             alignment: AlignmentDirectional.centerStart,
@@ -1145,7 +1219,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextField(
+                TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter details'
+                          : null;
+                    },
                     maxLines: 5,
                     controller: cooking,
                     decoration: const InputDecoration(
@@ -1176,7 +1255,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                TextField(
+                TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter link Video'
+                          : null;
+                    },
                     controller: linkVideo,
                     decoration: const InputDecoration(
                       hintText: 'Enter Link',
