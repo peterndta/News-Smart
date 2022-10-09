@@ -6,6 +6,7 @@ using reciWebApp.DTOs.CookingMethodDTOs;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.RecipeRegionDTOs;
 using reciWebApp.DTOs.StepDTOs;
+using reciWebApp.DTOs.UseDTOs;
 
 namespace reciWebApp.Configs
 {
@@ -18,11 +19,13 @@ namespace reciWebApp.Configs
             CreateMap<UpdatePostDTO, Post>();
             CreateMap<AuthMobile, User>();
             CreateMap<CreateStepDTO, Step>();
-            CreateMap<Step, ShowPostDTO>();
+            CreateMap<Step, ShowStepDTO>();
             CreateMap<UpdateStepDTO, Step>();
             CreateMap<Category, ShowCategoryDTO>();
             CreateMap<CookingMethod, ShowCookingMethodDTO>();
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();
+            CreateMap<CreatePostDTO, Step>();
+            CreateMap<Use, ShowUseDTO>();
         }
     }
 }

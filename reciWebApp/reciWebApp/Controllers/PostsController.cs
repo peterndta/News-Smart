@@ -97,6 +97,20 @@ namespace reciWebApp.Controllers
                 createPost.Id = DateTime.Now.ToString("yyyyMMddHHmmssffff");
                 _repoManager.Post.CreatePost(createPost);
                 await _repoManager.SaveChangesAsync();
+                var createStep = _mapper.Map<Step>(postDTO);
+                createStep.PostsId = createPost.Id;
+                _repoManager.Step.CreateStep(createStep);
+                await _repoManager.SaveChangesAsync();
+                foreach (var categoryId in postDTO.CategoriesId)
+                {
+                    var postCategory = new PostCategory
+                    {
+                        PostId = createPost.Id,
+                        CategoryId = categoryId
+                    };
+                    _repoManager.PostCategory.CreatePostCategory(postCategory);
+                }
+                await _repoManager.SaveChangesAsync();
                 return Ok(new Response(200));
             }
             catch (Exception ex)

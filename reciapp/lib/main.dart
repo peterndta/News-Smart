@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
 import 'pages/home_page.dart';
-import 'pages/course_page.dart';
+import 'pages/collection_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +38,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return CoursePage();
+    return RecipesResult();
   }
 }
