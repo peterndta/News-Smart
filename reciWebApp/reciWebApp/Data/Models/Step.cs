@@ -6,7 +6,6 @@ namespace reciWebApp.Data.Models
     public partial class Step
     {
         public int Id { get; set; }
-        public string Description { get; set; } = null!;
         public string PostsId { get; set; } = null!;
         public string Ingredient { get; set; } = null!;
         public string Processing { get; set; } = null!;
