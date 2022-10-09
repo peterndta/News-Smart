@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'pages/create_recipe_page.dart';
 import 'pages/home_page.dart';
-import 'pages/course_page.dart';
+import 'pages/collection_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
