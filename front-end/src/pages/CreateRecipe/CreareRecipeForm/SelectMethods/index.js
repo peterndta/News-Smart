@@ -1,10 +1,13 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 
-import { METHOD_LIST } from '../../../../Elixir'
+import methodAtom from '../../../../recoil/methods'
 
 const SelectMethods = ({ method, setMethod }) => {
+    const methodList = useRecoilValue(methodAtom)
     const handleChange = (event) => {
         setMethod(event.target.value)
     }
@@ -21,9 +24,9 @@ const SelectMethods = ({ method, setMethod }) => {
                 label="Method"
                 required
             >
-                {METHOD_LIST.list.map((name, index) => (
-                    <MenuItem key={index} value={name}>
-                        {name}
+                {methodList.list.map((method) => (
+                    <MenuItem key={method.id} value={method.id}>
+                        {method.method}
                     </MenuItem>
                 ))}
             </Select>

@@ -1,15 +1,72 @@
+import { useEffect } from 'react'
+
 import { BrowserRouter } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
 
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import { ThemeProvider, useTheme } from '@mui/material/styles'
 
+import { useSnackbar } from '../HOCs/SnackbarContext'
 import { useAuthAction } from '../recoil/auth'
+import categoryAtom, { useCategoryAction } from '../recoil/categories'
+import continentAtom, { useContinentsAction } from '../recoil/continents'
+import methodAtom, { useMethodsAction } from '../recoil/methods'
 import Routes from '../routes'
 import Theme from '../theme'
 import './App.css'
 
 function App() {
     const authAction = useAuthAction()
+    const methodAction = useMethodsAction()
+    const setMethods = useSetRecoilState(methodAtom)
+    const setCategories = useSetRecoilState(categoryAtom)
+    const setContinents = useSetRecoilState(continentAtom)
+    const categoryAction = useCategoryAction()
+    const continentAction = useContinentsAction()
+    const showSnackBar = useSnackbar()
+
+    useEffect(() => {
+        methodAction
+            .getMethods()
+            .then((res) => {
+                const data = res.data.data
+                setMethods({ type: 'Method', list: data })
+            })
+            .catch(() => {
+                showSnackBar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+
+        categoryAction
+            .getCategories()
+            .then((res) => {
+                const data = res.data.data
+                setCategories({ type: 'Category', list: data })
+            })
+            .catch(() => {
+                showSnackBar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+
+        continentAction
+            .getContinents()
+            .then((res) => {
+                const data = res.data.data
+                setContinents({ type: 'Continent', list: data })
+            })
+            .catch(() => {
+                showSnackBar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     authAction.autoLogin()
 
     const theme = useTheme()
