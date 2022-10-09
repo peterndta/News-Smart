@@ -17,15 +17,19 @@ import {
 import { blueGrey, grey } from '@mui/material/colors'
 
 import continentAtom from '../../../../recoil/continents'
+import usesAtom from '../../../../recoil/uses'
 import ContinentsFilter from './Continents'
+import UsesFilter from './UsesFilter'
 
 const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
-    const { search: query, pathname } = useLocation()
+    const usesList = useRecoilValue(usesAtom)
+    const { search: query } = useLocation()
 
     const { q } = queryString.parse(query)
     const history = useHistory('')
     const [continents, setContinents] = React.useState([])
+    const [uses, setUses] = React.useState([])
     const [searchValue, setSearchValue] = useState(q ? q : '')
 
     const selectHandler = (value, type) => () => {
@@ -38,6 +42,15 @@ const Filter = () => {
                 newContinents.splice(currentIndex, 1)
             }
             setContinents(newContinents)
+        } else if (usesList.type === type) {
+            const currentIndex = uses.indexOf(value)
+            const newUses = [...uses]
+            if (currentIndex === -1) {
+                newUses.push(value)
+            } else {
+                newUses.splice(currentIndex, 1)
+            }
+            setUses(newUses)
         }
     }
 
@@ -46,6 +59,12 @@ const Filter = () => {
         if (searchText !== '') {
             setSearchValue(event.target.value)
         }
+    }
+
+    const clearAllHandler = () => {
+        setSearchValue('')
+        setContinents([])
+        setUses([])
     }
 
     const searchSubmitHandler = () => {
@@ -67,7 +86,9 @@ const Filter = () => {
                     <Typography variant="h4" fontWeight={700} sx={{ color: blueGrey[800] }}>
                         Filters
                     </Typography>
-                    <Button variant="outlined">Clear all</Button>
+                    <Button variant="outlined" onClick={clearAllHandler}>
+                        Clear all
+                    </Button>
                 </Box>
                 <Box mt={3} mb={1}>
                     <Typography variant="h6" fontWeight={700} sx={{ color: blueGrey[800] }} mb={2}>
@@ -112,6 +133,14 @@ const Filter = () => {
                     checks={continents}
                     selectHandler={selectHandler}
                 />
+                <Divider
+                    sx={{
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                        height: 2,
+                        mt: 2,
+                    }}
+                />
+                <UsesFilter uses={usesList} checks={uses} selectHandler={selectHandler} />
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
                     <Button
                         variant="contained"

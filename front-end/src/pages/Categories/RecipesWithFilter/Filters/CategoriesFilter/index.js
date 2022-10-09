@@ -6,7 +6,6 @@ import { blueGrey } from '@mui/material/colors'
 
 const CategoriesFilter = ({ categories, checks, selectHandler }) => {
     const [open, setOpen] = React.useState(true)
-    const typeList = categories.type
 
     const handleClick = () => setOpen(!open)
 
@@ -27,18 +26,18 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {categories.list.map((category, index) => (
+                    {categories.list.map((category) => (
                         <ListItemButton
-                            key={index}
+                            key={category.id}
                             dense
-                            onClick={selectHandler(category, typeList)}
+                            onClick={selectHandler(category.id)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(category) !== -1}
+                                checked={checks.indexOf(category.id) !== -1}
                             />
-                            <ListItemText primary={category} />
+                            <ListItemText primary={category.type} />
                         </ListItemButton>
                     ))}
                 </List>
