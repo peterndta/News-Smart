@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import {
     Box,
     Button,
@@ -12,32 +14,23 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import { CATEGORY_LIST } from '../../../../Elixir'
+import categoryAtom from '../../../../recoil/categories'
 import CategoriesFilter from './CategoriesFilter'
 
 const Filter = () => {
     const [categories, setCategories] = React.useState([])
+    const categoryList = useRecoilValue(categoryAtom)
 
-    const selectHandler = (value, type) => () => {
-        if (type === CATEGORY_LIST.type) {
-            const newCategories = [...categories]
-            const currentIndex = categories.indexOf(value)
-            if (value === CATEGORY_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
-                } else {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
-                }
-            } else {
-                if (currentIndex === -1) {
-                    newCategories.push(value)
-                } else {
-                    newCategories.splice(currentIndex, 1)
-                }
-            }
-
-            setCategories(newCategories)
+    const selectHandler = (value) => () => {
+        const newCategories = [...categories]
+        const currentIndex = categories.indexOf(value)
+        if (currentIndex === -1) {
+            newCategories.push(value)
+        } else {
+            newCategories.splice(currentIndex, 1)
         }
+
+        setCategories(newCategories)
     }
 
     return (
@@ -89,7 +82,7 @@ const Filter = () => {
                     }}
                 />
                 <CategoriesFilter
-                    categories={CATEGORY_LIST}
+                    categories={categoryList}
                     checks={categories}
                     selectHandler={selectHandler}
                 />
