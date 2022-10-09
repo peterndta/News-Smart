@@ -12,6 +12,7 @@ namespace reciWebApp.Data.Repositories
         private ICategoryRepository _categoryRepository;
         private ICookingMethodRepository _cookingMethodRepository; 
         private IRecipeRegionRepository _recipeRegionRepository;
+        private IPostCategoryRepository _postCategoryRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -88,6 +89,17 @@ namespace reciWebApp.Data.Repositories
             }
         }
 
+        public IPostCategoryRepository PostCategory
+        {
+            get
+            {
+                if (_postCategoryRepository == null)
+                {
+                    _postCategoryRepository = new PostCategoryRepository(_context);
+                }
+                return _postCategoryRepository;
+            }
+        }
         public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();
