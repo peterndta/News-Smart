@@ -13,6 +13,7 @@ namespace reciWebApp.Data.Repositories
         private ICookingMethodRepository _cookingMethodRepository; 
         private IRecipeRegionRepository _recipeRegionRepository;
         private IPostCategoryRepository _postCategoryRepository;
+        private IUsesRepository _usesRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -100,6 +101,19 @@ namespace reciWebApp.Data.Repositories
                 return _postCategoryRepository;
             }
         }
+
+        public IUsesRepository Use
+        {
+            get
+            {
+                if (_usesRepository == null)
+                {
+                    _usesRepository = new UsesRepository(_context);
+                }
+                return _usesRepository;
+            }
+        }
+
         public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();
