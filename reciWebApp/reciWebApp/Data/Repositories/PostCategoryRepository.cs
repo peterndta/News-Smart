@@ -16,7 +16,7 @@ namespace reciWebApp.Data.Repositories
 
         public List<PostCategory> GetPostCategoriesByPostId(string id)
         {
-            return GetByCondition(x => x.PostId == id).ToList();
+            return GetByCondition(x => x.PostId.Equals(id)).ToList();
         }
     }
 }
