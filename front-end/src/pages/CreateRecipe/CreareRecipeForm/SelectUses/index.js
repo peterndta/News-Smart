@@ -1,10 +1,13 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 
-import { USES_LIST } from '../../../../Elixir'
+import usesAtom from '../../../../recoil/uses'
 
 const SelectUses = ({ uses, setUses }) => {
+    const useList = useRecoilValue(usesAtom)
     const handleChange = (event) => {
         setUses(event.target.value)
     }
@@ -21,9 +24,9 @@ const SelectUses = ({ uses, setUses }) => {
                 label="Uses"
                 required
             >
-                {USES_LIST.list.map((name, index) => (
-                    <MenuItem key={index} value={name}>
-                        {name}
+                {useList.list.map((use) => (
+                    <MenuItem key={use.id} value={use.id}>
+                        {use.usesOfFood}
                     </MenuItem>
                 ))}
             </Select>
