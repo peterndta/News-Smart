@@ -91,8 +91,6 @@ namespace reciWebApp.Data.Models
                     .HasMaxLength(50)
                     .HasColumnName("id");
 
-                entity.Property(e => e.CategoryId).HasColumnName("category_id");
-
                 entity.Property(e => e.CookingMethodId).HasColumnName("cooking_method_id");
 
                 entity.Property(e => e.CreateDate)
