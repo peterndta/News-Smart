@@ -8,8 +8,8 @@ namespace reciWebApp.Data.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public string PostsId { get; set; } = null!;
-        public string? Reason { get; set; }
-        public int? Status { get; set; }
+        public string Reason { get; set; } = null!;
+        public int Status { get; set; }
 
         public virtual Post Posts { get; set; } = null!;
         public virtual User User { get; set; } = null!;
