@@ -25,7 +25,7 @@ const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
     const usesList = useRecoilValue(usesAtom)
     const { search: query, pathname } = useLocation()
-    const { search, continent, use, time, status } = queryString.parse(query)
+    const { search, continent, use, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [continents, setContinents] = React.useState(continent ? continent : [])
     const [uses, setUses] = React.useState(use ? use : [])
@@ -73,9 +73,9 @@ const Filter = () => {
 
         if (uses.length !== 0) uses.forEach((use) => (route += `&use=${use}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }
