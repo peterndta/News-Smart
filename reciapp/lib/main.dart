@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/bookmark_page.dart';
+import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
@@ -39,6 +40,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return CategoryPage();
   }
 }
