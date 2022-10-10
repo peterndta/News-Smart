@@ -374,7 +374,6 @@ namespace reciWebApp.Controllers
             {
                 new Step
                 {
-                    Description = "This is the first step of dish",
                     PostsId= "001",
                     Ingredient=
                     "8 eggs, ½ cup mayonnaise, 1 teaspoon prepared yellow mustard, ¼ cup chopped green onion, salt and pepper to taste, ¼ teaspoon paprika",
@@ -388,7 +387,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the second step of dish",
                     PostsId= "001",
                     Ingredient=
                     "8 eggs, ½ cup mayonnaise, 1 teaspoon prepared yellow mustard, ¼ cup chopped green onion, salt and pepper to taste, ¼ teaspoon paprika",
@@ -402,7 +400,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the first step of dish",
                     PostsId= "002",
                     Ingredient=
                     "5 potatoes, 3 eggs, 1 cup chopped celery, ½ cup chopped onion, ½ cup sweet pickle relish, ¼ cup mayonnaise, 1 tablespoon prepared mustard, ¼ teaspoon garlic salt, ¼ teaspoon celery salt, ground black pepper to taste",
@@ -416,7 +413,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the second step of dish",
                     PostsId= "002",
                     Ingredient=
                     "5 potatoes, 3 eggs, 1 cup chopped celery, ½ cup chopped onion, ½ cup sweet pickle relish, ¼ cup mayonnaise, 1 tablespoon prepared mustard, ¼ teaspoon garlic salt, ¼ teaspoon celery salt, ground black pepper to taste",
@@ -430,7 +426,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the first step of dish",
                     PostsId= "003",
                     Ingredient=
                     "1 (8 ounce) package uncooked tri-color rotini pasta, 6 ounces pepperoni sausage, diced, 6 ounces provolone cheese, cubed, 1 medium red onion, very thinly sliced and cut into 1-inch pieces, 1 small cucumber, thinly sliced, ¾ cup chopped green bell pepper, ¾ cup chopped red bell pepper, 1 (6 ounce) can pitted black olives, drained, ¼ cup minced fresh parsley, ¼ cup grated Parmesan cheese",
@@ -444,7 +439,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the second step of dish",
                     PostsId= "003",
                     Ingredient=
                     "5 potatoes, 3 eggs, 1 cup chopped celery, ½ cup chopped onion, ½ cup sweet pickle relish, ¼ cup mayonnaise, 1 tablespoon prepared mustard, ¼ teaspoon garlic salt, ¼ teaspoon celery salt, ground black pepper to taste",
@@ -458,7 +452,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the first step of dish",
                     PostsId= "004",
                     Ingredient=
                     "1 cup yellow cornmeal, 1 cup all-purpose flour, ¼ cup white sugar, 4 teaspoons baking powder, ¼ teaspoon salt, ⅛ teaspoon ground black pepper, 1 cup whole milk, 1 large egg, 16 large hot dogs, 4 cups vegetable oil for frying, 16 skewers",
@@ -472,7 +465,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the second step of dish",
                     PostsId= "004",
                     Ingredient=
                     "1 cup yellow cornmeal, 1 cup all-purpose flour, ¼ cup white sugar, 4 teaspoons baking powder, ¼ teaspoon salt, ⅛ teaspoon ground black pepper, 1 cup whole milk, 1 large egg, 16 large hot dogs, 4 cups vegetable oil for frying, 16 skewers",
@@ -486,7 +478,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the first step of dish",
                     PostsId= "005",
                     Ingredient=
                     "1 picked over turkey carcass, 1 ½ cups leftover stuffing, 1 onion, peeled and diced, 2 carrots, peeled and sliced, 2 celery stalks, chopped, 1 tablespoon poultry seasoning, 1 teaspoon ground sage, 2 bay leaves, 2 ½ quarts chicken broth, ½ teaspoon garlic salt, or to taste, ground black pepper, to taste, 2 cups (uncooked) regular long-grain white rice, 1 (16 ounce) package frozen green peas, 1 cup water, or as needed (Optional)",
@@ -500,7 +491,6 @@ namespace reciWebApp.Controllers
                 },
                 new Step
                 {
-                    Description = "This is the second step of dish",
                     PostsId= "005",
                     Ingredient=
                     "1 picked over turkey carcass, 1 ½ cups leftover stuffing, 1 onion, peeled and diced, 2 carrots, peeled and sliced, 2 celery stalks, chopped, 1 tablespoon poultry seasoning, 1 teaspoon ground sage, 2 bay leaves, 2 ½ quarts chicken broth, ½ teaspoon garlic salt, or to taste, ground black pepper, to taste, 2 cups (uncooked) regular long-grain white rice, 1 (16 ounce) package frozen green peas, 1 cup water, or as needed (Optional)",

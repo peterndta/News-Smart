@@ -84,7 +84,6 @@ namespace reciWebApp.Controllers
 
                 var createStep = _mapper.Map<Step>(stepDTO);
                 createStep.PostsId = id;
-                createStep.Id = Int32.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
                 _repoManager.Step.CreateStep(createStep);
                 await _repoManager.SaveChangesAsync();
                 return Ok (new Response(200));
@@ -99,14 +98,7 @@ namespace reciWebApp.Controllers
         public async Task<IActionResult> UpdateStep(int id, [FromBody] UpdateStepDTO updateStepDTO)
         {
             try
-            {
-                var user = await _servicesManager.AuthService.GetUser(Request);
-
-                if(user == null)
-                {
-                    return BadRequest(new Response (400, "Invalid user"));
-                }
-                
+            {               
                 var step = await _repoManager.Step.GetStepByIdAsync(id);
                 if(step == null)
                 {
