@@ -14,6 +14,7 @@ namespace reciWebApp.Data.Repositories
         private IRecipeRegionRepository _recipeRegionRepository;
         private IPostCategoryRepository _postCategoryRepository;
         private IUsesRepository _usesRepository;
+        private IUserInteractRepository _userInteractRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -111,6 +112,18 @@ namespace reciWebApp.Data.Repositories
                     _usesRepository = new UsesRepository(_context);
                 }
                 return _usesRepository;
+            }
+        }
+
+        public IUserInteractRepository UserInteract
+        {
+            get
+            {
+                if (_userInteractRepository == null)
+                {
+                    _userInteractRepository = new UserInteractRepository(_context);
+                }
+                return _userInteractRepository;
             }
         }
 

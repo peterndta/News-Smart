@@ -55,12 +55,12 @@ namespace reciWebApp.Controllers
             {
                 var step = await _repoManager.Step.GetStepByPostIdAsync(id);
                 
-                if (!step.Any())
+                if (step == null)
                 {
                     return BadRequest(new Response(400, "Post does not have any step"));
                 }
 
-                var showStep = _mapper.Map<List<ShowStepDTO>>(step);
+                var showStep = _mapper.Map<ShowStepDTO>(step);
                 return Ok(new Response(200, showStep));
             }
             catch (Exception ex)
@@ -69,44 +69,50 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/post/{id}/step")]
-        [HttpPost]
-        public async Task<IActionResult> CreateStep(string id, [FromBody] CreateStepDTO stepDTO)
-        {
-            try
-            {
-                var post = await _repoManager.Post.GetPostByIdAsync(id);
+        ////[Route("~/api/post/{id}/step")]
+        ////[HttpPost]
+        ////public async Task<IActionResult> CreateStep(string id, [FromBody] CreateStepDTO stepDTO)
+        ////{
+        ////    try
+        ////    {
+        ////        var post = await _repoManager.Post.GetPostByIdAsync(id);
 
-                if(post == null)
-                {
-                    return BadRequest (new Response(400, "Post id does not exist!"));
-                }
+        ////        if(post == null)
+        ////        {
+        ////            return BadRequest (new Response(400, "Post id does not exist!"));
+        ////        }
 
-                var createStep = _mapper.Map<Step>(stepDTO);
-                createStep.PostsId = id;
-                createStep.Id = Int32.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
-                _repoManager.Step.CreateStep(createStep);
-                await _repoManager.SaveChangesAsync();
-                return Ok (new Response(200));
-            }
-            catch(Exception e)
-            {
-                return BadRequest(new Response(500, e.Message));
-            }
-        }
+        //        var createStep = _mapper.Map<Step>(stepDTO);
+        //        createStep.PostsId = id;
+        //        _repoManager.Step.CreateStep(createStep);
+        //        await _repoManager.SaveChangesAsync();
+        //        return Ok (new Response(200));
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        return BadRequest(new Response(500, e.Message));
+        //    }
+        //}
+
+        //        var createStep = _mapper.Map<Step>(stepDTO);
+        //        createStep.PostsId = id;
+        //        createStep.Id = Int32.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
+        //        _repoManager.Step.CreateStep(createStep);
+        //        await _repoManager.SaveChangesAsync();
+        //        return Ok (new Response(200));
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        return BadRequest(new Response(500, e.Message));
+        //    }
+        //}
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStep(int id, [FromBody] UpdateStepDTO updateStepDTO)
         {
             try
-            {
-                var user = await _servicesManager.AuthService.GetUser(Request);
-
-                if(user == null)
-                {
-                    return BadRequest(new Response (400, "Invalid user"));
-                }
-                
+            {               
                 var step = await _repoManager.Step.GetStepByIdAsync(id);
                 if(step == null)
                 {

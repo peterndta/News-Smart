@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/bookmark_page.dart';
+import 'package:reciapp/pages/category_page.dart';
+import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'pages/create_recipe_page.dart';
 import 'pages/home_page.dart';
 import 'pages/collection_page.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,6 +45,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return CreateRecipePage();
   }
 }

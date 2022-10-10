@@ -39,12 +39,13 @@ namespace reciWebApp.Services
             List<Category> categories = new List<Category>();
             foreach (var postCategory in listPostCategories)
             {
-                categories.Add(_repoManager.Category.GetCategoryById(postCategory.Id));
+                categories.Add(_repoManager.Category.GetCategoryById(postCategory.CategoryId));
             }
             showPostDTO.ListCategories = _mapper.Map<List<ShowCategoryDTO>>(categories);
             showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.RecipeRegionId).Continents;
             showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CookingMethodId).Method;
             showPostDTO.UserName = _repoManager.User.GetUserById(showPostDTO.UserId).Name;
+            showPostDTO.AverageRating = _repoManager.UserInteract.GetAverageRating(showPostDTO.Id);
             return showPostDTO;
         }
     }

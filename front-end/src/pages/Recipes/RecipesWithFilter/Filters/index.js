@@ -24,13 +24,12 @@ import UsesFilter from './UsesFilter'
 const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
     const usesList = useRecoilValue(usesAtom)
-    const { search: query } = useLocation()
-
-    const { q } = queryString.parse(query)
+    const { search: query, pathname } = useLocation()
+    const { search, continent, use, time, status } = queryString.parse(query)
     const history = useHistory('')
-    const [continents, setContinents] = React.useState([])
-    const [uses, setUses] = React.useState([])
-    const [searchValue, setSearchValue] = useState(q ? q : '')
+    const [continents, setContinents] = React.useState(continent ? continent : [])
+    const [uses, setUses] = React.useState(use ? use : [])
+    const [searchValue, setSearchValue] = useState(search ? search : '')
 
     const selectHandler = (value, type) => () => {
         if (continentsList.type === type) {
@@ -56,9 +55,7 @@ const Filter = () => {
 
     const searchChangeHandler = (event) => {
         const searchText = event.target.value.trim()
-        if (searchText !== '') {
-            setSearchValue(event.target.value)
-        }
+        setSearchValue(searchText)
     }
 
     const clearAllHandler = () => {
@@ -68,9 +65,19 @@ const Filter = () => {
     }
 
     const searchSubmitHandler = () => {
-        if (searchValue.trim().length !== 0) {
-            history.push(`/recipes?q=${searchValue}`)
-        }
+        let route = pathname + '?'
+        if (searchValue) route += '&search=' + searchValue
+
+        if (continents.length !== 0)
+            continents.forEach((continent) => (route += `&continent=${continent}`))
+
+        if (uses.length !== 0) uses.forEach((use) => (route += `&use=${use}`))
+
+        if (time) route += `&time=${time}`
+
+        if (status) route += `&status=${status}`
+
+        history.push(route)
     }
 
     return (

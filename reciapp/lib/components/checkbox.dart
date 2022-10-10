@@ -12,19 +12,17 @@ class CheckBox extends StatelessWidget {
       children: [
         StatefulBuilder(
             builder: (context, _setState) => Checkbox(
-                side: BorderSide(color: Colors.orange),
-                value: isChecked,
-                onChanged: (bool? value) {
-                  _setState(() {
-                    isChecked = value!;
-                  });
-                },
-              )),
+                  side: BorderSide(color: Colors.orange),
+                  value: isChecked,
+                  onChanged: (bool? value) {
+                    _setState(() {
+                      isChecked = value!;
+                    });
+                  },
+                )),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 18
-          ),
+          style: TextStyle(fontSize: 18),
         ),
       ],
     );

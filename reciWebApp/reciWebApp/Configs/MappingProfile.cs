@@ -21,6 +21,7 @@ namespace reciWebApp.Configs
             CreateMap<CreateStepDTO, Step>();
             CreateMap<Step, ShowStepDTO>();
             CreateMap<UpdateStepDTO, Step>();
+            CreateMap<Step, ShowStepDTO>();
             CreateMap<Category, ShowCategoryDTO>();
             CreateMap<CookingMethod, ShowCookingMethodDTO>();
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();

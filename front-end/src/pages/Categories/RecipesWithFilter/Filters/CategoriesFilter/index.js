@@ -30,12 +30,12 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
                         <ListItemButton
                             key={category.id}
                             dense
-                            onClick={selectHandler(category.id)}
+                            onClick={selectHandler(category.type)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(category.id) !== -1}
+                                checked={checks.indexOf(category.type) !== -1}
                             />
                             <ListItemText primary={category.type} />
                         </ListItemButton>
