@@ -80,7 +80,7 @@ class _RecipesResultState extends State<RecipesResult> {
                           margin:
                               EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                           child: Text(
-                            'Recipes Result',
+                            'Recipes',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
