@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'checkbox.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FilterCookingMethods extends StatefulWidget {
   bool isSelected;
@@ -12,9 +14,36 @@ class FilterCookingMethods extends StatefulWidget {
   State<FilterCookingMethods> createState() => _FilterCookingMethodsState();
 }
 
+class Method {
+  int id;
+  String method;
+  Method(this.id, this.method);
+}
+
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var _controller = TextEditingController();
   bool isSelected = false;
+
+  Future getCookingMethodData() async {
+    var response = await http.get(
+      Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      List<Method> methods = [];
+      for (var cate in jsonData['data']) {
+        Method method = Method(cate['id'], cate['method']);
+        methods.add(method);
+      }
+      // print(methods.length);
+      // print(methods);
+      return methods;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +158,7 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                       // color: Colors.yellow,
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.24,
+                      height: MediaQuery.of(context).size.height * 0.5,
                       // color: Colors.yellow,
                       padding: EdgeInsets.only(top: 5, left: 15),
                       alignment: Alignment.topLeft,
@@ -146,16 +175,23 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.02,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CheckBox(isSelected, 'Boil'),
-                              CheckBox(isSelected, 'Fry'),
-                              CheckBox(isSelected, 'Roast'),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                              ),
-                            ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            child: FutureBuilder(
+                                future: getCookingMethodData(),
+                                builder: ((context, snapshot) {
+                                  if (snapshot.data == null) {
+                                    return Container();
+                                  } else {
+                                    return ListView.builder(
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (context, index) => CheckBox(
+                                          isSelected,
+                                          snapshot.data[index].method),
+                                    );
+                                  }
+                                })),
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.04,

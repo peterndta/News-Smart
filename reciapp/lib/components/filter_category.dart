@@ -39,8 +39,8 @@ class _FilterCategoryState extends State<FilterCategory> {
         Category category = Category(cate['id'], cate['type']);
         categories.add(category);
       }
-      print(categories.length);
-      print(categories);
+      // print(categories.length);
+      // print(categories);
       return categories;
     }
   }
@@ -155,11 +155,9 @@ class _FilterCategoryState extends State<FilterCategory> {
                           ),
                         ],
                       ),
-                      // color: Colors.yellow,
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
-                      // color: Colors.yellow,
                       padding: EdgeInsets.only(top: 5, left: 15),
                       alignment: Alignment.topLeft,
                       child: Column(
@@ -182,7 +180,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                                 future: getCategoryData(),
                                 builder: ((context, snapshot) {
                                   if (snapshot.data == null) {
-                                    return Center(child: Text('LOADING...'));
+                                    return Container();
                                   } else {
                                     return ListView.builder(
                                       itemCount: snapshot.data.length,

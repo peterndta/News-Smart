@@ -78,7 +78,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         margin:
                             EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         child: Text(
-                          'Course',
+                          'Collection',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
