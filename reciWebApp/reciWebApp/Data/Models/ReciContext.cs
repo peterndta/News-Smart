@@ -120,6 +120,24 @@ namespace reciWebApp.Data.Models
                 entity.Property(e => e.UsesId).HasColumnName("uses_id");
 
                 entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+
+                entity.HasOne(d => d.CookingMethod)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.CookingMethodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Posts_CookingMethods");
+
+                entity.HasOne(d => d.RecipeRegion)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.RecipeRegionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Posts_RecipeRegions");
+
+                entity.HasOne(d => d.Uses)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.UsesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Posts_Uses");
             });
 
             modelBuilder.Entity<PostCategory>(entity =>
