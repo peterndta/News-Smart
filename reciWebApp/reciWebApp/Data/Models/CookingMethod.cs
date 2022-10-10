@@ -5,14 +5,7 @@ namespace reciWebApp.Data.Models
 {
     public partial class CookingMethod
     {
-        public CookingMethod()
-        {
-            Posts = new HashSet<Post>();
-        }
-
         public int Id { get; set; }
-        public string? Method { get; set; }
-
-        public virtual ICollection<Post> Posts { get; set; }
+        public string Method { get; set; } = null!;
     }
 }
