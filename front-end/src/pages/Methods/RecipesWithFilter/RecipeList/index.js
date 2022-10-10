@@ -11,7 +11,7 @@ import Recipes from './RecipesCompo'
 const RecipeList = () => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { search, time, category } = queryString.parse(query)
+    const { search, time, method } = queryString.parse(query)
     const [type, setType] = React.useState(time ? time : '')
 
     const handleChange = (event) => {
@@ -22,8 +22,7 @@ const RecipeList = () => {
         let route = pathname + '?'
         if (search) route += '&search=' + search
 
-        if (category?.length !== 0)
-            category?.forEach((category) => (route += `&category=${category}`))
+        if (method?.length !== 0) method?.forEach((method) => (route += `&method=${method}`))
 
         if (!!type) {
             if (type === 'Popularity') route += `&status=${type}`

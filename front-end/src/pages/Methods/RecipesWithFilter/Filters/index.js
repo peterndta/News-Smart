@@ -16,41 +16,32 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import continentAtom from '../../../../recoil/continents'
-import usesAtom from '../../../../recoil/uses'
-import ContinentsFilter from './Continents'
-import UsesFilter from './UsesFilter'
+import methodsAtom from '../../../../recoil/methods'
+import MethodsFilter from './MethodsFilter'
 
 const Filter = () => {
-    const continentsList = useRecoilValue(continentAtom)
-    const usesList = useRecoilValue(usesAtom)
+    const methodList = useRecoilValue(methodsAtom)
     const { search: query, pathname } = useLocation()
-    const { search, continent, use, time, status } = queryString.parse(query)
+    const { search, method, time, status } = queryString.parse(query)
     const history = useHistory('')
-    const [continents, setContinents] = React.useState(continent ? continent : [])
-    const [uses, setUses] = React.useState(use ? use : [])
+    const [methods, setMethods] = useState(method ? method : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
 
-    const selectHandler = (value, type) => () => {
-        if (continentsList.type === type) {
-            const currentIndex = continents.indexOf(value)
-            const newContinents = [...continents]
-            if (currentIndex === -1) {
-                newContinents.push(value)
-            } else {
-                newContinents.splice(currentIndex, 1)
-            }
-            setContinents(newContinents)
-        } else if (usesList.type === type) {
-            const currentIndex = uses.indexOf(value)
-            const newUses = [...uses]
-            if (currentIndex === -1) {
-                newUses.push(value)
-            } else {
-                newUses.splice(currentIndex, 1)
-            }
-            setUses(newUses)
+    const selectHandler = (value) => () => {
+        const newMethods = [...methods]
+        const currentIndex = methods.indexOf(value)
+        if (currentIndex === -1) {
+            newMethods.push(value)
+        } else {
+            newMethods.splice(currentIndex, 1)
         }
+
+        setMethods(newMethods)
+    }
+
+    const clearAllHandler = () => {
+        setSearchValue('')
+        setMethods([])
     }
 
     const searchChangeHandler = (event) => {
@@ -58,20 +49,11 @@ const Filter = () => {
         setSearchValue(searchText)
     }
 
-    const clearAllHandler = () => {
-        setSearchValue('')
-        setContinents([])
-        setUses([])
-    }
-
     const searchSubmitHandler = () => {
         let route = pathname + '?'
         if (searchValue) route += '&search=' + searchValue
 
-        if (continents.length !== 0)
-            continents.forEach((continent) => (route += `&continent=${continent}`))
-
-        if (uses.length !== 0) uses.forEach((use) => (route += `&use=${use}`))
+        if (methods.length !== 0) methods.forEach((method) => (route += `&method=${method}`))
 
         if (time) route += `&time=${time}`
 
@@ -123,8 +105,8 @@ const Filter = () => {
                         <OutlinedInput
                             id="component-outlined"
                             label="Keyword"
-                            value={searchValue}
                             onChange={searchChangeHandler}
+                            value={searchValue}
                         />
                     </FormControl>
                 </Box>
@@ -135,19 +117,12 @@ const Filter = () => {
                         mt: 2,
                     }}
                 />
-                <ContinentsFilter
-                    continents={continentsList}
-                    checks={continents}
+                <MethodsFilter
+                    methods={methodList}
+                    checks={methods}
                     selectHandler={selectHandler}
                 />
-                <Divider
-                    sx={{
-                        backgroundColor: (theme) => theme.palette.primary.main,
-                        height: 2,
-                        mt: 2,
-                    }}
-                />
-                <UsesFilter uses={usesList} checks={uses} selectHandler={selectHandler} />
+
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
                     <Button
                         variant="contained"

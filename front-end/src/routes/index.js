@@ -31,7 +31,7 @@ const hybridRoutes = [
         layout: 'common',
     },
     {
-        path: '/recipes/course',
+        path: '/recipes/collection',
         name: 'course',
         component: lazy(() => import('../pages/Course')),
         layout: 'common',
@@ -40,6 +40,12 @@ const hybridRoutes = [
         path: '/recipes/category',
         name: 'categories',
         component: lazy(() => import('../pages/Categories')),
+        layout: 'common',
+    },
+    {
+        path: '/recipes/method',
+        name: 'methods',
+        component: lazy(() => import('../pages/Methods')),
         layout: 'common',
     },
     {
