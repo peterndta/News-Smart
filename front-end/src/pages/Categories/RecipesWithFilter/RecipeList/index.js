@@ -17,6 +17,7 @@ const RecipeList = () => {
     const handleChange = (event) => {
         setType(event.target.value)
     }
+
     const filterHandler = () => {
         let route = pathname + '?'
         if (search) route += '&search=' + search
