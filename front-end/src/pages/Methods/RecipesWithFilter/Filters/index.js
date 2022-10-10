@@ -22,7 +22,7 @@ import MethodsFilter from './MethodsFilter'
 const Filter = () => {
     const methodList = useRecoilValue(methodsAtom)
     const { search: query, pathname } = useLocation()
-    const { search, method, time, status } = queryString.parse(query)
+    const { search, method, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [methods, setMethods] = useState(method ? method : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
@@ -55,9 +55,9 @@ const Filter = () => {
 
         if (methods.length !== 0) methods.forEach((method) => (route += `&method=${method}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }

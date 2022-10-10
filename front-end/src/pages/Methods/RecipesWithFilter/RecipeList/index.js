@@ -1,60 +1,48 @@
 import React, { useEffect } from 'react'
 
 import queryString from 'query-string'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import { FormControl, Grid, InputLabel, MenuItem, Pagination, Select } from '@mui/material'
+import { Grid } from '@mui/material'
 
 import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
+import useRecipe from '../../../../recoil/recipe/action'
+import Paging from '../Pagination'
+import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
+const filterStringGenerator = ({ search, method, sort }) => {
+    let filterString = `&pageSize=${6}`
+
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (method && Array.isArray(method))
+        method.forEach((method) => (filterString += `&method=${method}`))
+    else if (method !== undefined) filterString += `&method=${method}`
+
+    if (sort !== undefined) filterString += `&sort=${sort}`
+
+    return filterString
+}
+
 const RecipeList = () => {
-    const history = useHistory()
-    const { search: query, pathname } = useLocation()
-    const { search, time, method } = queryString.parse(query)
-    const [type, setType] = React.useState(time ? time : '')
-
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
-
-    const filterHandler = () => {
-        let route = pathname + '?'
-        if (search) route += '&search=' + search
-
-        if (method?.length !== 0) method?.forEach((method) => (route += `&method=${method}`))
-
-        if (!!type) {
-            if (type === 'Popularity') route += `&status=${type}`
-            else route += `&time=${type}`
-        }
-
-        history.push(route)
-    }
+    const { search: query } = useLocation()
+    const { search, sort, method, pageNum } = queryString.parse(query)
+    const recipeAction = useRecipe()
 
     useEffect(() => {
-        filterHandler()
+        const params = filterStringGenerator({ search, method, sort })
+
+        if (pageNum === undefined) recipeAction.getRecipes(params)
+        else recipeAction.getRecipesFilterMethod(params, pageNum)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type])
+    }, [search, sort, pageNum, method])
 
     return (
         <Grid item md={9} display="flex" flexDirection="column">
-            <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">
-                <InputLabel id="demo-select-small">Type</InputLabel>
-                <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    value={type}
-                    label="Type"
-                    onChange={handleChange}
-                >
-                    <MenuItem value={'Popularity'}>Popularity</MenuItem>
-                    <MenuItem value={'Newest'}>Newest</MenuItem>
-                    <MenuItem value={'Oldest'}>Oldest</MenuItem>
-                </Select>
-            </FormControl>
+            <Sort />
             <Recipes posts={MOST_FAVORITE_POSTS} />
-            <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
+            <Paging size={10} />
         </Grid>
     )
 }
