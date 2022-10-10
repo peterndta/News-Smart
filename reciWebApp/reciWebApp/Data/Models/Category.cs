@@ -11,7 +11,7 @@ namespace reciWebApp.Data.Models
         }
 
         public int Id { get; set; }
-        public string? Type { get; set; }
+        public string Type { get; set; } = null!;
 
         public virtual ICollection<PostCategory> PostCategories { get; set; }
     }

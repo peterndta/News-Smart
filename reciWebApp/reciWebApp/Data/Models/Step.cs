@@ -10,11 +10,11 @@ namespace reciWebApp.Data.Models
         public string Ingredient { get; set; } = null!;
         public string Processing { get; set; } = null!;
         public string Cooking { get; set; } = null!;
-        public string? Tool { get; set; }
-        public int? ProcessingTime { get; set; }
-        public int? CookingTime { get; set; }
-        public int? PreparingTime { get; set; }
-        public int? Serving { get; set; }
+        public string Tool { get; set; } = null!;
+        public int ProcessingTime { get; set; }
+        public int CookingTime { get; set; }
+        public int PreparingTime { get; set; }
+        public int Serving { get; set; }
 
         public virtual Post Posts { get; set; } = null!;
     }

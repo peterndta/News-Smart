@@ -11,7 +11,7 @@ namespace reciWebApp.Data.Models
         }
 
         public int Id { get; set; }
-        public string? CollectionName { get; set; }
+        public string CollectionName { get; set; } = null!;
 
         public virtual ICollection<FoodCollection> FoodCollections { get; set; }
     }
