@@ -27,18 +27,18 @@ const ContinentsFilter = ({ continents, checks, selectHandler }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {continents.list.map((continent, index) => (
+                    {continents.list.map((continent) => (
                         <ListItemButton
-                            key={index}
+                            key={continent.id}
                             dense
-                            onClick={selectHandler(continent, typeList)}
+                            onClick={selectHandler(continent.continents, typeList)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(continent) !== -1}
+                                checked={checks.indexOf(continent.continents) !== -1}
                             />
-                            <ListItemText primary={continent} />
+                            <ListItemText primary={continent.continents} />
                         </ListItemButton>
                     ))}
                 </List>

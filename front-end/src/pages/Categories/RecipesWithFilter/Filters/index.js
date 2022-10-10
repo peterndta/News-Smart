@@ -1,4 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
+
+import queryString from 'query-string'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 import {
     Box,
@@ -12,32 +16,51 @@ import {
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import { CATEGORY_LIST } from '../../../../Elixir'
+import categoryAtom from '../../../../recoil/categories'
 import CategoriesFilter from './CategoriesFilter'
 
 const Filter = () => {
-    const [categories, setCategories] = React.useState([])
+    const categoryList = useRecoilValue(categoryAtom)
+    const { search: query, pathname } = useLocation()
+    const { search, category, time, status } = queryString.parse(query)
+    const history = useHistory('')
+    const [categories, setCategories] = useState(category ? category : [])
+    const [searchValue, setSearchValue] = useState(search ? search : '')
 
-    const selectHandler = (value, type) => () => {
-        if (type === CATEGORY_LIST.type) {
-            const newCategories = [...categories]
-            const currentIndex = categories.indexOf(value)
-            if (value === CATEGORY_LIST.list[0]) {
-                if (currentIndex === -1) {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.push(category))
-                } else {
-                    CATEGORY_LIST.list.forEach((category) => newCategories.pop(category))
-                }
-            } else {
-                if (currentIndex === -1) {
-                    newCategories.push(value)
-                } else {
-                    newCategories.splice(currentIndex, 1)
-                }
-            }
-
-            setCategories(newCategories)
+    const selectHandler = (value) => () => {
+        const newCategories = [...categories]
+        const currentIndex = categories.indexOf(value)
+        if (currentIndex === -1) {
+            newCategories.push(value)
+        } else {
+            newCategories.splice(currentIndex, 1)
         }
+
+        setCategories(newCategories)
+    }
+
+    const clearAllHandler = () => {
+        setSearchValue('')
+        setCategories([])
+    }
+
+    const searchChangeHandler = (event) => {
+        const searchText = event.target.value.trim()
+        setSearchValue(searchText)
+    }
+
+    const searchSubmitHandler = () => {
+        let route = pathname + '?'
+        if (searchValue) route += '&search=' + searchValue
+
+        if (categories.length !== 0)
+            categories.forEach((category) => (route += `&category=${category}`))
+
+        if (time) route += `&time=${time}`
+
+        if (status) route += `&status=${status}`
+
+        history.push(route)
     }
 
     return (
@@ -53,7 +76,9 @@ const Filter = () => {
                     <Typography variant="h4" fontWeight={700} sx={{ color: blueGrey[800] }}>
                         Filters
                     </Typography>
-                    <Button variant="outlined">Clear all</Button>
+                    <Button variant="outlined" onClick={clearAllHandler}>
+                        Clear all
+                    </Button>
                 </Box>
                 <Box mt={3} mb={1}>
                     <Typography variant="h6" fontWeight={700} sx={{ color: blueGrey[800] }} mb={2}>
@@ -78,7 +103,12 @@ const Filter = () => {
                         <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
                             Keyword
                         </InputLabel>
-                        <OutlinedInput id="component-outlined" label="Keyword" />
+                        <OutlinedInput
+                            id="component-outlined"
+                            label="Keyword"
+                            value={searchValue}
+                            onChange={searchChangeHandler}
+                        />
                     </FormControl>
                 </Box>
                 <Divider
@@ -89,13 +119,17 @@ const Filter = () => {
                     }}
                 />
                 <CategoriesFilter
-                    categories={CATEGORY_LIST}
+                    categories={categoryList}
                     checks={categories}
                     selectHandler={selectHandler}
                 />
 
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
-                    <Button variant="contained" sx={{ color: grey[100] }}>
+                    <Button
+                        variant="contained"
+                        sx={{ color: grey[100] }}
+                        onClick={searchSubmitHandler}
+                    >
                         SHOW RESULTS
                     </Button>
                 </Box>

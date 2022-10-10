@@ -117,7 +117,8 @@ namespace reciWebApp.Services
                 new("email", user.Email),
                 new("name", user.Name),
                 new("role", user.Role),
-                new("image", user.ImageUrl)
+                new("image", user.ImageUrl),
+                new("userId", user.Id.ToString()),
             };
 
             return Task.FromResult(claims);

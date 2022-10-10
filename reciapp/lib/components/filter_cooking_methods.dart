@@ -152,8 +152,6 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               CheckBox(isSelected, 'Boil'),
                               CheckBox(isSelected, 'Fry'),
                               CheckBox(isSelected, 'Roast'),
-                              CheckBox(isSelected, 'Frizzy'),
-                              CheckBox(isSelected, 'Steam'),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                               ),

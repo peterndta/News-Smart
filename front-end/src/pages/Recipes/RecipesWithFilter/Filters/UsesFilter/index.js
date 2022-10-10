@@ -4,9 +4,9 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Checkbox, Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const CategoriesFilter = ({ categories, checks, selectHandler }) => {
+const UsesFilter = ({ uses, checks, selectHandler }) => {
     const [open, setOpen] = React.useState(true)
-    const typeList = categories.type
+    const typeList = uses.type
 
     const handleClick = () => setOpen(!open)
 
@@ -14,7 +14,7 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }} component="nav">
             <ListItemButton onClick={handleClick}>
                 <ListItemText
-                    primary={categories.type}
+                    primary={uses.type}
                     sx={{
                         '& > span': {
                             fontWeight: 700,
@@ -27,18 +27,18 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {categories.list.map((category, index) => (
+                    {uses.list.map((use) => (
                         <ListItemButton
-                            key={index}
+                            key={use.id}
                             dense
-                            onClick={selectHandler(category, typeList)}
+                            onClick={selectHandler(use.usesOfFood, typeList)}
                         >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(category) !== -1}
+                                checked={checks.indexOf(use.usesOfFood) !== -1}
                             />
-                            <ListItemText primary={category} />
+                            <ListItemText primary={use.usesOfFood} />
                         </ListItemButton>
                     ))}
                 </List>
@@ -47,4 +47,4 @@ const CategoriesFilter = ({ categories, checks, selectHandler }) => {
     )
 }
 
-export default CategoriesFilter
+export default UsesFilter

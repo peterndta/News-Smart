@@ -18,7 +18,7 @@ namespace reciWebApp.Data.Repositories
 
         public Step GetStepById (int id)
         {
-            return GetByCondition(x => x.Id.Equals(id)).FirstOrDefault();
+            return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
         public async void UpdateStep (Step step)
         {
@@ -27,12 +27,12 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<Step> GetStepByIdAsync(int id)
         {
-            return await GetByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+            return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
         }
         
-        public async Task<List<Step>> GetStepByPostIdAsync(string id)
+        public async Task<Step> GetStepByPostIdAsync(string id)
         {
-            return await GetByCondition(x => x.PostsId == id).ToListAsync();
+            return await GetByCondition(x => x.PostsId.Equals(id)).SingleOrDefaultAsync();
         }
 
     }

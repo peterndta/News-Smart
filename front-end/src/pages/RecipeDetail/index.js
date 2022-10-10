@@ -1,29 +1,62 @@
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import {
-    StarRateOutlined,
-    BookmarkBorder,
-    ShoppingCart,
-    Kitchen,
-    RestaurantMenu,
-} from '@mui/icons-material'
+import ReactPlayer from 'react-player/youtube'
+import { useParams } from 'react-router-dom'
+
+import { BookmarkBorder, Kitchen, ShoppingCart, StarRateOutlined } from '@mui/icons-material'
 import GroupIcon from '@mui/icons-material/Group'
 import {
-    Breadcrumbs,
-    Typography,
-    Link,
     Box,
-    Rating,
+    Breadcrumbs,
+    Divider,
     Grid,
+    Link,
     List,
     ListItem,
     ListItemButton,
     ListItemIcon,
-    Divider,
+    Rating,
+    Typography,
 } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
+import { useSnackbar } from '../../HOCs/SnackbarContext'
+import { useRecipe } from '../../recoil/recipe'
+
 const RecipeDetail = () => {
+    const [recipe, setRecipe] = useState({})
+    const [step, setStep] = useState([])
+    const { id } = useParams()
+    const { getRecipe, getStep } = useRecipe()
+    const showSnackbar = useSnackbar()
+    useEffect(() => {
+        getRecipe(id)
+            .then((response) => {
+                const data = response.data.data
+                setRecipe(data)
+                console.log(data)
+            })
+            .catch(() => {
+                showSnackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        getStep(id)
+            .then((response) => {
+                const data = response.data.data
+                setStep(data[0])
+                console.log(data[0])
+            })
+            .catch(() => {
+                showSnackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     const breadcrumbs = [
         <Link underline="hover" key="1" color="inherit" href="/" fontWeight={700}>
             Home
@@ -32,7 +65,7 @@ const RecipeDetail = () => {
             Recipes
         </Link>,
         <Typography key="3" color="text.primary" fontWeight={700}>
-            Homemade Chicken Soup
+            {recipe?.name}
         </Typography>,
     ]
 
@@ -42,15 +75,108 @@ const RecipeDetail = () => {
                 {breadcrumbs}
             </Breadcrumbs>
             <Typography mt={4} variant="h3" fontWeight={700} sx={{ color: blueGrey[800] }}>
-                Homemade Chicken Soup
+                {recipe?.name}
             </Typography>
-            <Box display="flex">
+            <Box mt={4} display="flex">
+                <Typography
+                    variant="subtitle1"
+                    sx={{ fontSize: 20, mt: 0.35, color: blueGrey[700] }}
+                    fontWeight={700}
+                    mr={1.2}
+                >
+                    Rating:{' '}
+                </Typography>
                 <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} />
             </Box>
-            <Typography mt={1} variant="subtitle1" sx={{ fontSize: 18, width: '84%' }}>
-                Homemade chicken soup - but you do not have to be sick to deserve or enjoy it - you
-                do, so do! Good for body and soul!
+
+            <Box display="flex">
+                {/* <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} /> */}
+                <Box display="flex">
+                    <Typography
+                        // ml={3}
+                        variant="subtitle1"
+                        sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                        fontWeight={700}
+                    >
+                        Method:{' '}
+                    </Typography>
+                    <Typography
+                        ml={1}
+                        variant="subtitle1"
+                        fontWeight={400}
+                        sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                    >
+                        {recipe?.method}
+                    </Typography>
+                </Box>
+                <Box display="flex">
+                    <Typography
+                        ml={3}
+                        variant="subtitle1"
+                        sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                        fontWeight={700}
+                    >
+                        Continents:{' '}
+                    </Typography>
+                    <Typography
+                        ml={1}
+                        variant="subtitle1"
+                        fontWeight={400}
+                        sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                    >
+                        {recipe?.continents}
+                    </Typography>
+                </Box>
+            </Box>
+            <Box display="flex">
+                <Typography
+                    variant="subtitle1"
+                    sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                    fontWeight={700}
+                    mr={1}
+                >
+                    Categories:{' '}
+                </Typography>
+                {/* {recipe?.listCategories.map((cate) => ( */}
+                <Typography
+                    // key={cate.id}
+                    variant="subtitle1"
+                    fontWeight={400}
+                    sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                >
+                    Meat, Vegetable
+                    {/* {cate}
+                        {', '} */}
+                </Typography>
+                {/* ))} */}
+            </Box>
+            <Typography
+                mt={4}
+                variant="h4"
+                fontWeight={700}
+                sx={{
+                    color: blueGrey[800],
+                    pb: 0.125,
+                    // borderBottom: (theme) => `5px solid ${theme.palette.primary.main}`,
+                    display: 'inline-block',
+                }}
+            >
+                About this recipe
             </Typography>
+            <Box display="flex" mt={1.5} sx={{ width: '84%' }}>
+                <Divider
+                    orientation="vertical"
+                    flexItem
+                    variant="middle"
+                    sx={{
+                        borderRightWidth: '5px',
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                    }}
+                />
+                <Typography ml={1} variant="subtitle1" sx={{ fontSize: 21 }}>
+                    {recipe?.description}
+                </Typography>
+            </Box>
             <Grid mt={3} container columnSpacing={4}>
                 <Grid item md={1}>
                     <List sx={{ pl: 1 }}>
@@ -87,7 +213,7 @@ const RecipeDetail = () => {
                     <Box
                         component="img"
                         alt="food"
-                        src="https://s3-alpha-sig.figma.com/img/cc01/ed52/b633bef4961d3740fab0677957c63908?Expires=1664755200&Signature=e6c09hY0e2w7-gEvO74edrI0MSNhBA6KroHPs3QvSDcxpgIj2u960wnxwBV1l7eIKWTGxUmRbtIjnJol2HpqHeIBNmvc89sp0Rf4MIe5yLC6sgbBpEW~y6~ZKCiwjZFgcjJXQc7jcUv5pSV04vwpyVfWbHQsBmNZbXKwEnWndcvTXVpqr48c9eKLKPRHyo3l5Q1sxrtg9Ps3~N~RapACKgatOUzykkYbnXuzLqu5spAxcM5blYy60-XeRzXJ8dXqSjZafIFehZKQgv21mZLaeFyl3KzMwZPwZQotquQaNldlynsP5oMCxKIBnF~fwRLSHzKTZEguK3m1ut1g5hAFQw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+                        src={recipe?.imageUrl}
                         sx={{
                             width: '77%',
                             aspectRatio: '16 / 9',
@@ -113,7 +239,7 @@ const RecipeDetail = () => {
                                     align="center"
                                     sx={{ fontSize: 19 }}
                                 >
-                                    26 minutes
+                                    {step?.preparingTime} minutes
                                 </Typography>
                             </Grid>
                             <Divider orientation="vertical" flexItem />
@@ -133,7 +259,7 @@ const RecipeDetail = () => {
                                     align="center"
                                     sx={{ fontSize: 19 }}
                                 >
-                                    26 minutes
+                                    {step?.processingTime} minutes
                                 </Typography>
                             </Grid>
                             <Divider orientation="vertical" flexItem />
@@ -153,7 +279,7 @@ const RecipeDetail = () => {
                                     align="center"
                                     sx={{ fontSize: 19 }}
                                 >
-                                    26 minutes
+                                    {step?.cookingTime} minutes
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -186,7 +312,7 @@ const RecipeDetail = () => {
                                         Serving:
                                     </Typography>
                                     <Typography ml={1} variant="body1" sx={{ fontSize: 18 }}>
-                                        4 people
+                                        {step?.serving} people
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -208,8 +334,7 @@ const RecipeDetail = () => {
                                         variant="subtitle1"
                                         sx={{ fontSize: 18, width: '77%' }}
                                     >
-                                        1 (3 pound) whole chicken, 4 carrots, halved, 4 stalks
-                                        celery, halved.
+                                        {step?.ingredient}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -228,7 +353,7 @@ const RecipeDetail = () => {
                                         variant="subtitle1"
                                         sx={{ fontSize: 18, width: '77%' }}
                                     >
-                                        Cooker, Knife, Blender.
+                                        {step?.tool}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -250,9 +375,7 @@ const RecipeDetail = () => {
                         </Typography>
                         <Box mt={4} mb={8} ml={3} display="flex" alignItems="center">
                             <Typography variant="subtitle1" sx={{ fontSize: 20, width: '77%' }}>
-                                Put the chicken, carrots, celery and onion in a large soup pot and
-                                cover with cold water. Heat and simmer, uncovered, until the chicken
-                                meat falls off of the bones (skim off foam every so often).
+                                {step?.processing}
                             </Typography>
                         </Box>
                     </Box>
@@ -272,9 +395,7 @@ const RecipeDetail = () => {
                         </Typography>
                         <Box mt={4} mb={8} ml={3} display="flex" alignItems="center">
                             <Typography variant="subtitle1" sx={{ fontSize: 20, width: '77%' }}>
-                                Put the chicken, carrots, celery and onion in a large soup pot and
-                                cover with cold water. Heat and simmer, uncovered, until the chicken
-                                meat falls off of the bones (skim off foam every so often).
+                                {step?.cooking}
                             </Typography>
                         </Box>
                     </Box>
@@ -290,18 +411,15 @@ const RecipeDetail = () => {
                                 display: 'inline-block',
                             }}
                         >
-                            Nutrition Facts
+                            Video
                         </Typography>
-                        <Box mt={3} mb={8} ml={3} display="flex" alignItems="center">
-                            <RestaurantMenu fontSize="medium" sx={{ color: blueGrey[800] }} />
-                            <Typography
-                                ml={1}
-                                variant="subtitle1"
-                                sx={{ fontSize: 18, width: '77%' }}
-                            >
-                                152 calories; protein 13.1g; carbohydrates 4.2g; fat 8.9g;
-                                cholesterol 36.9mg; sodium 67.6mg.
-                            </Typography>
+                        <Box mt={4} mb={7} ml={3}>
+                            <ReactPlayer
+                                url={recipe?.videoUrl}
+                                height={400}
+                                width={800}
+                                controls={true}
+                            />
                         </Box>
                     </Box>
                     <Box mt={10} mb={8} ml={80} display="flex">
@@ -309,7 +427,7 @@ const RecipeDetail = () => {
                             Recipe by
                         </Typography>
                         <Typography ml={1} variant="body1" fontWeight={700} sx={{ fontSize: 15 }}>
-                            The Allrecipes Community
+                            {recipe?.userName}
                         </Typography>
                     </Box>
                 </Grid>
