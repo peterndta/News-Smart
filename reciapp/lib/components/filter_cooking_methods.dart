@@ -23,7 +23,7 @@ class Method {
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var _controller = TextEditingController();
   bool isSelected = false;
-
+  final List<int> selectedItemsID = [];
   Future getCookingMethodData() async {
     var response = await http.get(
       Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
@@ -181,11 +181,53 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                       return Container();
                                     } else {
                                       return ListView.builder(
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) =>
-                                            CheckBox(isSelected,
-                                                snapshot.data[index].method),
-                                      );
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (context, index) => Row(
+                                                children: [
+                                                  StatefulBuilder(
+                                                      builder: (context,
+                                                              _setState) =>
+                                                          Checkbox(
+                                                            side: BorderSide(
+                                                                color: Colors
+                                                                    .orange),
+                                                            value: isSelected,
+                                                            onChanged:
+                                                                (bool? value) {
+                                                              _setState(() {
+                                                                isSelected =
+                                                                    value!;
+                                                                if (isSelected ==
+                                                                    true) {
+                                                                  selectedItemsID
+                                                                      .add(snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .id);
+                                                                } else {
+                                                                  selectedItemsID
+                                                                      .remove(snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .id);
+                                                                }
+                                                                print(
+                                                                    selectedItemsID);
+                                                              });
+                                                            },
+                                                          )),
+                                                  Text(
+                                                    snapshot.data[index].method,
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                  // Visibility(
+                                                  //     visible: false,
+                                                  //     child: Text(snapshot
+                                                  //         .data[index].id
+                                                  //         .toString()))
+                                                ],
+                                              ));
                                     }
                                   })),
                             ),
