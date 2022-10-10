@@ -83,209 +83,213 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return Container(
+              return SizedBox(
                 height: MediaQuery.of(context).size.height * 0.9,
-                // color: Colors.amber,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.orange,
-                            width: 3.0,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.orange,
+                              width: 3.0,
+                            ),
                           ),
                         ),
-                      ),
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      // color: Colors.red,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CloseButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CloseButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: OutlinedButton(
-                              onPressed: () {},
-                              style: OutlinedButton.styleFrom(
-                                padding: EdgeInsets.all(5),
-                                side: BorderSide(
-                                    width: 1.0, color: Colors.orange),
-                                shape: RoundedRectangleBorder(),
-                                backgroundColor: Colors.white,
-                              ),
-                              child: Text(
-                                'Clear All',
-                                style: TextStyle(
-                                    fontSize: 17, color: Colors.black),
+                            Text(
+                              'Filter',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
-                        ],
+                            Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: OutlinedButton(
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  side: BorderSide(
+                                      width: 1.0, color: Colors.orange),
+                                  shape: RoundedRectangleBorder(),
+                                  backgroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  'Clear All',
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.black),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 15, left: 15),
-                      // alignment: Alignment.bottomLeft,
-                      height: MediaQuery.of(context).size.height * 0.17,
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Recipe or Keyword',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                      Container(
+                        padding: EdgeInsets.only(top: 15, left: 15),
+                        // alignment: Alignment.bottomLeft,
+                        height: MediaQuery.of(context).size.height * 0.17,
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Recipe or Keyword',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.023,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            child: TextField(
-                              controller: _controller,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: 'Keywords',
-                                suffixIcon: IconButton(
-                                  onPressed: _controller.clear,
-                                  icon: Icon(Icons.clear),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.023,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              child: TextField(
+                                controller: _controller,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: 'Keywords',
+                                  suffixIcon: IconButton(
+                                    onPressed: _controller.clear,
+                                    icon: Icon(Icons.clear),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.022,
-                          ),
-                          Divider(
-                            color: Colors.orange,
-                            height: 3,
-                            thickness: 2,
-                            indent: 50,
-                            endIndent: 60,
-                          ),
-                        ],
-                      ),
-                      // color: Colors.yellow,
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      padding: EdgeInsets.only(top: 5, left: 15),
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Continents',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.022,
                             ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            child: FutureBuilder(
-                                future: getContinentData(),
-                                builder: ((context, snapshot) {
-                                  if (snapshot.data == null) {
-                                    return Container();
-                                  } else {
-                                    return ListView.builder(
-                                      itemCount: snapshot.data.length,
-                                      itemBuilder: (context, index) => CheckBox(
-                                          isSelected,
-                                          snapshot.data[index].continent),
-                                    );
-                                  }
-                                })),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.02,
-                          ),
-                          Divider(
-                            color: Colors.orange,
-                            height: 3,
-                            thickness: 2,
-                            indent: 50,
-                            endIndent: 60,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      padding: EdgeInsets.only(top: 5, left: 15),
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Uses',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
+                            Divider(
+                              color: Colors.orange,
+                              height: 3,
+                              thickness: 2,
+                              indent: 50,
+                              endIndent: 60,
                             ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            child: FutureBuilder(
-                                future: getUseData(),
-                                builder: ((context, snapshot) {
-                                  if (snapshot.data == null) {
-                                    return Container();
-                                  } else {
-                                    return ListView.builder(
-                                      itemCount: snapshot.data.length,
-                                      itemBuilder: (context, index) => CheckBox(
-                                          isSelected,
-                                          snapshot.data[index].usesOfFood),
-                                    );
-                                  }
-                                })),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.02,
-                          ),
-                          Center(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                minimumSize: Size(
-                                    MediaQuery.of(context).size.width * 0.8,
-                                    MediaQuery.of(context).size.height * 0.06),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                'Show Result',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25,
-                                    color: Colors.white),
+                          ],
+                        ),
+                        // color: Colors.yellow,
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        padding: EdgeInsets.only(top: 5, left: 15),
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Continents',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
                               ),
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              child: FutureBuilder(
+                                  future: getContinentData(),
+                                  builder: ((context, snapshot) {
+                                    if (snapshot.data == null) {
+                                      return Container();
+                                    } else {
+                                      return ListView.builder(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (context, index) =>
+                                            CheckBox(isSelected,
+                                                snapshot.data[index].continent),
+                                      );
+                                    }
+                                  })),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Divider(
+                              color: Colors.orange,
+                              height: 3,
+                              thickness: 2,
+                              indent: 50,
+                              endIndent: 60,
+                            ),
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        padding: EdgeInsets.only(top: 5, left: 15),
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Uses',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: FutureBuilder(
+                                  future: getUseData(),
+                                  builder: ((context, snapshot) {
+                                    if (snapshot.data == null) {
+                                      return Container();
+                                    } else {
+                                      return ListView.builder(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (context, index) =>
+                                            CheckBox(
+                                                isSelected,
+                                                snapshot
+                                                    .data[index].usesOfFood),
+                                      );
+                                    }
+                                  })),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            Center(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.orange,
+                                  minimumSize: Size(
+                                      MediaQuery.of(context).size.width * 0.8,
+                                      MediaQuery.of(context).size.height *
+                                          0.06),
+                                ),
+                                onPressed: () {},
+                                child: const Text(
+                                  'Show Result',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             });
