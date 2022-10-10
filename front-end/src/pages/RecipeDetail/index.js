@@ -25,7 +25,9 @@ import { useRecipe } from '../../recoil/recipe'
 
 const RecipeDetail = () => {
     const [recipe, setRecipe] = useState({})
-    const [step, setStep] = useState([])
+    const [categories, setCategories] = useState([])
+    const [step, setStep] = useState({})
+    const [star, setStar] = useState(0)
     const { id } = useParams()
     const { getRecipe, getStep } = useRecipe()
     const showSnackbar = useSnackbar()
@@ -34,6 +36,8 @@ const RecipeDetail = () => {
             .then((response) => {
                 const data = response.data.data
                 setRecipe(data)
+                setCategories(data.listCategories)
+                setStar(data?.averageRating)
                 console.log(data)
             })
             .catch(() => {
@@ -46,8 +50,8 @@ const RecipeDetail = () => {
         getStep(id)
             .then((response) => {
                 const data = response.data.data
-                setStep(data[0])
-                console.log(data[0])
+                setStep(data)
+                console.log(data)
             })
             .catch(() => {
                 showSnackbar({
@@ -86,7 +90,13 @@ const RecipeDetail = () => {
                 >
                     Rating:{' '}
                 </Typography>
-                <Rating name="half-rating-read" value={4} precision={0.5} readOnly sx={{ mt: 1 }} />
+                <Rating
+                    name="half-rating-read"
+                    value={star}
+                    precision={0.5}
+                    readOnly
+                    sx={{ mt: 1 }}
+                />
             </Box>
 
             <Box display="flex">
@@ -137,18 +147,29 @@ const RecipeDetail = () => {
                 >
                     Categories:{' '}
                 </Typography>
-                {/* {recipe?.listCategories.map((cate) => ( */}
-                <Typography
-                    // key={cate.id}
-                    variant="subtitle1"
-                    fontWeight={400}
-                    sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
-                >
-                    Meat, Vegetable
-                    {/* {cate}
-                        {', '} */}
-                </Typography>
-                {/* ))} */}
+                {categories?.length ? (
+                    <Box display="flex">
+                        {categories.map((item, index) => (
+                            <Typography
+                                key={item.id}
+                                variant="subtitle1"
+                                fontWeight={400}
+                                sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                            >
+                                {(index ? ', ' : '') + item.type}
+                            </Typography>
+                        ))}
+                    </Box>
+                ) : (
+                    <Typography
+                        // key={item.id}
+                        variant="subtitle1"
+                        fontWeight={400}
+                        sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                    >
+                        Updating
+                    </Typography>
+                )}
             </Box>
             <Typography
                 mt={4}
