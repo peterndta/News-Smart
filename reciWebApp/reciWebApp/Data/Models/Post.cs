@@ -28,6 +28,9 @@ namespace reciWebApp.Data.Models
         public int UsesId { get; set; }
         public string Description { get; set; } = null!;
 
+        public virtual CookingMethod CookingMethod { get; set; } = null!;
+        public virtual RecipeRegion RecipeRegion { get; set; } = null!;
+        public virtual Use Uses { get; set; } = null!;
         public virtual ICollection<FoodCollection> FoodCollections { get; set; }
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         public virtual ICollection<PostMetum> PostMeta { get; set; }
