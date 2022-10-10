@@ -1,10 +1,13 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 
-import { CONTINENTS_LIST } from '../../../../Elixir'
+import continentAtom from '../../../../recoil/continents'
 
 const SelectContinents = ({ continents, setContinents }) => {
+    const continentList = useRecoilValue(continentAtom)
     const handleChange = (event) => {
         setContinents(event.target.value)
     }
@@ -21,9 +24,9 @@ const SelectContinents = ({ continents, setContinents }) => {
                 label="Continents"
                 required
             >
-                {CONTINENTS_LIST.list.map((name, index) => (
-                    <MenuItem key={index} value={name}>
-                        {name}
+                {continentList.list.map((continent) => (
+                    <MenuItem key={continent.id} value={continent.id}>
+                        {continent.continents}
                     </MenuItem>
                 ))}
             </Select>

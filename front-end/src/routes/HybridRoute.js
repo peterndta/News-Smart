@@ -9,8 +9,8 @@ const HybridRoute = (props) => {
     const { component, ...rest } = props
     const auth = useRecoilValue(authAtom)
 
-    if (auth && auth.email && auth.role === 'Admin') {
-        return <Redirect to="/admin" />
+    if (auth && auth.email && auth.role === 'admin') {
+        return <Redirect to="/admin/posts-management" />
     }
 
     return <Route component={component} {...rest} />

@@ -73,7 +73,7 @@ const Navs = () => {
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <StarRateOutlined color="secondary" />
                         </ListItemIcon>
-                        <ListItemText primary="Your rating" sx={{ fontWeight: 500 }} />
+                        <ListItemText primary="My rating" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
@@ -81,7 +81,7 @@ const Navs = () => {
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <Description color="secondary" />
                         </ListItemIcon>
-                        <ListItemText primary="Your recipes" sx={{ fontWeight: 500 }} />
+                        <ListItemText primary="My recipes" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
             </List>

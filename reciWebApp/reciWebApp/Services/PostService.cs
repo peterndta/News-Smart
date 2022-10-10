@@ -1,5 +1,7 @@
-﻿using reciWebApp.Data.IRepositories;
+﻿using AutoMapper;
+using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.DTOs.CategoryDTOs;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
@@ -10,10 +12,12 @@ namespace reciWebApp.Services
     {
         private readonly IRepositoryManager _repoManager;
         private readonly IConfiguration _configuration;
-        public PostService(IRepositoryManager repoManager, IConfiguration config)
+        private readonly IMapper _mapper;
+        public PostService(IRepositoryManager repoManager, IConfiguration config, IMapper mapper)
         {
             _repoManager = repoManager;
             _configuration = config;
+            _mapper = mapper;
         }
         public bool CheckPostAuthority(int userId, string postId)
         {
@@ -31,9 +35,17 @@ namespace reciWebApp.Services
 
         public ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO)
         {
-            showPostDTO.Type = _repoManager.Category.GetCategoryById(showPostDTO.CategoryId).Type;
-            showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.CategoryId).Continents;
-            showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CategoryId).Method;
+            var listPostCategories = _repoManager.PostCategory.GetPostCategoriesByPostId(showPostDTO.Id);
+            List<Category> categories = new List<Category>();
+            foreach (var postCategory in listPostCategories)
+            {
+                categories.Add(_repoManager.Category.GetCategoryById(postCategory.CategoryId));
+            }
+            showPostDTO.ListCategories = _mapper.Map<List<ShowCategoryDTO>>(categories);
+            showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.RecipeRegionId).Continents;
+            showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CookingMethodId).Method;
+            showPostDTO.UserName = _repoManager.User.GetUserById(showPostDTO.UserId).Name;
+            showPostDTO.AverageRating = _repoManager.UserInteract.GetAverageRating(showPostDTO.Id);
             return showPostDTO;
         }
     }

@@ -20,6 +20,11 @@ namespace reciWebApp.Data.Repositories
             Delete(category);
         }
 
+        public List<Category?> GetAllCategories()
+        {
+            return GetAll().ToList();
+        }
+
         public async Task<List<Category>?> GetAllCategoryAsync()
         {
             return await GetAll().ToListAsync();

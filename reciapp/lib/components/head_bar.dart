@@ -75,7 +75,7 @@ class _HeadBarState extends State<HeadBar> {
               InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CollectionPage()));
+                        builder: (context) => BookmarkPage()));
                   },
                   child: Icon(
                     Icons.bookmark,

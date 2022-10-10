@@ -4,9 +4,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Checkbox, Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const CoursesFilter = ({ methods, checks, selectHandler }) => {
+const MethodsFilter = ({ methods, checks, selectHandler }) => {
     const [open, setOpen] = React.useState(true)
-    const typeList = methods.type
 
     const handleClick = () => setOpen(!open)
 
@@ -27,14 +26,18 @@ const CoursesFilter = ({ methods, checks, selectHandler }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {methods.list.map((method, index) => (
-                        <ListItemButton key={index} dense onClick={selectHandler(method, typeList)}>
+                    {methods.list.map((method) => (
+                        <ListItemButton
+                            key={method.id}
+                            dense
+                            onClick={selectHandler(method.method)}
+                        >
                             <Checkbox
                                 edge="start"
                                 disableRipple
-                                checked={checks.indexOf(method) !== -1}
+                                checked={checks.indexOf(method.method) !== -1}
                             />
-                            <ListItemText primary={method} />
+                            <ListItemText primary={method.method} />
                         </ListItemButton>
                     ))}
                 </List>
@@ -43,4 +46,4 @@ const CoursesFilter = ({ methods, checks, selectHandler }) => {
     )
 }
 
-export default CoursesFilter
+export default MethodsFilter
