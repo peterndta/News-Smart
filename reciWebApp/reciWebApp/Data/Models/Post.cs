@@ -22,16 +22,15 @@ namespace reciWebApp.Data.Models
         public int CookingMethodId { get; set; }
         public int RecipeRegionId { get; set; }
         public int UserId { get; set; }
-        public int? Status { get; set; }
+        public int Status { get; set; }
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
-        public int? UsesId { get; set; }
-        public string? Description { get; set; }
+        public int UsesId { get; set; }
+        public string Description { get; set; } = null!;
 
         public virtual CookingMethod CookingMethod { get; set; } = null!;
         public virtual RecipeRegion RecipeRegion { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
-        public virtual Use? Uses { get; set; }
+        public virtual Use Uses { get; set; } = null!;
         public virtual ICollection<FoodCollection> FoodCollections { get; set; }
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         public virtual ICollection<PostMetum> PostMeta { get; set; }

@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 
+import queryString from 'query-string'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -18,8 +20,12 @@ import methodsAtom from '../../../../recoil/methods'
 import MethodsFilter from './MethodsFilter'
 
 const Filter = () => {
-    const [methods, setMethods] = React.useState([])
     const methodList = useRecoilValue(methodsAtom)
+    const { search: query, pathname } = useLocation()
+    const { search, method, time, status } = queryString.parse(query)
+    const history = useHistory('')
+    const [methods, setMethods] = useState(method ? method : [])
+    const [searchValue, setSearchValue] = useState(search ? search : '')
 
     const selectHandler = (value) => () => {
         const newMethods = [...methods]
@@ -31,6 +37,29 @@ const Filter = () => {
         }
 
         setMethods(newMethods)
+    }
+
+    const clearAllHandler = () => {
+        setSearchValue('')
+        setMethods([])
+    }
+
+    const searchChangeHandler = (event) => {
+        const searchText = event.target.value.trim()
+        setSearchValue(searchText)
+    }
+
+    const searchSubmitHandler = () => {
+        let route = pathname + '?'
+        if (searchValue) route += '&search=' + searchValue
+
+        if (methods.length !== 0) methods.forEach((method) => (route += `&method=${method}`))
+
+        if (time) route += `&time=${time}`
+
+        if (status) route += `&status=${status}`
+
+        history.push(route)
     }
 
     return (
@@ -46,7 +75,9 @@ const Filter = () => {
                     <Typography variant="h4" fontWeight={700} sx={{ color: blueGrey[800] }}>
                         Filters
                     </Typography>
-                    <Button variant="outlined">Clear all</Button>
+                    <Button variant="outlined" onClick={clearAllHandler}>
+                        Clear all
+                    </Button>
                 </Box>
                 <Box mt={3} mb={1}>
                     <Typography variant="h6" fontWeight={700} sx={{ color: blueGrey[800] }} mb={2}>
@@ -71,7 +102,12 @@ const Filter = () => {
                         <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
                             Keyword
                         </InputLabel>
-                        <OutlinedInput id="component-outlined" label="Keyword" />
+                        <OutlinedInput
+                            id="component-outlined"
+                            label="Keyword"
+                            onChange={searchChangeHandler}
+                            value={searchValue}
+                        />
                     </FormControl>
                 </Box>
                 <Divider
@@ -88,7 +124,11 @@ const Filter = () => {
                 />
 
                 <Box width="100%" display="flex" justifyContent="center" mt={3}>
-                    <Button variant="contained" sx={{ color: grey[100] }}>
+                    <Button
+                        variant="contained"
+                        sx={{ color: grey[100] }}
+                        onClick={searchSubmitHandler}
+                    >
                         SHOW RESULTS
                     </Button>
                 </Box>

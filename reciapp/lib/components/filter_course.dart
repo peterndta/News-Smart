@@ -137,7 +137,7 @@ class _FilterCourseState extends State<FilterCourse> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Course',
+                            'Courses',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,

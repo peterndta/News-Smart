@@ -3,6 +3,6 @@
     public class ShowRecipeRegionDTO
     {
         public int Id { get; set; }
-        public string? Continents { get; set; }
+        public string Continents { get; set; }
     }
 }
