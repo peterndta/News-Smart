@@ -69,32 +69,31 @@ namespace reciWebApp.Controllers
             }
         }
 
-        //[Route("~/api/post/{id}/step")]
-        //[HttpPost]
-        //public async Task<IActionResult> CreateStep(string id, [FromBody] CreateStepDTO stepDTO)
-        //{
-        //    try
+        ////[Route("~/api/post/{id}/step")]
+        ////[HttpPost]
+        ////public async Task<IActionResult> CreateStep(string id, [FromBody] CreateStepDTO stepDTO)
+        ////{
+        ////    try
+        ////    {
+        ////        var post = await _repoManager.Post.GetPostByIdAsync(id);
+
+        ////        if(post == null)
+        ////        {
+        ////            return BadRequest (new Response(400, "Post id does not exist!"));
+        ////        }
+
+        //        var createStep = _mapper.Map<Step>(stepDTO);
+        //        createStep.PostsId = id;
+        //        _repoManager.Step.CreateStep(createStep);
+        //        await _repoManager.SaveChangesAsync();
+        //        return Ok (new Response(200));
+        //    }
+        //    catch(Exception e)
         //    {
-        //        var post = await _repoManager.Post.GetPostByIdAsync(id);
+        //        return BadRequest(new Response(500, e.Message));
+        //    }
+        //}
 
-        //        if(post == null)
-        //        {
-        //            return BadRequest (new Response(400, "Post id does not exist!"));
-        //        }
-
-<<<<<<< HEAD
-                var createStep = _mapper.Map<Step>(stepDTO);
-                createStep.PostsId = id;
-                _repoManager.Step.CreateStep(createStep);
-                await _repoManager.SaveChangesAsync();
-                return Ok (new Response(200));
-            }
-            catch(Exception e)
-            {
-                return BadRequest(new Response(500, e.Message));
-            }
-        }
-=======
         //        var createStep = _mapper.Map<Step>(stepDTO);
         //        createStep.PostsId = id;
         //        createStep.Id = Int32.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
@@ -107,7 +106,7 @@ namespace reciWebApp.Controllers
         //        return BadRequest(new Response(500, e.Message));
         //    }
         //}
->>>>>>> cebe0e2abe75c3ac3e76fdbfe7094b0c44c7c394
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStep(int id, [FromBody] UpdateStepDTO updateStepDTO)
