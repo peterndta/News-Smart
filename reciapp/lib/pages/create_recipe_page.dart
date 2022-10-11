@@ -154,14 +154,14 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   }
 
   Future postRecipe() async {
-    uploadFile();
+    await uploadFile();
     PostSendItem post = PostSendItem(
         name: title.text,
         cookingMethodId: selectedMethod!.id,
         recipeRegionId: selectedRegion!.id,
         imageUrl: imageURL.toString(),
         videoUrl: linkVideo.text,
-        usesId: 4,
+        usesId: selectedUse!.id,
         description: description.text,
         categoriesId: selectedCategorys.map((e) => e.id).toList(),
         ingredient: ingredients.text,
