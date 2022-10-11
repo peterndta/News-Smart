@@ -40,7 +40,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 children: [
                   Flexible(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: TextField(
                         controller: _textController,
                         style: TextStyle(color: Colors.black),
@@ -69,7 +69,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.13,
                   ),
-                  FilterNewOldPopular(),
+                  //FilterNewOldPopular(),
                 ],
               ),
               Container(
