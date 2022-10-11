@@ -22,7 +22,7 @@ import CategoriesFilter from './CategoriesFilter'
 const Filter = () => {
     const categoryList = useRecoilValue(categoryAtom)
     const { search: query, pathname } = useLocation()
-    const { search, category, time, status } = queryString.parse(query)
+    const { search, category, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [categories, setCategories] = useState(category ? category : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
@@ -56,9 +56,9 @@ const Filter = () => {
         if (categories.length !== 0)
             categories.forEach((category) => (route += `&category=${category}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }

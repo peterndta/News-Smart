@@ -1,64 +1,52 @@
 import React, { useEffect } from 'react'
 
 import queryString from 'query-string'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 // import queryString from 'query-string'
 // import { useLocation } from 'react-router-dom'
-import { FormControl, Grid, InputLabel, MenuItem, Pagination, Select } from '@mui/material'
+import { Grid } from '@mui/material'
 
 import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
+import useRecipe from '../../../../recoil/recipe/action'
+import Paging from '../Pagination'
+import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
+const filterStringGenerator = ({ search, continent, use, sort }) => {
+    let filterString = `&pageSize=${6}`
+
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (continent && Array.isArray(continent))
+        continent.forEach((continent) => (filterString += `&continent=${continent}`))
+    else if (continent !== undefined) filterString += `&continent=${continent}`
+
+    if (use && Array.isArray(use)) use.forEach((use) => (filterString += `&use=${use}`))
+    else if (use !== undefined) filterString += `&use=${use}`
+
+    if (sort !== undefined) filterString += `&sort=${sort}`
+
+    return filterString
+}
+
 const RecipeList = () => {
-    const history = useHistory()
-    const { search: query, pathname } = useLocation()
-    const { use, continent, search, time } = queryString.parse(query)
-    const [type, setType] = React.useState(time ? time : '')
-
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
-
-    const filterHandler = () => {
-        let route = pathname + '?'
-        if (search) route += '&search=' + search
-
-        if (continent?.length !== 0)
-            continent?.forEach((continent) => (route += `&continent=${continent}`))
-
-        if (use?.length !== 0) use?.forEach((use) => (route += `&use=${use}`))
-
-        if (!!type) {
-            if (type === 'Popularity') route += `&status=${type}`
-            else route += `&time=${type}`
-        }
-
-        history.push(route)
-    }
+    const { search: query } = useLocation()
+    const { use, continent, search, sort, pageNum } = queryString.parse(query)
+    const recipeAction = useRecipe()
 
     useEffect(() => {
-        filterHandler()
+        const params = filterStringGenerator({ search, continent, use, sort })
+
+        if (pageNum === undefined) recipeAction.getRecipes(params)
+        else recipeAction.getRecipes(params, pageNum)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type])
+    }, [use, continent, search, sort, pageNum])
     return (
         <Grid item md={9} display="flex" flexDirection="column">
-            <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">
-                <InputLabel id="demo-select-small">Type</InputLabel>
-                <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    value={type}
-                    label="Type"
-                    onChange={handleChange}
-                >
-                    <MenuItem value={'Popularity'}>Popularity</MenuItem>
-                    <MenuItem value={'Newest'}>Newest</MenuItem>
-                    <MenuItem value={'Oldest'}>Oldest</MenuItem>
-                </Select>
-            </FormControl>
+            <Sort />
             <Recipes posts={MOST_FAVORITE_POSTS} />
-            <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
+            <Paging size={10} />
         </Grid>
     )
 }
