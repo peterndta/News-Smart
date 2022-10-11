@@ -10,7 +10,7 @@ import 'pages/create_recipe_page.dart';
 import 'pages/home_page.dart';
 import 'pages/collection_page.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());

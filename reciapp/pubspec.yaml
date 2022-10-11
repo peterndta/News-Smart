@@ -43,9 +43,9 @@ dependencies:
   path_provider: any
   dropdown_button2: ^1.8.2
   http: ^0.13.5
-  cloud_firestore: any
-  firebase_core: any
-  firebase_storage: any
+  cloud_firestore: ^3.5.1
+  firebase_core: ^1.6.0
+  firebase_storage: ^10.0.3
 
 dev_dependencies:
   flutter_test:
