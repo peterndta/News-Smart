@@ -25,6 +25,13 @@ namespace reciWebApp.Data.Repositories
             return await GetAll().ToListAsync();
         }
 
+        public int? GetRecipeRegionIdByName(string? name)
+        {
+            return string.IsNullOrWhiteSpace(name)
+                ? null
+                : GetByCondition(x => x.Continents.Equals(name)).FirstOrDefault().Id;
+        }
+
         public RecipeRegion? GetRecipeRegionsById(int id)
         {
             return GetByCondition(x => x.Id == id).FirstOrDefault();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -25,11 +25,12 @@ const Filter = () => {
     const continentsList = useRecoilValue(continentAtom)
     const usesList = useRecoilValue(usesAtom)
     const { search: query, pathname } = useLocation()
-    const { search, continent, use, time, status } = queryString.parse(query)
+    const { search, continent, use, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [continents, setContinents] = React.useState(continent ? continent : [])
     const [uses, setUses] = React.useState(use ? use : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
+    const isClearAll = useRef(false)
 
     const selectHandler = (value, type) => () => {
         if (continentsList.type === type) {
@@ -51,17 +52,20 @@ const Filter = () => {
             }
             setUses(newUses)
         }
+        isClearAll.current = false
     }
 
     const searchChangeHandler = (event) => {
         const searchText = event.target.value.trim()
         setSearchValue(searchText)
+        isClearAll.current = false
     }
 
     const clearAllHandler = () => {
         setSearchValue('')
         setContinents([])
         setUses([])
+        isClearAll.current = true
     }
 
     const searchSubmitHandler = () => {
@@ -73,12 +77,17 @@ const Filter = () => {
 
         if (uses.length !== 0) uses.forEach((use) => (route += `&use=${use}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }
+
+    useEffect(() => {
+        searchSubmitHandler()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClearAll.current === false])
 
     return (
         <Grid item md={3}>

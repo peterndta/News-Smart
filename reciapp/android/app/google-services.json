@@ -1,31 +1,39 @@
 {
-    "project_info": {
-        "project_number": "35735969334",
-        "project_id": "signin-363208",
-        "storage_bucket": "signin-363208.appspot.com"
-    },
-    "client": [{
-        "client_info": {
-            "mobilesdk_app_id": "1:35735969334:android:b98defa87dba3c100e4297",
-            "android_client_info": {
-                "package_name": "com.example.reciapp"
-            }
-        },
-        "oauth_client": [{
-            "client_id": "35735969334-lkj9l3rujfp60d43muc19u2vsmss2fak.apps.googleusercontent.com",
-            "client_type": 3
-        }],
-        "api_key": [{
-            "current_key": "AIzaSyA66Ynkko4mOYVqrywHjJ_2qYYOPna372E"
-        }],
-        "services": {
-            "appinvite_service": {
-                "other_platform_oauth_client": [{
-                    "client_id": "35735969334-lkj9l3rujfp60d43muc19u2vsmss2fak.apps.googleusercontent.com",
-                    "client_type": 3
-                }]
-            }
+  "project_info": {
+    "project_number": "247569221545",
+    "project_id": "flutter-storage-ca8a9",
+    "storage_bucket": "flutter-storage-ca8a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247569221545:android:399912755342fa654ee6b8",
+        "android_client_info": {
+          "package_name": "com.example.reciapp"
         }
-    }],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "247569221545-87bq5geeq2pk66qhq0pruhejsb4c75co.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-9_BvYaLJJa_H24aHfhuMR5JqmeLL9RI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "247569221545-87bq5geeq2pk66qhq0pruhejsb4c75co.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

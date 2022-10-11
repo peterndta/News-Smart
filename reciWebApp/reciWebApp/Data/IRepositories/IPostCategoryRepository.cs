@@ -6,5 +6,7 @@ namespace reciWebApp.Data.IRepositories
     {
         void CreatePostCategory(PostCategory postCategory);
         List<PostCategory> GetPostCategoriesByPostId(string id);
+        List<PostCategory?> GetPostCategoriesByCategory(List<Category> categories);
+        List<PostCategory?> GetAllPostCategories();
     }
 }

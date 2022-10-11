@@ -52,34 +52,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.only(bottom: 10),
-              alignment: Alignment.centerLeft,
-              child: RichText(
-                // textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 11),
-                  children: [
-                    TextSpan(text: 'Home '),
-                    WidgetSpan(
-                      child: Icon(Icons.arrow_forward_ios, size: 11),
-                    ),
-                    TextSpan(text: ' Main Dish '),
-                    WidgetSpan(
-                      child: Icon(Icons.arrow_forward_ios, size: 11),
-                    ),
-                    TextSpan(text: ' Chicken '),
-                    WidgetSpan(
-                      child: Icon(Icons.arrow_forward_ios, size: 11),
-                    ),
-                    TextSpan(text: ' Homemade Chicken Soup'),
-                  ],
-                ),
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
