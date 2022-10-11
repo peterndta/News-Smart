@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import '../object/category_item.dart';
 import 'checkbox.dart';
 
 class FilterCategory extends StatefulWidget {
@@ -24,26 +25,26 @@ class _FilterCategoryState extends State<FilterCategory> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
-  Future getCategoryData() async {
-    var response = await http.get(
-      Uri.parse('https://reciapp.azurewebsites.net/api/categories'),
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      List<Category> categories = [];
-      for (var cate in jsonData['data']) {
-        Category category = Category(cate['id'], cate['type']);
-        categories.add(category);
-      }
-      // print(categories.length);
-      // print(categories);
-      return categories;
-    }
-  }
+  // Future getCategoryData() async {
+  //   var response = await http.get(
+  //     Uri.parse('https://reciapp.azurewebsites.net/api/categories'),
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "accept": "application/json",
+  //     },
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var jsonData = jsonDecode(response.body);
+  //     List<Category> categories = [];
+  //     for (var cate in jsonData['data']) {
+  //       Category category = Category(cate['id'], cate['type']);
+  //       categories.add(category);
+  //     }
+  //     // print(categories.length);
+  //     // print(categories);
+  //     return categories;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +179,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                               width: MediaQuery.of(context).size.height * 0.6,
                               height: MediaQuery.of(context).size.height * 0.55,
                               child: FutureBuilder(
-                                  future: getCategoryData(),
+                                  future: fetchCategories(),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container();
