@@ -10,6 +10,8 @@ PostSendItem postSendItemFromJson(String str) =>
 String postSendItemToJson(PostSendItem data) => json.encode(data.toJson());
 
 Future submitData(PostSendItem post) async {
+  print(postSendItemToJson(post));
+  print('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post');
   var response = await http.post(
     Uri.parse('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post'),
     body: postSendItemToJson(post),

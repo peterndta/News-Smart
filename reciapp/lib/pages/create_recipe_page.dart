@@ -9,11 +9,13 @@ import 'package:path/path.dart';
 import 'package:reciapp/components/copyright.dart';
 import 'package:reciapp/components/dropdown_button.dart';
 import 'package:reciapp/components/textbox_form.dart';
+import 'package:reciapp/object/post_send_item.dart';
 import '../components/dropdown_multiple_choice_button.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
+import 'package:http/http.dart' as http;
 
 class SelectedItem {
   dynamic data;
@@ -53,6 +55,7 @@ class CreateRecipePage extends StatefulWidget {
 
 class _CreateRecipePageState extends State<CreateRecipePage> {
   File? image;
+  String? imageURL;
   UploadTask? uploadTask;
   bool checkImage = true;
   TextEditingController title = TextEditingController();
@@ -124,7 +127,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       setState(() {
         this.image = imageTemporary;
       });
-      uploadFile();
     } on PlatformException catch (e) {
       print('Fail to pick image: $e');
     }
@@ -138,15 +140,39 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   }
 
   Future<String> uploadFile() async {
-    final pathUpload = 'images/${image!.path}';
+    final pathUpload = 'images${image!.path}';
     final ref = FirebaseStorage.instance.ref().child(pathUpload);
-
     uploadTask = ref.putFile(image!);
     final snapshot = await uploadTask!.whenComplete(() {});
-
     final imageUrl = await snapshot.ref.getDownloadURL();
-    print(imageUrl);
+    // print('url:'+imageUrl);
+    setState(() {
+      imageURL = imageUrl;
+    });
+    print('url:' + imageURL!);
     return imageUrl;
+  }
+
+  Future postRecipe() async {
+    uploadFile();
+    PostSendItem post = PostSendItem(
+        name: title.text,
+        cookingMethodId: selectedMethod!.id,
+        recipeRegionId: selectedRegion!.id,
+        imageUrl: imageURL.toString(),
+        videoUrl: linkVideo.text,
+        usesId: 4,
+        description: description.text,
+        categoriesId: selectedCategorys.map((e) => e.id).toList(),
+        ingredient: ingredients.text,
+        processing: processing.text,
+        cooking: cooking.text,
+        tool: tools.text,
+        processingTime: selectedTimeProcessing!.toInt(),
+        cookingTime: selectedTimeCooking!.toInt(),
+        preparingTime: selectedTimePreparing!.toInt(),
+        serving: selectedServe!.toInt());
+    submitData(post);
   }
 
   @override
@@ -423,11 +449,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     // if (_formKey.currentState!.validate()) {
                     //   _formKey.currentState!.save();
                     // }
-                    final url = uploadFile();
-                    print(url);
-                    // for (var item in selectedCategorys) {
-                    //   print(item.id);
+                    // uploadFile();
+                    // print(imageURL);
+                    // for (var item
+                    //     in selectedCategorys.map((e) => e.id).toList()) {
+                    //   print(item);
                     // }
+                    postRecipe();
                     // print(selectedMethod);
                     // print(selectedTimeCooking as int);
                   },
