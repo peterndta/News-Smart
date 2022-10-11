@@ -47,22 +47,40 @@ namespace reciWebApp.Data.Repositories
         {
             var post = await GetAll()
                 .FilterPostByName(_reciContext, postParams.Name)
-                .FilterPostByCategoryId(_reciContext, postParams.CategoryId)
+                //.FilterPostByPostCategory(_reciContext, postParams.Posts)
                 .FilterPostByCookingMethodId(_reciContext, postParams.CookingMethodId)
                 .FilterPostByRecipeTypeId(_reciContext, postParams.RecipeTypeId)
                 .ToListAsync();
-            return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
+            var result = post.Intersect(postParams.Posts).ToList();
+            return PaginatedList<Post>.Create(result, postParams.PageNumber, postParams.PageSize);
         }
 
         public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId)
         {
             var post = await GetByCondition(x => x.UserId == userId)
                 .FilterPostByName(_reciContext, postParams.Name)
-                .FilterPostByCategoryId(_reciContext, postParams.CategoryId)
+                .FilterPostByPostCategory(_reciContext, postParams.Posts)
                 .FilterPostByCookingMethodId(_reciContext, postParams.CookingMethodId)
                 .FilterPostByRecipeTypeId(_reciContext, postParams.RecipeTypeId)
                 .ToListAsync();
-            return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
+            var result = post.Intersect(postParams.Posts).ToList();
+            return PaginatedList<Post>.Create(result, postParams.PageNumber, postParams.PageSize);
+        }
+
+        public List<Post> GetPostsByPostCategories(List<PostCategory?> postCategories)
+        {
+            var posts = GetAll().ToList();
+            if (postCategories.Count > 0)
+            {
+                List<Post> result = new List<Post>();
+                postCategories.DistinctBy(x => x.PostId);
+                foreach(var postCategory in postCategories)
+                {
+                    result.Add(GetPostById(postCategory.PostId));
+                }
+                return result;
+            }
+            return posts;
         }
     }
 }

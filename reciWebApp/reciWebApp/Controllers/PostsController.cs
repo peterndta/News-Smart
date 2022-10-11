@@ -190,7 +190,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet("page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] PostParams postParams)
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostDTO filterAndSort)
         {
             try
             {
@@ -200,6 +200,19 @@ namespace reciWebApp.Controllers
                 //{
                 //    return BadRequest(new Response(400, "Invalid user"));
                 //}
+                var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Categories);
+                var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
+                var getPosts = _repoManager.Post.GetPostsByPostCategories(postCategories);
+                var postParams = new PostParams
+                {
+                    Name = filterAndSort.Name,
+                    CookingMethodId = _repoManager.CookingMethod.GetCookingMethodIdByName(filterAndSort.CookingMethod),
+                    RecipeTypeId = _repoManager.RecipeRegion.GetRecipeRegionIdByName(filterAndSort.RecipeType),
+                    Posts = getPosts,
+                    PageNumber = filterAndSort.PageNumber,
+                    PageSize = filterAndSort.PageSize,
+                    Type = filterAndSort.Sort,
+                };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
@@ -207,7 +220,12 @@ namespace reciWebApp.Controllers
                 {
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
-                return Ok(new Response(200, showPosts, "", posts.Meta));
+                IEnumerable<ShowPostDTO> result = showPosts;
+                if (postParams.Type != null)
+                {
+                    result = _servicesManager.PostService.SortPostByCondition(showPosts, postParams.Type);
+                }
+                return Ok(new Response(200, result, "", posts.Meta));
             }
             catch (Exception ex)
             {
