@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -30,6 +30,7 @@ const Filter = () => {
     const [continents, setContinents] = React.useState(continent ? continent : [])
     const [uses, setUses] = React.useState(use ? use : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
+    const isClearAll = useRef(false)
 
     const selectHandler = (value, type) => () => {
         if (continentsList.type === type) {
@@ -51,17 +52,20 @@ const Filter = () => {
             }
             setUses(newUses)
         }
+        isClearAll.current = false
     }
 
     const searchChangeHandler = (event) => {
         const searchText = event.target.value.trim()
         setSearchValue(searchText)
+        isClearAll.current = false
     }
 
     const clearAllHandler = () => {
         setSearchValue('')
         setContinents([])
         setUses([])
+        isClearAll.current = true
     }
 
     const searchSubmitHandler = () => {
@@ -79,6 +83,11 @@ const Filter = () => {
 
         history.push(route)
     }
+
+    useEffect(() => {
+        searchSubmitHandler()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClearAll.current === false])
 
     return (
         <Grid item md={3}>
