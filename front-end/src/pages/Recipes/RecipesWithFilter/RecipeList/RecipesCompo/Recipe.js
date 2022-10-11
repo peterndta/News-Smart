@@ -7,7 +7,7 @@ const LatestRecipe = ({ post }) => {
     return (
         <Grid item md={4}>
             <Card sx={{ maxWidth: 392 }}>
-                <CardMedia component="img" alt="green iguana" height="270" image={post.image} />
+                <CardMedia component="img" alt="green iguana" height="270" image={post.imageUrl} />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div" fontWeight={700}>
                         {post.name}
@@ -17,7 +17,7 @@ const LatestRecipe = ({ post }) => {
                     </Typography>
                     <Rating
                         name="half-rating-read"
-                        value={post.rating}
+                        value={post.averageRating}
                         precision={0.5}
                         readOnly
                         sx={{ mt: 2 }}
@@ -27,7 +27,7 @@ const LatestRecipe = ({ post }) => {
                             By
                         </Typography>
                         <Typography component="span" ml={1.5} variant="body2" fontWeight={700}>
-                            {post.author}
+                            {post.userName}
                         </Typography>
                     </Box>
                 </CardContent>

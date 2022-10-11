@@ -6,8 +6,8 @@ import LatestRecipe from './Recipe'
 
 const LatestList = ({ posts }) => {
     return (
-        <Grid container rowSpacing={6} columnSpacing={4} display="flex" justifyContent="center">
-            {posts.map((post) => (
+        <Grid container rowSpacing={6} columnSpacing={4} display="flex">
+            {posts?.map((post) => (
                 <LatestRecipe key={post.id} post={post} />
             ))}
         </Grid>

@@ -394,7 +394,7 @@ class _SideBarMenuState extends State<SideBarMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.orange,
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.55,
       child: ListView(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),

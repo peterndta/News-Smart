@@ -8,5 +8,6 @@ namespace reciWebApp.Services.Interfaces
     {
         bool CheckPostAuthority(int userId, string postId);
         ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO);
+        IEnumerable<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
     }
 }

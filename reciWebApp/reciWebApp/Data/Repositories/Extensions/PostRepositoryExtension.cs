@@ -1,5 +1,8 @@
 ﻿using Google;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using reciWebApp.Data.Models;
+using System.Linq;
 
 namespace reciWebApp.Data.Repositories.Extensions
 {
@@ -29,9 +32,13 @@ namespace reciWebApp.Data.Repositories.Extensions
                 : posts.Where(x => x.RecipeRegionId == id);
         }
 
-        public static IQueryable<Post> FilterPostByCategoryId(this IQueryable<Post> posts, ReciContext context,
-            int? id)
-        {
+        public static IQueryable<Post> FilterPostByPostCategory(this IQueryable<Post> posts, ReciContext context,
+            List<Post?> getPosts)
+        {          
+            if (getPosts.Count > 0)
+            {
+                posts.Intersect(getPosts);
+            }
             return posts;
         }
     }

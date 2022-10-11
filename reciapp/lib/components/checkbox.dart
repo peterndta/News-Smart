@@ -20,9 +20,12 @@ class CheckBox extends StatelessWidget {
                     });
                   },
                 )),
-        Text(
-          title,
-          style: TextStyle(fontSize: 18),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 18),
+          ),
         ),
       ],
     );
