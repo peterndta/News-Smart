@@ -89,6 +89,7 @@ class _DropdownOneChoiceButtonState extends State<DropdownOneChoiceButton> {
             onChanged: (value) {
               setState(() {
                 widget.data = value;
+                print(widget.data);
               });
             },
             buttonHeight: MediaQuery.of(context).size.height * 0.05,

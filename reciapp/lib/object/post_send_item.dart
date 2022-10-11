@@ -1,16 +1,37 @@
-// To parse required this JSON data, do
+// To parse this JSON data, do
 //
-//     final postItem = postItemFromJson(jsonString);
-
+//     final postSendItem = postSendItemFromJson(jsonString);
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-PostItem postItemFromJson(String str) => PostItem.fromJson(json.decode(str));
+PostSendItem postSendItemFromJson(String str) =>
+    PostSendItem.fromJson(json.decode(str));
 
-String postItemToJson(PostItem data) => json.encode(data.toJson());
+String postSendItemToJson(PostSendItem data) => json.encode(data.toJson());
 
-class PostItem {
-  PostItem({
-    required this.id,
+Future submitData(PostSendItem post) async {
+  print(postSendItemToJson(post));
+  print('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post');
+  var response = await http.post(
+    Uri.parse('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post'),
+    body: postSendItemToJson(post),
+    headers: {
+      "content-type": "application/json",
+      "accept": "application/json",
+    },
+  );
+  var data = response.body;
+
+  if (response.statusCode == 200) {
+    String responseString = response.body;
+    print(responseString);
+  } else {
+    print(data);
+  }
+}
+
+class PostSendItem {
+  PostSendItem({
     required this.name,
     required this.cookingMethodId,
     required this.recipeRegionId,
@@ -29,7 +50,6 @@ class PostItem {
     required this.serving,
   });
 
-  int id;
   String name;
   int cookingMethodId;
   int recipeRegionId;
@@ -47,8 +67,7 @@ class PostItem {
   int preparingTime;
   int serving;
 
-  factory PostItem.fromJson(Map<String, dynamic> json) => PostItem(
-        id: json["id"],
+  factory PostSendItem.fromJson(Map<String, dynamic> json) => PostSendItem(
         name: json["name"],
         cookingMethodId: json["cookingMethodId"],
         recipeRegionId: json["recipeRegionId"],
@@ -68,7 +87,6 @@ class PostItem {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "name": name,
         "cookingMethodId": cookingMethodId,
         "recipeRegionId": recipeRegionId,

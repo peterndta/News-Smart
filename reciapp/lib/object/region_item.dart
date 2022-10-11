@@ -29,7 +29,7 @@ class RegionItem {
     required this.continents,
   });
 
-  int? id;
+  int id;
   String continents;
 
   factory RegionItem.fromJson(Map<String, dynamic> json) => RegionItem(
