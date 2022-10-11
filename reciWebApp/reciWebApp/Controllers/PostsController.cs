@@ -200,14 +200,14 @@ namespace reciWebApp.Controllers
                 //{
                 //    return BadRequest(new Response(400, "Invalid user"));
                 //}
-                var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Categories);
+                var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
                 var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
                 var getPosts = _repoManager.Post.GetPostsByPostCategories(postCategories);
                 var postParams = new PostParams
                 {
-                    Name = filterAndSort.Name,
-                    CookingMethodId = _repoManager.CookingMethod.GetCookingMethodIdByName(filterAndSort.CookingMethod),
-                    RecipeTypeId = _repoManager.RecipeRegion.GetRecipeRegionIdByName(filterAndSort.RecipeType),
+                    Name = filterAndSort.Search,
+                    CookingMethodId = _repoManager.CookingMethod.GetCookingMethodIdByName(filterAndSort.Method),
+                    RecipeTypeId = _repoManager.RecipeRegion.GetRecipeRegionIdByName(filterAndSort.Continent),
                     Posts = getPosts,
                     PageNumber = filterAndSort.PageNumber,
                     PageSize = filterAndSort.PageSize,

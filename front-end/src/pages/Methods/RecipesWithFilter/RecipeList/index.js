@@ -12,7 +12,7 @@ import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
 const filterStringGenerator = ({ search, method, sort }) => {
-    let filterString = `&pageSize=${6}`
+    let filterString = `?PageSize=${6}`
 
     if (search && search.trim() !== '') filterString += '&search=' + search
 

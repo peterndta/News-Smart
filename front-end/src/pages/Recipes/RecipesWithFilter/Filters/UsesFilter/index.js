@@ -5,7 +5,7 @@ import { Checkbox, Collapse, List, ListItemButton, ListItemText } from '@mui/mat
 import { blueGrey } from '@mui/material/colors'
 
 const UsesFilter = ({ uses, checks, selectHandler }) => {
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(false)
     const typeList = uses.type
 
     const handleClick = () => setOpen(!open)
