@@ -10,6 +10,7 @@ class FoodList extends StatelessWidget {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short descriptionnnnnnnnnnnnnn ...',
+      mail: 'tommy@',
     ),
     Food(
       image:
@@ -17,6 +18,7 @@ class FoodList extends StatelessWidget {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short description ...',
+      mail: 'khuongvladimir2001@gmail.com',
     ),
   ];
 

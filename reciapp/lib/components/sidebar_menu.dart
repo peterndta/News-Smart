@@ -8,6 +8,8 @@ import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
 
+import '../pages/login_page.dart';
+
 class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -356,9 +358,7 @@ class LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => UserProfile(),
-        // ));
+        handleSignOut();
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),

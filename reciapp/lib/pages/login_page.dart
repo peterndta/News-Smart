@@ -55,6 +55,8 @@ Future<void> _handleSignIn() async {
   }
 }
 
+Future<void> handleSignOut() => _googleSignIn.disconnect();
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -108,6 +110,9 @@ class _LoginPageState extends State<LoginPage> {
                         ElevatedButton.icon(
                           onPressed: () {
                             _handleSignIn();
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //   builder: (context) => HomePage(),
+                            // ));
                           },
                           style: ButtonStyle(
                               foregroundColor:
