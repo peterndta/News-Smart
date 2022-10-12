@@ -37,6 +37,21 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
+        public List<RecipeRegion>? GetRecipeRegionsByName(List<string>? names)
+        {
+            var recipeRegions = GetAll().ToList();
+            List<RecipeRegion> result = new List<RecipeRegion>();
+            if (names != null && recipeRegions.Count > 0)
+            {
+                foreach (var name in names)
+                {
+                    result.Add(recipeRegions.Where(x => x.Continents.Equals(name)).FirstOrDefault());
+                }
+                return result;
+            }
+            return recipeRegions;
+        }
+
         public void UpdateRecipeRegion(RecipeRegion recipeRegion)
         {
             Update(recipeRegion);

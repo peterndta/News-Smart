@@ -14,5 +14,20 @@ namespace reciWebApp.Data.Repositories
         {
             return await GetAll().ToListAsync();
         }
+
+        public List<Use?> GetUsesByName(List<string?> names)
+        {
+            var uses = GetAll().ToList();
+            List<Use> result = new List<Use>();
+            if (names != null && uses.Count > 0)
+            {
+                foreach (var name in names)
+                {
+                    result.Add(uses.Where(x => x.UsesOfFood.Equals(name)).FirstOrDefault());
+                }
+                return result;
+            }
+            return uses;
+        }
     }
 }
