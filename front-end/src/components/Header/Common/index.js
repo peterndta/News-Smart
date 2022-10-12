@@ -221,7 +221,6 @@ const CommonHeader = () => {
                                     METHOD
                                 </Typography>
                             </Box>
-                            {/* <Filter filters={filters} /> */}
                             <Box
                                 component={Link}
                                 to="/recipes/bookmark"

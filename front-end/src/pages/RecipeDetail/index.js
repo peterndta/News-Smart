@@ -48,7 +48,7 @@ const RecipeDetail = () => {
                 const data = response.data.data
                 setRecipe(data)
                 setCategories(data.listCategories)
-                setStar(data?.averageRating)
+                setStar(data.averageRating)
             })
             .catch(() => {
                 showSnackbar({
@@ -207,7 +207,7 @@ const RecipeDetail = () => {
                 </Box>
                 <Grid mt={3} container columnSpacing={4}>
                     <Grid item md={1}>
-                        <List sx={{ pl: 1 }}>
+                        <List sx={{ pl: 1, pt: 0.2 }}>
                             <ListItem
                                 disablePadding
                                 sx={{
@@ -474,7 +474,11 @@ const RecipeDetail = () => {
                 </Grid>
             </Box>
             {openCreateFeedback && (
-                <RecipeRating open={openCreateFeedback} onClose={closeCreateFeedbackHandler} />
+                <RecipeRating
+                    open={openCreateFeedback}
+                    onClose={closeCreateFeedbackHandler}
+                    setStar={setStar}
+                />
             )}
         </React.Fragment>
     )

@@ -51,7 +51,7 @@ const Search = () => {
     const searchHandler = (event) => {
         if (event.key === 'Enter') {
             if (value.trim().length !== 0) {
-                history.push(`recipes?q=${value}`)
+                history.push(`/recipes?search=${value}`)
                 setValue('')
             }
         }
