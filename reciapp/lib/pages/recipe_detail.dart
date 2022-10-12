@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../components/back_to_top_button.dart';
 
 class RecipeDetailPage extends StatefulWidget {
@@ -116,18 +115,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
             ),
             Row(
               children: [
-                SmoothStarRating(
-                    allowHalfRating: true,
-                    onRated: (v) {},
-                    starCount: 5,
-                    rating: 4.5,
-                    size: 23.0,
-                    isReadOnly: true,
-                    filledIconData: Icons.star,
-                    halfFilledIconData: Icons.star_half,
-                    color: Colors.yellow,
-                    borderColor: Colors.yellow,
-                    spacing: 0.0),
+                SimpleStarRating(
+                  allowHalfRating: true,
+                  starCount: 5,
+                  rating: 4.5,
+                  size: 15,
+                  spacing: 10,
+                ),
                 SizedBox(
                   width: 4,
                 ),
