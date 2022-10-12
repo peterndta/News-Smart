@@ -45,38 +45,102 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<PaginatedList<Post>?> GetAllPostsAsync(PostParams postParams)
         {
-            var post = await GetAll()
-                .FilterPostByName(_reciContext, postParams.Name)
-                //.FilterPostByPostCategory(_reciContext, postParams.Posts)
-                .FilterPostByCookingMethodId(_reciContext, postParams.CookingMethodId)
-                .FilterPostByRecipeTypeId(_reciContext, postParams.RecipeTypeId)
-                .ToListAsync();
-            var result = post.Intersect(postParams.Posts).ToList();
-            return PaginatedList<Post>.Create(result, postParams.PageNumber, postParams.PageSize);
+            var post =  GetAll().ToList();
+            if (postParams.PostsByCategories != null)
+            {
+                post = post.Intersect(postParams.PostsByCategories).ToList();
+            }
+            if (postParams.PostsByCookingMethods != null)
+            {
+                post = (post.Intersect(postParams.PostsByCookingMethods)).ToList();
+            }
+            if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
+            {
+                post = (post.Intersect(postParams.PostsRecipeRegions)).ToList();
+                post = post.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
+            }            
+            else if (postParams.PostsRecipeRegions != null && postParams.PostsByUses == null)
+            {
+                post = (post.Intersect(postParams.PostsRecipeRegions)).ToList();
+            }
+            else if (postParams.PostsRecipeRegions == null && postParams.PostsByUses != null)
+            {
+                post = post.Intersect(postParams.PostsByUses).ToList();
+            }
+            if (postParams.Name != null)
+            {
+                post = post.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }         
+            return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
         }
 
-        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId)
+        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(MyPostParams myPostParams, int userId)
         {
             var post = await GetByCondition(x => x.UserId == userId)
-                .FilterPostByName(_reciContext, postParams.Name)
-                .FilterPostByPostCategory(_reciContext, postParams.Posts)
-                .FilterPostByCookingMethodId(_reciContext, postParams.CookingMethodId)
-                .FilterPostByRecipeTypeId(_reciContext, postParams.RecipeTypeId)
+                .FilterPostByName(_reciContext, myPostParams.Name)
                 .ToListAsync();
-            var result = post.Intersect(postParams.Posts).ToList();
-            return PaginatedList<Post>.Create(result, postParams.PageNumber, postParams.PageSize);
+            return PaginatedList<Post>.Create(post, myPostParams.PageNumber, myPostParams.PageSize);
         }
 
-        public List<Post> GetPostsByPostCategories(List<PostCategory?> postCategories)
+        public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
         {
             var posts = GetAll().ToList();
-            if (postCategories.Count > 0)
+            if (posts.Count > 0 && postCategories.Count > 0)
             {
                 List<Post> result = new List<Post>();
                 postCategories.DistinctBy(x => x.PostId);
-                foreach(var postCategory in postCategories)
+                foreach (var postCategory in postCategories)
                 {
                     result.Add(GetPostById(postCategory.PostId));
+                }
+                return result.DistinctBy(x => x.Id).ToList();
+            }
+            return posts;
+        }
+
+        public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
+        {
+            var posts = GetAll().ToList();
+            if (posts.Count > 0 && cookingMethods.Count > 0)
+            {
+                List<Post> result = new List<Post>();
+                foreach (var cookingMethod in cookingMethods)
+                {
+                    var invalidResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id);
+                    if (invalidResult != null)
+                    {
+                        result.AddRange(invalidResult);
+                    }
+                }
+                return result.ToList();
+            }
+            return posts;
+        }
+
+        public List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
+        {
+            var posts = GetAll().ToList();
+            if (posts.Count > 0 && recipeRegions.Count > 0)
+            {
+                List<Post> result = new List<Post>();
+                foreach (var recipeRegion in recipeRegions)
+                {
+                    result.AddRange(GetByCondition(x => x.RecipeRegionId == recipeRegion.Id).ToList());
+                }
+                return result;
+            }
+            return posts;
+        }
+
+        public List<Post>? GetPostsByUses(List<Use> uses)
+        {
+            var posts = GetAll().ToList();
+            if (posts.Count > 0 && uses.Count > 0)
+            {
+                List<Post> result = new List<Post>();
+                foreach (var use in uses)
+                {
+                    result.AddRange(GetByCondition(x => x.UsesId == use.Id).ToList());
                 }
                 return result;
             }

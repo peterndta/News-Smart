@@ -53,24 +53,29 @@ namespace reciWebApp.Controllers
         //View list my recipes
         [Route("~/api/user/{id}/post/page/{pageNumber}")]
         [HttpGet]
-        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] PostParams postParams)
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] MyPostParams myPostParams)
         {
             try
             {
-                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(postParams, id);
-                
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams, id);
+
                 if (!posts.Any())
                 {
                     return BadRequest(new Response(400, "User do not have any post"));
                 }
 
-                postParams.PageNumber = pageNumber;
+                myPostParams.PageNumber = pageNumber;
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
-                return Ok(new Response(200, showPosts, "", posts.Meta));
+                IEnumerable<ShowPostDTO> result = showPosts;
+                if (myPostParams.Type != null)
+                {
+                    result = _servicesManager.PostService.SortPostByCondition(showPosts, myPostParams.Type);
+                }
+                return Ok(new Response(200, result, "", posts.Meta));
             }
             catch (Exception ex)
             {
@@ -200,18 +205,44 @@ namespace reciWebApp.Controllers
                 //{
                 //    return BadRequest(new Response(400, "Invalid user"));
                 //}
-                var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
-                var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
-                var getPosts = _repoManager.Post.GetPostsByPostCategories(postCategories);
+                List<Post>? getPostsByCategories = null;
+                if (filterAndSort.Category != null)
+                {
+                    var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
+                    var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
+                    getPostsByCategories = _repoManager.Post.GetPostsByPostCategories(postCategories);
+                }
+
+                List<Post>? getPostsByCookingMethods = null;
+                if (filterAndSort.Method != null)
+                {
+                    var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filterAndSort.Method);
+                    getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
+                }
+
+                List<Post>? getPostsByRecipeRegions = null;
+                if (filterAndSort.Continent != null)
+                {
+                    var recipeRegions = _repoManager.RecipeRegion.GetRecipeRegionsByName(filterAndSort.Continent);
+                    getPostsByRecipeRegions = _repoManager.Post.GetPostsByRecipeRegions(recipeRegions);
+                }
+
+                List<Post>? getPostsByUses = null;
+                if (filterAndSort.Uses != null)
+                {
+                    var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
+                    getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
+                }
                 var postParams = new PostParams
                 {
                     Name = filterAndSort.Search,
-                    CookingMethodId = _repoManager.CookingMethod.GetCookingMethodIdByName(filterAndSort.Method),
-                    RecipeTypeId = _repoManager.RecipeRegion.GetRecipeRegionIdByName(filterAndSort.Continent),
-                    Posts = getPosts,
+                    PostsByCookingMethods = getPostsByCookingMethods,
+                    PostsRecipeRegions = getPostsByRecipeRegions,
+                    PostsByCategories = getPostsByCategories,
                     PageNumber = filterAndSort.PageNumber,
                     PageSize = filterAndSort.PageSize,
                     Type = filterAndSort.Sort,
+                    PostsByUses = getPostsByUses,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
