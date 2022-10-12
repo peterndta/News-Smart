@@ -15,23 +15,24 @@ const labels = {
     5: 'Excellent',
 }
 
-const RecipeRating = ({ open, onClose, postId }) => {
+const RecipeRating = ({ open, onClose, postId, setStar }) => {
     const ratingAction = useRating()
     const [hover, setHover] = React.useState(-1)
     const showSnackbar = useSnackbar()
 
     const ratingChangeHandler = (newValue) => {
-        console.log(newValue)
         ratingAction
             .createRating(postId, { rating: newValue })
             .then((res) => {
-                console.log(res.data.data)
+                const { averageRating } = res.data.data
+                setStar(averageRating)
+                onClose()
             })
             .catch((error) => {
-                console.log(error.response)
+                const message = error.response.data.message
                 showSnackbar({
                     severity: 'error',
-                    children: 'Something went wrong, please try again later.',
+                    children: message,
                 })
             })
     }
