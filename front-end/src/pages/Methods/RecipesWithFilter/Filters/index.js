@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -26,6 +26,7 @@ const Filter = () => {
     const history = useHistory('')
     const [methods, setMethods] = useState(method ? method : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
+    const isClearAll = useRef(false)
 
     const selectHandler = (value) => () => {
         const newMethods = [...methods]
@@ -37,16 +38,19 @@ const Filter = () => {
         }
 
         setMethods(newMethods)
+        isClearAll.current = false
     }
 
     const clearAllHandler = () => {
         setSearchValue('')
         setMethods([])
+        isClearAll.current = true
     }
 
     const searchChangeHandler = (event) => {
         const searchText = event.target.value.trim()
         setSearchValue(searchText)
+        isClearAll.current = false
     }
 
     const searchSubmitHandler = () => {
@@ -61,6 +65,12 @@ const Filter = () => {
 
         history.push(route)
     }
+
+    useEffect(() => {
+        if (isClearAll.current === true) searchSubmitHandler()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClearAll.current === false])
 
     return (
         <Grid item md={3}>
