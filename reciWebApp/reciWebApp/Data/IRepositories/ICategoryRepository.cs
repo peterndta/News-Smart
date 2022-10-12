@@ -11,6 +11,6 @@ namespace reciWebApp.Data.IRepositories
         Task<List<Category>?> GetAllCategoryAsync();
         List<Category?> GetAllCategories();
         Category? GetCategoryById(int id);
-        List<Category?> GetCategoryByName(List<string?> name);
+        List<Category?> GetCategoryByName(List<string?> names);
     }
 }
