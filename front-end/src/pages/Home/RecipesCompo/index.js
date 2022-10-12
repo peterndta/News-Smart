@@ -1,11 +1,15 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 import { Box, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import LatestList from './Recipes'
 
-const Recipes = ({ posts, title }) => {
+const Recipes = ({ posts, title, linkTo }) => {
+    const history = useHistory()
+
     return (
         <Box mt={8}>
             <Typography
@@ -17,7 +21,9 @@ const Recipes = ({ posts, title }) => {
                     mb: 3,
                     borderBottom: (theme) => `5px solid ${theme.palette.primary.main}`,
                     display: 'inline-block',
+                    cursor: 'pointer',
                 }}
+                onClick={() => history.push(linkTo)}
                 component="span"
             >
                 {title}

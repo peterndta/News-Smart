@@ -21,7 +21,7 @@ const MyRecipes = () => {
                     size="large"
                     sx={{ color: grey[100] }}
                     component={Link}
-                    to="/my-recipes"
+                    to="/recipes/me"
                 >
                     Show more
                 </Button>
