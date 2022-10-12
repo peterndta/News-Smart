@@ -11,9 +11,9 @@ String postSendItemToJson(PostSendItem data) => json.encode(data.toJson());
 
 Future submitData(PostSendItem post) async {
   print(postSendItemToJson(post));
-  print('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post');
+  print('https://reciapp.azurewebsites.net/api/user/4/post');
   var response = await http.post(
-    Uri.parse('https://reciapp.azurewebsites.net/api/user/${post.usesId}/post'),
+    Uri.parse('https://reciapp.azurewebsites.net/api/user/4/post'),
     body: postSendItemToJson(post),
     headers: {
       "content-type": "application/json",
