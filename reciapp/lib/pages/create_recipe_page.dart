@@ -11,6 +11,8 @@ import 'package:reciapp/components/dropdown_button.dart';
 import 'package:reciapp/components/textbox_form.dart';
 import 'package:reciapp/object/post_send_item.dart';
 import '../components/dropdown_multiple_choice_button.dart';
+import '../components/head_bar.dart';
+import '../components/sidebar_menu.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
 import '../object/region_item.dart';
@@ -178,8 +180,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CreateRecipePage'),
+      drawer: SideBarMenu(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: HeadBar(),
       ),
       body: Form(
         key: _formKey,
@@ -446,18 +450,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                   onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   _formKey.currentState!.save();
-                    // }
-                    // uploadFile();
-                    // print(imageURL);
-                    // for (var item
-                    //     in selectedCategorys.map((e) => e.id).toList()) {
-                    //   print(item);
-                    // }
-                    postRecipe();
-                    // print(selectedMethod);
-                    // print(selectedTimeCooking as int);
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      postRecipe();
+                    }
                   },
                 ),
                 SizedBox(

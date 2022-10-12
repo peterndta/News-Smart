@@ -6,7 +6,11 @@ import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/today_special_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'login_support/auth_service.dart';
+
+import '../login_support/auth_service.dart';
+
+import 'package:reciapp/pages/user_profile.dart';
+
 import 'pages/create_recipe_page.dart';
 import 'pages/home_page.dart';
 import 'pages/collection_page.dart';
@@ -43,9 +47,18 @@ class MyApp extends StatelessWidget {
 //   State<MyHomePage> createState() => _MyHomePageState();
 // }
 
+
 // class _MyHomePageState extends State<MyHomePage> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return HomePage();
 //   }
 // }
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return UserProfile();
+  }
+}
+
