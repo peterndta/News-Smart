@@ -53,24 +53,29 @@ namespace reciWebApp.Controllers
         //View list my recipes
         [Route("~/api/user/{id}/post/page/{pageNumber}")]
         [HttpGet]
-        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] PostParams postParams)
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] MyPostParams myPostParams)
         {
             try
             {
-                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(postParams, id);
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams, id);
 
                 if (!posts.Any())
                 {
                     return BadRequest(new Response(400, "User do not have any post"));
                 }
 
-                postParams.PageNumber = pageNumber;
+                myPostParams.PageNumber = pageNumber;
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
-                return Ok(new Response(200, showPosts, "", posts.Meta));
+                IEnumerable<ShowPostDTO> result = showPosts;
+                if (myPostParams.Type != null)
+                {
+                    result = _servicesManager.PostService.SortPostByCondition(showPosts, myPostParams.Type);
+                }
+                return Ok(new Response(200, result, "", posts.Meta));
             }
             catch (Exception ex)
             {
