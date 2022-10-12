@@ -85,7 +85,8 @@ const Filter = () => {
     }
 
     useEffect(() => {
-        searchSubmitHandler()
+        if (isClearAll.current === true) searchSubmitHandler()
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isClearAll.current === false])
 
