@@ -54,13 +54,21 @@ namespace reciWebApp.Data.Repositories
 
         public bool CheckBookMark(int userId, string postId)
         {
-            var userInteract = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).First();
+            var userInteract = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).FirstOrDefault();
+            if (userInteract == null)
+            {
+                return false;
+            }
             return userInteract.Bookmark;
         }
 
         public int? GetRating(int userId, string postId)
         {
-            var userInteract = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).First();
+            var userInteract = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).FirstOrDefault();
+            if (userInteract == null)
+            {
+                return null;
+            }
             return userInteract.Rating;
         }
     }

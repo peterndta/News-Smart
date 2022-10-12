@@ -25,7 +25,7 @@ namespace reciWebApp.Controllers
         }
         // GET: api/<IUserInteractsController>
         [HttpPost]
-        [Route("~/post/{id}/rating")]
+        [Route("~/api/post/{id}/rating")]
         public async Task<IActionResult> Post(string id, [FromBody] int rating)
         {
             try
@@ -75,7 +75,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpPost]
-        [Route("~/post/{id}/bookmark")]
+        [Route("~/api/post/{id}/bookmark")]
         public async Task<IActionResult> Post(string id, bool bookMark)
         {
             try
