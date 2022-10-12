@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
 
-import { BookmarkBorder, Kitchen, ShoppingCart, StarRateOutlined } from '@mui/icons-material'
+import {
+    BookmarkAdded,
+    BookmarkBorder,
+    Kitchen,
+    ShoppingCart,
+    Star,
+    Verified,
+} from '@mui/icons-material'
 import GroupIcon from '@mui/icons-material/Group'
 import {
     Box,
@@ -23,6 +30,7 @@ import { blueGrey, grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Loading from '../../pages/Loading'
+import { useBookmark } from '../../recoil/bookmark'
 import { useRecipe } from '../../recoil/recipe'
 import RecipeRating from './RecipeRating'
 
@@ -36,6 +44,8 @@ const RecipeDetail = () => {
     const showSnackbar = useSnackbar()
     const [openCreateFeedback, setOpenCreateFeedback] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isBookmark, setIsBookmark] = useState(false)
+    const bookmarkAction = useBookmark()
 
     const openCreateFeedbackHandler = () => {
         setOpenCreateFeedback(true)
@@ -43,6 +53,24 @@ const RecipeDetail = () => {
 
     const closeCreateFeedbackHandler = () => {
         setOpenCreateFeedback(false)
+    }
+
+    const bookmarkHandler = () => {
+        bookmarkAction
+            .handleBookmark(recipe.id, true)
+            .then(() => {
+                setIsBookmark(true)
+                showSnackbar({
+                    severity: 'success',
+                    children: 'Bookmark successfully.',
+                })
+            })
+            .catch(() => {
+                showSnackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later or reload the page.',
+                })
+            })
     }
 
     useEffect(() => {
@@ -235,9 +263,17 @@ const RecipeDetail = () => {
                                                     theme.palette.primary.main,
                                             }}
                                         >
-                                            <ListItemButton sx={{ height: 50 }}>
+                                            <ListItemButton
+                                                sx={{ height: 50 }}
+                                                disabled={recipe.bookMark === true || isBookmark}
+                                                onClick={bookmarkHandler}
+                                            >
                                                 <ListItemIcon>
-                                                    <BookmarkBorder sx={{ color: '#fefefe' }} />
+                                                    {recipe.bookMark || isBookmark ? (
+                                                        <BookmarkAdded sx={{ color: '#fefefe' }} />
+                                                    ) : (
+                                                        <BookmarkBorder sx={{ color: '#fefefe' }} />
+                                                    )}
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>
@@ -249,11 +285,16 @@ const RecipeDetail = () => {
                                                 backgroundColor: grey[200],
                                             }}
                                         >
-                                            <ListItemButton sx={{ height: 50 }}>
+                                            <ListItemButton
+                                                sx={{ height: 50 }}
+                                                disabled={recipe.rating !== null || star !== 0}
+                                            >
                                                 <ListItemIcon>
-                                                    <StarRateOutlined
-                                                        sx={{ color: blueGrey[800] }}
-                                                    />
+                                                    {recipe.rating === null || star !== 0 ? (
+                                                        <Star sx={{ color: blueGrey[800] }} />
+                                                    ) : (
+                                                        <Verified color="primary" />
+                                                    )}
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>
