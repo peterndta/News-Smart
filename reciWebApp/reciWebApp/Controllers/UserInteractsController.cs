@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.DTOs;
+using reciWebApp.DTOs.UserInteractDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -26,7 +28,7 @@ namespace reciWebApp.Controllers
         // GET: api/<IUserInteractsController>
         [HttpPost]
         [Route("~/post/{id}/rating")]
-        public async Task<IActionResult> Post(string id, [FromBody] int rating)
+        public async Task<IActionResult> Post(string id, [FromBody] RatingDTO ratingDTO)
         {
             try
             {
@@ -49,7 +51,7 @@ namespace reciWebApp.Controllers
                     {
                         UserId = currentUser.Id,
                         PostsId = id,
-                        Rating = rating,
+                        Rating = ratingDTO.Rating,
                     });
                 }
                 else if (userInteract.Rating != null)
@@ -58,7 +60,7 @@ namespace reciWebApp.Controllers
                 }
                 else
                 {
-                    userInteract.Rating = rating;
+                    userInteract.Rating = ratingDTO.Rating;
                     _repoManager.UserInteract.UpdateUserInteract(userInteract);
                 }
                 await _repoManager.SaveChangesAsync();
@@ -76,7 +78,7 @@ namespace reciWebApp.Controllers
 
         [HttpPost]
         [Route("~/post/{id}/bookmark")]
-        public async Task<IActionResult> Post(string id, bool bookMark)
+        public async Task<IActionResult> Post(string id, [FromBody] BookmarkDTO bookmarkDTO)
         {
             try
             {
@@ -99,18 +101,18 @@ namespace reciWebApp.Controllers
                     {
                         UserId = currentUser.Id,
                         PostsId = id,
-                        Bookmark = bookMark,
+                        Bookmark = bookmarkDTO.Bookmark,
                     });
                 }
                 else
                 {
-                    if (bookMark == false && userInteract.Rating == null)
+                    if (bookmarkDTO.Bookmark == false && userInteract.Rating == null)
                     {
                         _repoManager.UserInteract.DeleteUserInteract(userInteract);
                     }
                     else
                     {
-                        userInteract.Bookmark = bookMark;
+                        userInteract.Bookmark = bookmarkDTO.Bookmark;
                         _repoManager.UserInteract.UpdateUserInteract(userInteract);
                     }
                 }
