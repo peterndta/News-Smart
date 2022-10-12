@@ -8,7 +8,12 @@ import { grey } from '@mui/material/colors'
 const ButtonAddRecipe = () => {
     return (
         <Box width="100%" display="flex" justifyContent="center" mt={3}>
-            <Button component={Link} to="/create" variant="contained" sx={{ color: grey[100] }}>
+            <Button
+                component={Link}
+                to="/recipes/create"
+                variant="contained"
+                sx={{ color: grey[100] }}
+            >
                 ADD A RECIPE
             </Button>
         </Box>
