@@ -23,7 +23,7 @@ const Filter = () => {
     const categoryList = useRecoilValue(categoryAtom)
     const { search: query, pathname } = useLocation()
     const { search, category, sort, pageNum } = queryString.parse(query)
-    const history = useHistory('')
+    const history = useHistory()
     const [categories, setCategories] = useState(category ? category : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
     const isClearAll = useRef(false)
