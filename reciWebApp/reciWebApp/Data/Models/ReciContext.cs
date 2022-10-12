@@ -282,19 +282,11 @@ namespace reciWebApp.Data.Models
 
                 entity.Property(e => e.Bookmark).HasColumnName("bookmark");
 
-                entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("create_date");
-
                 entity.Property(e => e.PostsId)
                     .HasMaxLength(50)
                     .HasColumnName("posts_id");
 
                 entity.Property(e => e.Rating).HasColumnName("rating");
-
-                entity.Property(e => e.UpdateDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("update_date");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 

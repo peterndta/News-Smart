@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Star } from '@mui/icons-material'
 import { Box, Modal, Rating, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
+
+import { useSnackbar } from '../../../HOCs/SnackbarContext'
+import { useRating } from '../../../recoil/rating'
 
 const labels = {
     1: 'Useless',
@@ -12,16 +15,26 @@ const labels = {
     5: 'Excellent',
 }
 
-const RecipeRating = ({ open, onClose }) => {
-    const [ratingValue, setRatingValue] = useState({ value: 0, isTouched: false })
+const RecipeRating = ({ open, onClose, postId, setStar }) => {
+    const ratingAction = useRating()
     const [hover, setHover] = React.useState(-1)
+    const showSnackbar = useSnackbar()
 
     const ratingChangeHandler = (newValue) => {
-        if (newValue === null) setRatingValue((previousValue) => ({ ...previousValue, value: 0.5 }))
-        else setRatingValue((previousValue) => ({ ...previousValue, value: +newValue }))
-    }
-    const ratingTouchedHandler = () => {
-        setRatingValue((previousValue) => ({ ...previousValue, isTouched: true }))
+        ratingAction
+            .createRating(postId, { rating: newValue })
+            .then((res) => {
+                const { averageRating } = res.data.data
+                setStar(averageRating)
+                onClose()
+            })
+            .catch((error) => {
+                const message = error.response.data.message
+                showSnackbar({
+                    severity: 'error',
+                    children: message,
+                })
+            })
     }
 
     return (
@@ -51,20 +64,14 @@ const RecipeRating = ({ open, onClose }) => {
                         </Typography>
                         <Box display="flex" alignItems="center">
                             <Rating
-                                value={ratingValue.value}
                                 onChange={(_, newValue) => ratingChangeHandler(newValue)}
                                 sx={{ mr: 1 }}
-                                onBlur={ratingTouchedHandler}
                                 onChangeActive={(event, newHover) => {
                                     setHover(newHover)
                                 }}
                                 emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
                             />
-                            {ratingValue !== null && (
-                                <Box sx={{ ml: 2 }}>
-                                    {labels[hover !== -1 ? hover : ratingValue]}
-                                </Box>
-                            )}
+                            <Box sx={{ ml: 2 }}>{labels[hover]}</Box>
                         </Box>
                     </Box>
                 </Box>

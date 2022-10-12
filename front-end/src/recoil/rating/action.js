@@ -1,14 +1,10 @@
-import { post, put } from '../../utils/ApiCaller'
+import { post } from '../../utils/ApiCaller'
 
 const useRating = () => {
-    const createRating = (userId, postId, value) => {
-        post({ endpoint: `/api/user/${userId}/post/${postId}/rating`, body: { rating: value } })
-    }
+    const createRating = (postId, value) =>
+        post({ endpoint: `/api/post/${postId}/rating`, body: value })
 
-    const updateRating = (userId, postId, value) =>
-        put({ endpoint: `/api/user/${userId}/post/${postId}/rating`, body: { rating: value } })
-
-    return { createRating, updateRating }
+    return { createRating }
 }
 
 export default useRating

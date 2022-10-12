@@ -27,6 +27,7 @@ namespace reciWebApp.Configs
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();
             CreateMap<CreatePostDTO, Step>();
             CreateMap<Use, ShowUseDTO>();
+            CreateMap<ShowPostDTO, ShowDetailPostDTO>();
         }
     }
 }

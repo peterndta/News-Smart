@@ -33,6 +33,13 @@ namespace reciWebApp.Controllers
         {
             try
             {
+                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new Response(400, "Invalid user"));
+                }
+
                 var post = await _repoManager.Post.GetPostByIdAsync(id);
 
                 if (post == null)
@@ -42,7 +49,10 @@ namespace reciWebApp.Controllers
 
                 var showPost = _mapper.Map<ShowPostDTO>(post);
                 showPost = _servicesManager.PostService.GetPostInfo(showPost);
-                return Ok(new Response(200, showPost));
+                var showDetailPost = _mapper.Map<ShowDetailPostDTO>(showPost);
+                showDetailPost.BookMark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
+                showDetailPost.Rating = _repoManager.UserInteract.GetRating(currentUser.Id, id);
+                return Ok(new Response(200, showDetailPost));
             }
             catch (Exception ex)
             {
