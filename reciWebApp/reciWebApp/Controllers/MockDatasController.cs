@@ -524,91 +524,71 @@ namespace reciWebApp.Controllers
                 {
                     UserId = 1,
                     PostsId = "b1",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 5,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 2,
                     PostsId = "b1",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 4,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 3,
                     PostsId = "b3",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 2,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 4,
                     PostsId = "b4",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = false,
                     Rating = 4,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 5,
                     PostsId = "b5",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 1,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 6,
                     PostsId = "b6",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = false,
                     Rating = 2,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 7,
                     PostsId = "b7",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 3,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 8,
                     PostsId = "b8",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = false,
                     Rating = 5,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 9,
                     PostsId = "b9",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = false,
                     Rating = 2,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 },
                 new UserInteract
                 {
                     UserId = 10,
                     PostsId = "b10",
-                    CreateDate = new DateTime(2022, 10, 10),
                     Bookmark = true,
                     Rating = 5,
-                    UpdateDate = new DateTime(2022, 10, 10),
                 }
             };
             for (int i = 0; i < userInteract.Count(); i++)
