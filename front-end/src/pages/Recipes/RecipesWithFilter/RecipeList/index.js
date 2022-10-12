@@ -42,8 +42,9 @@ const RecipeList = () => {
 
     useEffect(() => {
         const params = filterStringGenerator({ search, continent, use, sort })
+        setIsLoading(true)
+
         if (pageNum === undefined) {
-            setIsLoading(true)
             recipeAction
                 .getRecipes(params)
                 .then((res) => {
@@ -60,7 +61,6 @@ const RecipeList = () => {
                     setIsLoading(false)
                 })
         } else {
-            setIsLoading(true)
             recipeAction
                 .getRecipes(params, pageNum)
                 .then((res) => {
@@ -87,7 +87,7 @@ const RecipeList = () => {
                 <React.Fragment>
                     <Sort />
                     <Recipes posts={recipes.list} />
-                    <Paging size={recipes.totalPages} />
+                    <Paging size={recipes.pageCount} />
                 </React.Fragment>
             )}
         </Grid>

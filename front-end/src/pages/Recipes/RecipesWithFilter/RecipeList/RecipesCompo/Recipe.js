@@ -1,18 +1,50 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 import { Box, Card, CardContent, CardMedia, Grid, Rating, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 const LatestRecipe = ({ post }) => {
+    const history = useHistory()
     return (
         <Grid item md={4}>
-            <Card sx={{ maxWidth: 392 }}>
-                <CardMedia component="img" alt="green iguana" height="270" image={post.imageUrl} />
+            <Card sx={{ maxWidth: 392, height: '1' }}>
+                <CardMedia
+                    component="img"
+                    alt="green iguana"
+                    height="270"
+                    image={post.imageUrl}
+                    onClick={() => history.push(`/recipes/${post.id}`)}
+                    sx={{ cursor: 'pointer' }}
+                />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div" fontWeight={700}>
+                    <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        fontWeight={700}
+                        sx={{
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: '1',
+                            textOverflow: 'ellipsis',
+                        }}
+                    >
                         {post.name}
                     </Typography>
-                    <Typography variant="body1" color="text.secondary">
+                    <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: '2',
+                            textOverflow: 'ellipsis',
+                        }}
+                    >
                         {post.description}
                     </Typography>
                     <Rating
