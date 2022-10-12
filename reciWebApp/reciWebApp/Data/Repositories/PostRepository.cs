@@ -74,13 +74,12 @@ namespace reciWebApp.Data.Repositories
             return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
         }
 
-        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId)
+        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(MyPostParams myPostParams, int userId)
         {
             var post = await GetByCondition(x => x.UserId == userId)
-                .FilterPostByName(_reciContext, postParams.Name)
+                .FilterPostByName(_reciContext, myPostParams.Name)
                 .ToListAsync();
-            var result = post.Intersect(postParams.PostsByCategories).ToList();
-            return PaginatedList<Post>.Create(result, postParams.PageNumber, postParams.PageSize);
+            return PaginatedList<Post>.Create(post, myPostParams.PageNumber, myPostParams.PageSize);
         }
 
         public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)

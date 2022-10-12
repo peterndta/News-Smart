@@ -17,6 +17,6 @@ namespace reciWebApp.Data.IRepositories
         List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
         List<Post>? GetPostsByUses(List<Use> uses);
         Task<PaginatedList<Post>?> GetAllPostsAsync(PostParams postParams);
-        Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(PostParams postParams, int userId);
+        Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(MyPostParams myPostParams, int userId);
     }
 }
