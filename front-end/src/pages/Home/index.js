@@ -20,8 +20,12 @@ const Home = () => {
                     height: 300,
                 }}
             />
-            <Recipes posts={LATEST_POSTS} title="Latest Recipes" />
-            <Recipes posts={MOST_FAVORITE_POSTS} title="Latest Recipes" />
+            <Recipes posts={LATEST_POSTS} title="Latest Recipes" linkTo={'/recipes?sort=Newest'} />
+            <Recipes
+                posts={MOST_FAVORITE_POSTS}
+                title="Latest Recipes"
+                linkTo={'/recipes?sort=Popularity'}
+            />
         </Box>
     )
 }
