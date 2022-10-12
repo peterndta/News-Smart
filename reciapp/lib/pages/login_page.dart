@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reciapp/pages/home_page.dart';
 import '../components/copyright.dart';
-import '../login_support.dart/data.dart';
+import '../login_support/auth_service.dart';
+import '../login_support/data.dart';
 import 'package:http/http.dart' as http;
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -38,18 +40,18 @@ Future<Data?> submitData(Data _data) async {
 
 Future<void> _handleSignIn() async {
   try {
-    var googleAccount = await _googleSignIn.signIn();
+    await AuthService().signInWithGoogle();
 
     Data data = Data(
-      name: googleAccount?.displayName as String,
-      email: googleAccount?.email as String,
-      imageUrl: googleAccount?.photoUrl as String,
+      name: FirebaseAuth.instance.currentUser!.displayName!,
+      email: FirebaseAuth.instance.currentUser!.email!,
+      imageUrl: FirebaseAuth.instance.currentUser!.photoURL!,
     );
     await submitData(data);
 
-    print(googleAccount?.displayName);
-    print(googleAccount?.email);
-    print(googleAccount?.photoUrl);
+    print(FirebaseAuth.instance.currentUser!.displayName!);
+    print(FirebaseAuth.instance.currentUser!.email!);
+    print(FirebaseAuth.instance.currentUser!.photoURL!);
   } catch (error) {
     print(error);
   }
@@ -63,70 +65,55 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GoogleSignInAccount? _currentUser;
-  @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      setState(() {
-        _currentUser = account;
-      });
-    });
-    _googleSignIn.signInSilently();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount? user = _currentUser;
-    return user != null
-        ? const HomePage()
-        : Scaffold(
-            body: Center(
-              child: Column(
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: 200,
+              height: 120,
+              child: Image(
+                image: AssetImage('assets/logo.png'),
+              ),
+            ),
+            const Text(
+              'short description about the app',
+              style: TextStyle(
+                fontFamily: 'Times New Roman',
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    width: 200,
-                    height: 120,
-                    child: Image(
-                      image: AssetImage('assets/logo.png'),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      _handleSignIn();
+                    },
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.orange)),
+                    icon: const FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Colors.red,
                     ),
-                  ),
-                  const Text(
-                    'short description about the app',
-                    style: TextStyle(
-                      fontFamily: 'Times New Roman',
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _handleSignIn();
-                          },
-                          style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.orange)),
-                          icon: const FaIcon(
-                            FontAwesomeIcons.google,
-                            color: Colors.red,
-                          ),
-                          label: const Text('Sign in with Google'),
-                        ),
-                      ],
-                    ),
+                    label: const Text('Sign in with Google'),
                   ),
                 ],
               ),
             ),
-            bottomNavigationBar: const Copyright(),
-          );
+          ],
+        ),
+      ),
+      bottomNavigationBar: const Copyright(),
+    );
   }
 }

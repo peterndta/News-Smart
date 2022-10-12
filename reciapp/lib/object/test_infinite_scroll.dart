@@ -18,6 +18,7 @@ class _TestInfiniteScrollState extends State<TestInfiniteScroll> {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short descriptionnnnnnnnnnnnnn ...',
+      mail: '',
     ),
     Food(
       image:
@@ -25,6 +26,7 @@ class _TestInfiniteScrollState extends State<TestInfiniteScroll> {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short description ...',
+      mail: '',
     ),
     Food(
       image:
@@ -32,6 +34,7 @@ class _TestInfiniteScrollState extends State<TestInfiniteScroll> {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short description ...',
+      mail: '',
     ),
     Food(
       image:
@@ -39,6 +42,7 @@ class _TestInfiniteScrollState extends State<TestInfiniteScroll> {
       name: 'Lasagna',
       author: 'Tommy',
       content: 'short description ...',
+      mail: '',
     ),
   ];
 
@@ -72,6 +76,7 @@ class _TestInfiniteScrollState extends State<TestInfiniteScroll> {
           name: 'Chicken fry Burrito',
           author: 'Tommy',
           content: 'short descriptionnnnnnnnnnnnnn ...',
+          mail: '',
         ),
       );
     });
