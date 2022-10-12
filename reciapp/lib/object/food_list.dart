@@ -1,4 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'food.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +56,13 @@ class FoodList extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                       textAlign: TextAlign.end,
                     ),
+                    foods[index].mail ==
+                            FirebaseAuth.instance.currentUser!.email!
+                        ? Icon(
+                            Icons.bookmark,
+                            color: Colors.black,
+                          )
+                        : Container(),
                     Row(
                       children: [
                         Icon(Icons.star, color: Colors.amber[600]),

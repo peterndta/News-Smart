@@ -8,6 +8,7 @@ import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
 
+import '../login_support/auth_service.dart';
 import '../pages/login_page.dart';
 
 class HomeButton extends StatelessWidget {
@@ -66,53 +67,6 @@ class RecipeButton extends StatelessWidget {
   }
 }
 
-//class CourseButton extends StatefulWidget {
-//   @override
-//   State<CourseButton> createState() => _CourseButtonState();
-// }
-//class _CourseButtonState extends State<CourseButton> {
-//   List<String> CourseItem = ['Course', 'Dinner', 'Lunch', 'Breakfast'];
-//   String? selectedItem = 'Course';
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Icon(
-//             Icons.schedule,
-//             color: Colors.white,
-//             size: 30,
-//           ),
-//           SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-//           Row(
-//             children: [
-//               DropdownButtonHideUnderline(
-//                 child: DropdownButton(
-//                     //iconDisabledColor: Colors.white,
-//                     iconEnabledColor: Colors.white,
-//                     focusColor: Colors.orange,
-//                     dropdownColor: Colors.orange,
-//                     value: selectedItem,
-//                     items: CourseItem.map((item) {
-//                       return DropdownMenuItem<String>(
-//                         value: item,
-//                         child: Text(
-//                           item,
-//                           style: TextStyle(color: Colors.white, fontSize: 25),
-//                         ),
-//                       );
-//                     }).toList(),
-//                     onChanged: (item) => setState(() => selectedItem = item)),
-//               ),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class CourseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -142,51 +96,6 @@ class CourseButton extends StatelessWidget {
   }
 }
 
-// class CategoryButton extends StatefulWidget {
-//   @override
-//   State<CategoryButton> createState() => _CategoryButtonState();
-// }
-// class _CategoryButtonState extends State<CategoryButton> {
-//   List<String> CourseItem = ['Category', 'Beef', 'Egg', 'Pork', 'Chicken'];
-//   String? selectedItem = 'Category';
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Icon(
-//             Icons.soup_kitchen,
-//             color: Colors.white,
-//             size: 30,
-//           ),
-//           SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-//           Row(
-//             children: [
-//               DropdownButtonHideUnderline(
-//                 child: DropdownButton(
-//                     iconEnabledColor: Colors.white,
-//                     focusColor: Colors.orange,
-//                     dropdownColor: Colors.orange,
-//                     value: selectedItem,
-//                     items: CourseItem.map((item) {
-//                       return DropdownMenuItem<String>(
-//                         value: item,
-//                         child: Text(
-//                           item,
-//                           style: TextStyle(color: Colors.white, fontSize: 25),
-//                         ),
-//                       );
-//                     }).toList(),
-//                     onChanged: (item) => setState(() => selectedItem = item)),
-//               ),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
 class CategoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -215,52 +124,6 @@ class CategoryButton extends StatelessWidget {
     );
   }
 }
-
-// class MethodsButton extends StatefulWidget {
-//   @override
-//   State<MethodsButton> createState() => _MethodsButtonState();
-// }
-// class _MethodsButtonState extends State<MethodsButton> {
-//   List<String> CourseItem = ['Methods', 'Frizzle', 'Stir fry', 'Steam', 'Boil'];
-//   String? selectedItem = 'Methods';
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Row(
-//             children: [
-//               Icon(
-//                 Icons.book,
-//                 color: Colors.white,
-//                 size: 30,
-//               ),
-//               SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-//               DropdownButtonHideUnderline(
-//                 child: DropdownButton(
-//                     iconEnabledColor: Colors.white,
-//                     focusColor: Colors.orange,
-//                     dropdownColor: Colors.orange,
-//                     value: selectedItem,
-//                     items: CourseItem.map((item) {
-//                       return DropdownMenuItem<String>(
-//                         value: item,
-//                         child: Text(
-//                           item,
-//                           style: TextStyle(color: Colors.white, fontSize: 25),
-//                         ),
-//                       );
-//                     }).toList(),
-//                     onChanged: (item) => setState(() => selectedItem = item)),
-//               ),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class MethodsButton extends StatelessWidget {
   @override
@@ -358,7 +221,7 @@ class LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        handleSignOut();
+        AuthService().signOut();
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
@@ -373,7 +236,7 @@ class LogoutButton extends StatelessWidget {
                   size: 30,
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                Text('Profile',
+                Text('Logout',
                     style: TextStyle(color: Colors.white, fontSize: 25))
               ],
             )
