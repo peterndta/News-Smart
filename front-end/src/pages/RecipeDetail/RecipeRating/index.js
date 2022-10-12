@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Star } from '@mui/icons-material'
-import { Box, Modal, Rating, Typography } from '@mui/material'
+import { Box, Button, Modal, Rating, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
@@ -32,8 +32,11 @@ const RecipeRating = ({ open, onClose, postId, setStar }) => {
                 const message = error.response.data.message
                 showSnackbar({
                     severity: 'error',
-                    children: message,
+                    children:
+                        message ||
+                        'Something went wrong, please try again later or reload the page.',
                 })
+                onClose()
             })
     }
 
@@ -54,7 +57,7 @@ const RecipeRating = ({ open, onClose, postId, setStar }) => {
                 <Box sx={{ py: 3, px: 3, bgcolor: 'primary.main', color: grey[100] }}>
                     <Typography variant="h5">How do you feel about the Recipe?</Typography>
                 </Box>
-                <Box sx={{ py: 4, px: 3 }}>
+                <Box sx={{ py: 2, px: 3 }}>
                     <Box>
                         <Typography
                             fontWeight={700}
@@ -73,6 +76,11 @@ const RecipeRating = ({ open, onClose, postId, setStar }) => {
                             />
                             <Box sx={{ ml: 2 }}>{labels[hover]}</Box>
                         </Box>
+                    </Box>
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button variant="contained" color="error" onClick={onClose}>
+                            Cancel
+                        </Button>
                     </Box>
                 </Box>
             </Box>
