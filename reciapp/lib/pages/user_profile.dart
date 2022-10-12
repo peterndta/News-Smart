@@ -1,9 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../components/sidebar_menu.dart';
 
@@ -71,8 +69,8 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(55),
         child: HeadBar(),
       ),
       body: Container(
@@ -261,18 +259,13 @@ class RecipeDetail extends StatelessWidget {
           //   '$start starts',
           //   style: const TextStyle(fontSize: 10.0),
           // ),
-          SmoothStarRating(
-              allowHalfRating: true,
-              onRated: (v) {},
-              starCount: 5,
-              rating: start,
-              size: 15.0,
-              isReadOnly: true,
-              filledIconData: Icons.star,
-              halfFilledIconData: Icons.star_half,
-              color: Colors.yellow,
-              borderColor: Colors.yellow,
-              spacing: 0.0),
+          SimpleStarRating(
+            allowHalfRating: true,
+            starCount: 5,
+            rating: start,
+            size: 15,
+            spacing: 10,
+          ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
           Text(
             description,
