@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -54,14 +54,14 @@ android {
         versionName flutterVersionName
     }
 
-    signingConfigs{
-        config {
-            storeFile file('mykey.jks')
-            storePassword '123456'
-            keyAlias 'mytestkey'
-            keyPassword '123456'
-        }
-    }
+    // signingConfigs{
+    //     config {
+    //         storeFile file('mykey.jks')
+    //         storePassword '123456'
+    //         keyAlias 'mytestkey'
+    //         keyPassword '123456'
+    //     }
+    // }
 
     buildTypes {
         release {
@@ -69,9 +69,7 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
-        debug{
-            signingConfig signingConfigs.debug
-        }
+        
     }
 }
 
