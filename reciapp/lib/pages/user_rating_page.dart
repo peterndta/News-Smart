@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import '../components/copyright.dart';
 import '../object/recipe_review.dart';
 
-class UserRecipesPage extends StatefulWidget {
-  const UserRecipesPage({super.key});
+class UserRatingsPage extends StatefulWidget {
+  const UserRatingsPage({super.key});
 
   @override
-  State<UserRecipesPage> createState() => _UserRecipesPageState();
+  State<UserRatingsPage> createState() => _UserRatingsPageState();
 }
 
-class _UserRecipesPageState extends State<UserRecipesPage> {
-  String tag = "Newest";
+class _UserRatingsPageState extends State<UserRatingsPage> {
+    String tag = "Newest";
   TextEditingController keywords = TextEditingController();
   final List<ReciepReview> _listReciepReviews = [
     ReciepReview(
@@ -100,7 +100,7 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('User Recipes'),
+        title: const Text('User Ratings'),
         centerTitle: true,
         elevation: 0,
         foregroundColor: Colors.orange,

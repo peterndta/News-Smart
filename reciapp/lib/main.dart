@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:reciapp/pages/user_profile.dart';
+import 'package:reciapp/pages/user_recipes_page.dart';
 
 import '../login_support/auth_service.dart';
 
