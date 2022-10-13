@@ -70,6 +70,7 @@ export default function StickyHeadTable() {
 
     const rowsPerPage = 5
     const page = pageNum === undefined ? 0 : pageNum - 1
+
     useEffect(() => {
         const params = filterStringGenerator({ search, sort })
         console.log(params)

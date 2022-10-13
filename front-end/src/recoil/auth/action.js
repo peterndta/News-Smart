@@ -69,6 +69,7 @@ const useAuthAction = () => {
             exp: 0,
             userId: null,
         })
+        history.push('/login')
     }
 
     return {
