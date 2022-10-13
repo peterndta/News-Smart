@@ -1,17 +1,17 @@
 import { get } from '../../utils/ApiCaller'
 
 const useMyProfile = () => {
-    const getRecentRecipes = (userid) =>
+    const getRecentRecipes = (userId) =>
         get({
-            endpoint: `/api/user/${userid}/post/page/1`,
+            endpoint: `/api/user/${userId}/post/page/1`,
             params: {
                 Type: 'Newest',
                 PageSize: 6,
             },
         })
-    const getActivity = (userid) =>
+    const getActivity = (userId) =>
         get({
-            endpoint: `/api/user/${userid}/allactivity`,
+            endpoint: `/api/user/${userId}/allactivity`,
         })
 
     return {

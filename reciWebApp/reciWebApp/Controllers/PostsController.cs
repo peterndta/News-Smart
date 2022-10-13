@@ -81,9 +81,9 @@ namespace reciWebApp.Controllers
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
-                if (myPostParams.Type != null)
+                if (myPostParams.Sort != null)
                 {
-                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, myPostParams.Type);
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, myPostParams.Sort);
                 }
 
                 var result = PaginatedList<ShowPostDTO>.Create(showPosts, myPostParams.PageNumber, myPostParams.PageSize);
@@ -304,9 +304,9 @@ namespace reciWebApp.Controllers
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
-                if (bookmarkParams.Type != null)
+                if (bookmarkParams.Sort != null)
                 {
-                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, bookmarkParams.Type);
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, bookmarkParams.Sort);
                 }
 
                 bookmarkParams.PageNumber = pageNumber;
@@ -346,9 +346,9 @@ namespace reciWebApp.Controllers
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
-                if (ratingParams.Type != null)
+                if (ratingParams.Sort != null)
                 {
-                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, ratingParams.Type);
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, ratingParams.Sort);
                 }
 
                 var result = PaginatedList<ShowPostDTO>.Create(showPosts, ratingParams.PageNumber, ratingParams.PageSize);

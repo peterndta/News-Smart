@@ -9,7 +9,7 @@ const AdminLayout = ({ children }) => {
     return (
         <React.Fragment>
             <AdminHeader />
-            <Box minHeight="50vh">
+            <Box minHeight="60vh">
                 <Container maxWidth="lg"> {children}</Container>
             </Box>
             <Footer />
