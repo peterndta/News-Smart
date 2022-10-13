@@ -34,6 +34,14 @@ namespace reciWebApp.Data.Repositories
         {
             return GetByCondition(x => x.Email == email).FirstOrDefault();
         }
+        public List<User> GetAllUser()
+        {
+            return GetAll().ToList();
+        }
+        public async Task<List<User>?> GetAllUserAsync()
+        {
+            return await GetAll().ToListAsync();
+        }
     }
 }
     

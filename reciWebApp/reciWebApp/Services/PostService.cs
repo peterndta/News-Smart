@@ -48,23 +48,5 @@ namespace reciWebApp.Services
             showPostDTO.AverageRating = _repoManager.UserInteract.GetAverageRating(showPostDTO.Id);
             return showPostDTO;
         }
-
-        public IEnumerable<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition)
-        {
-            IEnumerable<ShowPostDTO> sortPosts = posts;
-            if (condition.Equals("Newest"))
-            {
-                sortPosts = posts.OrderByDescending(x => x.CreateDate);
-            }
-            else if (condition.Equals("Oldest"))
-            {
-                sortPosts = posts.OrderBy(x => x.CreateDate);
-            }
-            else if (condition.Equals("Popularity"))
-            {
-                sortPosts = posts.OrderByDescending(x => x.AverageRating);
-            }
-            return sortPosts;
-        }
     }
 }
