@@ -9,9 +9,14 @@ const useMyProfile = () => {
                 PageSize: 6,
             },
         })
+    const getActivity = (userid) =>
+        get({
+            endpoint: `/api/user/${userid}/allactivity`,
+        })
 
     return {
         getRecentRecipes,
+        getActivity,
     }
 }
 export default useMyProfile
