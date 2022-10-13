@@ -73,7 +73,6 @@ namespace reciWebApp.Data.Repositories
                 posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
             }
             return posts;
-            //return PaginatedList<Post>.Create(posts, postParams.PageNumber, postParams.PageSize);
         }
 
         public async Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId)
@@ -164,6 +163,17 @@ namespace reciWebApp.Data.Repositories
                 posts = posts.OrderByDescending(x => x.AverageRating).ToList();
             }
             return posts;
+        }
+
+        public async Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name)
+        {
+            var posts = await GetAll().FilterPostByName(_reciContext, name).ToListAsync();
+            List<Post> result = new List<Post>();
+            foreach (var userInteract in userInteracts)
+            {
+                result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
+            }
+            return result;
         }
     }
 }

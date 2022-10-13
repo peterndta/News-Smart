@@ -71,5 +71,17 @@ namespace reciWebApp.Data.Repositories
             }
             return userInteract.Rating;
         }
+
+        public Task<List<UserInteract>?> GetBookmarkAsync(int userId)
+        {
+            var bookmarks = GetByCondition(x => x.UserId == userId && x.Bookmark == true).ToListAsync();
+            return bookmarks;
+        }
+
+        public Task<List<UserInteract>?> GetRatingAsync(int userId)
+        {
+            var ratings = GetByCondition(x => x.UserId == userId && x.Rating != null).ToListAsync();
+            return ratings;
+        }
     }
 }
