@@ -5,7 +5,7 @@ const useMyProfile = () => {
         get({
             endpoint: `/api/user/${userId}/post/page/1`,
             params: {
-                Type: 'Newest',
+                Sort: 'Newest',
                 PageSize: 6,
             },
         })
