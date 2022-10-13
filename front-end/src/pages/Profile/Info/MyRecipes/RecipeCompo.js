@@ -1,9 +1,12 @@
 import React from 'react'
 
-import { Box, Grid, Rating, Typography } from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { useHistory } from 'react-router-dom'
 
-const RecipeCompo = ({ name, description, rating, author, image }) => {
+import { Box, Grid, Rating, Typography } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
+
+const RecipeCompo = ({ name, description, averageRating, id, imageUrl }) => {
+    const history = useHistory()
     return (
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -12,15 +15,21 @@ const RecipeCompo = ({ name, description, rating, author, image }) => {
                         component="img"
                         width={120}
                         height={120}
-                        sx={{ aspectRatio: '1 / 1' }}
-                        src={image}
+                        sx={{ aspectRatio: '1 / 1', cursor: 'pointer' }}
+                        src={imageUrl}
+                        onClick={() => history.push(`/recipes/${id}`)}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }}>
                         <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
+                            <Typography
+                                onClick={() => history.push(`/recipes/${id}`)}
+                                variant="h5"
+                                fontWeight={700}
+                                sx={{ color: blueGrey[700], cursor: 'pointer' }}
+                            >
                                 {name}
                             </Typography>
-                            <Box>
+                            {/* <Box>
                                 <Typography component="span" sx={{ color: grey[500] }}>
                                     By
                                 </Typography>
@@ -30,13 +39,13 @@ const RecipeCompo = ({ name, description, rating, author, image }) => {
                                     variant="body2"
                                     fontWeight={700}
                                 >
-                                    {author}
+                                    {userName}
                                 </Typography>
-                            </Box>
+                            </Box> */}
                         </Box>
                         <Rating
                             name="half-rating"
-                            value={rating}
+                            value={averageRating}
                             precision={0.5}
                             sx={{ mt: 1 }}
                             readOnly

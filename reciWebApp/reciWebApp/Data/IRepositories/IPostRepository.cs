@@ -20,5 +20,6 @@ namespace reciWebApp.Data.IRepositories
         List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
         Task<List<Post>?> GetAllPostsAsync(PostParams postParams);
         Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId);
+        Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name);
     }
 }
