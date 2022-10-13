@@ -1,5 +1,6 @@
 ﻿using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Data.IRepositories
@@ -16,7 +17,8 @@ namespace reciWebApp.Data.IRepositories
         List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
         List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
         List<Post>? GetPostsByUses(List<Use> uses);
-        Task<PaginatedList<Post>?> GetAllPostsAsync(PostParams postParams);
-        Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(MyPostParams myPostParams, int userId);
+        List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
+        Task<List<Post>?> GetAllPostsAsync(PostParams postParams);
+        Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId);
     }
 }

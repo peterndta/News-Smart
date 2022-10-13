@@ -3,6 +3,7 @@ using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.Data.Repositories.Extensions;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Data.Repositories
@@ -43,43 +44,44 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.UserId == id).ToListAsync();
         }
 
-        public async Task<PaginatedList<Post>?> GetAllPostsAsync(PostParams postParams)
+        public async Task<List<Post>?> GetAllPostsAsync(PostParams postParams)
         {
-            var post =  GetAll().ToList();
+            var posts =  GetAll().ToList();
             if (postParams.PostsByCategories != null)
             {
-                post = post.Intersect(postParams.PostsByCategories).ToList();
+                posts = posts.Intersect(postParams.PostsByCategories).ToList();
             }
             if (postParams.PostsByCookingMethods != null)
             {
-                post = (post.Intersect(postParams.PostsByCookingMethods)).ToList();
+                posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
             }
             if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
             {
-                post = (post.Intersect(postParams.PostsRecipeRegions)).ToList();
-                post = post.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
+                posts = posts.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
             }            
             else if (postParams.PostsRecipeRegions != null && postParams.PostsByUses == null)
             {
-                post = (post.Intersect(postParams.PostsRecipeRegions)).ToList();
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
             }
             else if (postParams.PostsRecipeRegions == null && postParams.PostsByUses != null)
             {
-                post = post.Intersect(postParams.PostsByUses).ToList();
+                posts = posts.Intersect(postParams.PostsByUses).ToList();
             }
             if (postParams.Name != null)
             {
-                post = post.Where(x => x.Name.Contains(postParams.Name)).ToList();
-            }         
-            return PaginatedList<Post>.Create(post, postParams.PageNumber, postParams.PageSize);
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+            //return PaginatedList<Post>.Create(posts, postParams.PageNumber, postParams.PageSize);
         }
 
-        public async Task<PaginatedList<Post>?> GetAllPostsByUserIdAsync(MyPostParams myPostParams, int userId)
+        public async Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId)
         {
-            var post = await GetByCondition(x => x.UserId == userId)
-                .FilterPostByName(_reciContext, myPostParams.Name)
+            var posts = await GetByCondition(x => x.UserId == userId)
+                .FilterPostByName(_reciContext, name)
                 .ToListAsync();
-            return PaginatedList<Post>.Create(post, myPostParams.PageNumber, myPostParams.PageSize);
+            return posts;
         }
 
         public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
@@ -143,6 +145,23 @@ namespace reciWebApp.Data.Repositories
                     result.AddRange(GetByCondition(x => x.UsesId == use.Id).ToList());
                 }
                 return result;
+            }
+            return posts;
+        }
+
+        public List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition)
+        {
+            if (condition.Equals("Newest"))
+            {
+                posts = posts.OrderByDescending(x => x.CreateDate).ToList();
+            }
+            else if (condition.Equals("Oldest"))
+            {
+                posts = posts.OrderBy(x => x.CreateDate).ToList();
+            }
+            else if (condition.Equals("Popularity"))
+            {
+                posts = posts.OrderByDescending(x => x.AverageRating).ToList();
             }
             return posts;
         }
