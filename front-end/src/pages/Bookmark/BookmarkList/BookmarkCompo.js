@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { Box, Grid, Rating, Typography } from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { useHistory } from 'react-router-dom'
 
-const BookmarkCompo = ({ name, description, rating, author, image }) => {
+import { Box, Grid, Rating, Typography } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
+
+const BookmarkCompo = ({ name, description, averageRating, imageUrl, id }) => {
+    const history = useHistory()
+
     return (
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -13,30 +17,16 @@ const BookmarkCompo = ({ name, description, rating, author, image }) => {
                         width={120}
                         height={120}
                         sx={{ aspectRatio: '1 / 1' }}
-                        src={image}
+                        src={imageUrl}
+                        onClick={() => history.push(`/recipes/${id}`)}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }}>
-                        <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
-                                {name}
-                            </Typography>
-                            <Box>
-                                <Typography component="span" sx={{ color: grey[500] }}>
-                                    By
-                                </Typography>
-                                <Typography
-                                    component="span"
-                                    ml={1.5}
-                                    variant="body2"
-                                    fontWeight={700}
-                                >
-                                    {author}
-                                </Typography>
-                            </Box>
-                        </Box>
+                        <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
+                            {name}
+                        </Typography>
                         <Rating
                             name="half-rating"
-                            value={rating}
+                            value={averageRating}
                             precision={0.5}
                             sx={{ mt: 1 }}
                             readOnly
