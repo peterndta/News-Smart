@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
-
 import '../components/sidebar_menu.dart';
 
 class ReciepReview {
@@ -17,6 +16,41 @@ class ReciepReview {
     @required required this.start,
     @required required this.description,
   });
+}
+
+class IconDetail extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final int number;
+  final String text;
+  const IconDetail({
+    super.key,
+    required this.color,
+    required this.number,
+    required this.icon,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          iconSize: 40,
+          color: color,
+          icon: Icon(icon),
+          tooltip: text,
+          onPressed: () {
+            print('Press the button');
+          },
+        ),
+        Text(
+          '$number',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        )
+      ],
+    );
+  }
 }
 
 class UserProfile extends StatefulWidget {
@@ -73,114 +107,91 @@ class _UserProfileState extends State<UserProfile> {
         preferredSize: Size.fromHeight(55),
         child: HeadBar(),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 35, left: 20, right: 20),
-        child: Column(
-          children: [
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 20),
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Image(
-                      image: AssetImage('assets/nonAvatar.png'),
-                      height: 100,
-                      width: 100,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: SingleChildScrollView(
+          child: Column(children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: Container(
+                margin: const EdgeInsets.only(top: 25),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                      child: Image(
+                        image: AssetImage('assets/nonAvatar.png'),
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                      ),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Jason',
+                            style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        const SizedBox(height: 20),
+                        Text('Email: example@example.com')
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.13,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.orange, width: 2.0))),
+              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconDetail(
+                    icon: Icons.assignment,
+                    color: Colors.red,
+                    number: 3,
+                    text: "Press to your recipes",
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Jason',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      SizedBox(height: 20),
-                      Text('Email: example@example.com')
-                    ],
+                  IconDetail(
+                    icon: Icons.bookmark,
+                    color: Colors.blue,
+                    number: 20,
+                    text: "Press to your bookmarks",
+                  ),
+                  IconDetail(
+                    icon: Icons.star_outlined,
+                    color: Colors.yellow,
+                    number: 15,
+                    text: "Press to your ratings",
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.04,
+              margin: const EdgeInsets.only(top: 5),
+              child: Row(
+                children: const [
+                  Icon(Icons.assignment),
+                  Text(
+                    ' Recently Recipes',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   )
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.orange, width: 2.0))),
-              padding: EdgeInsets.only(top: 15, bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.assignment,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                      Text(
-                        '3',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.bookmark,
-                        color: Colors.blue,
-                        size: 40,
-                      ),
-                      Text(
-                        '5',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                        size: 40,
-                      ),
-                      Text(
-                        '15',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.assignment),
-                      Text(
-                        ' Recently Recipes',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
-                      )
-                    ],
-                  ),
-                  ListRecipeReview(_listReciepReviews)
-                ],
-              ),
-            ),
-          ],
+            ListRecipeReview(_listReciepReviews),
+          ]),
         ),
       ),
-      bottomNavigationBar: Copyright(),
+      bottomNavigationBar: const Copyright(),
     );
   }
 }
@@ -201,28 +212,35 @@ class RecipeReviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0))),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image.network(image),
-            ),
-            Expanded(
-              flex: 3,
-              child: RecipeDetail(
-                title: title,
-                start: start,
-                description: description,
+    return InkWell(
+      onTap: () {
+        print('Click on card');
+      },
+      splashColor: const Color.fromARGB(255, 211, 210, 210),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: const BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: Colors.grey, width: 1.0))),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Image.network(image),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 3,
+                child: RecipeDetail(
+                  title: title,
+                  start: start,
+                  description: description,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -231,6 +249,7 @@ class RecipeReviewItem extends StatelessWidget {
 
 class RecipeDetail extends StatelessWidget {
   const RecipeDetail({
+    super.key,
     required this.title,
     required this.start,
     required this.description,
@@ -255,10 +274,6 @@ class RecipeDetail extends StatelessWidget {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-          // Text(
-          //   '$start starts',
-          //   style: const TextStyle(fontSize: 10.0),
-          // ),
           SimpleStarRating(
             allowHalfRating: true,
             starCount: 5,
@@ -266,7 +281,7 @@ class RecipeDetail extends StatelessWidget {
             size: 15,
             spacing: 10,
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
           Text(
             description,
             style: const TextStyle(fontSize: 10.0),
@@ -280,30 +295,34 @@ class RecipeDetail extends StatelessWidget {
 class ListRecipeReview extends StatelessWidget {
   final List<ReciepReview> list;
 
-  ListRecipeReview(this.list);
+  const ListRecipeReview(this.list, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return (list.length == 0)
+    return (list.isEmpty)
         ? Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             alignment: Alignment.topLeft,
-            child: Text(
+            child: const Text(
               'No posts were found.',
               style: TextStyle(fontSize: 20),
             ))
-        : Container(
-            height: 400,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return RecipeReviewItem(
-                  image: list[index].image,
-                  title: list[index].title,
-                  start: list[index].start,
-                  description: list[index].description,
-                );
-              },
-              itemCount: list.length,
+        : SizedBox(
+            height: MediaQuery.of(context).size.height * 0.47,
+            child: Scrollbar(
+              thickness: 7,
+              radius: const Radius.circular(20),
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return RecipeReviewItem(
+                    image: list[index].image,
+                    title: list[index].title,
+                    start: list[index].start,
+                    description: list[index].description,
+                  );
+                },
+                itemCount: list.length,
+              ),
             ),
           );
   }
