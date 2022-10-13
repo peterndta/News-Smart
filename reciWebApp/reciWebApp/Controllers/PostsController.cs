@@ -67,11 +67,11 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams, id);
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Name, id);
 
                 if (!posts.Any())
                 {
-                    return BadRequest(new Response(400, "User do not have any post"));
+                    return BadRequest(new Response(400, "Do not have any post"));
                 }
 
                 myPostParams.PageNumber = pageNumber;
@@ -80,12 +80,14 @@ namespace reciWebApp.Controllers
                 {
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
-                IEnumerable<ShowPostDTO> result = showPosts;
+
                 if (myPostParams.Type != null)
                 {
-                    result = _servicesManager.PostService.SortPostByCondition(showPosts, myPostParams.Type);
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, myPostParams.Type);
                 }
-                return Ok(new Response(200, result, "", posts.Meta));
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, myPostParams.PageNumber, myPostParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
             {
@@ -261,12 +263,14 @@ namespace reciWebApp.Controllers
                 {
                     showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
-                IEnumerable<ShowPostDTO> result = showPosts;
+
                 if (postParams.Type != null)
                 {
-                    result = _servicesManager.PostService.SortPostByCondition(showPosts, postParams.Type);
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
                 }
-                return Ok(new Response(200, result, "", posts.Meta));
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
             {
