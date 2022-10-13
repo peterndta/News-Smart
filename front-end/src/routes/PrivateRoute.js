@@ -16,7 +16,7 @@ const PrivateRoute = (props) => {
         }
     } else if (role == 'user') {
         if (auth.role === 'admin') {
-            return <Redirect to="/admin/posts-management" />
+            return <Redirect to="/admin/users" />
         }
     }
 
