@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.DTOs.UserDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -24,7 +25,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user")]
-        public async Task<IActionResult> GetAllUser (int id)
+        public async Task<IActionResult> GetAllUser(int id)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace reciWebApp.Controllers
                 if (!userList.Any())
                 {
                     return BadRequest(new Response(400, "There is no user in database"));
-                }    
+                }
 
                 var showUserList = _mapper.Map<List<User>>(userList);
 
@@ -62,6 +63,41 @@ namespace reciWebApp.Controllers
             }
 
         }
-        
+
+        [HttpGet]
+        [Route("~/api/user/{id}/allactivity")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new Response(400, "Invalid user"));
+                }
+
+                var user = await _repoManager.User.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    return BadRequest(new Response(400, "User id does not existed"));
+                }
+
+                var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(id);
+                var ratings = await _repoManager.UserInteract.GetRatingAsync(id);
+                var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
+                var activity = new ActivityDTO
+                {
+                    TotalPosts = posts.Count,
+                    TotalBookmarks = bookmarks.Count,
+                    TotalRatings = ratings.Count,
+                };
+                return Ok(new Response(200, activity));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
     }
 }
