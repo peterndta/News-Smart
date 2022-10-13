@@ -1,28 +1,32 @@
 import React from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import { BookmarkOutlined, Description, StarOutlined } from '@mui/icons-material'
 import { Avatar, Box, Divider, Typography } from '@mui/material'
 import { blue, blueGrey, grey, red, yellow } from '@mui/material/colors'
 
 import { USER } from '../../../Elixir'
+import authAtom from '../../../recoil/auth/atom'
 import MyRecipes from './MyRecipes'
 
 const Info = () => {
+    const auth = useRecoilValue(authAtom)
     return (
         <Box pl={6}>
             <Box sx={{ mb: 6 }} display="flex" alignItems="center">
                 <Avatar
                     alt="avatar"
-                    src={USER.image}
+                    src={auth.image}
                     sx={{ height: 150, width: 150 }}
                     variant="square"
                 />
                 <Box sx={{ ml: 6 }}>
                     <Typography variant="h4" fontWeight={700} sx={{ mb: 1, color: grey[700] }}>
-                        {USER.name}
+                        {auth.name}
                     </Typography>
                     <Typography fontWeight={700} sx={{ color: blueGrey[800] }} variant="h6">
-                        Email: {USER.email}
+                        Email: {auth.email}
                     </Typography>
                 </Box>
             </Box>

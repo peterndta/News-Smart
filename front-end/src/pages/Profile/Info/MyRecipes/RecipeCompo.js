@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { Box, Grid, Rating, Typography } from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { blueGrey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, description, rating, author, image }) => {
+const RecipeCompo = ({ name, description, averageRating, userName, imageUrl }) => {
     return (
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -13,14 +13,14 @@ const RecipeCompo = ({ name, description, rating, author, image }) => {
                         width={120}
                         height={120}
                         sx={{ aspectRatio: '1 / 1' }}
-                        src={image}
+                        src={imageUrl}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }}>
                         <Box display="flex" alignItems="center" justifyContent="space-between">
                             <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
                                 {name}
                             </Typography>
-                            <Box>
+                            {/* <Box>
                                 <Typography component="span" sx={{ color: grey[500] }}>
                                     By
                                 </Typography>
@@ -30,13 +30,13 @@ const RecipeCompo = ({ name, description, rating, author, image }) => {
                                     variant="body2"
                                     fontWeight={700}
                                 >
-                                    {author}
+                                    {userName}
                                 </Typography>
-                            </Box>
+                            </Box> */}
                         </Box>
                         <Rating
                             name="half-rating"
-                            value={rating}
+                            value={averageRating}
                             precision={0.5}
                             sx={{ mt: 1 }}
                             readOnly
