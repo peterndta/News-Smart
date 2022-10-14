@@ -253,7 +253,7 @@ const RecipeDetail = () => {
                             color="text.primary"
                             sx={{ fontSize: 15 }}
                         >
-                            The Allrecipes Community
+                            The All recipes Community
                         </Link>
                     </Box>
                 </Grid>
