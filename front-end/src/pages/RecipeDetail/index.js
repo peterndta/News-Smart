@@ -43,7 +43,7 @@ const RecipeDetail = () => {
     const { getRecipe, getStep } = useRecipe()
     const showSnackbar = useSnackbar()
     const [openCreateFeedback, setOpenCreateFeedback] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isFirstRender, setIsFirstRender] = useState(true)
     const [isBookmark, setIsBookmark] = useState(false)
     const bookmarkAction = useBookmark()
 
@@ -72,38 +72,39 @@ const RecipeDetail = () => {
                 })
             })
     }
-
     useEffect(() => {
-        setIsLoading(true)
-
         getRecipe(id)
             .then((response) => {
                 const data = response.data.data
                 setRecipe(data)
                 setCategories(data.listCategories)
                 setStar(data.averageRating)
-                setIsLoading(false)
+                setTimeout(() => {
+                    setIsFirstRender(false)
+                }, 1000)
             })
             .catch(() => {
                 showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later.',
                 })
-                setIsLoading(false)
+                setTimeout(() => {
+                    setIsFirstRender(false)
+                }, 1000)
             })
 
         getStep(id)
             .then((response) => {
                 const data = response.data.data
                 setStep(data)
-                setIsLoading(false)
+                setIsFirstRender(false)
             })
             .catch(() => {
                 showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later.',
                 })
-                setIsLoading(false)
+                setIsFirstRender(false)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -122,7 +123,7 @@ const RecipeDetail = () => {
 
     return (
         <React.Fragment>
-            {isLoading ? (
+            {isFirstRender ? (
                 <Loading />
             ) : (
                 <React.Fragment>
@@ -137,7 +138,7 @@ const RecipeDetail = () => {
                                 fontWeight={700}
                                 sx={{ color: blueGrey[800] }}
                             >
-                                {recipe?.name}
+                                {recipe.name}
                             </Typography>
                             <Box mt={4} display="flex">
                                 <Typography
@@ -249,7 +250,7 @@ const RecipeDetail = () => {
                                     }}
                                 />
                                 <Typography ml={1} variant="subtitle1" sx={{ fontSize: 21 }}>
-                                    {recipe?.description}
+                                    {recipe.description}
                                 </Typography>
                             </Box>
                             <Grid mt={3} container columnSpacing={4}>
@@ -279,7 +280,6 @@ const RecipeDetail = () => {
                                         </ListItem>
                                         <ListItem
                                             disablePadding
-                                            onClick={openCreateFeedbackHandler}
                                             sx={{
                                                 color: blueGrey[800],
                                                 backgroundColor: grey[200],
@@ -288,9 +288,10 @@ const RecipeDetail = () => {
                                             <ListItemButton
                                                 sx={{ height: 50 }}
                                                 disabled={recipe.rating !== null || star !== 0}
+                                                onClick={openCreateFeedbackHandler}
                                             >
                                                 <ListItemIcon>
-                                                    {recipe.rating === null || star !== 0 ? (
+                                                    {recipe.rating === null || star === 0 ? (
                                                         <Star sx={{ color: blueGrey[800] }} />
                                                     ) : (
                                                         <Verified color="primary" />
@@ -305,7 +306,7 @@ const RecipeDetail = () => {
                                     <Box
                                         component="img"
                                         alt="food"
-                                        src={recipe?.imageUrl}
+                                        src={recipe.imageUrl}
                                         sx={{
                                             width: '75%',
                                             aspectRatio: '16 / 9',
@@ -330,7 +331,7 @@ const RecipeDetail = () => {
                                                     align="center"
                                                     sx={{ fontSize: 19 }}
                                                 >
-                                                    {step?.preparingTime} minutes
+                                                    {step.preparingTime} minutes
                                                 </Typography>
                                             </Grid>
                                             <Divider orientation="vertical" flexItem />
@@ -350,7 +351,7 @@ const RecipeDetail = () => {
                                                     align="center"
                                                     sx={{ fontSize: 19 }}
                                                 >
-                                                    {step?.processingTime} minutes
+                                                    {step.processingTime} minutes
                                                 </Typography>
                                             </Grid>
                                             <Divider orientation="vertical" flexItem />
@@ -370,7 +371,7 @@ const RecipeDetail = () => {
                                                     align="center"
                                                     sx={{ fontSize: 19 }}
                                                 >
-                                                    {step?.cookingTime} minutes
+                                                    {step.cookingTime} minutes
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -407,7 +408,7 @@ const RecipeDetail = () => {
                                                         variant="body1"
                                                         sx={{ fontSize: 18 }}
                                                     >
-                                                        {step?.serving} people
+                                                        {step.serving} people
                                                     </Typography>
                                                 </Box>
                                             </Grid>
@@ -436,7 +437,7 @@ const RecipeDetail = () => {
                                                     variant="subtitle1"
                                                     sx={{ fontSize: 18, width: '75%' }}
                                                 >
-                                                    {step?.ingredient}
+                                                    {step.ingredient}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -495,7 +496,7 @@ const RecipeDetail = () => {
                                                 variant="subtitle1"
                                                 sx={{ fontSize: 20, width: '75%' }}
                                             >
-                                                {step?.processing}
+                                                {step.processing}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -525,7 +526,7 @@ const RecipeDetail = () => {
                                                 variant="subtitle1"
                                                 sx={{ fontSize: 20, width: '75%' }}
                                             >
-                                                {step?.cooking}
+                                                {step.cooking}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -565,7 +566,7 @@ const RecipeDetail = () => {
                                                 fontWeight={700}
                                                 sx={{ fontSize: 15 }}
                                             >
-                                                {recipe?.userName}
+                                                {recipe.userName}
                                             </Typography>
                                         </Box>
                                     </Box>

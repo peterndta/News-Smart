@@ -1,4 +1,7 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
+
+import queryString from 'query-string'
+import { useLocation } from 'react-router-dom'
 
 import Label from '../../../../components/Label'
 import AdminStudentMoreMenu from '../../../../components/MoreMenu'
@@ -9,9 +12,10 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TablePagination,
     TableRow,
 } from '@mui/material'
+
+import Paging from '../Pagination'
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 60, align: 'left' },
@@ -50,18 +54,28 @@ const rows = [
     createData('Nguyen Van N', 'example12@gmail.com', 1, ''),
 ]
 
+const filterStringGenerator = ({ search, sort }) => {
+    let filterString = `?PageSize=${6}`
+
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (sort !== undefined) filterString += `&sort=${sort}`
+
+    return filterString
+}
+
 export default function StickyHeadTable() {
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(5)
+    const { search: query } = useLocation()
+    const { search, sort, pageNum } = queryString.parse(query)
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage)
-    }
+    const rowsPerPage = 5
+    const page = pageNum === undefined ? 0 : pageNum - 1
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value)
-        setPage(0)
-    }
+    useEffect(() => {
+        const params = filterStringGenerator({ search, sort })
+        console.log(params)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search, sort, pageNum])
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -83,9 +97,9 @@ export default function StickyHeadTable() {
                     <TableBody>
                         {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((row, index) => {
                                 return (
-                                    <TableRow hover tabIndex={-1} key={row.code}>
+                                    <TableRow hover tabIndex={-1} key={index}>
                                         <TableCell align="left">{row.name}</TableCell>
                                         <TableCell align="left">{row.email}</TableCell>
                                         <TableCell align="left">
@@ -110,15 +124,7 @@ export default function StickyHeadTable() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            <Paging lengthRow={rows.length} />
         </Paper>
     )
 }

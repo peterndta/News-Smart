@@ -3,15 +3,18 @@ import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Pagination } from '@mui/material'
+import { TablePagination } from '@mui/material'
 
-const Paging = ({ size }) => {
+const Paging = ({ lengthRow }) => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
     const { search, sort, pageNum } = queryString.parse(query)
-    const [pageNumber, setPageNumber] = useState(pageNum ? +pageNum : 1)
+    const [page, setPage] = useState(pageNum ? pageNum - 1 : 0)
+    const rowsPerPage = 5
 
-    const pagingHandler = (__, value) => setPageNumber(value)
+    const handleChangePage = (__, newPage) => {
+        setPage(newPage)
+    }
 
     const filterHandler = () => {
         let route = pathname + '?'
@@ -19,7 +22,7 @@ const Paging = ({ size }) => {
 
         if (sort) route += `&sort=${sort}`
 
-        if (pageNumber !== 1) route += `&pageNum=${pageNumber}`
+        if (page !== 0) route += `&pageNum=${page + 1}`
 
         history.push(route)
     }
@@ -27,15 +30,16 @@ const Paging = ({ size }) => {
     useEffect(() => {
         filterHandler()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber])
+    }, [page])
 
     return (
-        <Pagination
-            count={size}
-            variant="outlined"
-            sx={{ alignSelf: 'center', mt: 6 }}
-            onChange={pagingHandler}
-            page={pageNumber}
+        <TablePagination
+            rowsPerPageOptions={[5]}
+            component="div"
+            count={lengthRow}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
         />
     )
 }

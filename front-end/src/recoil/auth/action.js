@@ -51,7 +51,7 @@ const useAuthAction = () => {
                 const { email, name, image, role, exp, userId } = jwt_decode(token)
                 setAuth({ token, email, name, image, role, exp, userId: userId })
                 if (role === 'admin') {
-                    history.push('/admin')
+                    history.push('/admin/users')
                 } else history.push('/')
             } else {
                 throw new Error('Something went wrong')
@@ -69,6 +69,7 @@ const useAuthAction = () => {
             exp: 0,
             userId: null,
         })
+        history.push('/login')
     }
 
     return {
