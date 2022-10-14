@@ -31,17 +31,17 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-                if (currentUser == null)
-                {
-                    return BadRequest(new Response(400, "Invalid user"));
-                }
+                //if (currentUser == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
 
-                if (!currentUser.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!currentUser.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 var userList = await _repoManager.User.GetAllUserAsync(userParams);
                 if (!userList.Any())
