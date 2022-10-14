@@ -42,8 +42,8 @@ const filterStringGenerator = ({ name, status }) => {
 
     if (name && name.trim() !== '') filterString += '&name=' + name
 
-    if (status === 'undefined') filterString += `&status=${true}`
-    filterString += `&status=${status}`
+    if (status === undefined) filterString += `&status=${true}`
+    else filterString += `&status=${status}`
 
     return filterString
 }

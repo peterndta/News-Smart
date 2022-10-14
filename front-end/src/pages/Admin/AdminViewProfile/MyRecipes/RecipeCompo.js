@@ -6,8 +6,8 @@ import { blueGrey, grey } from '@mui/material/colors'
 const RecipeCompo = ({ name, description, rating, author, image }) => {
     return (
         <Grid item md={12} mt={1}>
-            <Box ml={10} pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
-                <Box display="flex">
+            <Box mx={10} pt={4} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
+                <Box display="flex" mx={3}>
                     <Box
                         component="img"
                         width={120}
@@ -15,7 +15,7 @@ const RecipeCompo = ({ name, description, rating, author, image }) => {
                         sx={{ aspectRatio: '1 / 1' }}
                         src={image}
                     />
-                    <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }}>
+                    <Box display="flex" flexDirection="column" sx={{ ml: 2.5, width: '1' }}>
                         <Box display="flex" alignItems="center" justifyContent="space-between">
                             <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
                                 {name}

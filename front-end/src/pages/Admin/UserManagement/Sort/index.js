@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -9,8 +9,8 @@ const Sort = () => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
     const { name, status, pageNum } = queryString.parse(query)
-    const [statuses, setType] = React.useState(status ? status : true)
-
+    const [statuses, setType] = React.useState(status)
+    const isFirstRender = useRef(true)
     const handleChange = (event) => {
         setType(event.target.value)
     }
@@ -19,7 +19,9 @@ const Sort = () => {
         let route = pathname + '?'
         if (name && name.trim() !== '') route += '&name=' + name
 
-        route += `&status=${statuses}`
+        if (statuses === undefined && isFirstRender.current) {
+            isFirstRender.current = false
+        } else route += `&status=${statuses}`
 
         if (pageNum) route += `&pageNum=${pageNum}`
 
