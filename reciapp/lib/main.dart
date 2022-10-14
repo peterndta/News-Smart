@@ -28,25 +28,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        fontFamily: 'Inter',
-      ),
-      home: AuthService().handleAuthState(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          fontFamily: 'Inter',
+        ),
+        home: //AuthService().handleAuthState(),
+            MyHomePage(
+          title: '',
+        ));
   }
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-//   final String title;
+  final String title;
 
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
 
 // class _MyHomePageState extends State<MyHomePage> {
 //   @override
@@ -61,4 +62,3 @@ class _MyHomePageState extends State<MyHomePage> {
     return UserProfile();
   }
 }
-
