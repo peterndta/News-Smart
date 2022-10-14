@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import { Pagination } from '@mui/material'
 
-const Paging = () => {
+const Paging = ({ size }) => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
     const { search, sort, pageNum } = queryString.parse(query)
@@ -31,7 +31,7 @@ const Paging = () => {
 
     return (
         <Pagination
-            count={10}
+            count={size}
             variant="outlined"
             sx={{ alignSelf: 'center', mt: 6 }}
             onChange={pagingHandler}

@@ -20,6 +20,7 @@ const Info = () => {
     const { getActivity } = useMyProfile()
     const showSnackbar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
         setIsLoading(true)
         getActivity(auth.userId)

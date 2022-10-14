@@ -4,7 +4,6 @@ import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
-import 'package:reciapp/pages/today_special_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../login_support/auth_service.dart';
@@ -28,25 +27,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        fontFamily: 'Inter',
-      ),
-      home: AuthService().handleAuthState(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          fontFamily: 'Inter',
+        ),
+        home: //AuthService().handleAuthState(),
+            MyHomePage(
+          title: '',
+        ));
   }
 }
 
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-//   final String title;
+  final String title;
 
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
 
 // class _MyHomePageState extends State<MyHomePage> {
 //   @override
@@ -58,7 +58,6 @@ class MyApp extends StatelessWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return UserProfile();
+    return HomePage();
   }
 }
-

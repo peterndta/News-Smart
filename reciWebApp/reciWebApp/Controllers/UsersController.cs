@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.Data.Pagination;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.UserDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
@@ -24,36 +26,29 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet]
-        [Route("~/api/user")]
-        public async Task<IActionResult> GetAllUser(int id)
+        [Route("~/api/user/page/{pageNumber}")]
+        public async Task<IActionResult> Get(int pageNumber, [FromQuery] UserParams userParams)
         {
             try
             {
-                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-                if (currentUser == null)
-                {
-                    return BadRequest(new Response(400, "Invalid user"));
-                }
+                //if (currentUser == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
 
-                var user = await _repoManager.User.GetUserByIdAsync(id);
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (!currentUser.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                var userList = await _repoManager.User.GetAllUserAsync(userParams);
 
-                List<User> userList = await _repoManager.User.GetAllUserAsync();
-                if (!userList.Any())
-                {
-                    return BadRequest(new Response(400, "There is no user in database"));
-                }
-
-                var showUserList = _mapper.Map<List<User>>(userList);
+                var showUserList = _mapper.Map<List<ShowUserDTO>>(userList);
+                userParams.PageNumber = pageNumber;
+                var result = PaginatedList<ShowUserDTO>.Create(showUserList, userParams.PageNumber, userParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
 
                 return Ok(new Response(200, showUserList));
             }

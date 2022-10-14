@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_new_old_popular.dart';
-import 'package:reciapp/object/test_infinite_scroll.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
@@ -96,7 +95,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.7,
-                  child: TestInfiniteScroll()),
+                  child: Container()),
             ],
           ),
         ),

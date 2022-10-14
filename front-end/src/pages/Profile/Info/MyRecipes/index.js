@@ -17,7 +17,7 @@ const MyRecipes = () => {
     const [recipe, setRecipe] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const showSnackbar = useSnackbar()
-    const { getRecentRecipes, getActivity } = useMyProfile()
+    const { getRecentRecipes } = useMyProfile()
     const auth = useRecoilValue(authAtom)
 
     useEffect(() => {
