@@ -133,6 +133,42 @@ const AdminHeader = () => {
                                         RECIPES
                                     </Typography>
                                 </Box>
+                                <Box
+                                    // component={NavLink}
+                                    // to="/admin/posts-management"
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: grey[100],
+                                        position: 'relative',
+                                        '&:hover:after': {
+                                            width: '100%',
+                                        },
+                                        ml: 5,
+                                        fontFamily: 'Roboto',
+                                    }}
+                                >
+                                    <Typography component="span" variant="h5">
+                                        REPORTS
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    component={NavLink}
+                                    to="/admin/collection"
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: grey[100],
+                                        position: 'relative',
+                                        '&:hover:after': {
+                                            width: '100%',
+                                        },
+                                        ml: 5,
+                                        fontFamily: 'Roboto',
+                                    }}
+                                >
+                                    <Typography component="span" variant="h5">
+                                        COLLECTION
+                                    </Typography>
+                                </Box>
                             </Box>
                         </Box>
                         {auth.email ? (

@@ -14,7 +14,7 @@ const SearchBox = () => {
     const [searchValue, setSearchValue] = useState(search ? search : '')
 
     const searchChangeHandler = (event) => {
-        const searchText = event.target.value.trim()
+        const searchText = event.target.value
         setSearchValue(searchText)
     }
 
