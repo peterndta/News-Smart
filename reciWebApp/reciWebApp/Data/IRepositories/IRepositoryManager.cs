@@ -11,6 +11,7 @@
         IPostCategoryRepository PostCategory { get; }
         IUsesRepository Use { get; }
         IUserInteractRepository UserInteract { get; }
+        ICollectionRepository Collection { get; }  
         Task SaveChangesAsync();
     }
 }
