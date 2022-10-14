@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/object/get_posts.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
@@ -87,12 +88,18 @@ class _HomePageState extends State<HomePage> {
                                 bottom: BorderSide(
                                     color: Theme.of(context).primaryColor,
                                     width: 0.8))),
-                        child: Text(
-                          'Latest Post',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            fontFamily: 'Inter',
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: ((context) => RecipesResult())));
+                          },
+                          child: Text(
+                            'Latest Post',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              fontFamily: 'Inter',
+                            ),
                           ),
                         ),
                       ),
