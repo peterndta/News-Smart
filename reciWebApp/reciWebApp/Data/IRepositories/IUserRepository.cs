@@ -1,4 +1,5 @@
 ﻿using reciWebApp.Data.Models;
+using reciWebApp.DTOs.UserDTOs;
 
 namespace reciWebApp.Data.IRepositories
 {
@@ -10,6 +11,6 @@ namespace reciWebApp.Data.IRepositories
         User GetUserById(int id);
         User GetUserByEmail(string email);
         List<User> GetAllUser();
-        Task<List<User>> GetAllUserAsync();
+        Task<List<User>?> GetAllUserAsync(UserParams userParams);
     }
 }
