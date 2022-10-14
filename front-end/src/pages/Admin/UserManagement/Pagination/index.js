@@ -20,8 +20,7 @@ const Paging = ({ lengthRow }) => {
         let route = pathname + '?'
         if (name && name.trim() !== '') route += '&name=' + name
 
-        if (status === 'undefined') route += `&status=${true}`
-        else route += `&status=${status}`
+        if (status !== undefined) route += `&status=${status}`
 
         if (page !== 0) route += `&pageNum=${page + 1}`
 

@@ -15,7 +15,7 @@ const AdminViewProfile = () => {
                     alt="avatar"
                     src={USER.image}
                     sx={{ height: 150, width: 150 }}
-                    variant="square"
+                    variant="circular"
                 />
                 <Box sx={{ ml: 6 }}>
                     <Typography variant="h4" fontWeight={700} sx={{ mb: 1, color: grey[700] }}>

@@ -23,8 +23,7 @@ const SearchBox = () => {
             let route = pathname + '?'
             if (searchValue) route += '&name=' + searchValue
 
-            if (status === 'undefined') route += `&status=${true}`
-            else route += `&status=${status}`
+            if (status !== undefined) route += `&status=${status}`
 
             if (pageNum) route += `&pageNum=${pageNum}`
 
