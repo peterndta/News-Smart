@@ -32,27 +32,6 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
-  // Future getContinentData() async {
-  //   var response = await http.get(
-  //     Uri.parse('https://reciapp.azurewebsites.net/api/RecipeRegions'),
-  //     headers: {
-  //       "content-type": "application/json",
-  //       "accept": "application/json",
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var jsonData = jsonDecode(response.body);
-  //     List<Continent> continents = [];
-  //     for (var cate in jsonData['data']) {
-  //       Continent continent = Continent(cate['id'], cate['continents']);
-  //       continents.add(continent);
-  //     }
-  //     // print(methods.length);
-  //     // print(methods);
-  //     return continents;
-  //   }
-  // }
-
   // Future getUseData() async {
   //   var response = await http.get(
   //     Uri.parse('https://reciapp.azurewebsites.net/api/Uses'),
