@@ -44,10 +44,6 @@ namespace reciWebApp.Controllers
                 //}
 
                 var userList = await _repoManager.User.GetAllUserAsync(userParams);
-                if (!userList.Any())
-                {
-                    return BadRequest(new Response(400, "Do not have any user match"));
-                }
 
                 var showUserList = _mapper.Map<List<ShowUserDTO>>(userList);
                 userParams.PageNumber = pageNumber;
