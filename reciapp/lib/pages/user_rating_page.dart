@@ -10,7 +10,6 @@ class UserRatingsPage extends StatefulWidget {
 }
 
 class _UserRatingsPageState extends State<UserRatingsPage> {
-    String tag = "Newest";
   TextEditingController keywords = TextEditingController();
   final List<ReciepReview> _listReciepReviews = [
     ReciepReview(
@@ -116,9 +115,6 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
               alignment: Alignment.topCenter,
               height: MediaQuery.of(context).size.height * 0.1,
               child: Form(
-                  child: Row(children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
                   child: TextFormField(
                       validator: (String? value) {
                         return (value == null || value.isEmpty)
@@ -133,42 +129,7 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
-                      )),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.02,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.32,
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    ),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.024,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: tag,
-                          isDense: true,
-                          isExpanded: true,
-                          items: const [
-                            DropdownMenuItem(
-                                child: Text("Newest"), value: "Newest"),
-                            DropdownMenuItem(
-                                child: Text("Oldest"), value: "Oldest"),
-                          ],
-                          onChanged: (newValue) {
-                            setState(() {
-                              tag = newValue!;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ])),
+                      ))),
             ),
             ListRecipeReview(0.72, _listReciepReviews)
           ],

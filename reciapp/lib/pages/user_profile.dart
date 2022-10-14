@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
-import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
 import '../components/sidebar_menu.dart';
@@ -155,7 +154,7 @@ class _UserProfileState extends State<UserProfile> {
                       bottom: BorderSide(color: Colors.orange, width: 2.0))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+                children: const [
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
