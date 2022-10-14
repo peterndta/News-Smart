@@ -170,27 +170,20 @@ class _HomePageState extends State<HomePage> {
                                               //         color: Colors.black,
                                               //       )
                                               //     : Container(),
-                                              // Row(
-                                              //   children: [
-                                              //     Icon(Icons.star,
-                                              //         color: Colors.amber[600]),
-                                              //     Icon(Icons.star,
-                                              //         color: Colors.amber[600]),
-                                              //     Icon(Icons.star,
-                                              //         color: Colors.amber[600]),
-                                              //     Icon(Icons.star,
-                                              //         color: Colors.amber[600]),
-                                              //     Icon(Icons.star,
-                                              //         color: Colors.amber[600]),
-                                              //   ],
-                                              // ),
-                                              SmoothStarRating(
-                                                size: 16,
-                                                color: Colors.amber[600],
-                                                rating: snapshot
-                                                    .data[index].averageRating
-                                                    .toDouble(),
-                                                borderColor: Colors.amber[600],
+
+                                              Row(
+                                                children: [
+                                                  SmoothStarRating(
+                                                    isReadOnly: true,
+                                                    size: 16,
+                                                    color: Colors.amber[600],
+                                                    rating: snapshot.data[index]
+                                                        .averageRating
+                                                        .toDouble(),
+                                                    borderColor:
+                                                        Colors.amber[600],
+                                                  ),
+                                                ],
                                               ),
                                               Container(
                                                   width: MediaQuery.of(context)
