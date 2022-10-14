@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
@@ -9,6 +10,8 @@ import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+import '../login_support/check_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,6 +48,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -105,11 +109,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  // Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 3),
-                  //   height: MediaQuery.of(context).size.height * 0.5,
-                  //   child: ListView.builder(itemBuilder: itemBuilder),
-                  // ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 1,
                     child: FutureBuilder(
@@ -163,14 +162,13 @@ class _HomePageState extends State<HomePage> {
                                                     fontSize: 15),
                                                 textAlign: TextAlign.end,
                                               ),
-                                              // snapshot.data[index].id ==
-                                              //         FirebaseAuth.instance.currentUser!.email!
-                                              //     ? Icon(
-                                              //         Icons.bookmark,
-                                              //         color: Colors.black,
-                                              //       )
-                                              //     : Container(),
-
+                                              snapshot.data[index].userId ==
+                                                      getUserID.userID
+                                                  ? Icon(
+                                                      Icons.bookmark,
+                                                      color: Colors.black,
+                                                    )
+                                                  : Container(),
                                               Row(
                                                 children: [
                                                   SmoothStarRating(
@@ -202,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
-                                                  )
+                                                  ),
                                                 ],
                                               ),
                                             ],
