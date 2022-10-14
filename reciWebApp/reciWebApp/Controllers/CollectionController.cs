@@ -45,7 +45,6 @@ namespace reciWebApp.Controllers
                 }
 
                 var createCollection = _mapper.Map<Collection>(collectionDTO);
-                createCollection.Id = 100;
 
                 Collection dbCollection = _repoManager.Collection.GetCollectionByName(collectionDTO.CollectionName);
                 if (dbCollection != null)
@@ -54,8 +53,10 @@ namespace reciWebApp.Controllers
                 }
 
                 _repoManager.Collection.CreateCollection(createCollection);
+
+                var returnCollection = _mapper.Map<ShowCollectionDTO>(createCollection);
                 await _repoManager.SaveChangesAsync();
-                return Ok(new Response(200, createCollection));
+                return Ok(new Response(200, returnCollection));
             }
             catch (Exception e)
             {
