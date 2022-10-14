@@ -99,5 +99,45 @@ namespace reciWebApp.Controllers
                 return BadRequest(new Response(500, ex.Message));
             }
         }
+
+        [HttpGet]
+        [Route("~/api/user/{id}/search")]
+        public async Task<IActionResult> SearchUser (int id, string search)
+        {
+            try
+            {
+                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
+
+                //if (currentUser == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+
+                var user = await _repoManager.User.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    return BadRequest(new Response(400, "User id does not exist"));
+                }    
+
+                if (!user.Role.Equals("admin"))
+                {
+                    return BadRequest(new Response(400, "You do not have permission"));
+                }
+
+                List<User> userList = _repoManager.User.SearchUser(search);
+                if (!userList.Any())
+                {
+
+                }    
+
+                var showUserList = _mapper.Map<List<User>>(userList);
+                return Ok(new Response(200, showUserList));
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new Response(400, e.Message));
+            }
+        }    
     }
 }

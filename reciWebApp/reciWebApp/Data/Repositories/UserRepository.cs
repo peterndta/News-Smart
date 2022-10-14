@@ -42,6 +42,14 @@ namespace reciWebApp.Data.Repositories
         {
             return await GetAll().ToListAsync();
         }
+        public async Task<List<User>?> SearchUserAsync (string search)
+        {
+            return await GetByCondition(x => x.Name.Contains(search) || x.Email.Contains(search)).ToListAsync();
+        }
+        public List<User> SearchUser (string search)
+        {
+            return GetByCondition(x => x.Name.Contains(search) || x.Email.Contains(search)).ToList();
+        }
     }
 }
     

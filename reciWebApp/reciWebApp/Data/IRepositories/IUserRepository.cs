@@ -11,5 +11,7 @@ namespace reciWebApp.Data.IRepositories
         User GetUserByEmail(string email);
         List<User> GetAllUser();
         Task<List<User>> GetAllUserAsync();
+        Task <List<User>> SearchUserAsync (string search);
+        List<User> SearchUser (string search);
     }
 }
