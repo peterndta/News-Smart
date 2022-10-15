@@ -159,7 +159,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
+                        height: MediaQuery.of(context).size.height * 1.19,
                         padding: EdgeInsets.only(top: 5, left: 15),
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -177,7 +177,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.height * 0.6,
-                              height: MediaQuery.of(context).size.height * 0.55,
+                              height: MediaQuery.of(context).size.height * 1.02,
                               child: FutureBuilder(
                                   future: fetchCategories(),
                                   builder: ((context, snapshot) {
@@ -185,6 +185,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       return Container();
                                     } else {
                                       return ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (context, index) =>
                                             CheckBox(isSelected,
