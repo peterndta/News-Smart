@@ -22,7 +22,7 @@ const MyRecipes = () => {
                 <SearchBox />
             </Box>
             <RecipeList posts={MOST_FAVORITE_POSTS} />
-            <Paging />
+            <Paging size={5} />
         </Box>
     )
 }
