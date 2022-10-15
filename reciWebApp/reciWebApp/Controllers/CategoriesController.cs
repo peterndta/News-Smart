@@ -45,7 +45,7 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/category")]
+        [Route("~/api/admin/category")]
         [HttpPost]
         public async Task<IActionResult> CreateCategory (int id, [FromBody] CreateCategoryDTO categoryDTO)
         {
