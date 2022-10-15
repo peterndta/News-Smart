@@ -11,7 +11,7 @@ using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/userinteracts")]
     [ApiController]
     public class UserInteractsController : ControllerBase
     {
