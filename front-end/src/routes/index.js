@@ -121,9 +121,9 @@ const privateRoutes = [
         role: 'admin',
     },
     {
-        path: '/admin/posts',
-        name: 'posts management',
-        component: lazy(() => import('../pages/Admin/PostManagement')),
+        path: '/admin/reports',
+        name: 'reports',
+        component: lazy(() => import('../pages/Admin/Reports')),
         layout: 'admin',
         role: 'admin',
     },
