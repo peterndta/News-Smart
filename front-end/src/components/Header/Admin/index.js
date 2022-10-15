@@ -134,8 +134,8 @@ const AdminHeader = () => {
                                     </Typography>
                                 </Box>
                                 <Box
-                                    // component={NavLink}
-                                    // to="/admin/posts-management"
+                                    component={NavLink}
+                                    to="/admin/reports"
                                     sx={{
                                         textDecoration: 'none',
                                         color: grey[100],
