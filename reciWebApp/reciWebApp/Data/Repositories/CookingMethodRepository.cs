@@ -52,6 +52,11 @@ namespace reciWebApp.Data.Repositories
             return cookingMethods;
         }
 
+        public CookingMethod GetCookingMethodByNameSignle (string method)
+        {
+            return GetByCondition(x => x.Method.Equals(method)).SingleOrDefault();
+        }
+
         public void UpdateCookingMethod(CookingMethod cookingMethod)
         {
             Update(cookingMethod);

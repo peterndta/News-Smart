@@ -11,5 +11,6 @@ namespace reciWebApp.Data.IRepositories
         CookingMethod? GetCookingMethodById(int id);
         int? GetCookingMethodIdByName(string? name);
         List<CookingMethod>? GetCookingMethodsByName(List<string>? names);
+        CookingMethod GetCookingMethodByNameSignle(string name);
     }
 }

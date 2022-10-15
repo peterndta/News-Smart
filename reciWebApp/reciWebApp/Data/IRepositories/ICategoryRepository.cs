@@ -12,5 +12,6 @@ namespace reciWebApp.Data.IRepositories
         List<Category?> GetAllCategories();
         Category? GetCategoryById(int id);
         List<Category?> GetCategoryByName(List<string?> names);
+        Category GetCategoryByName(string name);
     }
 }

@@ -53,9 +53,9 @@ namespace reciWebApp.Controllers
                 }
 
                 _repoManager.Collection.CreateCollection(createCollection);
+                await _repoManager.SaveChangesAsync();
 
                 var returnCollection = _mapper.Map<ShowCollectionDTO>(createCollection);
-                await _repoManager.SaveChangesAsync();
                 return Ok(new Response(200, returnCollection));
             }
             catch (Exception e)
