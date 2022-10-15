@@ -5,6 +5,7 @@ import 'package:reciapp/pages/bookmark_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 
 import '../login_support/auth_service.dart';
 
@@ -55,6 +56,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return CategoryPage();
+    return RecipesResult();
   }
 }

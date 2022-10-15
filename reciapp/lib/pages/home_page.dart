@@ -73,12 +73,6 @@ class _HomePageState extends State<HomePage> {
                       image: NetworkImage(
                           'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
                     ),
-                    Text('Ratatoulie is the best',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                            fontSize: 18)),
-                    Text('If you hadn\'t watched the movie yet, watch it!')
                   ],
                 ),
               ),
