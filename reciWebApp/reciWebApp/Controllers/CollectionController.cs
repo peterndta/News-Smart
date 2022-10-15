@@ -26,7 +26,7 @@ namespace reciWebApp.Controllers
             _servicesManager = servicesManager;
         }
 
-        [Route("~/api/user/{id}/collection")]
+        [Route("~/api/admin/collection")]
         [HttpPost]
         public async Task<IActionResult> CreateCollection(int id, [FromBody] CreateCollectionDTO collectionDTO)
         {

@@ -45,7 +45,7 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/use")]
+        [Route("~/api/admin/use")]
         [HttpPost]
         public async Task<IActionResult> CreateUse(int id, [FromBody] CreateUseDTO useDTO)
         {
