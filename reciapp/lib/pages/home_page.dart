@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/object/get_posts.dart';
+import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
