@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { RemoveCircle, Visibility, MoreVert } from '@mui/icons-material'
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 
-const AdminStudentMoreMenu = () => {
+const AdminStudentMoreMenu = ({ userId }) => {
     const ref = useRef(null)
     const [isOpen, setIsOpen] = useState(false)
 
@@ -27,7 +27,7 @@ const AdminStudentMoreMenu = () => {
             >
                 <MenuItem
                     component={RouterLink}
-                    to={`${window.location.pathname}/${1}`}
+                    to={`/admin/users/${userId}`}
                     sx={{ color: 'text.secondary' }}
                 >
                     <ListItemIcon>

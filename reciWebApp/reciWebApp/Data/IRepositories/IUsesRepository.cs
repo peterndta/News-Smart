@@ -6,5 +6,7 @@ namespace reciWebApp.Data.IRepositories
     {
         Task<List<Use>?> GetAllUseAsync();
         List<Use?> GetUsesByName(List<string?> names);
+        Use GetUsesByNameSingle(string name);
+        void CreateUse(Use use);
     }
 }

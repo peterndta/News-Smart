@@ -29,5 +29,15 @@ namespace reciWebApp.Data.Repositories
             }
             return uses;
         }
+
+        public Use GetUsesByNameSingle (string name)
+        {
+            return GetByCondition(x => x.UsesOfFood.Equals(name)).SingleOrDefault();
+        }
+
+        public void CreateUse (Use use)
+        {
+            Create(use);
+        }
     }
 }
