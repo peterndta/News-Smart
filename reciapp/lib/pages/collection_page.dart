@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/filter_course.dart';
+import 'package:reciapp/components/infinite_scroll.dart';
+
+import '../components/sidebar_menu.dart';
+import '../object/food_list.dart';
+import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../object/recipe_review.dart';
 
@@ -112,24 +118,27 @@ class _CollectionPageState extends State<CollectionPage> {
         child: Column(
           children: [
             Container(
-              alignment: Alignment.topCenter,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Form(
-                  child: TextFormField(
-                      validator: (String? value) {
-                        return (value == null || value.isEmpty)
-                            ? 'Please enter'
-                            : null;
-                      },
-                      controller: keywords,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Key',
-                        alignLabelWithHint: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ))),
+              // alignment: Alignment.topCenter,
+              // height: MediaQuery.of(context).size.height * 0.1,
+              // child: Form(
+              //     child: TextFormField(
+              //         validator: (String? value) {
+              //           return (value == null || value.isEmpty)
+              //               ? 'Please enter'
+              //               : null;
+              //         },
+              //         controller: keywords,
+              //         decoration: const InputDecoration(
+              //           prefixIcon: Icon(Icons.search),
+              //           hintText: 'Search Key',
+              //           alignLabelWithHint: false,
+              //           border: OutlineInputBorder(
+              //             borderRadius: BorderRadius.all(Radius.circular(5)),
+              //           ),
+              //         ))),
+              margin: EdgeInsets.symmetric(horizontal: 3),
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: InfiniteScroll(),
             ),
             ListRecipeReview(0.72, _listReciepReviews)
           ],
