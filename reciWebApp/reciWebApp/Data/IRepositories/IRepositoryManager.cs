@@ -12,6 +12,7 @@
         IUsesRepository Use { get; }
         IUserInteractRepository UserInteract { get; }
         ICollectionRepository Collection { get; }  
+        IFoodCollectionRepository FoodCollection { get; }
         Task SaveChangesAsync();
     }
 }
