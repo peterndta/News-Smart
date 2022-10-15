@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_course.dart';
+import 'package:reciapp/components/infinite_scroll.dart';
 
 import '../components/sidebar_menu.dart';
 import '../object/food_list.dart';
@@ -95,8 +96,8 @@ class _CollectionPageState extends State<CollectionPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: FoodList(),
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: InfiniteScroll(),
             ),
           ],
         ),

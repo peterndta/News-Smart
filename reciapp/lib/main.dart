@@ -5,6 +5,7 @@ import 'package:reciapp/pages/bookmark_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/recipes_result_page.dart';
 
 import '../login_support/auth_service.dart';
 
@@ -34,27 +35,27 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
-        home: //AuthService().handleAuthState(),
-            MyHomePage(
-          title: '',
-        ),
+        home: AuthService().handleAuthState(),
+        //     MyHomePage(
+        //   title: '',
+        // ),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
 
-  final String title;
+//   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return CategoryPage();
-  }
-}
+// class _MyHomePageState extends State<MyHomePage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return RecipesResult();
+//   }
+// }
