@@ -1,45 +1,16 @@
 import React from 'react'
 
 import NumberItemPagination from '../../../../../components/NumberItemPagination'
-import { Add, Search } from '@mui/icons-material'
-import {
-    Box,
-    Button,
-    IconButton,
-    FormControl,
-    InputBase,
-    InputLabel,
-    MenuItem,
-    Pagination,
-    Select,
-} from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { Search } from '@mui/icons-material'
+import { Box, IconButton, InputBase, Pagination } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
 
 import { MOST_FAVORITE_POSTS } from '../../../../../Elixir'
-import AddCollectionPopup from '../AddCollectionPopup'
 import PostLists from './PostLists'
 
 const PostList = () => {
-    const [open, setOpen] = React.useState(false)
-    const [type, setType] = React.useState('')
-
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
     return (
         <React.Fragment>
-            {open && <AddCollectionPopup status={open} onClose={() => setOpen(false)} />}
-            <Button
-                variant="outlined"
-                sx={{ color: grey[700], width: 200, mb: 2, minWidth: 100, alignSelf: 'flex-end' }}
-                startIcon={<Add />}
-                onClick={handleClickOpen}
-            >
-                CREATE COLLECTION
-            </Button>
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Box
                     component="form"
@@ -61,20 +32,6 @@ const PostList = () => {
                         inputProps={{ 'aria-label': 'search recipe name' }}
                     />
                 </Box>
-                <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="medium">
-                    <InputLabel id="demo-select-small">Type</InputLabel>
-                    <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={type}
-                        label="Sort"
-                        onChange={handleChange}
-                    >
-                        <MenuItem value={'popularity'}>Popularity</MenuItem>
-                        <MenuItem value={'newest'}>Newest</MenuItem>
-                        <MenuItem value={'oldest'}>Oldest</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
             <NumberItemPagination from={1} to={6} all={15} />
             <PostLists posts={MOST_FAVORITE_POSTS} />
