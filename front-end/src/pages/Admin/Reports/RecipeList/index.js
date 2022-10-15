@@ -1,45 +1,51 @@
 import React, { useEffect, useState } from 'react'
 
 import queryString from 'query-string'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import { Assignment } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { Grid } from '@mui/material'
 
 import { useSnackbar } from '../../../../HOCs/SnackbarContext'
-import useMyRecipe from '../../../../recoil/my-recipe/action'
+import useRecipe from '../../../../recoil/recipe/action'
 import Loading from '../../../Loading'
-import Paging from './Pagination'
-import RecipeList from './RecipeList'
-import SearchBox from './Search'
+import Paging from '../Pagination'
+import Recipes from './RecipesCompo'
 
-const filterStringGenerator = ({ search, sort }) => {
+const filterStringGenerator = ({ search, continent, use, sort }) => {
     let filterString = `?PageSize=${6}`
 
-    if (search && search.trim() !== '') filterString += '&name=' + search
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (continent && Array.isArray(continent))
+        continent.forEach((continent) => (filterString += `&continent=${continent}`))
+    else if (continent !== undefined) filterString += `&continent=${continent}`
+
+    if (use && Array.isArray(use)) use.forEach((use) => (filterString += `&use=${use}`))
+    else if (use !== undefined) filterString += `&use=${use}`
 
     if (sort !== undefined) filterString += `&sort=${sort}`
 
     return filterString
 }
 
-const MyRecipes = () => {
-    const { id } = useParams()
+const RecipeList = () => {
     const { search: query } = useLocation()
-    const { search, sort, pageNum } = queryString.parse(query)
-    const myRecipesAction = useMyRecipe()
+    const { use, continent, search, sort, pageNum } = queryString.parse(query)
+    const recipeAction = useRecipe()
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
 
+    if (Array.isArray(continent)) continent.sort((a, b) => a.localeCompare(b))
+    if (Array.isArray(use)) use.sort((a, b) => a.localeCompare(b))
+
     useEffect(() => {
-        const params = filterStringGenerator({ search, sort })
+        const params = filterStringGenerator({ search, continent, use, sort })
         setIsLoading(true)
 
         if (pageNum === undefined) {
-            myRecipesAction
-                .getRecipes(+id, params)
+            recipeAction
+                .getRecipes(params)
                 .then((res) => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
@@ -58,8 +64,8 @@ const MyRecipes = () => {
                     }, 500)
                 })
         } else {
-            myRecipesAction
-                .getRecipes(+id, params, pageNum)
+            recipeAction
+                .getRecipes(params, pageNum)
                 .then((res) => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
@@ -78,39 +84,20 @@ const MyRecipes = () => {
                     }, 500)
                 })
         }
-        return () => {
-            setRecipes({})
-            setIsLoading(false)
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, sort, pageNum])
-
+    }, [JSON.stringify(use), JSON.stringify(continent), search, sort, pageNum])
     return (
-        <React.Fragment>
+        <Grid item md={12} display="flex" flexDirection="column">
             {isLoading ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Box display="flex" alignItems="flex-end" justifyContent="space-between" m={4}>
-                        <Box display="flex" alignItems="center">
-                            <Assignment fontSize="large" sx={{ color: grey[700] }} />
-                            <Typography
-                                ml={1}
-                                variant="h4"
-                                fontWeight={700}
-                                sx={{ color: grey[700] }}
-                            >
-                                Recently Recipes
-                            </Typography>
-                        </Box>
-                        <SearchBox />
-                    </Box>
-                    <RecipeList posts={recipes.list} />
+                    <Recipes posts={recipes.list} />
                     {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                 </React.Fragment>
             )}
-        </React.Fragment>
+        </Grid>
     )
 }
 
-export default MyRecipes
+export default RecipeList

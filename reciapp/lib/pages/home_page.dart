@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/object/get_posts.dart';
+import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
@@ -62,23 +62,16 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               SizedBox(
-                //width: MediaQuery.of(context).size.width * 0.2,
-
-                height: MediaQuery.of(context).size.height * 0.35,
-                //height: 170,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      fit: BoxFit.fill,
                       image: NetworkImage(
                           'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
                     ),
-                    Text('Ratatoulie is the best',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                            fontSize: 18)),
-                    Text('If you hadn\'t watched the movie yet, watch it!')
                   ],
                 ),
               ),

@@ -21,7 +21,7 @@ const SearchBox = () => {
     const searchSubmitHandler = (event) => {
         if (event.key === 'Enter') {
             let route = pathname + '?'
-            if (searchValue) route += '&name=' + searchValue
+            if (searchValue) route += '&search=' + searchValue
 
             if (sort) route += `&sort=${sort}`
 
@@ -47,7 +47,6 @@ const SearchBox = () => {
                 inputProps={{ 'aria-label': 'search recipe name' }}
                 onChange={searchChangeHandler}
                 onKeyDown={searchSubmitHandler}
-                value={searchValue}
             />
             <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
                 <Search />

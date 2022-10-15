@@ -6,7 +6,6 @@ import { BookmarkOutlined, Description, StarOutlined } from '@mui/icons-material
 import { Avatar, Box, Divider, Typography } from '@mui/material'
 import { blue, blueGrey, grey, red, yellow } from '@mui/material/colors'
 
-import { USER } from '../../../Elixir'
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import { useMyProfile } from '../../../recoil/profile'
 import Loading from '../../Loading'
@@ -20,6 +19,9 @@ const AdminViewProfile = () => {
         totalBookmarks: 0,
         totalPosts: 0,
         totalRatings: 0,
+        name: '',
+        imageUrl: '',
+        email: '',
     })
     const [isLoading, setIsLoading] = useState(false)
 
@@ -29,8 +31,9 @@ const AdminViewProfile = () => {
         userProfileAction
             .getActivity(+id)
             .then((res) => {
-                const { totalBookmarks, totalPosts, totalRatings } = res.data.data
-                setActivities({ totalBookmarks, totalPosts, totalRatings })
+                const { totalBookmarks, totalPosts, totalRatings, name, imageUrl, email } =
+                    res.data.data
+                setActivities({ totalBookmarks, totalPosts, totalRatings, name, imageUrl, email })
                 setIsLoading(false)
             })
             .catch(() => {
@@ -52,7 +55,7 @@ const AdminViewProfile = () => {
                     <Box sx={{ mb: 6 }} display="flex" alignItems="center">
                         <Avatar
                             alt="avatar"
-                            src={USER.image}
+                            src={activities.imageUrl}
                             sx={{ height: 150, width: 150 }}
                             variant="circular"
                         />
@@ -62,10 +65,10 @@ const AdminViewProfile = () => {
                                 fontWeight={700}
                                 sx={{ mb: 1, color: grey[700] }}
                             >
-                                {USER.name}
+                                {activities.name}
                             </Typography>
                             <Typography fontWeight={700} sx={{ color: blueGrey[800] }} variant="h6">
-                                Email: {USER.email}
+                                Email: {activities.email}
                             </Typography>
                         </Box>
                     </Box>
