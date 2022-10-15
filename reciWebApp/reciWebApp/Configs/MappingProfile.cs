@@ -36,6 +36,8 @@ namespace reciWebApp.Configs
             CreateMap<CreateCategoryDTO, Category>();
             CreateMap<CreateCookingMethodDTO, CookingMethod>();
             CreateMap<User, ActivityDTO>();
+            CreateMap<CreateUseDTO, Use>();
+            CreateMap<Use, ShowUseDTO>();
         }
     }
 }
