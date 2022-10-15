@@ -62,14 +62,13 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               SizedBox(
-                //width: MediaQuery.of(context).size.width * 0.2,
-
-                height: MediaQuery.of(context).size.height * 0.35,
-                //height: 170,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      fit: BoxFit.fill,
                       image: NetworkImage(
                           'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
                     ),

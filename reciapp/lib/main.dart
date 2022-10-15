@@ -35,27 +35,27 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
-        home: //AuthService().handleAuthState(),
-            MyHomePage(
-          title: '',
-        ),
+        home: AuthService().handleAuthState(),
+        //     MyHomePage(
+        //   title: '',
+        // ),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
 
-  final String title;
+//   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return RecipesResult();
-  }
-}
+// class _MyHomePageState extends State<MyHomePage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return RecipesResult();
+//   }
+// }
