@@ -67,7 +67,7 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Name, id);
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Search, id);
 
                 if (!posts.Any())
                 {
@@ -297,7 +297,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Do not have any result"));
                 }
 
-                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Name);
+                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
@@ -339,7 +339,7 @@ namespace reciWebApp.Controllers
                 }
 
                 ratingParams.PageNumber = pageNumber;
-                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Name);
+                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
