@@ -34,6 +34,7 @@ const Mine = () => {
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
+    const [fromTo, setFromTo] = useState({ from: 1, to: 1, totalCount: 1 })
 
     useEffect(() => {
         const params = filterStringGenerator({ search, sort })
@@ -44,8 +45,9 @@ const Mine = () => {
                 .getRecipes(auth.userId, params)
                 .then((res) => {
                     const listRecipe = res.data.data
-                    const { totalPages } = res.data.meta
+                    const { totalPages, from, to, totalCount } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setFromTo({ from, to, totalCount })
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 500)
@@ -64,8 +66,9 @@ const Mine = () => {
                 .getRecipes(auth.userId, params, pageNum)
                 .then((res) => {
                     const listRecipe = res.data.data
-                    const { totalPages } = res.data.meta
+                    const { totalPages, from, to, totalCount } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setFromTo({ from, to, totalCount })
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 500)
@@ -93,7 +96,11 @@ const Mine = () => {
                         <SearchBox />
                         <Sort />
                     </Box>
-                    <NumberItemPagination from={1} to={6} all={15} />
+                    <NumberItemPagination
+                        from={fromTo.from}
+                        to={fromTo.to}
+                        all={fromTo.totalCount}
+                    />
                     <Recipes posts={recipes.list} />
                     {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                 </React.Fragment>

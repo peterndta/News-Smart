@@ -157,7 +157,7 @@ export default function StickyHeadTable() {
                                                     </Label>
                                                 </TableCell>
                                                 <TableCell align="right" style={{ width: '5%' }}>
-                                                    <AdminStudentMoreMenu />
+                                                    <AdminStudentMoreMenu userId={row.id} />
                                                 </TableCell>
                                             </TableRow>
                                         )
