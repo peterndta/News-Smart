@@ -5,8 +5,9 @@ namespace reciWebApp.Data.IRepositories
 {
     public interface ICollectionRepository
     {
-        void CreateCollection (Collection collection);
-        Collection GetCollectionByName (string name);
-        Task<Collection> GetCollectionByNameAsync (string name);
+        void CreateCollection(Collection collection);
+        Collection GetCollectionByName(string name);
+        Task<Collection> GetCollectionByNameAsync(string name);
+        Task<Collection> GetCollectionAsync(int id);
     }
 }

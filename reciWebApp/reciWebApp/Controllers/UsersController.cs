@@ -65,12 +65,17 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-                if (currentUser == null)
-                {
-                    return BadRequest(new Response(400, "Invalid user"));
-                }
+                //if (currentUser == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+
+                //if (!currentUser.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 var user = await _repoManager.User.GetUserByIdAsync(id);
                 if (user == null)
@@ -81,12 +86,10 @@ namespace reciWebApp.Controllers
                 var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(id);
                 var ratings = await _repoManager.UserInteract.GetRatingAsync(id);
                 var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
-                var activity = new ActivityDTO
-                {
-                    TotalPosts = posts.Count,
-                    TotalBookmarks = bookmarks.Count,
-                    TotalRatings = ratings.Count,
-                };
+                var activity = _mapper.Map<ActivityDTO>(user);
+                activity.TotalPosts = posts.Count;
+                activity.TotalBookmarks = bookmarks.Count;
+                activity.TotalRatings = ratings.Count;
                 return Ok(new Response(200, activity));
             }
             catch (Exception ex)

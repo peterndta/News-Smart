@@ -33,6 +33,7 @@ namespace reciWebApp.Configs
             CreateMap<User, ShowUserDTO>();
             CreateMap<Collection, ShowCollectionDTO>();
             CreateMap<CreateCollectionDTO, Collection>();
+            CreateMap<User, ActivityDTO>();
         }
     }
 }
