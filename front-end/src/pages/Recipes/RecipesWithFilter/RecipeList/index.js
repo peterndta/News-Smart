@@ -51,14 +51,18 @@ const RecipeList = () => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
-                    setIsLoading(false)
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
                 })
                 .catch(() => {
                     showSnackBar({
                         severity: 'error',
                         children: 'Something went wrong, please try again later.',
                     })
-                    setIsLoading(false)
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
                 })
         } else {
             recipeAction
@@ -67,14 +71,18 @@ const RecipeList = () => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
-                    setIsLoading(false)
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
                 })
                 .catch(() => {
                     showSnackBar({
                         severity: 'error',
                         children: 'Something went wrong, please try again later.',
                     })
-                    setIsLoading(false)
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
                 })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +95,7 @@ const RecipeList = () => {
                 <React.Fragment>
                     <Sort />
                     <Recipes posts={recipes.list} />
-                    <Paging size={recipes.pageCount} />
+                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                 </React.Fragment>
             )}
         </Grid>

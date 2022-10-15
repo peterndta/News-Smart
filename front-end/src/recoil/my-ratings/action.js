@@ -1,7 +1,8 @@
 import { get } from '../../utils/ApiCaller'
 
-const useMyRatings = (params, pageNum = 1) => {
-    const getMyRatingPosts = () => get({ endpoint: `/api/post/rating/page/${pageNum}${params}` })
+const useMyRatings = () => {
+    const getMyRatingPosts = (params, pageNum = 1) =>
+        get({ endpoint: `/api/post/rating/page/${pageNum}${params}` })
 
     return { getMyRatingPosts }
 }

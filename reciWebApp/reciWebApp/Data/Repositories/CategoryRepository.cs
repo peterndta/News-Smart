@@ -54,5 +54,10 @@ namespace reciWebApp.Data.Repositories
         {
             Update(category);
         }
+
+        public Category GetCategoryByName(string name)
+        {
+            return GetByCondition(x => x.Type.Equals(name)).SingleOrDefault();
+        }
     }
 }

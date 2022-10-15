@@ -1,15 +1,9 @@
 import { get } from '../../utils/ApiCaller'
 
 const useMyRecipe = () => {
-    const getRecipes = (search, userid, pageNum, type) =>
+    const getRecipes = (userId, params, pageNum = 1) =>
         get({
-            endpoint: `/api/user/${userid}/post/page/${pageNum}`,
-            params: {
-                pageNumber: pageNum,
-                Name: search,
-                Type: type,
-                PageSize: 6,
-            },
+            endpoint: `/api/user/${userId}/post/page/${pageNum}${params}`,
         })
 
     return {

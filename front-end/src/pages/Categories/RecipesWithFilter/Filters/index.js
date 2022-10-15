@@ -48,7 +48,7 @@ const Filter = () => {
     }
 
     const searchChangeHandler = (event) => {
-        const searchText = event.target.value.trim()
+        const searchText = event.target.value
         setSearchValue(searchText)
         isClearAll.current = false
     }

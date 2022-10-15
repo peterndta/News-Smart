@@ -144,7 +144,7 @@ const Info = () => {
                                         {activity.totalRatings} Recipes
                                     </Typography>
                                     <Typography component="span" sx={{ color: grey[600] }}>
-                                        Total stars rated
+                                        Total posts rated
                                     </Typography>
                                 </Box>
                             </Box>

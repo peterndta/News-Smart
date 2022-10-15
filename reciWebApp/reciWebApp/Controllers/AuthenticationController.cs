@@ -48,7 +48,7 @@ namespace reciWebApp.Controllers
             var userLogin = _serviceManager.AuthService.GetUser(result);
             if (userLogin == null)
             {
-                return Redirect($"https://recipe-sharing.vercel.app?error=invalid");
+                return Redirect($"http://localhost:3000/login?error=invalid");
             }
 
             if (await _repoManager.User.GetUserByEmailAsync(userLogin.Email) == null)
@@ -62,7 +62,7 @@ namespace reciWebApp.Controllers
 
             if (user.BanTime != null)
             {
-                return Redirect($"https://recipe-sharing.vercel.app?error=inactive-user");
+                return Redirect($"http://localhost:3000/login?error=inactive-user");
             }
 
             var accessToken = await _serviceManager.AuthService.GenerateToken(user);
@@ -70,7 +70,7 @@ namespace reciWebApp.Controllers
             {
                 HttpOnly = true
             });
-            return Redirect($"https://recipe-sharing.vercel.app/login?token={accessToken}");
+            return Redirect($"http://localhost:3000/login?token={accessToken}");
         }
 
         [HttpPost]

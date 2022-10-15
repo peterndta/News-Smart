@@ -1,7 +1,7 @@
 import { get } from '../../utils/ApiCaller'
 
-const useMyBookmarks = (params, pageNum = 1) => {
-    const getMyBookmarkPosts = () =>
+const useMyBookmarks = () => {
+    const getMyBookmarkPosts = (params, pageNum = 1) =>
         get({ endpoint: `/api/post/bookmark/page/${pageNum}${params}` })
 
     return { getMyBookmarkPosts }
