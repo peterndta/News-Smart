@@ -50,7 +50,7 @@ const Info = () => {
                                 alt="avatar"
                                 src={auth.image}
                                 sx={{ height: 150, width: 150 }}
-                                variant="square"
+                                variant="circular"
                             />
                             <Box sx={{ ml: 6 }}>
                                 <Typography
@@ -144,7 +144,7 @@ const Info = () => {
                                         {activity.totalRatings} Recipes
                                     </Typography>
                                     <Typography component="span" sx={{ color: grey[600] }}>
-                                        Total stars rated
+                                        Total posts rated
                                     </Typography>
                                 </Box>
                             </Box>

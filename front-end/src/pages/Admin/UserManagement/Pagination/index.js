@@ -8,7 +8,7 @@ import { TablePagination } from '@mui/material'
 const Paging = ({ lengthRow }) => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { search, sort, pageNum } = queryString.parse(query)
+    const { name, status, pageNum } = queryString.parse(query)
     const [page, setPage] = useState(pageNum ? pageNum - 1 : 0)
     const rowsPerPage = 5
 
@@ -18,9 +18,9 @@ const Paging = ({ lengthRow }) => {
 
     const filterHandler = () => {
         let route = pathname + '?'
-        if (search && search.trim() !== '') route += '&search=' + search
+        if (name && name.trim() !== '') route += '&name=' + name
 
-        if (sort) route += `&sort=${sort}`
+        if (status !== undefined) route += `&status=${status}`
 
         if (page !== 0) route += `&pageNum=${page + 1}`
 

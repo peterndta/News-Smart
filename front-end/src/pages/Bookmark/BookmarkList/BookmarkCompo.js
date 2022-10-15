@@ -16,7 +16,7 @@ const BookmarkCompo = ({ name, description, averageRating, imageUrl, id }) => {
                         component="img"
                         width={120}
                         height={120}
-                        sx={{ aspectRatio: '1 / 1' }}
+                        sx={{ aspectRatio: '1 / 1', cursor: 'pointer' }}
                         src={imageUrl}
                         onClick={() => history.push(`/recipes/${id}`)}
                     />
