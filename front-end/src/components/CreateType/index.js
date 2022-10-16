@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil'
 import {
     Box,
     Button,
+    capitalize,
     Dialog,
     DialogActions,
     DialogContent,
@@ -53,9 +54,12 @@ const CreateType = ({ status, onClose }) => {
 
     const submitHandler = (event, value) => {
         if (value.trim().length === 0 || event.key !== 'Enter') return
+
+        const transferValue = capitalize(value)
+
         if (type === 'Category')
             categoryAction
-                .createCategory(value)
+                .createCategory(transferValue)
                 .then(() => {
                     showSnackBar({
                         severity: 'success',
@@ -79,7 +83,7 @@ const CreateType = ({ status, onClose }) => {
                 })
         else if (type === 'Method')
             methodAction
-                .createMethod(value)
+                .createMethod(transferValue)
                 .then(() => {
                     showSnackBar({
                         severity: 'success',
@@ -103,7 +107,7 @@ const CreateType = ({ status, onClose }) => {
                 })
         else if (type === 'Use')
             useAction
-                .createUses(value)
+                .createUses(transferValue)
                 .then(() => {
                     showSnackBar({
                         severity: 'success',
