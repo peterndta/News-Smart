@@ -57,7 +57,7 @@ const CollectionTab = () => {
                     </FormControl>
                 </Box>
 
-                <Box width="100%" display="flex" justifyContent="center" mt={6}>
+                <Box width="100%" display="flex" justifyContent="center" mt={3}>
                     <Button variant="contained" sx={{ color: grey[100] }}>
                         ADD TO COLLECTION
                     </Button>

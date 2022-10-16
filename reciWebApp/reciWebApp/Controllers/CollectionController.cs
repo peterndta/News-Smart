@@ -63,5 +63,25 @@ namespace reciWebApp.Controllers
                 return BadRequest (new Response (400, e.Message));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateCollection()
+        { 
+            try
+            {
+                var collections = await _repoManager.Collection.GetCollectionsAsync();
+                if (collections == null)
+                {
+                    collections = new List<Collection>();
+                }
+
+                var result = _mapper.Map<List<ShowCollectionDTO>>(collections);
+                return Ok(new Response(200, result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(400, ex.Message));
+            }
+        }
     }
 }

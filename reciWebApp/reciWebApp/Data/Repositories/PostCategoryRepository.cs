@@ -22,16 +22,15 @@ namespace reciWebApp.Data.Repositories
         public List<PostCategory?> GetPostCategoriesByCategory(List<Category?> categories)
         {
             var postCategories = GetAllPostCategories();
-            List<PostCategory> result = new List<PostCategory>();
+            var result = new List<PostCategory>();
             if (postCategories.Any() && categories.Count > 0)
             {
                 foreach (var category in categories)
                 {
                     result.AddRange(postCategories.Where(x => x.CategoryId == category.Id).ToList());
                 }
-                return result;
             }
-            return postCategories;
+            return result;
         }
 
         public List<PostCategory?> GetAllPostCategories()

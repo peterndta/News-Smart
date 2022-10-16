@@ -55,6 +55,10 @@ namespace reciWebApp.Data.Repositories
             {
                 posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
             }
+            if (postParams.PostsByCollections != null)
+            {
+                posts = (posts.Intersect(postParams.PostsByCollections)).ToList();
+            }
             if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
             {
                 posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
@@ -86,17 +90,16 @@ namespace reciWebApp.Data.Repositories
         public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && postCategories.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 postCategories.DistinctBy(x => x.PostId);
                 foreach (var postCategory in postCategories)
                 {
                     result.Add(GetPostById(postCategory.PostId));
-                }
-                return result.DistinctBy(x => x.Id).ToList();
+                }              
             }
-            return posts;
+            return result;
         }
 
         public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
@@ -174,6 +177,20 @@ namespace reciWebApp.Data.Repositories
                 result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
             }
             return result;
+        }
+
+        public List<Post>? GetPostsByFoodCollections(List<FoodCollection> foodCollections)
+        {
+            var posts = new List<Post>();
+            if (foodCollections.Count > 0)
+            {
+                foodCollections = foodCollections.DistinctBy(x => x.PostsId).ToList();
+                foreach (var foodCollection in foodCollections)
+                {
+                    posts.Add(GetByCondition(x => x.Id.Equals(foodCollection.PostsId)).FirstOrDefault());
+                }
+            }
+            return posts;
         }
     }
 }

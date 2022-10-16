@@ -34,24 +34,24 @@ const SearchBox = () => {
     return (
         <Box
             sx={{
+                p: 0.5,
                 display: 'flex',
                 alignItems: 'center',
-                width: 380,
+                width: 400,
                 border: `1px solid ${blueGrey[200]}`,
                 borderRadius: 0.5,
             }}
         >
+            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <Search />
+            </IconButton>
             <InputBase
-                sx={{ ml: 3, flex: 1 }}
+                sx={{ ml: 1, flex: 1 }}
                 placeholder="Search recipe name"
                 inputProps={{ 'aria-label': 'search recipe name' }}
                 onChange={searchChangeHandler}
                 onKeyDown={searchSubmitHandler}
-                value={searchValue}
             />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                <Search />
-            </IconButton>
         </Box>
     )
 }

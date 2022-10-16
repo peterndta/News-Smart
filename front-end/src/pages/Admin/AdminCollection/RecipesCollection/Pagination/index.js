@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Box, Pagination } from '@mui/material'
+import { Pagination } from '@mui/material'
 
 const Paging = ({ size }) => {
     const history = useHistory()
@@ -30,15 +30,13 @@ const Paging = ({ size }) => {
     }, [pageNumber])
 
     return (
-        <Box display="flex" justifyContent="center" mt={4}>
-            <Pagination
-                count={size}
-                variant="outlined"
-                sx={{ alignSelf: 'center', mt: 6 }}
-                onChange={pagingHandler}
-                page={pageNumber}
-            />
-        </Box>
+        <Pagination
+            count={size}
+            variant="outlined"
+            sx={{ alignSelf: 'center', mt: 6 }}
+            onChange={pagingHandler}
+            page={pageNumber}
+        />
     )
 }
 
