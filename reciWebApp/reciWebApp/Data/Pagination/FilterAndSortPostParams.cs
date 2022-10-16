@@ -1,8 +1,6 @@
-﻿using reciWebApp.Data.Pagination;
-
-namespace reciWebApp.DTOs.PostDTOs
+﻿namespace reciWebApp.Data.Pagination
 {
-    public class FilterAndSortPostDTO : PaginationParams
+    public class FilterAndSortPostParams : PaginationParams
     {
         public string? Search { get; set; }
         public List<string>? Method { get; set; }

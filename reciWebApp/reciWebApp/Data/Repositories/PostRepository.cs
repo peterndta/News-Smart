@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
@@ -29,12 +30,12 @@ namespace reciWebApp.Data.Repositories
             Update(post);
         }
 
-        public Post GetPostById(string id)
+        public Post? GetPostById(string id)
         {
             return GetByCondition(x => x.Id.Equals(id)).FirstOrDefault();
         }
 
-        public async Task<Post> GetPostByIdAsync(string id)
+        public async Task<Post?> GetPostByIdAsync(string id)
         {
             return await GetByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
         }
@@ -188,6 +189,64 @@ namespace reciWebApp.Data.Repositories
                 }
             }
             return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByMethodsAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsByCookingMethods != null)
+            {
+                posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
+            }
+
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByCategoriesAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsByCategories != null)
+            {
+                posts = posts.Intersect(postParams.PostsByCategories).ToList();
+            }
+
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByUsesAndRegionsAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
+            {
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
+                posts = posts.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
+            }
+            else if (postParams.PostsRecipeRegions != null && postParams.PostsByUses == null)
+            {
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
+            }
+            else if (postParams.PostsRecipeRegions == null && postParams.PostsByUses != null)
+            {
+                posts = posts.Intersect(postParams.PostsByUses).ToList();
+            }
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostOfAllCollectionsAsync()
+        {
+            return await GetAll().ToListAsync();
         }
     }
 }
