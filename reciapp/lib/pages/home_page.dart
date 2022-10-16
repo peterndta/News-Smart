@@ -46,11 +46,11 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
-    getUserInfo.userID = UserPreferences.getUserID();
+    //getUserInfo.userID = UserPreferences.getUserID();
     // getUserInfo.imageURL = UserPreferences.getImageURL();
     // getUserInfo.mail = UserPreferences.getMail();
     // getUserInfo.name = UserPreferences.getUsername();
-    // getUserInfo.token = UserPreferences.getToken();
+    getUserInfo.token = UserPreferences.getToken();
     // getUserInfo.role = UserPreferences.getRole();
     super.initState();
   }
@@ -58,9 +58,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    print(
-        'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
-
+    //print(
+    //    'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
+    print('token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(

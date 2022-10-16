@@ -60,12 +60,12 @@ class _LoginPageState extends State<LoginPage> {
         //     decodedToken['name'],
         //     decodedToken['email'],
         //     decodedToken['role']);
-        await UserPreferences.setUserID(decodedToken['userId']);
+        //await UserPreferences.setUserID(decodedToken['userId']);
         // await UserPreferences.setImageURL(decodedToken['image']);
         // await UserPreferences.setUsername(decodedToken['name']);
         // await UserPreferences.setMail(decodedToken['email']);
         // await UserPreferences.setRole(decodedToken['role']);
-        // await UserPreferences.setToken(json.decode(responseString)['data']);
+         await UserPreferences.setToken(json.decode(responseString)['data']);
 
         print(getUserInfo.token);
         print(getUserInfo.role);

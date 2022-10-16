@@ -33,13 +33,13 @@ class UserPreferences {
   // static String getRole() => _preferences.getString(_keyUserRole) as String;
   // static String getMail() => _preferences.getString(_keyUserMail) as String;
 
-  static Future setUserID(String userID) async =>
-      await _preferences.setString(_keyUserID, userID);
-  static String getUserID() => _preferences.getString(_keyUserID) as String;
+  // static Future setUserID(String userID) async =>
+  //     await _preferences.setString(_keyUserID, userID);
+  // static String getUserID() => _preferences.getString(_keyUserID) as String;
 
-  // static Future setToken(String token) async =>
-  //     await _preferences.setString(_keyUserToken, token);
-  // static String getToken() => _preferences.getString(_keyUserToken) as String;
+  static Future setToken(String token) async =>
+      await _preferences.setString(_keyUserToken, token);
+  static String getToken() => _preferences.getString(_keyUserToken) as String;
 
   // static Future setImageURL(String imageurl) async =>
   //     await _preferences.setString(_keyUserImageURL, imageurl);
