@@ -28,21 +28,21 @@ namespace reciWebApp.Controllers
 
         [Route("~/api/admin/collection")]
         [HttpPost]
-        public async Task<IActionResult> CreateCollection(int id, [FromBody] CreateCollectionDTO collectionDTO)
+        public async Task<IActionResult> CreateCollection([FromBody] CreateCollectionDTO collectionDTO)
         {
             try
             {
-                var user = await _repoManager.User.GetUserByIdAsync(id);
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
 
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 var createCollection = _mapper.Map<Collection>(collectionDTO);
 
