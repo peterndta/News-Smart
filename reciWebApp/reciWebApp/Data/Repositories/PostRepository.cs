@@ -55,6 +55,10 @@ namespace reciWebApp.Data.Repositories
             {
                 posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
             }
+            if (postParams.PostsByCollections != null)
+            {
+                posts = (posts.Intersect(postParams.PostsByCollections)).ToList();
+            }
             if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
             {
                 posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
@@ -174,6 +178,20 @@ namespace reciWebApp.Data.Repositories
                 result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
             }
             return result;
+        }
+
+        public List<Post>? GetPostsByFoodCollections(List<FoodCollection> foodCollections)
+        {
+            var posts = new List<Post>();
+            if (foodCollections.Count > 0)
+            {
+                foodCollections = foodCollections.DistinctBy(x => x.PostsId).ToList();
+                foreach (var foodCollection in foodCollections)
+                {
+                    posts.Add(GetByCondition(x => x.Id.Equals(foodCollection.PostsId)).FirstOrDefault());
+                }
+            }
+            return posts;
         }
     }
 }

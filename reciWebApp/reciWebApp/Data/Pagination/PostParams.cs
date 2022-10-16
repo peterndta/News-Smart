@@ -10,5 +10,6 @@ namespace reciWebApp.Data.Pagination
         public string? Type { get; set; }
         public List<Post?> PostsByCategories { get; set; }
         public List<Post?> PostsByUses { get; set; }
+        public List<Post?> PostsByCollections { get; set; }
     }
 }

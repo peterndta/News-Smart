@@ -9,5 +9,6 @@ namespace reciWebApp.Data.IRepositories
         Collection GetCollectionByName(string name);
         Task<Collection> GetCollectionByNameAsync(string name);
         Task<Collection> GetCollectionAsync(int id);
+        List<Collection?> GetCollectionsByNames(List<string?> names);
     }
 }

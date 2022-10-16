@@ -8,5 +8,6 @@ namespace reciWebApp.Data.IRepositories
         List<Use?> GetUsesByName(List<string?> names);
         Use GetUsesByNameSingle(string name);
         void CreateUse(Use use);
+        Use GetUsesById(int id);
     }
 }

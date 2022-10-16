@@ -10,5 +10,6 @@ namespace reciWebApp.DTOs.PostDTOs
         public string? Sort { get; set; }
         public List<string>? Category { get; set; }
         public List<string>? Uses { get; set; }
+        public List<string>? Collection { get; set; }
     }
 }

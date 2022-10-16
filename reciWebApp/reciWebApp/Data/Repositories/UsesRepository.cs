@@ -39,5 +39,10 @@ namespace reciWebApp.Data.Repositories
         {
             Create(use);
         }
+
+        public Use GetUsesById(int id)
+        {
+            return GetByCondition(x => x.Id == id).FirstOrDefault();
+        }
     }
 }
