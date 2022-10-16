@@ -27,7 +27,7 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -69,7 +69,7 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1,
       child: ListView.builder(
