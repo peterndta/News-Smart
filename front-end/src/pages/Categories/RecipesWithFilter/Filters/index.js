@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -22,10 +22,11 @@ import CategoriesFilter from './CategoriesFilter'
 const Filter = () => {
     const categoryList = useRecoilValue(categoryAtom)
     const { search: query, pathname } = useLocation()
-    const { search, category, time, status } = queryString.parse(query)
-    const history = useHistory('')
+    const { search, category, sort, pageNum } = queryString.parse(query)
+    const history = useHistory()
     const [categories, setCategories] = useState(category ? category : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
+    const isClearAll = useRef(false)
 
     const selectHandler = (value) => () => {
         const newCategories = [...categories]
@@ -37,16 +38,19 @@ const Filter = () => {
         }
 
         setCategories(newCategories)
+        isClearAll.current = false
     }
 
     const clearAllHandler = () => {
         setSearchValue('')
         setCategories([])
+        isClearAll.current = true
     }
 
     const searchChangeHandler = (event) => {
-        const searchText = event.target.value.trim()
+        const searchText = event.target.value
         setSearchValue(searchText)
+        isClearAll.current = false
     }
 
     const searchSubmitHandler = () => {
@@ -56,12 +60,18 @@ const Filter = () => {
         if (categories.length !== 0)
             categories.forEach((category) => (route += `&category=${category}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }
+
+    useEffect(() => {
+        if (isClearAll.current === true) searchSubmitHandler()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClearAll.current === false])
 
     return (
         <Grid item md={3}>

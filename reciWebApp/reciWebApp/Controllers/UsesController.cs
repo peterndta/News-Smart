@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
+using reciWebApp.Data.Models;
 using reciWebApp.DTOs.CategoryDTOs;
+using reciWebApp.DTOs.CollectionDTOs;
 using reciWebApp.DTOs.UseDTOs;
 using reciWebApp.Services.Utils;
 
@@ -40,6 +42,44 @@ namespace reciWebApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [Route("~/api/admin/use")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUse([FromBody] CreateUseDTO useDTO)
+        {
+            try
+            {
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
+
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
+
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
+
+                var createUse = _mapper.Map<Use>(useDTO);
+
+                Use dbUse = _repoManager.Use.GetUsesByNameSingle(useDTO.UsesOfFood);
+                if (dbUse != null)
+                {
+                    return BadRequest(new Response(400, "This use of food has already existed"));
+                }
+
+                _repoManager.Use.CreateUse(createUse);
+                await _repoManager.SaveChangesAsync();
+
+                var returnCollection = _mapper.Map<ShowUseDTO>(createUse);
+                return Ok(new Response(200, returnCollection));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new Response(400, e.Message));
             }
         }
     }

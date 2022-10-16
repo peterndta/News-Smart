@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil'
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import { ThemeProvider, useTheme } from '@mui/material/styles'
 
-import { useSnackbar } from '../HOCs/SnackbarContext'
+import SnackbarProvider from '../HOCs/SnackbarContext'
 import { useAuthAction } from '../recoil/auth'
 import categoryAtom, { useCategoryAction } from '../recoil/categories'
 import continentAtom, { useContinentsAction } from '../recoil/continents'
@@ -26,7 +26,6 @@ function App() {
     const setCategories = useSetRecoilState(categoryAtom)
     const setContinents = useSetRecoilState(continentAtom)
     const setUses = useSetRecoilState(usesAtom)
-    const showSnackBar = useSnackbar()
 
     useEffect(() => {
         methodAction
@@ -90,25 +89,27 @@ function App() {
 
     return (
         <ThemeProvider theme={Theme}>
-            {matches ? (
-                <BrowserRouter>{Routes}</BrowserRouter>
-            ) : (
-                <Box
-                    display="flex"
-                    height="100vh"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    m={3}
-                >
-                    <Typography variant="body1" textAlign="center" color="primary">
-                        This application does not support small view,
-                    </Typography>
-                    <Typography variant="body1" textAlign="center" color="secondary">
-                        Please use Desktop view to have the best experience!
-                    </Typography>
-                </Box>
-            )}
+            <SnackbarProvider>
+                {matches ? (
+                    <BrowserRouter>{Routes}</BrowserRouter>
+                ) : (
+                    <Box
+                        display="flex"
+                        height="100vh"
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        m={3}
+                    >
+                        <Typography variant="body1" textAlign="center" color="primary">
+                            This application does not support small view,
+                        </Typography>
+                        <Typography variant="body1" textAlign="center" color="secondary">
+                            Please use Desktop view to have the best experience!
+                        </Typography>
+                    </Box>
+                )}
+            </SnackbarProvider>
         </ThemeProvider>
     )
 }

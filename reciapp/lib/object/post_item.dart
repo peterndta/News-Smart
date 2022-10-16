@@ -29,26 +29,7 @@ class PostItem {
     required this.serving,
   });
 
-  PostItem.sendData({
-    required this.name,
-    required this.cookingMethodId,
-    required this.recipeRegionId,
-    required this.imageUrl,
-    required this.videoUrl,
-    required this.usesId,
-    required this.description,
-    required this.categoriesId,
-    required this.ingredient,
-    required this.processing,
-    required this.cooking,
-    required this.tool,
-    required this.processingTime,
-    required this.cookingTime,
-    required this.preparingTime,
-    required this.serving,
-  });
-
-  late int id;
+  int id;
   String name;
   int cookingMethodId;
   int recipeRegionId;
@@ -87,6 +68,7 @@ class PostItem {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "cookingMethodId": cookingMethodId,
         "recipeRegionId": recipeRegionId,

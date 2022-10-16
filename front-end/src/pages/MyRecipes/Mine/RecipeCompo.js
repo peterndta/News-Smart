@@ -1,10 +1,14 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 import { Delete, Edit } from '@mui/icons-material'
 import { Box, Grid, IconButton, Rating, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, description, rating, image }) => {
+const RecipeCompo = ({ name, description, averageRating, imageUrl, id }) => {
+    const history = useHistory()
+
     return (
         <Grid item md={12} mt={1}>
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -13,8 +17,9 @@ const RecipeCompo = ({ name, description, rating, image }) => {
                         component="img"
                         width={120}
                         height={120}
-                        sx={{ aspectRatio: '1 / 1' }}
-                        src={image}
+                        sx={{ aspectRatio: '1 / 1', cursor: 'pointer' }}
+                        src={imageUrl}
+                        onClick={() => history.push(`/recipes/${id}`)}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -22,17 +27,17 @@ const RecipeCompo = ({ name, description, rating, image }) => {
                                 {name}
                             </Typography>
                             <Box>
-                                <IconButton>
-                                    <Edit color="primary" />
+                                <IconButton component="label" size="large">
+                                    <Edit color="warning" />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton component="label" size="large">
                                     <Delete />
                                 </IconButton>
                             </Box>
                         </Box>
                         <Rating
                             name="half-rating"
-                            value={rating}
+                            value={averageRating}
                             precision={0.5}
                             sx={{ mt: 1 }}
                             readOnly

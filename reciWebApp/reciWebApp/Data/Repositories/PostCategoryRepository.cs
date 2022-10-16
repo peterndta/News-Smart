@@ -18,5 +18,25 @@ namespace reciWebApp.Data.Repositories
         {
             return GetByCondition(x => x.PostId.Equals(id)).ToList();
         }
+
+        public List<PostCategory?> GetPostCategoriesByCategory(List<Category?> categories)
+        {
+            var postCategories = GetAllPostCategories();
+            List<PostCategory> result = new List<PostCategory>();
+            if (postCategories.Any() && categories.Count > 0)
+            {
+                foreach (var category in categories)
+                {
+                    result.AddRange(postCategories.Where(x => x.CategoryId == category.Id).ToList());
+                }
+                return result;
+            }
+            return postCategories;
+        }
+
+        public List<PostCategory?> GetAllPostCategories()
+        {
+            return GetAll().ToList();
+        }
     }
 }

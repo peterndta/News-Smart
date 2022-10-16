@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -22,10 +22,11 @@ import MethodsFilter from './MethodsFilter'
 const Filter = () => {
     const methodList = useRecoilValue(methodsAtom)
     const { search: query, pathname } = useLocation()
-    const { search, method, time, status } = queryString.parse(query)
+    const { search, method, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [methods, setMethods] = useState(method ? method : [])
     const [searchValue, setSearchValue] = useState(search ? search : '')
+    const isClearAll = useRef(false)
 
     const selectHandler = (value) => () => {
         const newMethods = [...methods]
@@ -37,16 +38,19 @@ const Filter = () => {
         }
 
         setMethods(newMethods)
+        isClearAll.current = false
     }
 
     const clearAllHandler = () => {
         setSearchValue('')
         setMethods([])
+        isClearAll.current = true
     }
 
     const searchChangeHandler = (event) => {
-        const searchText = event.target.value.trim()
+        const searchText = event.target.value
         setSearchValue(searchText)
+        isClearAll.current = false
     }
 
     const searchSubmitHandler = () => {
@@ -55,12 +59,18 @@ const Filter = () => {
 
         if (methods.length !== 0) methods.forEach((method) => (route += `&method=${method}`))
 
-        if (time) route += `&time=${time}`
+        if (sort) route += `&sort=${sort}`
 
-        if (status) route += `&status=${status}`
+        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }
+
+    useEffect(() => {
+        if (isClearAll.current === true) searchSubmitHandler()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isClearAll.current === false])
 
     return (
         <Grid item md={3}>

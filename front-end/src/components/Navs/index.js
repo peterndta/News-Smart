@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { NavLink } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 // import { NavLink } from 'react-router-dom'
 import { AccountCircle, Bookmark, Description, StarRateOutlined } from '@mui/icons-material'
@@ -17,9 +18,12 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-import BTH from '../../assets/members/BTH.jpg'
+import authAtom from '../../recoil/auth/atom'
+
+// import BTH from '../../assets/members/BTH.jpg'
 
 const Navs = () => {
+    const auth = useRecoilValue(authAtom)
     return (
         <Box
             sx={{
@@ -41,13 +45,13 @@ const Navs = () => {
                 py={1}
                 sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}
             >
-                <Avatar variant="square" src={BTH} sx={{ width: 40, height: 40 }} />
+                <Avatar variant="circular" src={auth.image} sx={{ width: 40, height: 40 }} />
                 <Box display="flex" flexDirection="column" ml={1.5}>
                     <Typography component="span" fontWeight={700} sx={{ color: blueGrey[900] }}>
                         Hi,
                     </Typography>
                     <Typography component="span" fontWeight={700} sx={{ color: blueGrey[900] }}>
-                        Hienbui25g@gmail.com
+                        {auth.name}
                     </Typography>
                 </Box>
             </Box>

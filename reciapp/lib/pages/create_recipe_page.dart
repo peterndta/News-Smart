@@ -1,5 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
-import 'dart:ffi';
+// ignore_for_file: depend_on_referenced_packages, unnecessary_this
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +8,26 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:reciapp/components/copyright.dart';
 import 'package:reciapp/components/dropdown_button.dart';
+import 'package:reciapp/components/textbox_form.dart';
+import 'package:reciapp/object/post_send_item.dart';
 import '../components/dropdown_multiple_choice_button.dart';
+import '../components/head_bar.dart';
+import '../components/sidebar_menu.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
+import 'package:http/http.dart' as http;
 
 class SelectedItem {
   dynamic data;
 
-  SelectedItem(this.data);
+  SelectedItem({this.data});
+
+  @override
+  String toString() {
+    return data ?? '';
+  }
 }
 
 class CreateRecipePage extends StatefulWidget {
@@ -48,6 +57,7 @@ class CreateRecipePage extends StatefulWidget {
 
 class _CreateRecipePageState extends State<CreateRecipePage> {
   File? image;
+  String? imageURL;
   UploadTask? uploadTask;
   bool checkImage = true;
   TextEditingController title = TextEditingController();
@@ -58,6 +68,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   TextEditingController cooking = TextEditingController();
   TextEditingController linkVideo = TextEditingController();
   Future getAllData() async {
+    selectedServe = serving[0];
+    selectedTimeCooking = times[0];
+    selectedTimePreparing = times[0];
+    selectedTimeProcessing = times[0];
     var categories = await fetchCategories();
     var methods = await fetchMethods();
     var uses = await fetchUses();
@@ -67,6 +81,9 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       this.methods = methods;
       this.uses = uses;
       this.regions = regions;
+      this.selectedMethod = this.methods[0];
+      this.selectedRegion = this.regions[0];
+      this.selectedUse = this.uses[0];
     });
   }
 
@@ -95,11 +112,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   RegionItem? selectedRegion;
 
   final List<int> serving = [2, 4, 6, 8, 10];
-  SelectedItem? selectedServe;
-  final List<int> times = [10, 20, 30, 40, 60, 80, 100, 120, 140, 160, 180];
-  SelectedItem? selectedTimeCooking;
-  SelectedItem? selectedTimeProcessing;
-  SelectedItem? selectedTimePreparing;
+  int? selectedServe;
+  List<int> times = [10, 20, 30, 40, 60, 80, 100, 120, 140, 160, 180];
+  int? selectedTimeCooking;
+  int? selectedTimeProcessing;
+  int? selectedTimePreparing;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -125,22 +142,48 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   }
 
   Future<String> uploadFile() async {
-    final pathUpload = 'images/${image!.path}';
+    final pathUpload = 'images${image!.path}';
     final ref = FirebaseStorage.instance.ref().child(pathUpload);
-
     uploadTask = ref.putFile(image!);
     final snapshot = await uploadTask!.whenComplete(() {});
-
     final imageUrl = await snapshot.ref.getDownloadURL();
-    print(imageUrl);
+    // print('url:'+imageUrl);
+    setState(() {
+      imageURL = imageUrl;
+    });
+    print('url:' + imageURL!);
     return imageUrl;
+  }
+
+  Future postRecipe() async {
+    await uploadFile();
+    PostSendItem post = PostSendItem(
+        name: title.text,
+        cookingMethodId: selectedMethod!.id,
+        recipeRegionId: selectedRegion!.id,
+        imageUrl: imageURL.toString(),
+        videoUrl: linkVideo.text,
+        usesId: selectedUse!.id,
+        description: description.text,
+        categoriesId: selectedCategorys.map((e) => e.id).toList(),
+        ingredient: ingredients.text,
+        processing: processing.text,
+        cooking: cooking.text,
+        tool: tools.text,
+        processingTime: selectedTimeProcessing!.toInt(),
+        cookingTime: selectedTimeCooking!.toInt(),
+        preparingTime: selectedTimePreparing!.toInt(),
+        serving: selectedServe!.toInt());
+    submitData(post);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CreateRecipePage'),
+      drawer: SideBarMenu(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: HeadBar(),
       ),
       body: Form(
         key: _formKey,
@@ -160,73 +203,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         color: Colors.orange),
                   ),
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter name of dish'
-                          : null;
-                    },
-                    controller: title,
-                    decoration: const InputDecoration(
-                      hintText: 'Name of dish',
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Title',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter description of dish'
-                          : null;
-                    },
-                    maxLines: 7,
-                    controller: description,
-                    decoration: const InputDecoration(
-                      hintText: 'Description of dish',
-                      alignLabelWithHint: true,
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Description',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(text: 'Description', controller: description),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
@@ -331,7 +312,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   ),
                 ),
                 DropdownOneChoiceButton(
-                    text: 'Time Preparing',
+                    text: 'Time Preparing (minutes)',
                     datas: times,
                     data: selectedTimePreparing,
                     sizeText: 15,
@@ -339,75 +320,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter tool of dish'
-                          : null;
-                    },
-                    maxLines: 5,
-                    controller: tools,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter Tool Needed',
-                      alignLabelWithHint: true,
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Tool Needed',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(text: 'Tool Needed', controller: tools),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter ingredient of dish'
-                          : null;
-                    },
-                    maxLines: 5,
-                    controller: ingredients,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter Ingredients Needed',
-                      alignLabelWithHint: true,
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Ingredients Needed',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(
+                    text: 'Ingredients Needed', controller: ingredients),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.006,
                 ),
@@ -436,7 +354,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   ),
                 ),
                 DropdownOneChoiceButton(
-                    text: 'Time Processing',
+                    text: 'Time Processing (minutes)',
                     datas: times,
                     data: selectedTimeProcessing,
                     sizeText: 15,
@@ -444,39 +362,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter details'
-                          : null;
-                    },
-                    maxLines: 5,
-                    controller: processing,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter Details',
-                      alignLabelWithHint: true,
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Details',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(text: 'Details', controller: processing),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.006,
                 ),
@@ -505,7 +391,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   ),
                 ),
                 DropdownOneChoiceButton(
-                    text: 'Time Cooking',
+                    text: 'Time Cooking (minutes)',
                     datas: times,
                     data: selectedTimeCooking,
                     sizeText: 15,
@@ -513,39 +399,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                TextFormField(
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter details'
-                          : null;
-                    },
-                    maxLines: 5,
-                    controller: cooking,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter Details',
-                      alignLabelWithHint: true,
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Details',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                TextBoxForm(text: 'Details', controller: cooking),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
@@ -598,14 +452,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
+                      postRecipe();
                     }
-                    for (var item in selectedCategorys) {
-                      print(item.id);
-                    }
-                    print(selectedTimeCooking?.data);
-                    print(selectedRegion);
-                    // final url = uploadFile();
-                    // print(url);
                   },
                 ),
                 SizedBox(

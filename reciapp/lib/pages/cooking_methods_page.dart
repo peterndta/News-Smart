@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_cooking_methods.dart';
+import 'package:reciapp/components/infinite_scroll.dart';
 
 import '../components/filter_new_old_popular.dart';
 import '../components/sidebar_menu.dart';
@@ -71,7 +72,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.55,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.black, width: 0.5)),
@@ -96,8 +97,8 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: FoodList(),
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: InfiniteScroll(),
             ),
           ],
         ),

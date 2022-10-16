@@ -2,11 +2,13 @@
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs;
 using reciWebApp.DTOs.CategoryDTOs;
+using reciWebApp.DTOs.CollectionDTOs;
 using reciWebApp.DTOs.CookingMethodDTOs;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.RecipeRegionDTOs;
 using reciWebApp.DTOs.StepDTOs;
 using reciWebApp.DTOs.UseDTOs;
+using reciWebApp.DTOs.UserDTOs;
 
 namespace reciWebApp.Configs
 {
@@ -26,6 +28,15 @@ namespace reciWebApp.Configs
             CreateMap<CookingMethod, ShowCookingMethodDTO>();
             CreateMap<RecipeRegion, ShowRecipeRegionDTO>();
             CreateMap<CreatePostDTO, Step>();
+            CreateMap<Use, ShowUseDTO>();
+            CreateMap<ShowPostDTO, ShowDetailPostDTO>();
+            CreateMap<User, ShowUserDTO>();
+            CreateMap<Collection, ShowCollectionDTO>();
+            CreateMap<CreateCollectionDTO, Collection>();
+            CreateMap<CreateCategoryDTO, Category>();
+            CreateMap<CreateCookingMethodDTO, CookingMethod>();
+            CreateMap<User, ActivityDTO>();
+            CreateMap<CreateUseDTO, Use>();
             CreateMap<Use, ShowUseDTO>();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using reciWebApp.Data.Models;
+using reciWebApp.DTOs.UserDTOs;
 
 namespace reciWebApp.Data.IRepositories
 {
@@ -9,5 +10,9 @@ namespace reciWebApp.Data.IRepositories
         void CreateUser(User user);
         User GetUserById(int id);
         User GetUserByEmail(string email);
+        List<User> GetAllUser();
+        Task <List<User>> SearchUserAsync (string search);
+        List<User> SearchUser (string search);
+        Task<List<User>?> GetAllUserAsync(UserParams userParams);
     }
 }

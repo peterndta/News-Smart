@@ -1,69 +1,110 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import queryString from 'query-string'
+import { useLocation } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 import NumberItemPagination from '../../../components/NumberItemPagination'
-import { Search } from '@mui/icons-material'
-import {
-    Box,
-    FormControl,
-    IconButton,
-    InputBase,
-    InputLabel,
-    MenuItem,
-    Pagination,
-    Select,
-} from '@mui/material'
-import { blueGrey } from '@mui/material/colors'
+import { Box } from '@mui/material'
 
-import { MOST_FAVORITE_POSTS } from '../../../Elixir'
+import { useSnackbar } from '../../../HOCs/SnackbarContext'
+import authAtom from '../../../recoil/auth/atom'
+import useMyRecipe from '../../../recoil/my-recipe/action'
+import Loading from '../../Loading'
+import Paging from './Pagination'
 import Recipes from './Recipes'
+import SearchBox from './Search'
+import Sort from './Sort'
+
+const filterStringGenerator = ({ search, sort }) => {
+    let filterString = `?PageSize=${6}`
+
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (sort !== undefined) filterString += `&sort=${sort}`
+
+    return filterString
+}
 
 const Mine = () => {
-    const [type, setType] = React.useState('')
+    const { search: query } = useLocation()
+    const { search, sort, pageNum } = queryString.parse(query)
+    const auth = useRecoilValue(authAtom)
+    const myRecipesAction = useMyRecipe()
+    const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
+    const showSnackBar = useSnackbar()
+    const [isLoading, setIsLoading] = useState(false)
+    const [fromTo, setFromTo] = useState({ from: 1, to: 1, totalCount: 1 })
 
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
+    useEffect(() => {
+        const params = filterStringGenerator({ search, sort })
+        setIsLoading(true)
+
+        if (pageNum === undefined) {
+            myRecipesAction
+                .getRecipes(auth.userId, params)
+                .then((res) => {
+                    const listRecipe = res.data.data
+                    const { totalPages, from, to, totalCount } = res.data.meta
+                    setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setFromTo({ from, to, totalCount })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+        } else {
+            myRecipesAction
+                .getRecipes(auth.userId, params, pageNum)
+                .then((res) => {
+                    const listRecipe = res.data.data
+                    const { totalPages, from, to, totalCount } = res.data.meta
+                    setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setFromTo({ from, to, totalCount })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search, sort, pageNum])
+
     return (
         <React.Fragment>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Box
-                    component="form"
-                    sx={{
-                        p: 0.5,
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: 400,
-                        border: `1px solid ${blueGrey[200]}`,
-                        borderRadius: 0.5,
-                    }}
-                >
-                    <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                        <Search />
-                    </IconButton>
-                    <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Search recipe name"
-                        inputProps={{ 'aria-label': 'search recipe name' }}
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <React.Fragment>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <SearchBox />
+                        <Sort />
+                    </Box>
+                    <NumberItemPagination
+                        from={fromTo.from}
+                        to={fromTo.to}
+                        all={fromTo.totalCount}
                     />
-                </Box>
-                <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="medium">
-                    <InputLabel id="demo-select-small">Type</InputLabel>
-                    <Select
-                        labelId="demo-select-small"
-                        id="demo-select-small"
-                        value={type}
-                        label="Type"
-                        onChange={handleChange}
-                    >
-                        <MenuItem value={'popularity'}>Popularity</MenuItem>
-                        <MenuItem value={'newest'}>Newest</MenuItem>
-                        <MenuItem value={'oldest'}>Oldest</MenuItem>
-                    </Select>
-                </FormControl>
-            </Box>
-            <NumberItemPagination from={1} to={6} all={15} />
-            <Recipes posts={MOST_FAVORITE_POSTS} />
-            <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
+                    <Recipes posts={recipes.list} />
+                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                </React.Fragment>
+            )}
         </React.Fragment>
     )
 }

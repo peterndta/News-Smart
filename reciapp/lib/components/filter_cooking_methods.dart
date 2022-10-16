@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import '../object/method_item.dart';
 import 'checkbox.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -21,29 +22,30 @@ class Method {
 }
 
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
-  var _controller = TextEditingController();
+  var controller = TextEditingController();
   bool isSelected = false;
-  final List<int> selectedItemsID = [];
-  Future getCookingMethodData() async {
-    var response = await http.get(
-      Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      List<Method> methods = [];
-      for (var cate in jsonData['data']) {
-        Method method = Method(cate['id'], cate['method']);
-        methods.add(method);
-      }
-      // print(methods.length);
-      // print(methods);
-      return methods;
-    }
-  }
+  final List<String> selectedMethod = [];
+  String urlAPI = '';
+  // Future getCookingMethodData() async {
+  //   var response = await http.get(
+  //     Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "accept": "application/json",
+  //     },
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var jsonData = jsonDecode(response.body);
+  //     List<Method> methods = [];
+  //     for (var cate in jsonData['data']) {
+  //       Method method = Method(cate['id'], cate['method']);
+  //       methods.add(method);
+  //     }
+  //     // print(methods.length);
+  //     // print(methods);
+  //     return methods;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -129,12 +131,12 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.06,
                               child: TextField(
-                                controller: _controller,
+                                controller: controller,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Keywords',
                                   suffixIcon: IconButton(
-                                    onPressed: _controller.clear,
+                                    onPressed: controller.clear,
                                     icon: Icon(Icons.clear),
                                   ),
                                 ),
@@ -155,7 +157,7 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.95,
                         padding: EdgeInsets.only(top: 5, left: 15),
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -172,62 +174,48 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               height: MediaQuery.of(context).size.height * 0.02,
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.73,
                               child: FutureBuilder(
-                                  future: getCookingMethodData(),
+                                  future: fetchMethods(),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container();
                                     } else {
                                       return ListView.builder(
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, index) => Row(
-                                                children: [
-                                                  StatefulBuilder(
-                                                      builder: (context,
-                                                              _setState) =>
-                                                          Checkbox(
-                                                            side: BorderSide(
-                                                                color: Colors
-                                                                    .orange),
-                                                            value: isSelected,
-                                                            onChanged:
-                                                                (bool? value) {
-                                                              _setState(() {
-                                                                isSelected =
-                                                                    value!;
-                                                                if (isSelected ==
-                                                                    true) {
-                                                                  selectedItemsID
-                                                                      .add(snapshot
-                                                                          .data[
-                                                                              index]
-                                                                          .id);
-                                                                } else {
-                                                                  selectedItemsID
-                                                                      .remove(snapshot
-                                                                          .data[
-                                                                              index]
-                                                                          .id);
-                                                                }
-                                                                print(
-                                                                    selectedItemsID);
-                                                              });
-                                                            },
-                                                          )),
-                                                  Text(
-                                                    snapshot.data[index].method,
-                                                    style:
-                                                        TextStyle(fontSize: 18),
-                                                  ),
-                                                  // Visibility(
-                                                  //     visible: false,
-                                                  //     child: Text(snapshot
-                                                  //         .data[index].id
-                                                  //         .toString()))
-                                                ],
-                                              ));
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            StatefulBuilder(
+                                              builder: (context, _setState) =>
+                                                  Checkbox(
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                                value: isSelected,
+                                                onChanged: (bool? value) {
+                                                  _setState(() {
+                                                    isSelected = value!;
+                                                    if (isSelected == true) {
+                                                      selectedMethod.add(
+                                                          snapshot.data[index]
+                                                              .method);
+                                                    } else {
+                                                      selectedMethod.remove(
+                                                          snapshot.data[index]
+                                                              .method);
+                                                    }
+                                                    print(selectedMethod);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Text(
+                                              snapshot.data[index].method,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                     }
                                   })),
                             ),

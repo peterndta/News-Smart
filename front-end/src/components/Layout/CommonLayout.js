@@ -9,7 +9,7 @@ const CommonLayout = ({ children }) => {
     return (
         <React.Fragment>
             <CommonHeader />
-            <Box minHeight="50vh">
+            <Box minHeight="60vh">
                 <Container maxWidth="lg"> {children}</Container>
             </Box>
             <Footer />

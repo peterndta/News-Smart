@@ -5,7 +5,7 @@ const Copyright = () => {
         <Box width="100%" mb={2}>
             <Typography variant="body2" color="primary.light" align="right">
                 {'Copyright © '}
-                SEEMS {new Date().getFullYear()}
+                RECI {new Date().getFullYear()}
                 {'.'}
             </Typography>
         </Box>

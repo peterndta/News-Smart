@@ -1,10 +1,14 @@
-﻿namespace reciWebApp.Data.Pagination
+﻿using reciWebApp.Data.Models;
+
+namespace reciWebApp.Data.Pagination
 {
     public class PostParams : PaginationParams
     {
         public string? Name { get; set; }
-        public int? CookingMethodId { get; set; }
-        public int? RecipeTypeId { get; set; }
-        public int? CategoryId { get; set; }
+        public List<Post?> PostsByCookingMethods { get; set; }
+        public List<Post?> PostsRecipeRegions { get; set; }
+        public string? Type { get; set; }
+        public List<Post?> PostsByCategories { get; set; }
+        public List<Post?> PostsByUses { get; set; }
     }
 }

@@ -9,5 +9,8 @@ namespace reciWebApp.Data.IRepositories
         void DeleteCookingMethod(CookingMethod cookingMethod);
         Task<List<CookingMethod>?> GetAllCookingMethodsAsync();
         CookingMethod? GetCookingMethodById(int id);
+        int? GetCookingMethodIdByName(string? name);
+        List<CookingMethod>? GetCookingMethodsByName(List<string>? names);
+        CookingMethod GetCookingMethodByNameSignle(string name);
     }
 }

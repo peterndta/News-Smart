@@ -1,61 +1,99 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import queryString from 'query-string'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import { FormControl, Grid, InputLabel, MenuItem, Pagination, Select } from '@mui/material'
+import { Grid } from '@mui/material'
 
-import { MOST_FAVORITE_POSTS } from '../../../../Elixir'
+import { useSnackbar } from '../../../../HOCs/SnackbarContext'
+import useRecipe from '../../../../recoil/recipe/action'
+import Loading from '../../../Loading'
+import Paging from '../Pagination'
+import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
+const filterStringGenerator = ({ search, category, sort }) => {
+    let filterString = `?PageSize=${6}`
+
+    if (search && search.trim() !== '') filterString += '&search=' + search
+
+    if (category && Array.isArray(category))
+        category.forEach((category) => (filterString += `&category=${category}`))
+    else if (category !== undefined) filterString += `&category=${category}`
+
+    if (sort !== undefined) filterString += `&sort=${sort}`
+
+    return filterString
+}
+
 const RecipeList = () => {
-    const history = useHistory()
-    const { search: query, pathname } = useLocation()
-    const { search, time, category } = queryString.parse(query)
-    const [type, setType] = React.useState(time ? time : '')
+    const { search: query } = useLocation()
+    const { search, sort, category, pageNum } = queryString.parse(query)
+    const recipeAction = useRecipe()
+    const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
+    const showSnackBar = useSnackbar()
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleChange = (event) => {
-        setType(event.target.value)
-    }
-
-    const filterHandler = () => {
-        let route = pathname + '?'
-        if (search) route += '&search=' + search
-
-        if (category?.length !== 0)
-            category?.forEach((category) => (route += `&category=${category}`))
-
-        if (!!type) {
-            if (type === 'Popularity') route += `&status=${type}`
-            else route += `&time=${type}`
-        }
-
-        history.push(route)
-    }
+    if (Array.isArray(category)) category.sort((a, b) => a.localeCompare(b))
 
     useEffect(() => {
-        filterHandler()
+        const params = filterStringGenerator({ search, category, sort })
+        setIsLoading(true)
+
+        if (pageNum === undefined)
+            recipeAction
+                .getRecipes(params)
+                .then((res) => {
+                    const listRecipe = res.data.data
+                    const { totalPages } = res.data.meta
+                    setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+        else
+            recipeAction
+                .getRecipes(params, pageNum)
+                .then((res) => {
+                    const listRecipe = res.data.data
+                    const { totalPages } = res.data.meta
+                    setRecipes({ list: listRecipe, pageCount: totalPages })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 500)
+                })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type])
+    }, [search, sort, pageNum, JSON.stringify(category)])
 
     return (
         <Grid item md={9} display="flex" flexDirection="column">
-            <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">
-                <InputLabel id="demo-select-small">Type</InputLabel>
-                <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    value={type}
-                    label="Type"
-                    onChange={handleChange}
-                >
-                    <MenuItem value={'Popularity'}>Popularity</MenuItem>
-                    <MenuItem value={'Newest'}>Newest</MenuItem>
-                    <MenuItem value={'Oldest'}>Oldest</MenuItem>
-                </Select>
-            </FormControl>
-            <Recipes posts={MOST_FAVORITE_POSTS} />
-            <Pagination count={10} variant="outlined" sx={{ alignSelf: 'center', mt: 6 }} />
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <React.Fragment>
+                    <Sort />
+                    <Recipes posts={recipes.list} />
+                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                </React.Fragment>
+            )}
         </Grid>
     )
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import '../object/region_item.dart';
+import '../object/use_item.dart';
 import 'checkbox.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -30,47 +32,29 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
   var _controller = TextEditingController();
   bool isSelected = false;
 
-  Future getContinentData() async {
-    var response = await http.get(
-      Uri.parse('https://reciapp.azurewebsites.net/api/RecipeRegions'),
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      List<Continent> continents = [];
-      for (var cate in jsonData['data']) {
-        Continent continent = Continent(cate['id'], cate['continents']);
-        continents.add(continent);
-      }
-      // print(methods.length);
-      // print(methods);
-      return continents;
-    }
-  }
+  // Future getUseData() async {
+  //   var response = await http.get(
+  //     Uri.parse('https://reciapp.azurewebsites.net/api/Uses'),
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "accept": "application/json",
+  //     },
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var jsonData = jsonDecode(response.body);
+  //     List<Use> uses = [];
+  //     for (var cate in jsonData['data']) {
+  //       Use use = Use(cate['id'], cate['usesOfFood']);
+  //       uses.add(use);
+  //     }
+  //     // print(methods.length);
+  //     // print(methods);
+  //     return uses;
+  //   }
+  // }
 
-  Future getUseData() async {
-    var response = await http.get(
-      Uri.parse('https://reciapp.azurewebsites.net/api/Uses'),
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      List<Use> uses = [];
-      for (var cate in jsonData['data']) {
-        Use use = Use(cate['id'], cate['usesOfFood']);
-        uses.add(use);
-      }
-      // print(methods.length);
-      // print(methods);
-      return uses;
-    }
-  }
+  final List<int> selectedContinentID = [];
+  final List<int> selectedUseID = [];
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +169,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                         // color: Colors.yellow,
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.45,
+                        height: MediaQuery.of(context).size.height * 0.6,
                         padding: EdgeInsets.only(top: 5, left: 15),
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -199,19 +183,50 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.height * 0.35,
+                              height: MediaQuery.of(context).size.height * 0.5,
                               child: FutureBuilder(
-                                  future: getContinentData(),
+                                  future: fetchRegions(),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container();
                                     } else {
                                       return ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) =>
-                                            CheckBox(isSelected,
-                                                snapshot.data[index].continent),
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            StatefulBuilder(
+                                                builder: (context, _setState) =>
+                                                    Checkbox(
+                                                      side: BorderSide(
+                                                          color: Colors.orange),
+                                                      value: isSelected,
+                                                      onChanged: (bool? value) {
+                                                        _setState(() {
+                                                          isSelected = value!;
+                                                          if (isSelected ==
+                                                              true) {
+                                                            selectedContinentID
+                                                                .add(snapshot
+                                                                    .data[index]
+                                                                    .id);
+                                                          } else {
+                                                            selectedContinentID
+                                                                .remove(snapshot
+                                                                    .data[index]
+                                                                    .id);
+                                                          }
+                                                          print(
+                                                              selectedContinentID);
+                                                        });
+                                                      },
+                                                    )),
+                                            Text(
+                                              snapshot.data[index].continents,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                   })),
@@ -230,7 +245,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.8,
                         padding: EdgeInsets.only(top: 5, left: 15),
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -244,21 +259,55 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.6,
                               child: FutureBuilder(
-                                  future: getUseData(),
+                                  future: fetchUses(),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container();
                                     } else {
                                       return ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) =>
-                                            CheckBox(
-                                                isSelected,
-                                                snapshot
-                                                    .data[index].usesOfFood),
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            StatefulBuilder(
+                                                builder: (context, _setState) =>
+                                                    Checkbox(
+                                                      side: BorderSide(
+                                                          color: Colors.orange),
+                                                      value: isSelected,
+                                                      onChanged: (bool? value) {
+                                                        _setState(() {
+                                                          isSelected = value!;
+                                                          if (isSelected ==
+                                                              true) {
+                                                            selectedUseID.add(
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .id);
+                                                          } else {
+                                                            selectedUseID
+                                                                .remove(snapshot
+                                                                    .data[index]
+                                                                    .id);
+                                                          }
+                                                          print(selectedUseID);
+                                                        });
+                                                      },
+                                                    )),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              child: Text(
+                                                snapshot.data[index].usesOfFood,
+                                                style: TextStyle(fontSize: 18),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                   })),

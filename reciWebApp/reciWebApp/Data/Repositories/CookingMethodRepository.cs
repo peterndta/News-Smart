@@ -30,6 +30,33 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
+        public int? GetCookingMethodIdByName(string? name)
+        {
+            return string.IsNullOrWhiteSpace(name)
+                ? null
+                : GetByCondition(x => x.Method.Equals(name)).FirstOrDefault().Id;
+        }
+
+        public List<CookingMethod>? GetCookingMethodsByName(List<string>? names)
+        {
+            var cookingMethods = GetAll().ToList();
+            List<CookingMethod> result = new List<CookingMethod>();
+            if (cookingMethods.Count > 0 && names != null)
+            {
+                foreach (var name in names)
+                {
+                    result.Add(cookingMethods.Where(x => x.Method.Equals(name)).First());
+                }
+                return result;
+            }
+            return cookingMethods;
+        }
+
+        public CookingMethod GetCookingMethodByNameSignle (string method)
+        {
+            return GetByCondition(x => x.Method.Equals(method)).SingleOrDefault();
+        }
+
         public void UpdateCookingMethod(CookingMethod cookingMethod)
         {
             Update(cookingMethod);

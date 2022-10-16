@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import '../object/category_item.dart';
 import 'checkbox.dart';
 
 class FilterCategory extends StatefulWidget {
@@ -23,27 +24,27 @@ class Category {
 class _FilterCategoryState extends State<FilterCategory> {
   var _controller = TextEditingController();
   bool isSelected = false;
-
-  Future getCategoryData() async {
-    var response = await http.get(
-      Uri.parse('https://reciapp.azurewebsites.net/api/categories'),
-      headers: {
-        "content-type": "application/json",
-        "accept": "application/json",
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      List<Category> categories = [];
-      for (var cate in jsonData['data']) {
-        Category category = Category(cate['id'], cate['type']);
-        categories.add(category);
-      }
-      // print(categories.length);
-      // print(categories);
-      return categories;
-    }
-  }
+  final List<String> selectedType = [];
+  // Future getCategoryData() async {
+  //   var response = await http.get(
+  //     Uri.parse('https://reciapp.azurewebsites.net/api/categories'),
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "accept": "application/json",
+  //     },
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var jsonData = jsonDecode(response.body);
+  //     List<Category> categories = [];
+  //     for (var cate in jsonData['data']) {
+  //       Category category = Category(cate['id'], cate['type']);
+  //       categories.add(category);
+  //     }
+  //     // print(categories.length);
+  //     // print(categories);
+  //     return categories;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +159,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
+                        height: MediaQuery.of(context).size.height * 1.19,
                         padding: EdgeInsets.only(top: 5, left: 15),
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -176,18 +177,46 @@ class _FilterCategoryState extends State<FilterCategory> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.height * 0.6,
-                              height: MediaQuery.of(context).size.height * 0.55,
+                              height: MediaQuery.of(context).size.height * 1.02,
                               child: FutureBuilder(
-                                  future: getCategoryData(),
+                                  future: fetchCategories(),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container();
                                     } else {
                                       return ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) =>
-                                            CheckBox(isSelected,
-                                                snapshot.data[index].type),
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            StatefulBuilder(
+                                              builder: (context, _setState) =>
+                                                  Checkbox(
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                                value: isSelected,
+                                                onChanged: (bool? value) {
+                                                  _setState(() {
+                                                    isSelected = value!;
+                                                    if (isSelected == true) {
+                                                      selectedType.add(snapshot
+                                                          .data[index].type);
+                                                    } else {
+                                                      selectedType.remove(
+                                                          snapshot.data[index]
+                                                              .type);
+                                                    }
+                                                    print(selectedType);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Text(
+                                              snapshot.data[index].method,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                   })),

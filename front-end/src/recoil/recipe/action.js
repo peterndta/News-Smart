@@ -5,6 +5,7 @@ const useRecipe = () => {
         get({
             endpoint: `/api/post/${id}`,
         })
+
     const getStep = (id) =>
         get({
             endpoint: `/api/post/${id}/step`,
@@ -16,10 +17,14 @@ const useRecipe = () => {
             body: recipe,
         })
 
+    const getRecipes = (filters, pageNum = 1) =>
+        get({ endpoint: `/api/post/page/${pageNum}${filters}` })
+
     return {
         getRecipe,
         createRecipe,
         getStep,
+        getRecipes,
     }
 }
 export default useRecipe
