@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
@@ -52,7 +53,15 @@ class IconDetail extends StatelessWidget {
 }
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({super.key});
+  final UserInfoProvider userInfoProvider;
+  const UserProfile({
+    required this.userInfoProvider,
+    super.key
+  });
+  const UserProfile.other({
+    required this.userInfoProvider,
+    super.key
+  });
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -97,10 +106,10 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    // final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     // userId = int.parse(getUserID.userID);
-    print(getUserID.userID);
-    fetchInfinitePosts(userId);
+    // print(getUserID.userID);
+    fetchInfinitePosts(0);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts(userId);
@@ -119,8 +128,7 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
-    print(getUserID.userID);
+    final getUserID = context.watch<UserInfoProvider>().userID;
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: const PreferredSize(
@@ -142,7 +150,7 @@ class _UserProfileState extends State<UserProfile> {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)),
                       child: Image(
-                        image: AssetImage('assets/nonAvatar.png'),
+                        image: NetworkImage(widget.userInfoProvider.imageURL),
                         height: MediaQuery.of(context).size.height * 0.15,
                         width: MediaQuery.of(context).size.width * 0.3,
                       ),
@@ -151,13 +159,13 @@ class _UserProfileState extends State<UserProfile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Jason',
+                        Text(widget.userInfoProvider.name,
                             style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             )),
                         const SizedBox(height: 20),
-                        Text('Email: example@example.com')
+                        Text(widget.userInfoProvider.mail)
                       ],
                     )
                   ],
@@ -177,21 +185,21 @@ class _UserProfileState extends State<UserProfile> {
                     color: Colors.red,
                     number: 3,
                     text: "Press to your recipes",
-                    page: UserRecipesPage(userId),
+                    page: UserRecipesPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
                     number: 20,
                     text: "Press to your bookmarks",
-                    page: CollectionPage(userId),
+                    page: CollectionPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
                     number: 15,
                     text: "Press to your ratings",
-                    page: UserRatingsPage(userId),
+                    page: UserRatingsPage(widget.userInfoProvider.userID),
                   ),
                 ],
               ),

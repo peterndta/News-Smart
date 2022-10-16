@@ -50,7 +50,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     print('category page userID ${getUserID.userID}');
     return Scaffold(
       drawer: SideBarMenu(),

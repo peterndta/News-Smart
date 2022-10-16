@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
@@ -44,12 +46,25 @@ class _HomePageState extends State<HomePage> {
       }
     });
     super.initState();
+    loadData();
   }
+
+  loadData() async {
+    if (userInfoProvider == null) {
+      Timer(Duration(seconds: 4), () {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+        setState(() {
+          userInfoProvider = getUserID;
+        });
+      });
+    }
+    return;
+  }
+
+  UserInfoProvider? userInfoProvider;
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
-    print(getUserID.userID);
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -157,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                                 textAlign: TextAlign.end,
                                               ),
                                               snapshot.data[index].userId ==
-                                                      getUserID.userID
+                                                      userInfoProvider?.userID
                                                   ? Icon(
                                                       Icons.bookmark,
                                                       color: Colors.black,

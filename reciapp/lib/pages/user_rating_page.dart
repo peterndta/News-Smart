@@ -7,6 +7,7 @@ import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
 
 import '../object/recipe_review.dart';
+
 class UserRatingsPage extends StatefulWidget {
   final int userId;
   UserRatingsPage(this.userId, {super.key});
@@ -22,7 +23,6 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts(int userId) async {
-    userId = 4;
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
@@ -36,6 +36,7 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;

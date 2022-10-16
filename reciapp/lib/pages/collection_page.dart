@@ -25,7 +25,6 @@ class _CollectionPageState extends State<CollectionPage> {
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts(int userId) async {
-    userId = 4;
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
@@ -39,6 +38,7 @@ class _CollectionPageState extends State<CollectionPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;
@@ -59,7 +59,7 @@ class _CollectionPageState extends State<CollectionPage> {
   void initState() {
     super.initState();
     userId = widget.userId;
-    print(userId);
+    print("User ID: $userId");
     fetchInfinitePosts(userId);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -113,9 +113,6 @@ class _CollectionPageState extends State<CollectionPage> {
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                       ))),
-              // margin: EdgeInsets.symmetric(horizontal: 3),
-              // height: MediaQuery.of(context).size.height * 0.7,
-              // child: InfiniteScroll(),
             ),
             ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
           ],

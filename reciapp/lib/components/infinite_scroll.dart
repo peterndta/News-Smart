@@ -69,7 +69,7 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1,
       child: ListView.builder(

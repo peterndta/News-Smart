@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
+import '../login_support/check_auth.dart';
 import '../pages/recipe_detail.dart';
 import 'get_posts_homepage.dart';
 
@@ -29,8 +31,9 @@ class RecipeReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RecipeDetailPage(id: post.id,),
+              builder: (context) => RecipeDetailPage(id: post.id, token: getUserID.token),
             ));
       },
       splashColor: const Color.fromARGB(255, 211, 210, 210),

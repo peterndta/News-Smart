@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/collection_page.dart';
@@ -9,6 +10,7 @@ import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
 
 import '../login_support/auth_service.dart';
+import '../login_support/check_auth.dart';
 import '../pages/login_page.dart';
 
 class HomeButton extends StatelessWidget {
@@ -68,13 +70,13 @@ class RecipeButton extends StatelessWidget {
 }
 
 class CourseButton extends StatelessWidget {
-  int userId = 0;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CollectionPage(userId),
+          builder: (context) => CollectionPage(getUserID.userID),
         ));
       },
       child: Container(
@@ -189,8 +191,9 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UserProfile(),
+          builder: (context) => UserProfile(userInfoProvider: getUserID),
         ));
       },
       child: Container(

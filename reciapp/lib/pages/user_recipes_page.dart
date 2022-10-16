@@ -23,7 +23,6 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts(int userId) async {
-    userId = 4;
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
@@ -37,6 +36,7 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;
