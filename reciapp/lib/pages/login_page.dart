@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,14 +13,22 @@ import '../login_support/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+import '../login_support/user_preference.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //String userIdStore = '';
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   userIdStore = UserPreferences.getUserID();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
@@ -39,16 +49,30 @@ class _LoginPageState extends State<LoginPage> {
         getUserInfo.userID = decodedToken['userId'];
         getUserInfo.name = decodedToken['name'];
         getUserInfo.imageURL = decodedToken['image'];
-        getUserInfo.token = responseString;
+        getUserInfo.token = json.decode(responseString)['data'];
         getUserInfo.role = decodedToken['role'];
         getUserInfo.mail = decodedToken['email'];
+
+        // await UserPreferences.setUserID(
+        //     decodedToken['userId'],
+        //     json.decode(responseString)['data'],
+        //     decodedToken['image'],
+        //     decodedToken['name'],
+        //     decodedToken['email'],
+        //     decodedToken['role']);
+        await UserPreferences.setUserID(decodedToken['userId']);
+        // await UserPreferences.setImageURL(decodedToken['image']);
+        // await UserPreferences.setUsername(decodedToken['name']);
+        // await UserPreferences.setMail(decodedToken['email']);
+        // await UserPreferences.setRole(decodedToken['role']);
+        // await UserPreferences.setToken(json.decode(responseString)['data']);
+
         print(getUserInfo.token);
         print(getUserInfo.role);
         print(getUserInfo.mail);
         print(getUserInfo.userID);
         print(getUserInfo.name);
         print(getUserInfo.imageURL);
-
         print('status ok');
       } else {
         print('status deo ok');

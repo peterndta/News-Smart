@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
@@ -12,6 +13,7 @@ import '../components/back_to_top_button.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,11 +28,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+
     scrollController.addListener(() {
       //scroll listener
       double showoffset =
           10.0; //Back to top botton will show on scroll offset 10.0
-
       if (scrollController.offset > showoffset) {
         showbtn = true;
         setState(() {
@@ -43,12 +46,21 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
+    getUserInfo.userID = UserPreferences.getUserID();
+    // getUserInfo.imageURL = UserPreferences.getImageURL();
+    // getUserInfo.mail = UserPreferences.getMail();
+    // getUserInfo.name = UserPreferences.getUsername();
+    // getUserInfo.token = UserPreferences.getToken();
+    // getUserInfo.role = UserPreferences.getRole();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+    print(
+        'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
+
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -156,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                                                 textAlign: TextAlign.end,
                                               ),
                                               snapshot.data[index].userId ==
-                                                      getUserID.userID
+                                                      getUserInfo.userID
                                                   ? Icon(
                                                       Icons.bookmark,
                                                       color: Colors.black,

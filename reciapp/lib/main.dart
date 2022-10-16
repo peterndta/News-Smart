@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/login_support/check_auth.dart';
+import 'package:reciapp/login_support/user_preference.dart';
 import 'package:reciapp/pages/bookmark_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,8 @@ import 'pages/collection_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await UserPreferences.init();
+
   runApp(MyApp());
 }
 

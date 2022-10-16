@@ -50,8 +50,9 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-    print('category page userID ${getUserID.userID}');
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+    print(
+        'At category page, token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
