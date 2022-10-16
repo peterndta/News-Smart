@@ -48,8 +48,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
-    print(getUserID.userID);
+    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(

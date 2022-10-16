@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
     Future<Data?> submitData(Data _data) async {
       var response = await http.post(
         Uri.parse(
@@ -34,11 +34,21 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (response.statusCode == 200) {
         String responseString = response.body;
-        print(responseString);
+        //print(responseString);
         Map<String, dynamic> decodedToken = JwtDecoder.decode(responseString);
-        getUserID.userID = decodedToken['userId'];
-        print(getUserID.userID);
-        //getUserID.userID = 12;
+        getUserInfo.userID = decodedToken['userId'];
+        getUserInfo.name = decodedToken['name'];
+        getUserInfo.imageURL = decodedToken['image'];
+        getUserInfo.token = responseString;
+        getUserInfo.role = decodedToken['role'];
+        getUserInfo.mail = decodedToken['email'];
+        print(getUserInfo.token);
+        print(getUserInfo.role);
+        print(getUserInfo.mail);
+        print(getUserInfo.userID);
+        print(getUserInfo.name);
+        print(getUserInfo.imageURL);
+
         print('status ok');
       } else {
         print('status deo ok');
@@ -56,9 +66,9 @@ class _LoginPageState extends State<LoginPage> {
         );
         await submitData(data);
 
-        print(FirebaseAuth.instance.currentUser!.displayName!);
-        print(FirebaseAuth.instance.currentUser!.email!);
-        print(FirebaseAuth.instance.currentUser!.photoURL!);
+        //print(FirebaseAuth.instance.currentUser!.displayName!);
+        //print(FirebaseAuth.instance.currentUser!.email!);
+        //print(FirebaseAuth.instance.currentUser!.photoURL!);
       } catch (error) {
         print(error);
       }
