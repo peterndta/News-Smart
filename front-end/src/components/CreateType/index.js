@@ -51,8 +51,8 @@ const CreateType = ({ status, onClose }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type])
 
-    const submitHandler = (value) => {
-        if (value.trim().length === 0) return
+    const submitHandler = (event, value) => {
+        if (value.trim().length === 0 || event.key !== 'Enter') return
         if (type === 'Category')
             categoryAction
                 .createCategory(value)
@@ -64,10 +64,18 @@ const CreateType = ({ status, onClose }) => {
                     onClose()
                 })
                 .catch(() => {
-                    showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
-                    })
+                    if (error.response.status === 400) {
+                        const message = error.response.data.message
+                        showSnackBar({
+                            severity: 'error',
+                            children: message,
+                        })
+                    } else {
+                        showSnackBar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                    }
                 })
         else if (type === 'Method')
             methodAction
@@ -79,13 +87,44 @@ const CreateType = ({ status, onClose }) => {
                     })
                     onClose()
                 })
-                .catch(() => {
-                    showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
-                    })
+                .catch((error) => {
+                    if (error.response.status === 400) {
+                        const message = error.response.data.message
+                        showSnackBar({
+                            severity: 'error',
+                            children: message,
+                        })
+                    } else {
+                        showSnackBar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                    }
                 })
-        else if (type === 'Use') useAction.createUses(value)
+        else if (type === 'Use')
+            useAction
+                .createUses(value)
+                .then(() => {
+                    showSnackBar({
+                        severity: 'success',
+                        children: 'Create Method successfully.',
+                    })
+                    onClose()
+                })
+                .catch(() => {
+                    if (error.response.status === 400) {
+                        const message = error.response.data.message
+                        showSnackBar({
+                            severity: 'error',
+                            children: message,
+                        })
+                    } else {
+                        showSnackBar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                    }
+                })
     }
 
     return (
@@ -130,9 +169,6 @@ const CreateType = ({ status, onClose }) => {
                 <DialogActions sx={{ mb: 1.5, px: 3 }}>
                     <Button onClick={onClose} variant="outlined" color="error">
                         Close
-                    </Button>
-                    <Button onClick={onClose} variant="outlined" sx={{ ml: 1.5 }}>
-                        Create
                     </Button>
                 </DialogActions>
             </Dialog>

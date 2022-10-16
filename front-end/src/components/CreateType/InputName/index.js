@@ -4,7 +4,7 @@ import { TextField } from '@mui/material'
 
 const isEmpty = (incomeValue) => incomeValue.trim().length === 0
 
-const InputName = ({ type }) => {
+const InputName = ({ type, submitHandler }) => {
     const [value, setValue] = useState({ value: '', isTouched: false })
 
     const valueChangeHandler = (event) => {
@@ -35,6 +35,7 @@ const InputName = ({ type }) => {
             sx={{ mt: 1.5, width: '100%' }}
             helperText={valueIsInvalid ? 'Name must not be empty' : ''}
             error={valueIsInvalid}
+            onKeyDown={(event) => submitHandler(event, value.value)}
         />
     )
 }
