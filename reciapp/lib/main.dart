@@ -56,6 +56,6 @@ class MyApp extends StatelessWidget {
 // class _MyHomePageState extends State<MyHomePage> {
 //   @override
 //   Widget build(BuildContext context) {
-//     return RecipesResult();
+//     return CategoryPage();
 //   }
 // }

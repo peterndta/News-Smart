@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserIDProvider with ChangeNotifier {
-  int userID = 0;
+  String userID = '';
 
   void changeMail() {
     userID = userID;
