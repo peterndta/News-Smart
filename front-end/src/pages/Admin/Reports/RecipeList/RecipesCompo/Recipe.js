@@ -16,17 +16,25 @@ import {
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
+import ConfirmPopup from '../ConfirmPopup'
 import DetailPopup from '../DetailPopup'
 
 const LatestRecipe = ({ post }) => {
     const [open, setOpen] = React.useState(false)
+    const [openConfirm, setOpenConfirm] = React.useState(false)
     const history = useHistory()
     const handleClickOpen = () => {
         setOpen(true)
     }
+    const handleOpenConfirm = () => {
+        setOpenConfirm(true)
+    }
     return (
         <React.Fragment>
             {open && <DetailPopup status={open} onClose={() => setOpen(false)} />}
+            {openConfirm && (
+                <ConfirmPopup status={openConfirm} onClose={() => setOpenConfirm(false)} />
+            )}
             <Grid item md={4}>
                 <Card sx={{ maxWidth: 392, height: '1' }}>
                     <CardMedia
@@ -110,6 +118,7 @@ const LatestRecipe = ({ post }) => {
                                     minWidth: 100,
                                 }}
                                 startIcon={<Approval />}
+                                onClick={handleOpenConfirm}
                             >
                                 Approve
                             </Button>
@@ -121,6 +130,7 @@ const LatestRecipe = ({ post }) => {
                                     minWidth: 100,
                                 }}
                                 startIcon={<DoNotDisturb />}
+                                onClick={handleOpenConfirm}
                             >
                                 Deny
                             </Button>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box } from '@mui/material'
+import { Box, Divider } from '@mui/material'
 
 import RecipeFilterName from './RecipeFilterName'
 import RecipeList from './RecipeList'
@@ -14,7 +14,17 @@ const Reports = () => {
                 <Box display="flex" justifyContent="flex-end">
                     <SearchBox />
                 </Box>
-                <Box mx={10} mt={4}>
+                <Box mx={8} mt={2}>
+                    <Divider
+                        sx={{
+                            backgroundColor: (theme) => theme.palette.primary.main,
+                            height: 1.5,
+                            mb: 2,
+                            mt: 3,
+                        }}
+                    />
+                </Box>
+                <Box mx={10} mt={2}>
                     <RecipeList />
                 </Box>
             </Box>
