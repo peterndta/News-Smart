@@ -45,7 +45,7 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/cookingMethod")]
+        [Route("~/api/admin/cookingMethod")]
         [HttpPost]
         public async Task<IActionResult> CreateCookingMethod (int id, [FromBody] CreateCookingMethodDTO cookingMethodDTO)
         {
