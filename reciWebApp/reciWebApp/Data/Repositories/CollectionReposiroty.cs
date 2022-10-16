@@ -30,6 +30,11 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.CollectionName.Equals(name)).SingleOrDefaultAsync();
         }
 
+        public Task<List<Collection>?> GetCollectionsAsync()
+        {
+            return GetAll().ToListAsync();
+        }
+
         public List<Collection?> GetCollectionsByNames(List<string?> names)
         {
             var collections = new List<Collection>();

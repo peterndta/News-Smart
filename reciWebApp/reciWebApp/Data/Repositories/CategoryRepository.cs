@@ -38,16 +38,19 @@ namespace reciWebApp.Data.Repositories
         public List<Category?> GetCategoryByName(List<string>? names)
         {
             var categories = GetAllCategories();
-            List<Category> result = new List<Category>();
+            var result = new List<Category>();
             if (names != null && categories.Count > 0)
             {
                 foreach (var name in names)
                 {
-                    result.AddRange(categories.Where(x => x.Type.Equals(name)).ToList());
+                    var category = GetByCondition(x => x.Type.Equals(name)).FirstOrDefault();
+                    if (category != null)
+                    {
+                        result.Add(category);
+                    }
                 }
-                return result;
             }
-            return categories;
+            return result;
         }
 
         public void UpdateCategory(Category category)

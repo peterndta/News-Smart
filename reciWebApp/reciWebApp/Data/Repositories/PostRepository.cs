@@ -90,17 +90,16 @@ namespace reciWebApp.Data.Repositories
         public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && postCategories.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 postCategories.DistinctBy(x => x.PostId);
                 foreach (var postCategory in postCategories)
                 {
                     result.Add(GetPostById(postCategory.PostId));
-                }
-                return result.DistinctBy(x => x.Id).ToList();
+                }              
             }
-            return posts;
+            return result;
         }
 
         public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
