@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
+import '../pages/recipe_detail.dart';
+import 'get_posts_homepage.dart';
+
 class ReciepReview {
   final String image;
   final String title;
@@ -18,26 +21,17 @@ class ReciepReview {
 }
 
 class RecipeReviewItem extends StatelessWidget {
-  const RecipeReviewItem({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.start,
-    required this.description,
-    required this.author,
-  });
+  const RecipeReviewItem({super.key, required this.post});
 
-  final String image;
-  final String title;
-  final double start;
-  final String description;
-  final String author;
+  final GetPosts post;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print('Click on card');
+        Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RecipeDetailPage(id: post.id,),
+            ));
       },
       splashColor: const Color.fromARGB(255, 211, 210, 210),
       child: Padding(
@@ -52,15 +46,20 @@ class RecipeReviewItem extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: Image.network(image),
+                child: Image(
+                  width: MediaQuery.of(context).size.width * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(post.imageUrl),
+                ),
               ),
               Expanded(
                 flex: 3,
                 child: RecipeDetail(
-                  title: title,
-                  start: start,
-                  description: description,
-                  author: author,
+                  title: post.name,
+                  start: post.averageRating,
+                  description: post.description,
+                  author: post.userName,
                 ),
               ),
             ],
@@ -81,7 +80,7 @@ class RecipeDetail extends StatelessWidget {
   });
 
   final String title;
-  final double start;
+  final int start;
   final String description;
   final String author;
 
@@ -104,41 +103,47 @@ class RecipeDetail extends StatelessWidget {
           SimpleStarRating(
             allowHalfRating: true,
             starCount: 5,
-            rating: start,
+            rating: start * 1.0,
             size: 13,
             spacing: 10,
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-          Text(
-            description,
-            maxLines: 2,
-            style: const TextStyle(
-              fontSize: 10.0,
-              overflow: TextOverflow.ellipsis,
+          Container(
+            height: MediaQuery.of(context).size.height * 0.04,
+            child: Text(
+              description,
+              maxLines: 2,
+              style: const TextStyle(
+                fontSize: 10.0,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-          Text.rich(
-            TextSpan(
-              children: <InlineSpan>[
-                const WidgetSpan(
-                  child: Text(
-                    'By',
-                    style: TextStyle(
-                      fontSize: 12.0,
+          Container(
+            alignment: Alignment.centerRight,
+            child: Text.rich(
+              TextSpan(
+                children: <InlineSpan>[
+                  const WidgetSpan(
+                    child: Text(
+                      'By',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
-                ),
-                WidgetSpan(
-                  child: Text(
-                    ' $author',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
+                  WidgetSpan(
+                    child: Text(
+                      ' $author',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -148,43 +153,45 @@ class RecipeDetail extends StatelessWidget {
 }
 
 class ListRecipeReview extends StatelessWidget {
-  final List<ReciepReview> list;
+  final List<GetPosts> list;
   final double heightValue;
+  final ScrollController scrollController;
+  final bool hasMore;
 
   const ListRecipeReview(
-    this.heightValue,
-    this.list,
-    {super.key}
-    );
+      this.heightValue, this.list, this.scrollController, this.hasMore,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return (list.isEmpty)
-        ? Container(
-            padding: const EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: const Text(
-              'No posts were found.',
-              style: TextStyle(fontSize: 20),
-            ))
-        : SizedBox(
+    return
+        SizedBox(
             height: MediaQuery.of(context).size.height * heightValue,
             child: Scrollbar(
-              thickness: 7,
-              radius: const Radius.circular(20),
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return RecipeReviewItem(
-                    image: list[index].image,
-                    title: list[index].title,
-                    start: list[index].start,
-                    description: list[index].description,
-                    author: list[index].author,
-                  );
-                },
-                itemCount: list.length,
-              ),
-            ),
-          );
+                thickness: 7,
+                radius: const Radius.circular(20),
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: list.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index < list.length) {
+                      final post = list[index];
+                      return RecipeReviewItem(
+                        post: post,
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Center(
+                          child: hasMore
+                              ? CircularProgressIndicator()
+                              : Text('No more data to load'),
+                        ),
+                      );
+                    }
+                  },
+                )
+                //   ),
+                ));
   }
 }

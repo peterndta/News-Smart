@@ -35,10 +35,10 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         String responseString = response.body;
         print(responseString);
-        //Map<String, dynamic> decodedToken = JwtDecoder.decode(responseString);
-        //getUserID.userID = decodedToken['userId'];
-        //print(getUserID.userID);
-        getUserID.userID = 12;
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(responseString);
+        getUserID.userID = decodedToken['userId'];
+        print(getUserID.userID);
+        // getUserID.userID = '12';
         print('status ok');
       } else {
         print('status deo ok');

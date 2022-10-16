@@ -68,12 +68,13 @@ class RecipeButton extends StatelessWidget {
 }
 
 class CourseButton extends StatelessWidget {
+  int userId = 0;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CollectionPage(),
+          builder: (context) => CollectionPage(userId),
         ));
       },
       child: Container(

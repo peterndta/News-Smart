@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
 import '../components/sidebar_menu.dart';
+import '../login_support/check_auth.dart';
+import '../object/get_posts_homepage.dart';
 import 'collection_page.dart';
 import '../object/recipe_review.dart';
+import 'package:http/http.dart' as http;
 
 class IconDetail extends StatelessWidget {
   final IconData icon;
@@ -13,14 +19,13 @@ class IconDetail extends StatelessWidget {
   final int number;
   final String text;
   final dynamic page;
-  const IconDetail({
-    super.key,
-    required this.color,
-    required this.number,
-    required this.icon,
-    required this.text,
-    required this.page,
-  });
+  const IconDetail(
+      {super.key,
+      required this.color,
+      required this.number,
+      required this.icon,
+      required this.text,
+      required this.page});
 
   @override
   Widget build(BuildContext context) {
@@ -54,56 +59,68 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final List<ReciepReview> _listReciepReviews = [
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4.5,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-  ];
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts(int userId) async {
+    userId = 4;
+    if (isLoading) return;
+    isLoading = true;
+    const limit = 6;
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    }
+  }
+
+  int userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    // userId = int.parse(getUserID.userID);
+    print(getUserID.userID);
+    fetchInfinitePosts(userId);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(userId);
+        print(' more');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
 
   @override
   Widget build(BuildContext context) {
+    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    print(getUserID.userID);
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: const PreferredSize(
@@ -148,33 +165,33 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.11,
+              height: MediaQuery.of(context).size.height * 0.13,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: Colors.orange, width: 2.0))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
+                children: [
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
                     number: 3,
                     text: "Press to your recipes",
-                    page: UserRecipesPage(),
+                    page: UserRecipesPage(userId),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
                     number: 20,
                     text: "Press to your bookmarks",
-                    page: CollectionPage(),
+                    page: CollectionPage(userId),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
                     number: 15,
                     text: "Press to your ratings",
-                    page: UserRatingsPage(),
+                    page: UserRatingsPage(userId),
                   ),
                 ],
               ),
@@ -192,7 +209,7 @@ class _UserProfileState extends State<UserProfile> {
                 ],
               ),
             ),
-            ListRecipeReview(0.5, _listReciepReviews)
+            ListRecipeReview(0.5, _listReciepReviews, controller, hasMore)
           ]),
         ),
       ),

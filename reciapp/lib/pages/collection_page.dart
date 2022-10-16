@@ -1,15 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/filter_course.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/components/infinite_scroll.dart';
 
-import '../components/sidebar_menu.dart';
-import '../object/food_list.dart';
-import '../components/back_to_top_button.dart';
+import '../login_support/check_auth.dart';
 import '../components/copyright.dart';
+import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
+import 'package:http/http.dart' as http;
 
 class CollectionPage extends StatefulWidget {
-  const CollectionPage({super.key});
+  CollectionPage(this.userId, {super.key});
+  final int userId;
 
   @override
   State<CollectionPage> createState() => _CollectionPageState();
@@ -17,89 +20,63 @@ class CollectionPage extends StatefulWidget {
 
 class _CollectionPageState extends State<CollectionPage> {
   TextEditingController keywords = TextEditingController();
-  final List<ReciepReview> _listReciepReviews = [
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4.5,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-  ];
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts(int userId) async {
+    userId = 4;
+    if (isLoading) return;
+    isLoading = true;
+    const limit = 6;
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    }
+  }
+
+  int userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    userId = widget.userId;
+    print(userId);
+    fetchInfinitePosts(userId);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(userId);
+        print(' more');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,29 +95,29 @@ class _CollectionPageState extends State<CollectionPage> {
         child: Column(
           children: [
             Container(
-              // alignment: Alignment.topCenter,
-              // height: MediaQuery.of(context).size.height * 0.1,
-              // child: Form(
-              //     child: TextFormField(
-              //         validator: (String? value) {
-              //           return (value == null || value.isEmpty)
-              //               ? 'Please enter'
-              //               : null;
-              //         },
-              //         controller: keywords,
-              //         decoration: const InputDecoration(
-              //           prefixIcon: Icon(Icons.search),
-              //           hintText: 'Search Key',
-              //           alignLabelWithHint: false,
-              //           border: OutlineInputBorder(
-              //             borderRadius: BorderRadius.all(Radius.circular(5)),
-              //           ),
-              //         ))),
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScroll(),
+              alignment: Alignment.topCenter,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Form(
+                  child: TextFormField(
+                      validator: (String? value) {
+                        return (value == null || value.isEmpty)
+                            ? 'Please enter'
+                            : null;
+                      },
+                      controller: keywords,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search Key',
+                        alignLabelWithHint: false,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ))),
+              // margin: EdgeInsets.symmetric(horizontal: 3),
+              // height: MediaQuery.of(context).size.height * 0.7,
+              // child: InfiniteScroll(),
             ),
-            ListRecipeReview(0.72, _listReciepReviews)
+            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),

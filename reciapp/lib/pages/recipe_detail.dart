@@ -1,12 +1,22 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
+import 'package:http/http.dart' as http;
+
+import '../login_support/check_auth.dart';
+import '../object/get_posts_homepage.dart';
 
 class RecipeDetailPage extends StatefulWidget {
+  final String id;
+  RecipeDetailPage({required this.id});
+
   @override
   State<RecipeDetailPage> createState() => _RecipeDetailPageState();
 }
@@ -14,9 +24,27 @@ class RecipeDetailPage extends StatefulWidget {
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  Future fetchPosts(String id) async {
+    http.Response response = await http.get(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$id'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    print(getUserID.userID);
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      print(responseJson);
+    }
+  }
 
   @override
   void initState() {
+    fetchPosts(widget.id);
     scrollController.addListener(() {
       //scroll listener
       double showoffset =
@@ -36,6 +64,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     });
     super.initState();
   }
+
+  GetPosts? post;
 
   @override
   Widget build(BuildContext context) {

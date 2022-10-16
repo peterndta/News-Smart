@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import '../components/copyright.dart';
+import '../object/get_posts_homepage.dart';
+import 'package:http/http.dart' as http;
+
 import '../object/recipe_review.dart';
 
 class UserRecipesPage extends StatefulWidget {
-  const UserRecipesPage({super.key});
+  final int userId;
+  UserRecipesPage(this.userId, {super.key});
 
   @override
   State<UserRecipesPage> createState() => _UserRecipesPageState();
@@ -11,89 +18,62 @@ class UserRecipesPage extends StatefulWidget {
 
 class _UserRecipesPageState extends State<UserRecipesPage> {
   TextEditingController keywords = TextEditingController();
-  final List<ReciepReview> _listReciepReviews = [
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4.5,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-    ReciepReview(
-      image:
-          'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-      title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-      start: 4,
-      description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-          "will be your summer go-to staple. 10-minute is all you need to whip...",
-      author: 'John',
-    ),
-  ];
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts(int userId) async {
+    userId = 4;
+    if (isLoading) return;
+    isLoading = true;
+    const limit = 6;
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    }
+  }
+
+  int userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    userId = widget.userId;
+    print(userId);
+    fetchInfinitePosts(userId);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(userId);
+        print(' more');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +112,7 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
                     )),
               ),
             ),
-            ListRecipeReview(0.72, _listReciepReviews)
+            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),

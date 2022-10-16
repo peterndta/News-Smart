@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reciapp/pages/home_page.dart';
 import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/user_profile.dart';
 
 class AuthService {
   //1. handleAuthState()
