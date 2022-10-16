@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil'
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import { ThemeProvider, useTheme } from '@mui/material/styles'
 
-import SnackbarProvider from '../HOCs/SnackbarContext'
+import SnackbarProvider, { useSnackbar } from '../HOCs/SnackbarContext'
 import { useAuthAction } from '../recoil/auth'
 import categoryAtom, { useCategoryAction } from '../recoil/categories'
 import continentAtom, { useContinentsAction } from '../recoil/continents'
@@ -19,13 +19,14 @@ import './App.css'
 function App() {
     const authAction = useAuthAction()
     const methodAction = useMethodsAction()
-    const categoryAction = useCategoryAction()
     const continentAction = useContinentsAction()
+    const categoryAction = useCategoryAction()
     const useAction = usesAction()
     const setMethods = useSetRecoilState(methodAtom)
     const setCategories = useSetRecoilState(categoryAtom)
     const setContinents = useSetRecoilState(continentAtom)
     const setUses = useSetRecoilState(usesAtom)
+    const showSnackBar = useSnackbar()
 
     useEffect(() => {
         methodAction

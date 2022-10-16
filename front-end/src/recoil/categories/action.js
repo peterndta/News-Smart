@@ -1,9 +1,12 @@
-import { get } from '../../utils/ApiCaller'
+import { get, post } from '../../utils/ApiCaller'
 
 const useCategoryAction = () => {
     const getCategories = () => get({ endpoint: '/api/categories' })
 
-    return { getCategories }
+    const createCategory = (value) =>
+        post({ endpoint: `/api/admin/category`, body: { type: value } })
+
+    return { getCategories, createCategory }
 }
 
 export default useCategoryAction

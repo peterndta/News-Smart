@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { useRecoilValue } from 'recoil'
 
 import {
     Box,
@@ -8,24 +10,82 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    InputBase,
     InputLabel,
     MenuItem,
     Select,
     Slide,
     Typography,
 } from '@mui/material'
-import { blueGrey } from '@mui/material/colors'
+
+import { useSnackbar } from '../../HOCs/SnackbarContext'
+import categoryAtom, { useCategoryAction } from '../../recoil/categories'
+import { useMethodsAction } from '../../recoil/methods'
+import methodsAtom from '../../recoil/methods/atom'
+import usesAtom, { usesAction } from '../../recoil/uses'
+import InputName from './InputName'
+import ListAlreadyHad from './ListAlreadyHad'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 
 const CreateType = ({ status, onClose }) => {
-    const [type, setType] = React.useState('Collection')
+    const [type, setType] = React.useState('Method')
+    const methodList = useRecoilValue(methodsAtom)
+    const usesList = useRecoilValue(usesAtom)
+    const categoryList = useRecoilValue(categoryAtom)
+    const methodAction = useMethodsAction()
+    const useAction = usesAction()
+    const categoryAction = useCategoryAction()
+    const [list, setList] = useState(methodList.list)
+    const showSnackBar = useSnackbar()
 
     const handleChange = (event) => {
         setType(event.target.value)
+    }
+
+    useEffect(() => {
+        if (type === 'Category') setList(categoryList.list)
+        else if (type === 'Method') setList(methodList.list)
+        else if (type === 'Use') setList(usesList.list)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [type])
+
+    const submitHandler = (value) => {
+        if (value.trim().length === 0) return
+        if (type === 'Category')
+            categoryAction
+                .createCategory(value)
+                .then(() => {
+                    showSnackBar({
+                        severity: 'success',
+                        children: 'Create category successfully.',
+                    })
+                    onClose()
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                })
+        else if (type === 'Method')
+            methodAction
+                .createMethod(value)
+                .then(() => {
+                    showSnackBar({
+                        severity: 'success',
+                        children: 'Create Method successfully.',
+                    })
+                    onClose()
+                })
+                .catch(() => {
+                    showSnackBar({
+                        severity: 'error',
+                        children: 'Something went wrong, please try again later.',
+                    })
+                })
+        else if (type === 'Use') useAction.createUses(value)
     }
 
     return (
@@ -49,7 +109,7 @@ const CreateType = ({ status, onClose }) => {
                     </Typography>
                 </DialogTitle>
                 <DialogContent dividers sx={{ borderBottom: 0 }}>
-                    <FormControl fullWidth sx={{ mt: 1, mb: 1.5 }} size="small">
+                    <FormControl sx={{ mt: 1, mb: 1.5 }} size="small">
                         <InputLabel id="demo-simple-select-label">Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -58,32 +118,16 @@ const CreateType = ({ status, onClose }) => {
                             label="Type"
                             onChange={handleChange}
                         >
-                            <MenuItem value={'Collection'}>Collection</MenuItem>
+                            {/* <MenuItem value={'Collection'}>Collection</MenuItem> */}
                             <MenuItem value={'Category'}>Category</MenuItem>
                             <MenuItem value={'Method'}>Method</MenuItem>
                             <MenuItem value={'Use'}>Use</MenuItem>
                         </Select>
                     </FormControl>
-                    <Box
-                        component="form"
-                        sx={{
-                            mt: 1,
-                            p: 0.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                            width: 400,
-                            border: `1px solid ${blueGrey[200]}`,
-                            borderRadius: 0.5,
-                        }}
-                    >
-                        <InputBase
-                            sx={{ ml: 1, flex: 1 }}
-                            placeholder="e.g. Spring Food"
-                            inputProps={{ 'aria-label': 'create collection name' }}
-                        />
-                    </Box>
+                    <ListAlreadyHad options={list} type={type} />
+                    <InputName type={type} submitHandler={submitHandler} />
                 </DialogContent>
-                <DialogActions sx={{ mb: 1.5 }}>
+                <DialogActions sx={{ mb: 1.5, px: 3 }}>
                     <Button onClick={onClose} variant="outlined" color="error">
                         Close
                     </Button>
