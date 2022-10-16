@@ -105,50 +105,47 @@ namespace reciWebApp.Data.Repositories
         public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && cookingMethods.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var cookingMethod in cookingMethods)
                 {
-                    var invalidResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id);
-                    if (invalidResult != null)
+                    var validResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id).ToList();
+                    if (validResult != null)
                     {
-                        result.AddRange(invalidResult);
+                        result.AddRange(validResult);
                     }
                 }
-                return result.ToList();
             }
-            return posts;
+            return result;
         }
 
         public List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && recipeRegions.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var recipeRegion in recipeRegions)
                 {
                     result.AddRange(GetByCondition(x => x.RecipeRegionId == recipeRegion.Id).ToList());
                 }
-                return result;
             }
-            return posts;
+            return result;
         }
 
         public List<Post>? GetPostsByUses(List<Use> uses)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && uses.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var use in uses)
                 {
                     result.AddRange(GetByCondition(x => x.UsesId == use.Id).ToList());
                 }
-                return result;
             }
-            return posts;
+            return result;
         }
 
         public List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition)
