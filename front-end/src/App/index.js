@@ -9,6 +9,8 @@ import { ThemeProvider, useTheme } from '@mui/material/styles'
 import SnackbarProvider, { useSnackbar } from '../HOCs/SnackbarContext'
 import { useAuthAction } from '../recoil/auth'
 import categoryAtom, { useCategoryAction } from '../recoil/categories'
+import collectionAtom from '../recoil/collection'
+import useCollection from '../recoil/collection/action'
 import continentAtom, { useContinentsAction } from '../recoil/continents'
 import methodAtom, { useMethodsAction } from '../recoil/methods'
 import usesAtom, { usesAction } from '../recoil/uses'
@@ -22,6 +24,8 @@ function App() {
     const continentAction = useContinentsAction()
     const categoryAction = useCategoryAction()
     const useAction = usesAction()
+    const collectionAction = useCollection()
+    const setCollections = useSetRecoilState(collectionAtom)
     const setMethods = useSetRecoilState(methodAtom)
     const setCategories = useSetRecoilState(categoryAtom)
     const setContinents = useSetRecoilState(continentAtom)
@@ -73,6 +77,19 @@ function App() {
             .then((res) => {
                 const data = res.data.data
                 setUses({ type: 'Use', list: data })
+            })
+            .catch(() => {
+                showSnackBar({
+                    severity: 'error',
+                    children: 'Something went wrong, please try again later.',
+                })
+            })
+
+        collectionAction
+            .getCollections()
+            .then((res) => {
+                const data = res.data.data
+                setCollections({ type: 'Collection', list: data })
             })
             .catch(() => {
                 showSnackBar({
