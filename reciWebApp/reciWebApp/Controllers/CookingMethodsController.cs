@@ -47,21 +47,21 @@ namespace reciWebApp.Controllers
 
         [Route("~/api/admin/cookingMethod")]
         [HttpPost]
-        public async Task<IActionResult> CreateCookingMethod (int id, [FromBody] CreateCookingMethodDTO cookingMethodDTO)
+        public async Task<IActionResult> CreateCookingMethod ([FromBody] CreateCookingMethodDTO cookingMethodDTO)
         {
             try
             {
-                var user = await _repoManager.User.GetUserByIdAsync(id);
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
 
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 CookingMethod dbcookingMethod = _repoManager.CookingMethod.GetCookingMethodByNameSignle(cookingMethodDTO.Method);
                 if (dbcookingMethod != null)
