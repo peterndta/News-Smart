@@ -245,6 +245,14 @@ namespace reciWebApp.Controllers
                     var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
                     getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
                 }
+
+                List<Post>? getPostsByCollections = null;
+                if (filterAndSort.Collection != null)
+                {
+                    var collection = _repoManager.Collection.GetCollectionsByNames(filterAndSort.Collection);
+                    var foodCollections = _repoManager.FoodCollection.GetFoodCollectionsByCollections(collection);
+                    getPostsByCollections = _repoManager.Post.GetPostsByFoodCollections(foodCollections);
+                }
                 var postParams = new PostParams
                 {
                     Name = filterAndSort.Search,
@@ -255,6 +263,7 @@ namespace reciWebApp.Controllers
                     PageSize = filterAndSort.PageSize,
                     Type = filterAndSort.Sort,
                     PostsByUses = getPostsByUses,
+                    PostsByCollections = getPostsByCollections,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetAllPostsAsync(postParams);

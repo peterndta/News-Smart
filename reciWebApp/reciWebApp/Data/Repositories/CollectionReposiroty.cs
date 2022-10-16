@@ -29,5 +29,19 @@ namespace reciWebApp.Data.Repositories
         {
             return await GetByCondition(x => x.CollectionName.Equals(name)).SingleOrDefaultAsync();
         }
+
+        public List<Collection?> GetCollectionsByNames(List<string?> names)
+        {
+            var collections = new List<Collection>();
+            foreach (var name in names)
+            {
+                var collection = GetByCondition(x => x.CollectionName.Equals(name)).FirstOrDefault();
+                if (collection != null)
+                {
+                    collections.Add(collection);
+                }
+            }
+            return collections;
+        }
     }
 }
