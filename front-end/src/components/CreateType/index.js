@@ -7,7 +7,11 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormControl,
     InputBase,
+    InputLabel,
+    MenuItem,
+    Select,
     Slide,
     Typography,
 } from '@mui/material'
@@ -16,14 +20,21 @@ import { blueGrey } from '@mui/material/colors'
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
-const AddCollectionPopup = (props) => {
+
+const CreateType = ({ status, onClose }) => {
+    const [type, setType] = React.useState('Collection')
+
+    const handleChange = (event) => {
+        setType(event.target.value)
+    }
+
     return (
         <Box>
             <Dialog
-                open={props.status}
+                open={status}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={props.onClose}
+                onClose={onClose}
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle>
@@ -34,10 +45,25 @@ const AddCollectionPopup = (props) => {
                         }}
                         color="primary"
                     >
-                        Create Collection
+                        Create Type
                     </Typography>
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent dividers sx={{ borderBottom: 0 }}>
+                    <FormControl fullWidth sx={{ mt: 1, mb: 1.5 }} size="small">
+                        <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={type}
+                            label="Type"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={'Collection'}>Collection</MenuItem>
+                            <MenuItem value={'Category'}>Category</MenuItem>
+                            <MenuItem value={'Method'}>Method</MenuItem>
+                            <MenuItem value={'Use'}>Use</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Box
                         component="form"
                         sx={{
@@ -57,13 +83,17 @@ const AddCollectionPopup = (props) => {
                         />
                     </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.onClose}>Close</Button>
-                    <Button onClick={props.onClose}>Create</Button>
+                <DialogActions sx={{ mb: 1.5 }}>
+                    <Button onClick={onClose} variant="outlined" color="error">
+                        Close
+                    </Button>
+                    <Button onClick={onClose} variant="outlined" sx={{ ml: 1.5 }}>
+                        Create
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box>
     )
 }
 
-export default AddCollectionPopup
+export default CreateType
