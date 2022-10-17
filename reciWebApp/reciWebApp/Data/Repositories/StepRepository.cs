@@ -16,7 +16,7 @@ namespace reciWebApp.Data.Repositories
             Create(step);
         }
 
-        public Step GetStepById (int id)
+        public Step? GetStepById (int id)
         {
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }

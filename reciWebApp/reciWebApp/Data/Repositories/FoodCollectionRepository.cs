@@ -14,7 +14,7 @@ namespace reciWebApp.Data.Repositories
             Create(foodCollection);
         }
 
-        public List<FoodCollection?> GetFoodCollectionsByCollections(List<Collection?> collections)
+        public List<FoodCollection> GetFoodCollectionsByCollections(List<Collection?> collections)
         {
             var foodCollections = new List<FoodCollection>();
             if (collections.Count > 0)
