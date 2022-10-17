@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
   loadData() async {
     if (userInfoProvider == null) {
       Timer(Duration(seconds: 4), () {
+        if (!mounted) return;
         final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         setState(() {
           if (getUserID.imageURL.isEmpty) {
