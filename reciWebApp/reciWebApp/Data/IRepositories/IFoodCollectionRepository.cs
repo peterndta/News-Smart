@@ -6,5 +6,6 @@ namespace reciWebApp.Data.IRepositories
     {
         void CreateFoodCollection(FoodCollection foodCollection);
         List<FoodCollection?> GetFoodCollectionsByCollections(List<Collection?> collections);
+        Task<List<FoodCollection>?> GetAllFoodCollectionsAsync(List<Collection?> collections);
     }
 }
