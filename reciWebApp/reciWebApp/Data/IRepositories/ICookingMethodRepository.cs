@@ -10,7 +10,7 @@ namespace reciWebApp.Data.IRepositories
         Task<List<CookingMethod>?> GetAllCookingMethodsAsync();
         CookingMethod? GetCookingMethodById(int id);
         int? GetCookingMethodIdByName(string? name);
-        List<CookingMethod>? GetCookingMethodsByName(List<string>? names);
+        List<CookingMethod> GetCookingMethodsByName(List<string>? names);
         CookingMethod GetCookingMethodByNameSignle(string name);
     }
 }
