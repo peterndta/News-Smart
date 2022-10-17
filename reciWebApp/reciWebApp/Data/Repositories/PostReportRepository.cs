@@ -18,5 +18,20 @@ namespace reciWebApp.Data.Repositories
         {
             Create(report);
         }
+
+        public void ApproveReport (PostReport report)
+        {
+            report.Status = 1;
+        }
+
+        public PostReport GetPostReportById (int id)
+        {
+            return GetByCondition(x => x.Id == id).SingleOrDefault();
+        }
+
+        public Task<PostReport> GetPostReportByIdAsync(int id)
+        {
+            return GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
+        }
     }
 }
