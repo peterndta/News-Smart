@@ -15,7 +15,7 @@ namespace reciWebApp.Data.Repositories
             return await GetAll().ToListAsync();
         }
 
-        public List<Use?> GetUsesByName(List<string?> names)
+        public List<Use> GetUsesByName(List<string>? names)
         {
             var uses = GetAll().ToList();
             var result = new List<Use>();

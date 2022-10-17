@@ -19,11 +19,11 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.PostId.Equals(id)).ToList();
         }
 
-        public List<PostCategory?> GetPostCategoriesByCategory(List<Category?> categories)
+        public List<PostCategory> GetPostCategoriesByCategory(List<Category> categories)
         {
             var postCategories = GetAllPostCategories();
             var result = new List<PostCategory>();
-            if (postCategories.Any() && categories.Count > 0)
+            if (postCategories != null && categories.Count > 0)
             {
                 foreach (var category in categories)
                 {
@@ -33,7 +33,7 @@ namespace reciWebApp.Data.Repositories
             return result;
         }
 
-        public List<PostCategory?> GetAllPostCategories()
+        public List<PostCategory>? GetAllPostCategories()
         {
             return GetAll().ToList();
         }

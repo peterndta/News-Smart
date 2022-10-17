@@ -37,7 +37,7 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
-        public List<RecipeRegion>? GetRecipeRegionsByName(List<string>? names)
+        public List<RecipeRegion> GetRecipeRegionsByName(List<string>? names)
         {
             var recipeRegions = GetAll().ToList();
             var result = new List<RecipeRegion>();

@@ -37,7 +37,7 @@ namespace reciWebApp.Data.Repositories
                 : GetByCondition(x => x.Method.Equals(name)).FirstOrDefault().Id;
         }
 
-        public List<CookingMethod>? GetCookingMethodsByName(List<string>? names)
+        public List<CookingMethod> GetCookingMethodsByName(List<string>? names)
         {
             var cookingMethods = GetAll().ToList();
             var result = new List<CookingMethod>();
