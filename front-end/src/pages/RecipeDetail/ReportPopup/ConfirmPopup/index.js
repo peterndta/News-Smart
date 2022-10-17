@@ -11,10 +11,38 @@ import {
     Slide,
 } from '@mui/material'
 
+import { useSnackbar } from '../../../../HOCs/SnackbarContext'
+import { useReport } from '../../../../recoil/report'
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 const ConfirmPopup = (props) => {
+    const reportAction = useReport()
+    const showSnackbar = useSnackbar()
+    const reportHandler = () => {
+        reportAction
+            .createReport(props.userId, props.postId, props.reason.value)
+            .then((res) => {
+                showSnackbar({
+                    severity: 'success',
+                    children: 'Report successfully.',
+                })
+                props.setIsReport(true)
+                props.onClose()
+                props.closeReport()
+            })
+            .catch((error) => {
+                const message = error.response.data.message
+                showSnackbar({
+                    severity: 'error',
+                    children:
+                        message ||
+                        'Something went wrong, please try again later or reload the page.',
+                })
+                props.onClose()
+            })
+    }
     return (
         <Box>
             <Dialog
@@ -42,7 +70,7 @@ const ConfirmPopup = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={props.onClose}>Confirm</Button>
+                    <Button onClick={reportHandler}>Confirm</Button>
                 </DialogActions>
             </Dialog>
         </Box>
