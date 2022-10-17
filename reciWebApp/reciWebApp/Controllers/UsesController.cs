@@ -11,7 +11,7 @@ using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/uses")]
     [ApiController]
     public class UsesController : ControllerBase
     {
@@ -45,23 +45,23 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/use")]
+        [Route("~/api/admin/use")]
         [HttpPost]
-        public async Task<IActionResult> CreateUse(int id, [FromBody] CreateUseDTO useDTO)
+        public async Task<IActionResult> CreateUse([FromBody] CreateUseDTO useDTO)
         {
             try
             {
-                var user = await _repoManager.User.GetUserByIdAsync(id);
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
 
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 var createUse = _mapper.Map<Use>(useDTO);
 

@@ -22,7 +22,8 @@ class Category {
 }
 
 class _FilterCategoryState extends State<FilterCategory> {
-  var _controller = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  TextEditingController checkboxController = TextEditingController();
   bool isSelected = false;
 
   // Future getCategoryData() async {
@@ -48,6 +49,19 @@ class _FilterCategoryState extends State<FilterCategory> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> selectedType = [];
+    String submitData() {
+      final searchResult = searchController.text;
+      // final checkboxResult = checkboxController.text;
+      // selectedType.add(checkboxResult);
+      for (var type in selectedType) {
+        return '&Category=${type}';
+      }
+      String urlFilterPath = '?Search=${searchResult}';
+      print(urlFilterPath);
+      return urlFilterPath;
+    }
+
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
@@ -133,12 +147,13 @@ class _FilterCategoryState extends State<FilterCategory> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.06,
                               child: TextField(
-                                controller: _controller,
+                                controller: searchController,
+                                onSubmitted: (_) => submitData(),
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Keywords',
                                   suffixIcon: IconButton(
-                                    onPressed: _controller.clear,
+                                    onPressed: searchController.clear,
                                     icon: Icon(Icons.clear),
                                   ),
                                 ),
@@ -187,9 +202,36 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       return ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) =>
-                                            CheckBox(isSelected,
-                                                snapshot.data[index].type),
+                                        itemBuilder: (context, index) => Row(
+                                          children: [
+                                            StatefulBuilder(
+                                              builder: (context, _setState) =>
+                                                  Checkbox(
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                                value: isSelected,
+                                                onChanged: (bool? value) {
+                                                  _setState(() {
+                                                    isSelected = value!;
+                                                    if (isSelected == true) {
+                                                      selectedType.add(snapshot
+                                                          .data[index].type);
+                                                    } else {
+                                                      selectedType.remove(
+                                                          snapshot.data[index]
+                                                              .type);
+                                                    }
+                                                    //print(selectedType);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Text(
+                                              snapshot.data[index].type,
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                   })),
@@ -203,7 +245,9 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       MediaQuery.of(context).size.height *
                                           0.06),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  submitData();
+                                },
                                 child: const Text(
                                   'Show Result',
                                   style: TextStyle(

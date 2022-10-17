@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/infinite_scroll.dart';
 import '../components/filter_new_old_popular.dart';
 import '../components/filter_recipe_result.dart';
 
@@ -96,8 +97,8 @@ class _RecipesResultState extends State<RecipesResult> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.33,
-              child: FoodList(),
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: InfiniteScroll(),
             ),
           ],
         ),

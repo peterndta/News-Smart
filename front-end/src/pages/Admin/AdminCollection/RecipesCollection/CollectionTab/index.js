@@ -3,7 +3,7 @@ import React from 'react'
 import { Autocomplete, Box, Button, FormControl, Grid, TextField, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-const options = ['ViPrpor', 'Option 2']
+const options = ['Option 1', 'Option 2']
 
 const CollectionTab = () => {
     const [value, setValue] = React.useState(options[0])
@@ -38,16 +38,13 @@ const CollectionTab = () => {
                             },
                         }}
                     >
-                        {/* <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
-                            Keyword
-                        </InputLabel> */}
                         <Autocomplete
                             value={value}
-                            onChange={(event, newValue) => {
+                            onChange={(__, newValue) => {
                                 setValue(newValue)
                             }}
                             inputValue={inputValue}
-                            onInputChange={(event, newInputValue) => {
+                            onInputChange={(__, newInputValue) => {
                                 setInputValue(newInputValue)
                             }}
                             id="controllable-states-demo"
@@ -60,7 +57,7 @@ const CollectionTab = () => {
                     </FormControl>
                 </Box>
 
-                <Box width="100%" display="flex" justifyContent="center" mt={6}>
+                <Box width="100%" display="flex" justifyContent="center" mt={3}>
                     <Button variant="contained" sx={{ color: grey[100] }}>
                         ADD TO COLLECTION
                     </Button>

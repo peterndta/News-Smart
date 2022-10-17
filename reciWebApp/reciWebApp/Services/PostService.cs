@@ -46,6 +46,7 @@ namespace reciWebApp.Services
             showPostDTO.Method = _repoManager.CookingMethod.GetCookingMethodById(showPostDTO.CookingMethodId).Method;
             showPostDTO.UserName = _repoManager.User.GetUserById(showPostDTO.UserId).Name;
             showPostDTO.AverageRating = _repoManager.UserInteract.GetAverageRating(showPostDTO.Id);
+            showPostDTO.UsesOfFood = _repoManager.Use.GetUsesById(showPostDTO.UsesId).UsesOfFood;
             return showPostDTO;
         }
     }

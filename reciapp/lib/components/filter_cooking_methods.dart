@@ -22,9 +22,10 @@ class Method {
 }
 
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
-  var _controller = TextEditingController();
+  var controller = TextEditingController();
   bool isSelected = false;
-  final List<int> selectedMethodID = [];
+  final List<String> selectedMethod = [];
+  String urlAPI = '';
   // Future getCookingMethodData() async {
   //   var response = await http.get(
   //     Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
@@ -130,12 +131,12 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.06,
                               child: TextField(
-                                controller: _controller,
+                                controller: controller,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Keywords',
                                   suffixIcon: IconButton(
-                                    onPressed: _controller.clear,
+                                    onPressed: controller.clear,
                                     icon: Icon(Icons.clear),
                                   ),
                                 ),
@@ -186,31 +187,28 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                         itemBuilder: (context, index) => Row(
                                           children: [
                                             StatefulBuilder(
-                                                builder: (context, _setState) =>
-                                                    Checkbox(
-                                                      side: BorderSide(
-                                                          color: Colors.orange),
-                                                      value: isSelected,
-                                                      onChanged: (bool? value) {
-                                                        _setState(() {
-                                                          isSelected = value!;
-                                                          if (isSelected ==
-                                                              true) {
-                                                            selectedMethodID
-                                                                .add(snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          } else {
-                                                            selectedMethodID
-                                                                .remove(snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          }
-                                                          print(
-                                                              selectedMethodID);
-                                                        });
-                                                      },
-                                                    )),
+                                              builder: (context, _setState) =>
+                                                  Checkbox(
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                                value: isSelected,
+                                                onChanged: (bool? value) {
+                                                  _setState(() {
+                                                    isSelected = value!;
+                                                    if (isSelected == true) {
+                                                      selectedMethod.add(
+                                                          snapshot.data[index]
+                                                              .method);
+                                                    } else {
+                                                      selectedMethod.remove(
+                                                          snapshot.data[index]
+                                                              .method);
+                                                    }
+                                                    print(selectedMethod);
+                                                  });
+                                                },
+                                              ),
+                                            ),
                                             Text(
                                               snapshot.data[index].method,
                                               style: TextStyle(fontSize: 18),

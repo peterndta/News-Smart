@@ -18,7 +18,7 @@ const useRecipe = () => {
         })
 
     const getRecipes = (filters, pageNum = 1) =>
-        get({ endpoint: `/api/post/page/${pageNum}${filters}` })
+        get({ endpoint: `/api/recipes/post/page/${pageNum}${filters}` })
 
     return {
         getRecipe,

@@ -26,23 +26,23 @@ namespace reciWebApp.Controllers
             _servicesManager = servicesManager;
         }
 
-        [Route("~/api/user/{id}/collection")]
+        [Route("~/api/admin/collection")]
         [HttpPost]
-        public async Task<IActionResult> CreateCollection(int id, [FromBody] CreateCollectionDTO collectionDTO)
+        public async Task<IActionResult> CreateCollection([FromBody] CreateCollectionDTO collectionDTO)
         {
             try
             {
-                var user = await _repoManager.User.GetUserByIdAsync(id);
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
 
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 var createCollection = _mapper.Map<Collection>(collectionDTO);
 
@@ -61,6 +61,26 @@ namespace reciWebApp.Controllers
             catch (Exception e)
             {
                 return BadRequest (new Response (400, e.Message));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateCollection()
+        { 
+            try
+            {
+                var collections = await _repoManager.Collection.GetCollectionsAsync();
+                if (collections == null)
+                {
+                    collections = new List<Collection>();
+                }
+
+                var result = _mapper.Map<List<ShowCollectionDTO>>(collections);
+                return Ok(new Response(200, result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(400, ex.Message));
             }
         }
     }

@@ -27,19 +27,19 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
       },
     );
     if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
       setState(() {
-        var responseJson = json.decode(response.body);
         //final List jsonData = responseJson['data'];
         isLoading = false;
         page++;
-        if (responseJson.length < limit) {
+        if (responseJson['data'].length < limit) {
           hasMore = false;
         }
         posts.addAll(responseJson['data']
@@ -69,120 +69,118 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = Provider.of<UserIDProvider>(context, listen: false);
+    final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 1,
-        child: ListView.builder(
-            controller: controller,
-            itemCount: posts.length + 1,
-            itemBuilder: (context, index) {
-              if (index < posts.length) {
-                final post = posts[index];
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  child: InkWell(
-                    //   onTap: () {
-                    //   Navigator.of(context).push(MaterialPageRoute(
-                    //       builder: (context) => /**foward đến recipe detail của recipe vừa bấm */));
-                    // },
+      height: MediaQuery.of(context).size.height * 1,
+      child: ListView.builder(
+          controller: controller,
+          itemCount: posts.length + 1,
+          itemBuilder: (context, index) {
+            if (index < posts.length) {
+              final post = posts[index];
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: InkWell(
+                  //   onTap: () {
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) => /**foward đến recipe detail của recipe vừa bấm */));
+                  // },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(color: Colors.grey, width: 0.5))),
                     child: Container(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Image(
-                              image: NetworkImage(post.imageUrl),
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              height: MediaQuery.of(context).size.height * 0.14,
-                            ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.03),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    post.name,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                    textAlign: TextAlign.start,
-                                  ),
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          Image(
+                            image: NetworkImage(post.imageUrl),
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.14,
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  post.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                  textAlign: TextAlign.start,
                                 ),
-                                post.userId == getUserID.userID
-                                    ? const Icon(
-                                        Icons.bookmark,
-                                        color: Colors.black,
-                                      )
-                                    : Container(),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  child: Row(
-                                    children: [
-                                      SmoothStarRating(
-                                        isReadOnly: true,
-                                        size: 16,
-                                        color: Colors.amber[600],
-                                        rating: post.averageRating.toDouble(),
-                                        borderColor: Colors.amber[600],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: Text(
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        post.description)),
-                                Row(
+                              ),
+                              post.userId == getUserID.userID
+                                  ? const Icon(
+                                      Icons.bookmark,
+                                      color: Colors.black,
+                                    )
+                                  : Container(),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 3),
+                                child: Row(
                                   children: [
-                                    const Text('by '),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Text(
-                                        maxLines: 1,
-                                        overflow: TextOverflow.fade,
-                                        post.userName,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                    SmoothStarRating(
+                                      isReadOnly: true,
+                                      size: 16,
+                                      color: Colors.amber[600],
+                                      rating: post.averageRating.toDouble(),
+                                      borderColor: Colors.amber[600],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                              SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      post.description)),
+                              Row(
+                                children: [
+                                  const Text('by '),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.01,
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      post.userName,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                );
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32),
-                  child: Center(
-                    child: hasMore
-                        ? const CircularProgressIndicator()
-                        : const Text('No more data to load'),
-                  ),
-                );
-              }
-            }));
+                ),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                child: Center(
+                  child: hasMore
+                      ? CircularProgressIndicator()
+                      : Text('No more data to load'),
+                ),
+              );
+            }
+          }),
+    );
   }
 }

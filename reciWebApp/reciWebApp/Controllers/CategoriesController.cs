@@ -45,23 +45,23 @@ namespace reciWebApp.Controllers
             }
         }
 
-        [Route("~/api/user/{id}/category")]
+        [Route("~/api/admin/category")]
         [HttpPost]
-        public async Task<IActionResult> CreateCategory (int id, [FromBody] CreateCategoryDTO categoryDTO)
+        public async Task<IActionResult> CreateCategory ([FromBody] CreateCategoryDTO categoryDTO)
         {
             try
             {
-                var user = await _repoManager.User.GetUserByIdAsync(id);
+                //var user = await _repoManager.User.GetUserByIdAsync(id);
 
-                if (user == null)
-                {
-                    return BadRequest(new Response(400, "User id does not existed"));
-                }
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "User id does not existed"));
+                //}
 
-                if (!user.Role.Equals("admin"))
-                {
-                    return BadRequest(new Response(400, "You do not have permission"));
-                }
+                //if (!user.Role.Equals("admin"))
+                //{
+                //    return BadRequest(new Response(400, "You do not have permission"));
+                //}
 
                 Category dbCategory = _repoManager.Category.GetCategoryByName(categoryDTO.Type);
                 if(dbCategory != null)
