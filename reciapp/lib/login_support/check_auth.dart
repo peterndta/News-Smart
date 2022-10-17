@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reciapp/login_support/user_preference.dart';
 
 class UserInfoProvider with ChangeNotifier {
-  String userID = '';
+  int userID = 0;
   String token = '';
   String imageURL = '';
   String name = '';
