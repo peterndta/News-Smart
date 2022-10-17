@@ -29,7 +29,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id, int id1)
         {
             try
             {
@@ -50,8 +50,9 @@ namespace reciWebApp.Controllers
                 var showPost = _mapper.Map<ShowPostDTO>(post);
                 showPost = _servicesManager.PostService.GetPostInfo(showPost);
                 var showDetailPost = _mapper.Map<ShowDetailPostDTO>(showPost);
-                showDetailPost.BookMark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
+                showDetailPost.Bookmark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
                 showDetailPost.Rating = _repoManager.UserInteract.GetRating(currentUser.Id, id);
+                showDetailPost.IsReport = _repoManager.PostReport.CheckReport(currentUser.Id, id);
                 return Ok(new Response(200, showDetailPost));
             }
             catch (Exception ex)
