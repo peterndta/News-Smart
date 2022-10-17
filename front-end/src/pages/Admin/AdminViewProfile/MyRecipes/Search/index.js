@@ -21,7 +21,7 @@ const SearchBox = () => {
     const searchSubmitHandler = (event) => {
         if (event.key === 'Enter') {
             let route = pathname + '?'
-            if (searchValue) route += '&name=' + searchValue
+            if (searchValue) route += '&search=' + searchValue
 
             if (sort) route += `&sort=${sort}`
 

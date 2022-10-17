@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import {
     BookmarkAdded,
     BookmarkBorder,
+    FlagTwoTone,
     Kitchen,
     ShoppingCart,
     Star,
@@ -33,8 +34,10 @@ import Loading from '../../pages/Loading'
 import { useBookmark } from '../../recoil/bookmark'
 import { useRecipe } from '../../recoil/recipe'
 import RecipeRating from './RecipeRating'
+import DetailPopup from './ReportPopup'
 
 const RecipeDetail = () => {
+    const [open, setOpen] = React.useState(false)
     const [recipe, setRecipe] = useState({})
     const [categories, setCategories] = useState([])
     const [step, setStep] = useState({})
@@ -46,7 +49,9 @@ const RecipeDetail = () => {
     const [isFirstRender, setIsFirstRender] = useState(true)
     const [isBookmark, setIsBookmark] = useState(false)
     const bookmarkAction = useBookmark()
-
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
     const openCreateFeedbackHandler = () => {
         setOpenCreateFeedback(true)
     }
@@ -127,6 +132,7 @@ const RecipeDetail = () => {
                 <Loading />
             ) : (
                 <React.Fragment>
+                    {open && <DetailPopup status={open} onClose={() => setOpen(false)} />}
                     <Container maxWidth="xl">
                         <Box mt={4}>
                             <Breadcrumbs separator="›" aria-label="breadcrumb">
@@ -278,10 +284,12 @@ const RecipeDetail = () => {
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>
+
                                         <ListItem
                                             disablePadding
                                             sx={{
                                                 color: blueGrey[800],
+                                                borderBottom: `1px solid ${blueGrey[200]}`,
                                                 backgroundColor: grey[200],
                                             }}
                                         >
@@ -296,6 +304,28 @@ const RecipeDetail = () => {
                                                     ) : (
                                                         <Verified color="primary" />
                                                     )}
+                                                </ListItemIcon>
+                                            </ListItemButton>
+                                        </ListItem>
+
+                                        <ListItem
+                                            disablePadding
+                                            sx={{
+                                                color: blueGrey[800],
+                                                backgroundColor: grey[200],
+                                            }}
+                                        >
+                                            <ListItemButton
+                                                sx={{ height: 50 }}
+                                                // disabled={recipe.rating !== null || star !== 0}
+                                                onClick={handleClickOpen}
+                                            >
+                                                <ListItemIcon>
+                                                    {/* {recipe.rating === null || star === 0 ? ( */}
+                                                    <FlagTwoTone sx={{ color: blueGrey[800] }} />
+                                                    {/* ) : (
+                                                        <Flag color="primary" />
+                                                    )} */}
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>

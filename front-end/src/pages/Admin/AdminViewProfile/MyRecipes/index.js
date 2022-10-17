@@ -17,7 +17,7 @@ import SearchBox from './Search'
 const filterStringGenerator = ({ search, sort }) => {
     let filterString = `?PageSize=${6}`
 
-    if (search && search.trim() !== '') filterString += '&name=' + search
+    if (search && search.trim() !== '') filterString += '&search=' + search
 
     if (sort !== undefined) filterString += `&sort=${sort}`
 

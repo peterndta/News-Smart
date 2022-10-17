@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/login_support/check_auth.dart';
+import 'package:reciapp/login_support/user_preference.dart';
 import 'package:reciapp/pages/bookmark_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,8 @@ import 'pages/collection_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await UserPreferences.init();
+
   runApp(MyApp());
 }
 
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => UserIDProvider(),
+      create: (context) => UserInfoProvider(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -56,6 +59,6 @@ class MyApp extends StatelessWidget {
 // class _MyHomePageState extends State<MyHomePage> {
 //   @override
 //   Widget build(BuildContext context) {
-//     return RecipesResult();
+//     return CategoryPage();
 //   }
 // }

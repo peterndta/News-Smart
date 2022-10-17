@@ -15,7 +15,7 @@ const Paging = ({ size }) => {
 
     const filterHandler = () => {
         let route = pathname + '?'
-        if (search && search.trim() !== '') route += '&name=' + search
+        if (search && search.trim() !== '') route += '&search=' + search
 
         if (sort) route += `&sort=${sort}`
 

@@ -48,12 +48,6 @@ const hybridRoutes = [
         component: lazy(() => import('../pages/Methods')),
         layout: 'common',
     },
-    {
-        path: '/recipes/:id',
-        name: 'recipe detail',
-        component: lazy(() => import('../pages/RecipeDetail')),
-        layout: 'common',
-    },
 ]
 
 const privateRoutes = [
@@ -91,6 +85,12 @@ const privateRoutes = [
         component: lazy(() => import('../pages/CreateRecipe')),
         layout: 'common',
         role: 'user',
+    },
+    {
+        path: '/recipes/:id',
+        name: 'recipe detail',
+        component: lazy(() => import('../pages/RecipeDetail')),
+        layout: 'common',
     },
     {
         path: '/admin/users',
@@ -143,13 +143,13 @@ const Routes = (
                 ({ layout, ...route }) =>
                     !layout && <PublicRoute key={route.name} exact={true} {...route} />
             )}
-            {privateRoutes.map(
-                ({ layout, ...route }) =>
-                    !layout && <PrivateRoute key={route.name} exact={true} {...route} />
-            )}
             {hybridRoutes.map(
                 ({ layout, ...route }) =>
                     !layout && <HybridRoute key={route.name} exact={true} {...route} />
+            )}
+            {privateRoutes.map(
+                ({ layout, ...route }) =>
+                    !layout && <PrivateRoute key={route.name} exact={true} {...route} />
             )}
             <Route path="/admin">
                 <AdminLayout>
@@ -161,16 +161,16 @@ const Routes = (
                                         <PublicRoute key={route.name} exact={true} {...route} />
                                     )
                             )}
-                            {privateRoutes.map(
-                                ({ layout, ...route }) =>
-                                    layout === 'admin' && (
-                                        <PrivateRoute key={route.name} exact={true} {...route} />
-                                    )
-                            )}
                             {hybridRoutes.map(
                                 ({ layout, ...route }) =>
                                     layout === 'admin' && (
                                         <HybridRoute key={route.name} exact={true} {...route} />
+                                    )
+                            )}
+                            {privateRoutes.map(
+                                ({ layout, ...route }) =>
+                                    layout === 'admin' && (
+                                        <PrivateRoute key={route.name} exact={true} {...route} />
                                     )
                             )}
                             <Redirect to="/admin" />
@@ -188,16 +188,16 @@ const Routes = (
                                         <PublicRoute key={route.name} exact={true} {...route} />
                                     )
                             )}
-                            {privateRoutes.map(
-                                ({ layout, ...route }) =>
-                                    layout === 'common' && (
-                                        <PrivateRoute key={route.name} exact={true} {...route} />
-                                    )
-                            )}
                             {hybridRoutes.map(
                                 ({ layout, ...route }) =>
                                     layout === 'common' && (
                                         <HybridRoute key={route.name} exact={true} {...route} />
+                                    )
+                            )}
+                            {privateRoutes.map(
+                                ({ layout, ...route }) =>
+                                    layout === 'common' && (
+                                        <PrivateRoute key={route.name} exact={true} {...route} />
                                     )
                             )}
                             <Redirect to="/" />
