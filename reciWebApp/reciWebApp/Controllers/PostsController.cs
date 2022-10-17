@@ -393,6 +393,8 @@ namespace reciWebApp.Controllers
                 {
                     Name = filter.Search,
                     PostsByCookingMethods = getPostsByCookingMethods,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByMethodsAsync(postParams);
@@ -440,6 +442,8 @@ namespace reciWebApp.Controllers
                 {
                     Name = filter.Search,
                     PostsByCategories = getPostsByCategories,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByCategoriesAsync(postParams);
@@ -494,6 +498,8 @@ namespace reciWebApp.Controllers
                     Name = filter.Search,
                     PostsRecipeRegions = getPostsByRecipeRegions,
                     PostsByUses = getPostsByUses,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByUsesAndRegionsAsync(postParams);
