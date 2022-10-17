@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
+import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
@@ -14,6 +17,7 @@ import '../components/back_to_top_button.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +36,6 @@ class _HomePageState extends State<HomePage> {
       //scroll listener
       double showoffset =
           10.0; //Back to top botton will show on scroll offset 10.0
-
       if (scrollController.offset > showoffset) {
         showbtn = true;
         setState(() {
@@ -54,6 +57,16 @@ class _HomePageState extends State<HomePage> {
       Timer(Duration(seconds: 4), () {
         final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         setState(() {
+          if (getUserID.imageURL.isEmpty) {
+            UserData userData =
+                UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+            getUserID.userID = userData.userID;
+            getUserID.imageURL = userData.imageURL;
+            getUserID.name = userData.name;
+            getUserID.token = userData.token;
+            getUserID.role = userData.role;
+            getUserID.mail = userData.mail;
+          }
           userInfoProvider = getUserID;
         });
       });
@@ -65,6 +78,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+    //print(
+    //    'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
+    // print('token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(

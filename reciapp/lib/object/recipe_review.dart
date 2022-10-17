@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/object/user_info.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
 import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
 import '../pages/recipe_detail.dart';
 import 'get_posts_homepage.dart';
 
@@ -31,10 +35,12 @@ class RecipeReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+        UserData userData =
+            UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
         Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RecipeDetailPage(id: post.id, token: getUserID.token),
-            ));
+          builder: (context) =>
+              RecipeDetailPage(id: post.id, token: userData.token),
+        ));
       },
       splashColor: const Color.fromARGB(255, 211, 210, 210),
       child: Padding(
@@ -167,34 +173,33 @@ class ListRecipeReview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        SizedBox(
-            height: MediaQuery.of(context).size.height * heightValue,
-            child: Scrollbar(
-                thickness: 7,
-                radius: const Radius.circular(20),
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: list.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index < list.length) {
-                      final post = list[index];
-                      return RecipeReviewItem(
-                        post: post,
-                      );
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Center(
-                          child: hasMore
-                              ? CircularProgressIndicator()
-                              : Text('No more data to load'),
-                        ),
-                      );
-                    }
-                  },
-                )
-                //   ),
-                ));
+    return SizedBox(
+        height: MediaQuery.of(context).size.height * heightValue,
+        child: Scrollbar(
+            thickness: 7,
+            radius: const Radius.circular(20),
+            child: ListView.builder(
+              controller: scrollController,
+              itemCount: list.length + 1,
+              itemBuilder: (context, index) {
+                if (index < list.length) {
+                  final post = list[index];
+                  return RecipeReviewItem(
+                    post: post,
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Center(
+                      child: hasMore
+                          ? CircularProgressIndicator()
+                          : Text('No more data to load'),
+                    ),
+                  );
+                }
+              },
+            )
+            //   ),
+            ));
   }
 }

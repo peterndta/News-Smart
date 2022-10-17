@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/object/post_detail.dart';
+import 'package:reciapp/object/step_iteam.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
@@ -44,6 +46,30 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+  Future fetchStep(String postId, String token) async {
+    http.Response response = await http.get(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/step'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      print(responseJson['data']);
+      StepItem step = StepItem.fromJson(responseJson['data']);
+      return step;
+    }
+  }
+
+  Future fetchData(String id, String token) async {
+    final post = await fetchPosts(id, token);
+    final step = await fetchStep(id, token);
+    PostDetail postDetail = PostDetail.fromJson(post.toJson(), step.toJson());
+    return postDetail;
+  }
+
   @override
   void initState() {
     fetchPosts(widget.id, widget.token);
@@ -77,7 +103,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         ),
         floatingActionButton: BackToTopButton(scrollController, showbtn),
         body: FutureBuilder(
-            future: fetchPosts(widget.id, widget.token),
+            future: fetchData(widget.id, widget.token),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return SingleChildScrollView(
@@ -167,7 +193,14 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Image.network(snapshot.data.imageUrl),
+                        child: Image(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            '${snapshot.data.imageUrl}',
+                          ),
+                        ),
                       ),
                       IntrinsicHeight(
                         child: Row(
@@ -182,7 +215,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Text('20 minutes')
+                                Text('${snapshot.data.preparingTime} minutes')
                               ],
                             ),
                             VerticalDivider(
@@ -201,7 +234,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Text('20 minutes')
+                                Text('${snapshot.data.processingTime} minutes')
                               ],
                             ),
                             const VerticalDivider(
@@ -220,7 +253,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Text('20 minutes')
+                                Text('${snapshot.data.cookingTime} minutes')
                               ],
                             ),
                           ],
@@ -267,7 +300,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                               color: Colors.black,
                                             )),
                                         TextSpan(
-                                            text: "4 people",
+                                            text:
+                                                "${snapshot.data.serving} people",
                                             style: TextStyle(
                                               color: Colors.black,
                                             ))
@@ -299,8 +333,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                           alignment:
                                               PlaceholderAlignment.middle),
                                       TextSpan(
-                                          text:
-                                              " 1 (3 pound) whole chicken, 4 carrots, halved, 4 stalks celery, halved.",
+                                          text: " ${snapshot.data.ingredient}",
                                           style: TextStyle(
                                             color: Colors.black,
                                           )),
@@ -323,7 +356,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                           alignment:
                                               PlaceholderAlignment.middle),
                                       TextSpan(
-                                          text: " Cooker, Knife, Blender.",
+                                          text: " ${snapshot.data.tool}",
                                           style: TextStyle(
                                             color: Colors.black,
                                           )),
@@ -360,8 +393,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             ),
                             Container(
                               padding: EdgeInsets.only(top: 10, left: 10),
-                              child: Text(
-                                  'Put the chicken, carrots, celery and onion in a large soup pot and cover with cold water. Heat and simmer, uncovered, until the chicken meat falls off of the bones (skim off foam every so often).'),
+                              child: Text('${snapshot.data.processing}'),
                             )
                           ],
                         ),
@@ -392,7 +424,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             Container(
                               padding: EdgeInsets.only(top: 10, left: 10),
                               child: Text(
-                                'Put the chicken, carrots, celery and onion in a large soup pot and cover with cold water. Heat and simmer, uncovered, until the chicken meat falls off of the bones (skim off foam every so often).',
+                                '${snapshot.data.cooking}',
                               ),
                             )
                           ],
@@ -437,7 +469,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                             Color.fromARGB(255, 119, 118, 118)),
                                     children: [
                                       TextSpan(
-                                          text: 'The Allrecipes Community',
+                                          text: '${snapshot.data.userName}',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black)),

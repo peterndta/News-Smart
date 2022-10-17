@@ -27,7 +27,7 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",

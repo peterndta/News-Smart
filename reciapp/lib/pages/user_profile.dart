@@ -9,7 +9,9 @@ import '../components/head_bar.dart';
 import '../components/copyright.dart';
 import '../components/sidebar_menu.dart';
 import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
+import '../object/user_info.dart';
 import 'collection_page.dart';
 import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
@@ -58,10 +60,6 @@ class UserProfile extends StatefulWidget {
     required this.userInfoProvider,
     super.key
   });
-  const UserProfile.other({
-    required this.userInfoProvider,
-    super.key
-  });
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -106,13 +104,20 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-    // final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-    // userId = int.parse(getUserID.userID);
-    // print(getUserID.userID);
-    fetchInfinitePosts(0);
+    if (widget.userInfoProvider.name.isEmpty) {
+      UserData userData =
+          UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+      widget.userInfoProvider.userID = userData.userID;
+      widget.userInfoProvider.imageURL = userData.imageURL;
+      widget.userInfoProvider.name = userData.name;
+      widget.userInfoProvider.token = userData.token;
+      widget.userInfoProvider.role = userData.role;
+      widget.userInfoProvider.mail = userData.mail;
+    }
+    fetchInfinitePosts(widget.userInfoProvider.userID);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetchInfinitePosts(userId);
+        fetchInfinitePosts(widget.userInfoProvider.userID);
         print(' more');
       }
     });
@@ -128,7 +133,6 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final getUserID = context.watch<UserInfoProvider>().userID;
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: const PreferredSize(

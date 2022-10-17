@@ -13,14 +13,17 @@ import '../login_support/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+import '../login_support/user_preference.dart';
+import '../object/user_info.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
@@ -38,20 +41,29 @@ class _LoginPageState extends State<LoginPage> {
         String responseString = response.body;
 
         Map<String, dynamic> decodedToken = JwtDecoder.decode(responseString);
-        print(decodedToken);
         getUserInfo.userID = int.parse(decodedToken['userId']);
         getUserInfo.name = decodedToken['name'];
         getUserInfo.imageURL = decodedToken['image'];
         getUserInfo.token = json.decode(responseString)['data'];
         getUserInfo.role = decodedToken['role'];
         getUserInfo.mail = decodedToken['email'];
+
+        UserData user = UserData(
+            userID: int.parse(decodedToken['userId']),
+            name: decodedToken['name'],
+            imageURL: decodedToken['image'],
+            role: decodedToken['role'],
+            mail: decodedToken['email'],
+            token: json.decode(responseString)['data']);
+        String userString = jsonEncode(user.toJson());
+        await UserPreferences.setUserInfo(userString);
+
         print(getUserInfo.token);
         print(getUserInfo.role);
         print(getUserInfo.mail);
         print(getUserInfo.userID);
         print(getUserInfo.name);
         print(getUserInfo.imageURL);
-
         print('status ok');
       } else {
         print('status deo ok');
