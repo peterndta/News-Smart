@@ -35,19 +35,22 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
-        public List<Category?> GetCategoryByName(List<string>? names)
+        public List<Category> GetCategoryByName(List<string>? names)
         {
             var categories = GetAllCategories();
-            List<Category> result = new List<Category>();
-            if (names != null && categories.Count > 0)
+            var result = new List<Category>();
+            if (names != null && categories != null)
             {
                 foreach (var name in names)
                 {
-                    result.AddRange(categories.Where(x => x.Type.Equals(name)).ToList());
+                    var category = GetByCondition(x => x.Type.Equals(name)).FirstOrDefault();
+                    if (category != null)
+                    {
+                        result.Add(category);
+                    }
                 }
-                return result;
             }
-            return categories;
+            return result;
         }
 
         public void UpdateCategory(Category category)
@@ -55,7 +58,7 @@ namespace reciWebApp.Data.Repositories
             Update(category);
         }
 
-        public Category GetCategoryByName(string name)
+        public Category? GetCategoryByName(string name)
         {
             return GetByCondition(x => x.Type.Equals(name)).SingleOrDefault();
         }

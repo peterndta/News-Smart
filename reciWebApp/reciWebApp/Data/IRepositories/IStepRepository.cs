@@ -7,7 +7,7 @@ namespace reciWebApp.Data.IRepositories
         Task<Step> GetStepByIdAsync(int id);
         Task<Step> GetStepByPostIdAsync(string id);
         void CreateStep(Step step);
-        Step GetStepById(int id);
+        Step? GetStepById(int id);
         void UpdateStep(Step step);
     }
 }

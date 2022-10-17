@@ -6,13 +6,13 @@ namespace reciWebApp.Data.IRepositories
     {
         double GetAverageRating(string postId);
         Task<UserInteract?> GetUserInteractAsync(int userId, string postId);
-        List<UserInteract?> GetUserInteract(string postId);
+        List<UserInteract>? GetUserInteract(string postId);
         void CreateUserInteract(UserInteract userInteract);
         void UpdateUserInteract(UserInteract userInteract);
         void DeleteUserInteract(UserInteract userInteract);
         bool CheckBookMark(int userId, string postId);
         int? GetRating(int userId, string postId);
-        Task<List<UserInteract>?> GetBookmarkAsync(int userId);
-        Task<List<UserInteract>?> GetRatingAsync(int userId);
+        Task<List<UserInteract>>? GetBookmarkAsync(int userId);
+        Task<List<UserInteract>>? GetRatingAsync(int userId);
     }
 }
