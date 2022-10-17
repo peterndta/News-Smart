@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 import {
     BookmarkAdded,
@@ -32,6 +33,7 @@ import { blueGrey, grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Loading from '../../pages/Loading'
+import authAtom from '../../recoil/auth/atom'
 import { useBookmark } from '../../recoil/bookmark'
 import { useRecipe } from '../../recoil/recipe'
 import RecipeRating from './RecipeRating'
@@ -51,6 +53,7 @@ const RecipeDetail = () => {
     const [isBookmark, setIsBookmark] = useState(false)
     const [isReport, setIsReport] = useState(false)
     const bookmarkAction = useBookmark()
+    const auth = useRecoilValue(authAtom)
     const handleClickOpenReport = () => {
         setOpen(true)
     }
@@ -141,7 +144,7 @@ const RecipeDetail = () => {
                         <DetailPopup
                             status={open}
                             onClose={handleClickCloseReport}
-                            userId={recipe.userId}
+                            userId={auth.userId}
                             postId={recipe.id}
                             setIsReport={setIsReport}
                         />
@@ -330,11 +333,11 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                disabled={isReport}
+                                                disabled={recipe.isReport === true || isReport}
                                                 onClick={handleClickOpenReport}
                                             >
                                                 <ListItemIcon>
-                                                    {isReport ? (
+                                                    {recipe.isReport || isReport ? (
                                                         <Flag color="primary" />
                                                     ) : (
                                                         <FlagTwoTone
