@@ -88,7 +88,7 @@ namespace reciWebApp.Data.Repositories
             return posts;
         }
 
-        public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
+        public List<Post> GetPostsByPostCategories(List<PostCategory> postCategories)
         {
             var posts = GetAll().ToList();
             var result = new List<Post>();
@@ -103,7 +103,7 @@ namespace reciWebApp.Data.Repositories
             return result;
         }
 
-        public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
+        public List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
         {
             var posts = GetAll().ToList();
             var result = new List<Post>();
@@ -121,7 +121,7 @@ namespace reciWebApp.Data.Repositories
             return result;
         }
 
-        public List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
+        public List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
         {
             var posts = GetAll().ToList();
             var result = new List<Post>();
