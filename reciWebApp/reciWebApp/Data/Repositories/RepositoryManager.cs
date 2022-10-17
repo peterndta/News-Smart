@@ -17,6 +17,7 @@ namespace reciWebApp.Data.Repositories
         private IUserInteractRepository _userInteractRepository;
         private ICollectionRepository _collectionRepository;
         private IFoodCollectionRepository _foodCollectionRepository;
+        private IPostReportRepository _postReportRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -150,6 +151,18 @@ namespace reciWebApp.Data.Repositories
                     _foodCollectionRepository = new FoodCollectionRepository(_context);
                 }
                 return _foodCollectionRepository;
+            }
+        }
+
+        public IPostReportRepository PostReport
+        {
+            get
+            {
+                if (_postReportRepository == null)
+                {
+                    _postReportRepository = new PostReportRepository(_context);
+                }
+                return _postReportRepository;
             }
         }
 

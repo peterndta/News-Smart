@@ -1,10 +1,10 @@
 import { get, post } from '../../utils/ApiCaller'
 
 const useCollection = () => {
-    const createCollection = (name) =>
-        post({ endpoint: `/api/admin/collection`, body: { collectionName: name } })
+    const createCollection = (value) =>
+        post({ endpoint: `/api/admin/collection`, body: { collectionName: value } })
 
-    const getCollections = () => get({ endpoint: '/api/collections' })
+    const getCollections = () => get({ endpoint: '/api/collection' })
 
     const addPostsToCollection = (collectionId, postsId) =>
         post({ endpoint: `/api/collection/${collectionId}/foodcollection`, body: postsId })
