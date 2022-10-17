@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import {
     BookmarkAdded,
     BookmarkBorder,
+    Flag,
     FlagTwoTone,
     Kitchen,
     ShoppingCart,
@@ -48,9 +49,13 @@ const RecipeDetail = () => {
     const [openCreateFeedback, setOpenCreateFeedback] = useState(false)
     const [isFirstRender, setIsFirstRender] = useState(true)
     const [isBookmark, setIsBookmark] = useState(false)
+    const [isReport, setIsReport] = useState(false)
     const bookmarkAction = useBookmark()
-    const handleClickOpen = () => {
+    const handleClickOpenReport = () => {
         setOpen(true)
+    }
+    const handleClickCloseReport = () => {
+        setOpen(false)
     }
     const openCreateFeedbackHandler = () => {
         setOpenCreateFeedback(true)
@@ -132,7 +137,15 @@ const RecipeDetail = () => {
                 <Loading />
             ) : (
                 <React.Fragment>
-                    {open && <DetailPopup status={open} onClose={() => setOpen(false)} />}
+                    {open && (
+                        <DetailPopup
+                            status={open}
+                            onClose={handleClickCloseReport}
+                            userId={recipe.userId}
+                            postId={recipe.id}
+                            setIsReport={setIsReport}
+                        />
+                    )}
                     <Container maxWidth="xl">
                         <Box mt={4}>
                             <Breadcrumbs separator="›" aria-label="breadcrumb">
@@ -317,15 +330,17 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                // disabled={recipe.rating !== null || star !== 0}
-                                                onClick={handleClickOpen}
+                                                disabled={isReport}
+                                                onClick={handleClickOpenReport}
                                             >
                                                 <ListItemIcon>
-                                                    {/* {recipe.rating === null || star === 0 ? ( */}
-                                                    <FlagTwoTone sx={{ color: blueGrey[800] }} />
-                                                    {/* ) : (
+                                                    {isReport ? (
                                                         <Flag color="primary" />
-                                                    )} */}
+                                                    ) : (
+                                                        <FlagTwoTone
+                                                            sx={{ color: blueGrey[800] }}
+                                                        />
+                                                    )}
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>
