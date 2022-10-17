@@ -14,7 +14,14 @@
       },
       "oauth_client": [
         {
-
+          "client_id": "584516125468-9keos1ppr9lc9c9mok75ml386v8kcp1d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reciapp",
+            "certificate_hash": "c735636f09ccfef5a3e70b47ad745f9157f29b1e"
+          }
+        },
+        {
           "client_id": "584516125468-ok82fkvnh2gvjc8lj8cvpdvhc17q78ai.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -23,7 +30,6 @@
           }
         },
         {
-
           "client_id": "584516125468-72l9ij7le1hrq6u7h3r3neim88idimlq.apps.googleusercontent.com",
           "client_type": 3
         }

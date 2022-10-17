@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
+import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_result_page.dart';
 import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
@@ -28,8 +32,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-
     scrollController.addListener(() {
       //scroll listener
       double showoffset =
@@ -46,21 +48,40 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
-    //getUserInfo.userID = UserPreferences.getUserID();
-    // getUserInfo.imageURL = UserPreferences.getImageURL();
-    // getUserInfo.mail = UserPreferences.getMail();
-    // getUserInfo.name = UserPreferences.getUsername();
-    getUserInfo.token = UserPreferences.getToken();
-    // getUserInfo.role = UserPreferences.getRole();
     super.initState();
+    loadData();
   }
+
+  loadData() async {
+    if (userInfoProvider == null) {
+      Timer(Duration(seconds: 4), () {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+        setState(() {
+          if (getUserID.imageURL.isEmpty) {
+            UserData userData =
+                UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+            getUserID.userID = userData.userID;
+            getUserID.imageURL = userData.imageURL;
+            getUserID.name = userData.name;
+            getUserID.token = userData.token;
+            getUserID.role = userData.role;
+            getUserID.mail = userData.mail;
+          }
+          userInfoProvider = getUserID;
+        });
+      });
+    }
+    return;
+  }
+
+  UserInfoProvider? userInfoProvider;
 
   @override
   Widget build(BuildContext context) {
-    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+    // final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
     //print(
     //    'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
-    print('token: ${getUserInfo.token}');
+    // print('token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -168,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                                                 textAlign: TextAlign.end,
                                               ),
                                               snapshot.data[index].userId ==
-                                                      getUserInfo.userID
+                                                      userInfoProvider?.userID
                                                   ? Icon(
                                                       Icons.bookmark,
                                                       color: Colors.black,

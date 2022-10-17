@@ -3,6 +3,7 @@
 //     final postItem = postItemFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 PostItem postItemFromJson(String str) => PostItem.fromJson(json.decode(str));
 
@@ -29,7 +30,7 @@ class PostItem {
     required this.serving,
   });
 
-  int id;
+  String id;
   String name;
   int cookingMethodId;
   int recipeRegionId;
