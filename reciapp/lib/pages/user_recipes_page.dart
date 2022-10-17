@@ -1,24 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
 
-import '../login_support/check_auth.dart';
 import '../components/copyright.dart';
 import '../object/get_posts_homepage.dart';
-import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
 
-class CollectionPage extends StatefulWidget {
-  CollectionPage(this.userId, {super.key});
+import '../object/recipe_review.dart';
+
+class UserRecipesPage extends StatefulWidget {
   final int userId;
+  UserRecipesPage(this.userId, {super.key});
 
   @override
-  State<CollectionPage> createState() => _CollectionPageState();
+  State<UserRecipesPage> createState() => _UserRecipesPageState();
 }
 
-class _CollectionPageState extends State<CollectionPage> {
+class _UserRecipesPageState extends State<UserRecipesPage> {
   TextEditingController keywords = TextEditingController();
   final controller = ScrollController();
   int page = 1;
@@ -59,7 +57,7 @@ class _CollectionPageState extends State<CollectionPage> {
   void initState() {
     super.initState();
     userId = widget.userId;
-    print("User ID: $userId");
+    print(userId);
     fetchInfinitePosts(userId);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -76,17 +74,16 @@ class _CollectionPageState extends State<CollectionPage> {
   }
 
   final List<GetPosts> _listReciepReviews = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('User Bookmark'),
+        title: const Text('User Recipes'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white,
         foregroundColor: Colors.orange,
+        backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -98,21 +95,22 @@ class _CollectionPageState extends State<CollectionPage> {
               alignment: Alignment.topCenter,
               height: MediaQuery.of(context).size.height * 0.1,
               child: Form(
-                  child: TextFormField(
-                      validator: (String? value) {
-                        return (value == null || value.isEmpty)
-                            ? 'Please enter'
-                            : null;
-                      },
-                      controller: keywords,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Key',
-                        alignLabelWithHint: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ))),
+                child: TextFormField(
+                    validator: (String? value) {
+                      return (value == null || value.isEmpty)
+                          ? 'Please enter'
+                          : null;
+                    },
+                    controller: keywords,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search Key',
+                      alignLabelWithHint: false,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    )),
+              ),
             ),
             ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
           ],
