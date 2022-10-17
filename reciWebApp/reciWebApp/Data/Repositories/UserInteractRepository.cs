@@ -32,7 +32,7 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).SingleOrDefaultAsync();
         }
 
-        public List<UserInteract?> GetUserInteract(string postId)
+        public List<UserInteract>? GetUserInteract(string postId)
         {
             return GetByCondition(x => x.PostsId.Equals(postId)).ToList();
         }
@@ -72,13 +72,13 @@ namespace reciWebApp.Data.Repositories
             return userInteract.Rating;
         }
 
-        public Task<List<UserInteract>?> GetBookmarkAsync(int userId)
+        public Task<List<UserInteract>>? GetBookmarkAsync(int userId)
         {
             var bookmarks = GetByCondition(x => x.UserId == userId && x.Bookmark == true).ToListAsync();
             return bookmarks;
         }
 
-        public Task<List<UserInteract>?> GetRatingAsync(int userId)
+        public Task<List<UserInteract>>? GetRatingAsync(int userId)
         {
             var ratings = GetByCondition(x => x.UserId == userId && x.Rating != null).ToListAsync();
             return ratings;
