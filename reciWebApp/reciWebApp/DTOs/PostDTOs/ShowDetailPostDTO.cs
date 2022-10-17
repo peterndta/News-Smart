@@ -21,7 +21,8 @@ namespace reciWebApp.DTOs.PostDTOs
         public string UserName { get; set; }
         public int UsesId { get; set; }
         public double AverageRating { get; set; }
-        public bool BookMark { get; set; }
+        public bool Bookmark { get; set; }
         public int? Rating { get; set; }
+        public bool IsReport { get; set; }  
     }
 }
