@@ -76,6 +76,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     var methods = await fetchMethods();
     var uses = await fetchUses();
     var regions = await fetchRegions();
+    if (!mounted) return;
     setState(() {
       this.categories = categories;
       this.methods = methods;
