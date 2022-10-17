@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, camel_case_types
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reciapp/object/filter_provider.dart';
 import '../object/category_item.dart';
 import 'checkbox.dart';
 
@@ -23,43 +25,40 @@ class Category {
 
 class _FilterCategoryState extends State<FilterCategory> {
   TextEditingController searchController = TextEditingController();
-  TextEditingController checkboxController = TextEditingController();
   bool isSelected = false;
-
-  // Future getCategoryData() async {
-  //   var response = await http.get(
-  //     Uri.parse('https://reciapp.azurewebsites.net/api/categories'),
-  //     headers: {
-  //       "content-type": "application/json",
-  //       "accept": "application/json",
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var jsonData = jsonDecode(response.body);
-  //     List<Category> categories = [];
-  //     for (var cate in jsonData['data']) {
-  //       Category category = Category(cate['id'], cate['type']);
-  //       categories.add(category);
-  //     }
-  //     // print(categories.length);
-  //     // print(categories);
-  //     return categories;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     final List<String> selectedType = [];
-    String submitData() {
+    String categoryParams = '';
+    String searchParam = '';
+    final getParamsFilterCategory =
+        Provider.of<CategoryProvider>(context, listen: false);
+    getParamsFilterCategory.selectedCheckbox = selectedType;
+    void submitData() {
       final searchResult = searchController.text;
-      // final checkboxResult = checkboxController.text;
-      // selectedType.add(checkboxResult);
-      for (var type in selectedType) {
-        return '&Category=${type}';
+
+      for (var i = 0; i < selectedType.length; i++) {
+        // for (var i = 0;
+        //     i < getParamsFilterCategory.selectedCheckbox.length;
+        //     i++) {
+        categoryParams += 'Category=${selectedType[i]}&';
       }
-      String urlFilterPath = '?Search=${searchResult}';
-      print(urlFilterPath);
-      return urlFilterPath;
+      selectedType.clear();
+      if (searchResult.isEmpty) {
+        searchParam = '';
+      } else {
+        searchParam = 'Search=$searchResult&';
+      }
+      getParamsFilterCategory.paramsFilterCategory =
+          searchParam + categoryParams;
+
+      print(getParamsFilterCategory.paramsFilterCategory);
+      print('list item $selectedType');
+      getParamsFilterCategory.paramsFilterCategory =
+          ''; //sau khi filter show ra kết quả, set lại chuỗi rỗng
+      //print(getParamsFilterCategory.paramsFilterCategory);
+      Navigator.of(context).pop();
     }
 
     return FloatingActionButton(
@@ -87,7 +86,6 @@ class _FilterCategoryState extends State<FilterCategory> {
                           ),
                         ),
                         height: MediaQuery.of(context).size.height * 0.08,
-                        // color: Colors.red,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

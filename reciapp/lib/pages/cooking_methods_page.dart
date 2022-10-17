@@ -2,11 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_cooking_methods.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
-
-import '../components/filter_new_old_popular.dart';
+import 'package:reciapp/components/infinite_scroll_methods.dart';
 import '../components/sidebar_menu.dart';
-import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
@@ -98,7 +95,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScroll(),
+              child: InfiniteScrollMethods(),
             ),
           ],
         ),
