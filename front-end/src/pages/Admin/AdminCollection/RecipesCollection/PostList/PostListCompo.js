@@ -7,7 +7,7 @@ import { blueGrey } from '@mui/material/colors'
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
-const PostListCompo = ({ name, description, rating, author, image }) => {
+const PostListCompo = ({ name, description, rating, image }) => {
     return (
         <Grid item md={12} mt={1}>
             <Box display="flex" pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -54,14 +54,6 @@ const PostListCompo = ({ name, description, rating, author, image }) => {
                         >
                             {description}
                         </Typography>
-                        {/* <Box display="flex" alignItems="center">
-                            <Typography component="span" sx={{ color: grey[500] }}>
-                                By
-                            </Typography>
-                            <Typography component="span" ml={1.5} variant="body2" fontWeight={700}>
-                                {author}
-                            </Typography>
-                        </Box> */}
                     </Box>
                 </Box>
             </Box>

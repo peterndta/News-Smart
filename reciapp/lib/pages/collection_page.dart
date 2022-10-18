@@ -1,117 +1,148 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_course.dart';
+import 'package:provider/provider.dart';
 
-import '../components/sidebar_menu.dart';
-import '../object/food_list.dart';
-import '../components/back_to_top_button.dart';
+import '../login_support/check_auth.dart';
 import '../components/copyright.dart';
-import '../components/head_bar.dart';
+import '../login_support/user_preference.dart';
+import '../object/get_posts_homepage.dart';
+import '../object/recipe_review.dart';
+import 'package:http/http.dart' as http;
+
+import '../object/user_info.dart';
 
 class CollectionPage extends StatefulWidget {
-  const CollectionPage({super.key});
+  CollectionPage(this.userId, {super.key});
+  final int userId;
 
   @override
   State<CollectionPage> createState() => _CollectionPageState();
 }
 
 class _CollectionPageState extends State<CollectionPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
-  bool isSelected = false;
+  TextEditingController keywords = TextEditingController();
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts() async {
+    if (isLoading) return;
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    isLoading = true;
+    const limit = 6;
+    String searchKey =
+        keywords.text.isNotEmpty ? '&Search=${keywords.text}' : '';
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/post/bookmark/page/$page?PageSize=$limit$searchKey'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      if (!mounted) return;
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
+      });
+    }
+  }
+
+  int userId = 0;
 
   @override
   void initState() {
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
+    super.initState();
+    userId = widget.userId;
+    fetchInfinitePosts();
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts();
       }
     });
-    super.initState();
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final _formKey = GlobalKey<FormState>();
+  final List<GetPosts> _listReciepReviews = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text('User Bookmark'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.orange,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
-      body: SingleChildScrollView(
-        controller: scrollController,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09,
-              child: Stack(
-                children: [
-                  Positioned(
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      color: Color.fromARGB(255, 255, 231, 185),
-                    ),
-                  ),
-                  Positioned(
-                    top: 20,
-                    left: 20,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black, width: 0.5)),
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        child: Text(
-                          'Collection',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            fontFamily: 'Inter',
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
-                margin: EdgeInsets.symmetric(horizontal: 3),
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: //InfiniteScroll(),
-                    FoodList()),
+              alignment: Alignment.topCenter,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                      onFieldSubmitted: (value) {
+                        if (_formKey.currentState!.validate()) {
+                          isLoading = false;
+                          hasMore = true;
+                          page = 1;
+                          setState(() {
+                            _listReciepReviews.clear();
+                          });
+                          fetchInfinitePosts();
+                        }
+                      },
+                      validator: (String? value) {
+                        return (value == null || value.isEmpty)
+                            ? 'Please enter'
+                            : null;
+                      },
+                      controller: keywords,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search Key',
+                        alignLabelWithHint: false,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ))),
+            ),
+            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          BackToTopButton(scrollController, showbtn),
-          SizedBox(
-            width: 5,
-          ),
-          FilterCourse(isSelected)
-        ],
-      ),
-      bottomNavigationBar: Copyright(),
+      bottomNavigationBar: const Copyright(),
     );
   }
 }

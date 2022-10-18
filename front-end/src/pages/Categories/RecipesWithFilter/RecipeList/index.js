@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { Grid } from '@mui/material'
 
 import { useSnackbar } from '../../../../HOCs/SnackbarContext'
-import useRecipe from '../../../../recoil/recipe/action'
+import useCategoryAction from '../../../../recoil/categories/action'
 import Loading from '../../../Loading'
 import Paging from '../Pagination'
 import Sort from '../Sort'
@@ -29,7 +29,7 @@ const filterStringGenerator = ({ search, category, sort }) => {
 const RecipeList = () => {
     const { search: query } = useLocation()
     const { search, sort, category, pageNum } = queryString.parse(query)
-    const recipeAction = useRecipe()
+    const categoryAction = useCategoryAction()
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
@@ -41,8 +41,8 @@ const RecipeList = () => {
         setIsLoading(true)
 
         if (pageNum === undefined)
-            recipeAction
-                .getRecipes(params)
+            categoryAction
+                .getPostCategory(params)
                 .then((res) => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
@@ -61,8 +61,8 @@ const RecipeList = () => {
                     }, 500)
                 })
         else
-            recipeAction
-                .getRecipes(params, pageNum)
+            categoryAction
+                .getPostCategory(params, pageNum)
                 .then((res) => {
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta

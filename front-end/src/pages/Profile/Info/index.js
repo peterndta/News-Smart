@@ -50,7 +50,7 @@ const Info = () => {
                                 alt="avatar"
                                 src={auth.image}
                                 sx={{ height: 150, width: 150 }}
-                                variant="square"
+                                variant="circular"
                             />
                             <Box sx={{ ml: 6 }}>
                                 <Typography

@@ -22,17 +22,17 @@ namespace reciWebApp.Data.Repositories
             Create(user);
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int id)
         {
             return await GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
         }
 
-        public User GetUserById(int id)
+        public User? GetUserById(int id)
         {
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
-        public User GetUserByEmail(string email)
+        public User? GetUserByEmail(string email)
         {
             return GetByCondition(x => x.Email == email).FirstOrDefault();
         }
@@ -44,7 +44,7 @@ namespace reciWebApp.Data.Repositories
         {
             return await GetAll().FilterUserByName(_reciContext, userParams.Name).FilterUserByStatus(_reciContext, userParams.Status).ToListAsync();
         }
-        public async Task<List<User>?> SearchUserAsync (string search)
+        public async Task<List<User>>? SearchUserAsync (string search)
         {
             return await GetByCondition(x => x.Name.Contains(search) || x.Email.Contains(search)).ToListAsync();
         }

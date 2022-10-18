@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reciapp/pages/home_page.dart';
 import 'package:reciapp/pages/login_page.dart';
+import 'package:reciapp/pages/user_profile.dart';
 
 class AuthService {
   //1. handleAuthState()
@@ -11,6 +14,9 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
+            Future.delayed(Duration(seconds: 2), () {
+              return const HomePage();
+            });
             return const HomePage();
           } else {
             return const LoginPage();
@@ -40,6 +46,7 @@ class AuthService {
 
   //3. signOut()
   signOut() {
+    GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
   }
 }

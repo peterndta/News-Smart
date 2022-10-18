@@ -9,7 +9,7 @@ using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/reciperegions")]
     [ApiController]
     public class RecipeRegionsController : ControllerBase
     {

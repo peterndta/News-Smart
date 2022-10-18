@@ -49,17 +49,21 @@ const MyRecipes = () => {
                             Recently Recipes
                         </Typography>
                         <RecipeList posts={recipe} />
-                        <Box display="flex" justifyContent="center" mt={6}>
-                            <Button
-                                variant="contained"
-                                size="large"
-                                sx={{ color: grey[100] }}
-                                component={Link}
-                                to="/recipes/me"
-                            >
-                                Show more
-                            </Button>
-                        </Box>
+                        {recipe.length > 6 ? (
+                            <Box display="flex" justifyContent="center" mt={6}>
+                                <Button
+                                    variant="contained"
+                                    size="large"
+                                    sx={{ color: grey[100] }}
+                                    component={Link}
+                                    to="/recipes/me"
+                                >
+                                    Show more
+                                </Button>
+                            </Box>
+                        ) : (
+                            ''
+                        )}
                     </Box>
                 </React.Fragment>
             )}

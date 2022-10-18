@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../login_support/user_preference.dart';
+import '../object/user_info.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,12 +23,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //String userIdStore = '';
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   userIdStore = UserPreferences.getUserID();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +39,24 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (response.statusCode == 200) {
         String responseString = response.body;
-        //print(responseString);
+
         Map<String, dynamic> decodedToken = JwtDecoder.decode(responseString);
-        getUserInfo.userID = decodedToken['userId'];
+        getUserInfo.userID = int.parse(decodedToken['userId']);
         getUserInfo.name = decodedToken['name'];
         getUserInfo.imageURL = decodedToken['image'];
         getUserInfo.token = json.decode(responseString)['data'];
         getUserInfo.role = decodedToken['role'];
         getUserInfo.mail = decodedToken['email'];
 
-        // await UserPreferences.setUserID(
-        //     decodedToken['userId'],
-        //     json.decode(responseString)['data'],
-        //     decodedToken['image'],
-        //     decodedToken['name'],
-        //     decodedToken['email'],
-        //     decodedToken['role']);
-        //await UserPreferences.setUserID(decodedToken['userId']);
-        // await UserPreferences.setImageURL(decodedToken['image']);
-        // await UserPreferences.setUsername(decodedToken['name']);
-        // await UserPreferences.setMail(decodedToken['email']);
-        // await UserPreferences.setRole(decodedToken['role']);
-         await UserPreferences.setToken(json.decode(responseString)['data']);
+        UserData user = UserData(
+            userID: int.parse(decodedToken['userId']),
+            name: decodedToken['name'],
+            imageURL: decodedToken['image'],
+            role: decodedToken['role'],
+            mail: decodedToken['email'],
+            token: json.decode(responseString)['data']);
+        String userString = jsonEncode(user.toJson());
+        await UserPreferences.setUserInfo(userString);
 
         print(getUserInfo.token);
         print(getUserInfo.role);

@@ -11,12 +11,13 @@ String methodItemToJson(MethodItem data) => json.encode(data.toJson());
 
 Future fetchMethods() async {
   http.Response response = await http.get(
-    Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
+    Uri.parse('https://reciapp.azurewebsites.net/api/cookingmethod'),
     headers: {
       "content-type": "application/json",
       "accept": "application/json",
     },
   );
+  print(response.body);
   var responseJson = json.decode(response.body);
   return (responseJson['data'] as List)
       .map((p) => MethodItem.fromJson(p))

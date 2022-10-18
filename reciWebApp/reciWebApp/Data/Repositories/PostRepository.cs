@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
@@ -29,12 +30,12 @@ namespace reciWebApp.Data.Repositories
             Update(post);
         }
 
-        public Post GetPostById(string id)
+        public Post? GetPostById(string id)
         {
             return GetByCondition(x => x.Id.Equals(id)).FirstOrDefault();
         }
 
-        public async Task<Post> GetPostByIdAsync(string id)
+        public async Task<Post?> GetPostByIdAsync(string id)
         {
             return await GetByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
         }
@@ -54,6 +55,10 @@ namespace reciWebApp.Data.Repositories
             if (postParams.PostsByCookingMethods != null)
             {
                 posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
+            }
+            if (postParams.PostsByCollections != null)
+            {
+                posts = (posts.Intersect(postParams.PostsByCollections)).ToList();
             }
             if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
             {
@@ -83,69 +88,65 @@ namespace reciWebApp.Data.Repositories
             return posts;
         }
 
-        public List<Post>? GetPostsByPostCategories(List<PostCategory?> postCategories)
+        public List<Post> GetPostsByPostCategories(List<PostCategory> postCategories)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && postCategories.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 postCategories.DistinctBy(x => x.PostId);
                 foreach (var postCategory in postCategories)
                 {
                     result.Add(GetPostById(postCategory.PostId));
-                }
-                return result.DistinctBy(x => x.Id).ToList();
+                }              
             }
-            return posts;
+            return result;
         }
 
-        public List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
+        public List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && cookingMethods.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var cookingMethod in cookingMethods)
                 {
-                    var invalidResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id);
-                    if (invalidResult != null)
+                    var validResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id).ToList();
+                    if (validResult != null)
                     {
-                        result.AddRange(invalidResult);
+                        result.AddRange(validResult);
                     }
                 }
-                return result.ToList();
             }
-            return posts;
+            return result;
         }
 
-        public List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
+        public List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && recipeRegions.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var recipeRegion in recipeRegions)
                 {
                     result.AddRange(GetByCondition(x => x.RecipeRegionId == recipeRegion.Id).ToList());
                 }
-                return result;
             }
-            return posts;
+            return result;
         }
 
         public List<Post>? GetPostsByUses(List<Use> uses)
         {
             var posts = GetAll().ToList();
+            var result = new List<Post>();
             if (posts.Count > 0 && uses.Count > 0)
             {
-                List<Post> result = new List<Post>();
                 foreach (var use in uses)
                 {
                     result.AddRange(GetByCondition(x => x.UsesId == use.Id).ToList());
                 }
-                return result;
             }
-            return posts;
+            return result;
         }
 
         public List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition)
@@ -174,6 +175,78 @@ namespace reciWebApp.Data.Repositories
                 result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
             }
             return result;
+        }
+
+        public List<Post>? GetPostsByFoodCollections(List<FoodCollection> foodCollections)
+        {
+            var posts = new List<Post>();
+            if (foodCollections.Count > 0)
+            {
+                foodCollections = foodCollections.DistinctBy(x => x.PostsId).ToList();
+                foreach (var foodCollection in foodCollections)
+                {
+                    posts.Add(GetByCondition(x => x.Id.Equals(foodCollection.PostsId)).FirstOrDefault());
+                }
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByMethodsAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsByCookingMethods != null)
+            {
+                posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
+            }
+
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByCategoriesAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsByCategories != null)
+            {
+                posts = posts.Intersect(postParams.PostsByCategories).ToList();
+            }
+
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostsFilterByUsesAndRegionsAsync(PostParams postParams)
+        {
+            var posts = GetAll().ToList();
+            if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
+            {
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
+                posts = posts.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
+            }
+            else if (postParams.PostsRecipeRegions != null && postParams.PostsByUses == null)
+            {
+                posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
+            }
+            else if (postParams.PostsRecipeRegions == null && postParams.PostsByUses != null)
+            {
+                posts = posts.Intersect(postParams.PostsByUses).ToList();
+            }
+            if (postParams.Name != null)
+            {
+                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+            }
+            return posts;
+        }
+
+        public async Task<List<Post>?> GetPostOfAllCollectionsAsync()
+        {
+            return await GetAll().ToListAsync();
         }
     }
 }

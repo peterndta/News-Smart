@@ -29,7 +29,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id, int id1)
         {
             try
             {
@@ -50,8 +50,9 @@ namespace reciWebApp.Controllers
                 var showPost = _mapper.Map<ShowPostDTO>(post);
                 showPost = _servicesManager.PostService.GetPostInfo(showPost);
                 var showDetailPost = _mapper.Map<ShowDetailPostDTO>(showPost);
-                showDetailPost.BookMark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
+                showDetailPost.Bookmark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
                 showDetailPost.Rating = _repoManager.UserInteract.GetRating(currentUser.Id, id);
+                showDetailPost.IsReport = _repoManager.PostReport.CheckReport(currentUser.Id, id);
                 return Ok(new Response(200, showDetailPost));
             }
             catch (Exception ex)
@@ -67,7 +68,7 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Name, id);
+                var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Search, id);
 
                 if (!posts.Any())
                 {
@@ -207,7 +208,7 @@ namespace reciWebApp.Controllers
         }
             
         [HttpGet("page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostDTO filterAndSort)
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostParams filterAndSort)
         {
             try
             {
@@ -245,6 +246,14 @@ namespace reciWebApp.Controllers
                     var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
                     getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
                 }
+
+                List<Post>? getPostsByCollections = null;
+                if (filterAndSort.Collection != null)
+                {
+                    var collection = _repoManager.Collection.GetCollectionsByNames(filterAndSort.Collection);
+                    var foodCollections = _repoManager.FoodCollection.GetFoodCollectionsByCollections(collection);
+                    getPostsByCollections = _repoManager.Post.GetPostsByFoodCollections(foodCollections);
+                }
                 var postParams = new PostParams
                 {
                     Name = filterAndSort.Search,
@@ -255,6 +264,7 @@ namespace reciWebApp.Controllers
                     PageSize = filterAndSort.PageSize,
                     Type = filterAndSort.Sort,
                     PostsByUses = getPostsByUses,
+                    PostsByCollections = getPostsByCollections,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
@@ -297,7 +307,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Do not have any result"));
                 }
 
-                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Name);
+                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
@@ -339,7 +349,7 @@ namespace reciWebApp.Controllers
                 }
 
                 ratingParams.PageNumber = pageNumber;
-                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Name);
+                var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
@@ -352,6 +362,159 @@ namespace reciWebApp.Controllers
                 }
 
                 var result = PaginatedList<ShowPostDTO>.Create(showPosts, ratingParams.PageNumber, ratingParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpGet]
+        [Route("~/api/method/post/page/{pageNumber}")]
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByMethodParams filter)
+        {
+            try
+            {
+                //var user = await _servicesManager.AuthService.GetUser(Request);
+
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+                List<Post>? getPostsByCookingMethods = null;
+                if (filter.Method != null)
+                {
+                    var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filter.Method);
+                    getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
+                }
+
+                var postParams = new PostParams
+                {
+                    Name = filter.Search,
+                    PostsByCookingMethods = getPostsByCookingMethods,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                };
+                postParams.PageNumber = pageNumber;
+                var posts = await _repoManager.Post.GetPostsFilterByMethodsAsync(postParams);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+
+                if (postParams.Type != null)
+                {
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
+                }
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpGet]
+        [Route("~/api/category/post/page/{pageNumber}")]
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByCategoryParams filter)
+        {
+            try
+            {
+                //var user = await _servicesManager.AuthService.GetUser(Request);
+
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+                List<Post>? getPostsByCategories = null;
+                if (filter.Category != null)
+                {
+                    var categories = _repoManager.Category.GetCategoryByName(filter.Category);
+                    var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
+                    getPostsByCategories = _repoManager.Post.GetPostsByPostCategories(postCategories);
+                }
+
+                var postParams = new PostParams
+                {
+                    Name = filter.Search,
+                    PostsByCategories = getPostsByCategories,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                };
+                postParams.PageNumber = pageNumber;
+                var posts = await _repoManager.Post.GetPostsFilterByCategoriesAsync(postParams);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+
+                if (postParams.Type != null)
+                {
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
+                }
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpGet]
+        [Route("~/api/recipes/post/page/{pageNumber}")]
+        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByUsesAndRegionsParams filter)
+        {
+            try
+            {
+                //var user = await _servicesManager.AuthService.GetUser(Request);
+
+                //if (user == null)
+                //{
+                //    return BadRequest(new Response(400, "Invalid user"));
+                //}
+                List<Post>? getPostsByRecipeRegions = null;
+                if (filter.Continent != null)
+                {
+                    var recipeRegions = _repoManager.RecipeRegion.GetRecipeRegionsByName(filter.Continent);
+                    getPostsByRecipeRegions = _repoManager.Post.GetPostsByRecipeRegions(recipeRegions);
+                }
+
+                List<Post>? getPostsByUses = null;
+                if (filter.Uses != null)
+                {
+                    var uses = _repoManager.Use.GetUsesByName(filter.Uses);
+                    getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
+                }
+
+                var postParams = new PostParams
+                {
+                    Name = filter.Search,
+                    PostsRecipeRegions = getPostsByRecipeRegions,
+                    PostsByUses = getPostsByUses,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                };
+                postParams.PageNumber = pageNumber;
+                var posts = await _repoManager.Post.GetPostsFilterByUsesAndRegionsAsync(postParams);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+
+                if (postParams.Type != null)
+                {
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
+                }
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
                 return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
