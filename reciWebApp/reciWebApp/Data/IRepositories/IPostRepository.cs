@@ -13,9 +13,9 @@ namespace reciWebApp.Data.IRepositories
         Post? GetPostById(string id);
         void DeletePost(Post post); 
         void UpdatePost(Post post);
-        List<Post>? GetPostsByPostCategories(List<PostCategory> postCategories);
-        List<Post>? GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
-        List<Post>? GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
+        List<Post> GetPostsByPostCategories(List<PostCategory> postCategories);
+        List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
+        List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
         List<Post>? GetPostsByFoodCollections(List<FoodCollection> foodCollections);
         List<Post>? GetPostsByUses(List<Use> uses);
         List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);

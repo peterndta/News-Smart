@@ -1,69 +1,127 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_star_rating/simple_star_rating.dart';
+import 'package:provider/provider.dart';
+import 'package:reciapp/pages/create_recipe_page.dart';
+import 'package:reciapp/pages/user_rating_page.dart';
+import 'package:reciapp/pages/user_recipes_page.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
-
 import '../components/sidebar_menu.dart';
+import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
+import '../object/get_posts_homepage.dart';
+import '../object/user_info.dart';
+import 'collection_page.dart';
+import '../object/recipe_review.dart';
+import 'package:http/http.dart' as http;
 
-class ReciepReview {
-  final String image;
-  final String title;
-  final double start;
-  final String description;
+class IconDetail extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String text;
+  final dynamic page;
+  const IconDetail(
+      {super.key,
+      required this.color,
+      required this.icon,
+      required this.text,
+      required this.page});
 
-  ReciepReview({
-    @required required this.image,
-    @required required this.title,
-    @required required this.start,
-    @required required this.description,
-  });
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 40,
+      color: color,
+      icon: Icon(icon),
+      tooltip: text,
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => page,
+        ));
+      },
+    );
+  }
 }
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({super.key});
+  final UserInfoProvider userInfoProvider;
+  const UserProfile({required this.userInfoProvider, super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final List<ReciepReview> _listReciepReviews = [
-    ReciepReview(
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-        title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-        start: 4,
-        description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-            "will be your summer go-to staple. 10-minute is all you need to whip..."),
-    ReciepReview(
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-        title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-        start: 4.5,
-        description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-            "will be your summer go-to staple. 10-minute is all you need to whip..."),
-    ReciepReview(
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-        title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-        start: 4,
-        description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-            "will be your summer go-to staple. 10-minute is all you need to whip..."),
-    ReciepReview(
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-        title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-        start: 4,
-        description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-            "will be your summer go-to staple. 10-minute is all you need to whip..."),
-    ReciepReview(
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2021/03/Classic-Minestrone-Soup-13720e5.jpg?resize=768,574',
-        title: 'Light and refreshing, Zaru Soba (Cold Soba Noodles)',
-        start: 4,
-        description: "Light and refreshing, Zaru Soba (Cold Soba Noodles)"
-            "will be your summer go-to staple. 10-minute is all you need to whip..."),
-  ];
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts(int userId) async {
+    if (isLoading) return;
+    isLoading = true;
+    const limit = 6;
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
+      });
+    }
+  }
+
+  int userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userInfoProvider.name.isEmpty) {
+      UserData userData =
+          UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+      widget.userInfoProvider.userID = userData.userID;
+      widget.userInfoProvider.imageURL = userData.imageURL;
+      widget.userInfoProvider.name = userData.name;
+      widget.userInfoProvider.token = userData.token;
+      widget.userInfoProvider.role = userData.role;
+      widget.userInfoProvider.mail = userData.mail;
+    }
+    userId = widget.userInfoProvider.userID;
+    fetchInfinitePosts(userId);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(widget.userInfoProvider.userID);
+        print(' more');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,238 +131,121 @@ class _UserProfileState extends State<UserProfile> {
         preferredSize: Size.fromHeight(55),
         child: HeadBar(),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 35, left: 20, right: 20),
-        child: Column(
-          children: [
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 20),
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Image(
-                      image: AssetImage('assets/nonAvatar.png'),
-                      height: 100,
-                      width: 100,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: SingleChildScrollView(
+          child: Column(children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: Container(
+                margin: const EdgeInsets.only(top: 25),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                      child: Image(
+                        image: NetworkImage(widget.userInfoProvider.imageURL),
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                      ),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(widget.userInfoProvider.name,
+                            style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        const SizedBox(height: 20),
+                        Text.rich(
+                          TextSpan(
+                            children: <InlineSpan>[
+                              const WidgetSpan(
+                                child: Text(
+                                  'Email: ',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                              WidgetSpan(
+                                child: Text(
+                                  widget.userInfoProvider.mail,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.13,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.orange, width: 2.0))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconDetail(
+                    icon: Icons.assignment,
+                    color: Colors.red,
+                    text: "Press to your recipes",
+                    page: UserRecipesPage(widget.userInfoProvider.userID),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Jason',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      SizedBox(height: 20),
-                      Text('Email: example@example.com')
-                    ],
+                  IconDetail(
+                    icon: Icons.bookmark,
+                    color: Colors.blue,
+                    text: "Press to your bookmarks",
+                    page: CollectionPage(widget.userInfoProvider.userID),
+                  ),
+                  IconDetail(
+                    icon: Icons.star_outlined,
+                    color: Colors.yellow,
+                    text: "Press to your ratings",
+                    page: UserRatingsPage(widget.userInfoProvider.userID),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.04,
+              margin: const EdgeInsets.only(top: 5),
+              child: Row(
+                children: const [
+                  Icon(Icons.assignment),
+                  Text(
+                    ' Recently Recipes',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   )
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.orange, width: 2.0))),
-              padding: EdgeInsets.only(top: 15, bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.assignment,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                      Text(
-                        '3',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.bookmark,
-                        color: Colors.blue,
-                        size: 40,
-                      ),
-                      Text(
-                        '5',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                        size: 40,
-                      ),
-                      Text(
-                        '15',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.assignment),
-                      Text(
-                        ' Recently Recipes',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
-                      )
-                    ],
-                  ),
-                  ListRecipeReview(_listReciepReviews)
-                ],
-              ),
-            ),
-          ],
+            ListRecipeReview(0.5, _listReciepReviews, controller, hasMore)
+          ]),
         ),
       ),
-      bottomNavigationBar: Copyright(),
-    );
-  }
-}
-
-class RecipeReviewItem extends StatelessWidget {
-  const RecipeReviewItem({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.start,
-    required this.description,
-  });
-
-  final String image;
-  final String title;
-  final double start;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0))),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image.network(image),
-            ),
-            Expanded(
-              flex: 3,
-              child: RecipeDetail(
-                title: title,
-                start: start,
-                description: description,
-              ),
-            ),
-          ],
-        ),
+      bottomNavigationBar: const Copyright(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateRecipePage(),
+          ));
+        },
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add),
       ),
     );
-  }
-}
-
-class RecipeDetail extends StatelessWidget {
-  const RecipeDetail({
-    required this.title,
-    required this.start,
-    required this.description,
-  });
-
-  final String title;
-  final double start;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.0,
-            ),
-          ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-          // Text(
-          //   '$start starts',
-          //   style: const TextStyle(fontSize: 10.0),
-          // ),
-          SimpleStarRating(
-            allowHalfRating: true,
-            starCount: 5,
-            rating: start,
-            size: 15,
-            spacing: 10,
-          ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
-          Text(
-            description,
-            style: const TextStyle(fontSize: 10.0),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ListRecipeReview extends StatelessWidget {
-  final List<ReciepReview> list;
-
-  ListRecipeReview(this.list);
-
-  @override
-  Widget build(BuildContext context) {
-    return (list.length == 0)
-        ? Container(
-            padding: EdgeInsets.all(5),
-            alignment: Alignment.topLeft,
-            child: Text(
-              'No posts were found.',
-              style: TextStyle(fontSize: 20),
-            ))
-        : Container(
-            height: 400,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return RecipeReviewItem(
-                  image: list[index].image,
-                  title: list[index].title,
-                  start: list[index].start,
-                  description: list[index].description,
-                );
-              },
-              itemCount: list.length,
-            ),
-          );
   }
 }

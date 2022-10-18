@@ -10,6 +10,6 @@ namespace reciWebApp.Data.IRepositories
         Task<List<RecipeRegion>?> GetAllRecipeRegionsAsync();
         RecipeRegion? GetRecipeRegionsById(int id);
         int? GetRecipeRegionIdByName(string? name);
-        List<RecipeRegion>? GetRecipeRegionsByName(List<string>? names);
+        List<RecipeRegion> GetRecipeRegionsByName(List<string>? names);
     }
 }

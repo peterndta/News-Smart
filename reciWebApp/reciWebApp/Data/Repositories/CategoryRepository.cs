@@ -35,11 +35,11 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
-        public List<Category?> GetCategoryByName(List<string>? names)
+        public List<Category> GetCategoryByName(List<string>? names)
         {
             var categories = GetAllCategories();
             var result = new List<Category>();
-            if (names != null && categories.Count > 0)
+            if (names != null && categories != null)
             {
                 foreach (var name in names)
                 {
@@ -58,7 +58,7 @@ namespace reciWebApp.Data.Repositories
             Update(category);
         }
 
-        public Category GetCategoryByName(string name)
+        public Category? GetCategoryByName(string name)
         {
             return GetByCondition(x => x.Type.Equals(name)).SingleOrDefault();
         }

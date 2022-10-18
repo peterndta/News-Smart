@@ -34,5 +34,11 @@ namespace reciWebApp.Data.Repositories
         {
             return GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
         }
+
+        public bool CheckReport(int userId, string postId)
+        {
+            var report = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).FirstOrDefault();
+            return report != null;
+        }
     }
 }
