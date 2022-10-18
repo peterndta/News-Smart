@@ -32,34 +32,6 @@ class _FilterCategoryState extends State<FilterCategory> {
     final List<String> selectedType = [];
     String categoryParams = '';
     String searchParam = '';
-    final getParamsFilterCategory =
-        Provider.of<CategoryProvider>(context, listen: false);
-    getParamsFilterCategory.selectedCheckbox = selectedType;
-    void submitData() {
-      final searchResult = searchController.text;
-
-      for (var i = 0; i < selectedType.length; i++) {
-        // for (var i = 0;
-        //     i < getParamsFilterCategory.selectedCheckbox.length;
-        //     i++) {
-        categoryParams += 'Category=${selectedType[i]}&';
-      }
-      selectedType.clear();
-      if (searchResult.isEmpty) {
-        searchParam = '';
-      } else {
-        searchParam = 'Search=$searchResult&';
-      }
-      getParamsFilterCategory.paramsFilterCategory =
-          searchParam + categoryParams;
-
-      print(getParamsFilterCategory.paramsFilterCategory);
-      print('list item $selectedType');
-      getParamsFilterCategory.paramsFilterCategory =
-          ''; //sau khi filter show ra kết quả, set lại chuỗi rỗng
-      //print(getParamsFilterCategory.paramsFilterCategory);
-      Navigator.of(context).pop();
-    }
 
     return FloatingActionButton(
       onPressed: () {
@@ -145,8 +117,9 @@ class _FilterCategoryState extends State<FilterCategory> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.06,
                               child: TextField(
+                                //autofocus: true,
                                 controller: searchController,
-                                onSubmitted: (_) => submitData(),
+                                //onSubmitted:
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Keywords',
@@ -243,9 +216,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       MediaQuery.of(context).size.height *
                                           0.06),
                                 ),
-                                onPressed: () {
-                                  submitData();
-                                },
+                                onPressed: () {},
                                 child: const Text(
                                   'Show Result',
                                   style: TextStyle(

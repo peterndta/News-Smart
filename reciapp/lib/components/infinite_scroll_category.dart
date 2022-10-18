@@ -71,14 +71,7 @@ class _InfiniteScrollCategoryState extends State<InfiniteScrollCategory> {
   @override
   Widget build(BuildContext context) {
     final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-    final getParamsFilterCategory =
-        Provider.of<CategoryProvider>(context, listen: false);
-    urlFilter = getParamsFilterCategory.paramsFilterCategory;
 
-    // Future.delayed(Duration(seconds: 1), () {
-    //   getParamsFilterCategory.selectedCheckbox.clear;
-    // });
-    print('category $urlFilter');
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1,
       child: ListView.builder(
