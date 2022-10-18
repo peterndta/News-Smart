@@ -19,9 +19,10 @@ namespace reciWebApp.Data.Repositories
             Create(report);
         }
 
-        public void ApproveReport (PostReport report)
+        public void DenyReport (PostReport report)
         {
-            report.Status = 1;
+            report.Status = 2;
+            Delete(report);
         }
 
         public PostReport GetPostReportById (int id)

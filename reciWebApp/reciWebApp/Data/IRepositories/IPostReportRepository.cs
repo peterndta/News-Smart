@@ -8,7 +8,7 @@ namespace reciWebApp.Data.IRepositories
     public interface IPostReportRepository
     {
         void CreatePostReport(PostReport report);
-        void ApproveReport(PostReport report);
+        void DenyReport(PostReport report);
 
         PostReport GetPostReportById(int id);
         Task<PostReport> GetPostReportByIdAsync(int id);
