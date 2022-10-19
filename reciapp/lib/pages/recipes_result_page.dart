@@ -1,15 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
-import '../components/filter_new_old_popular.dart';
+import 'package:reciapp/components/infinite_scroll_recipes.dart';
 import '../components/filter_recipe_result.dart';
 
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-import '../object/food_list.dart';
 
 class RecipesResult extends StatefulWidget {
   const RecipesResult({Key? key}) : super(key: key);
@@ -98,7 +96,7 @@ class _RecipesResultState extends State<RecipesResult> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScroll(),
+              child: InfiniteScrollRecipes(),
             ),
           ],
         ),

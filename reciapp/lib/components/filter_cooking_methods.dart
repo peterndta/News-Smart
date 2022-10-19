@@ -23,29 +23,18 @@ class Method {
 
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var controller = TextEditingController();
-  bool isSelected = false;
   final List<String> selectedMethod = [];
-  String urlAPI = '';
-  // Future getCookingMethodData() async {
-  //   var response = await http.get(
-  //     Uri.parse('https://reciapp.azurewebsites.net/api/CookingMethods'),
-  //     headers: {
-  //       "content-type": "application/json",
-  //       "accept": "application/json",
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var jsonData = jsonDecode(response.body);
-  //     List<Method> methods = [];
-  //     for (var cate in jsonData['data']) {
-  //       Method method = Method(cate['id'], cate['method']);
-  //       methods.add(method);
-  //     }
-  //     // print(methods.length);
-  //     // print(methods);
-  //     return methods;
-  //   }
-  // }
+  Widget buildingSingleCheckbox(CheckboxModal select) {
+    return StatefulBuilder(builder: (context, _setState) {
+      return CheckboxListTile(
+        value: select.value,
+        title: Text(select.title as String),
+        onChanged: (value) => _setState(() {
+          select.value = value!;
+        }),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,36 +173,40 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                       return ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) => Row(
-                                          children: [
-                                            StatefulBuilder(
-                                              builder: (context, _setState) =>
-                                                  Checkbox(
-                                                side: BorderSide(
-                                                    color: Colors.orange),
-                                                value: isSelected,
-                                                onChanged: (bool? value) {
-                                                  _setState(() {
-                                                    isSelected = value!;
-                                                    if (isSelected == true) {
-                                                      selectedMethod.add(
-                                                          snapshot.data[index]
-                                                              .method);
-                                                    } else {
-                                                      selectedMethod.remove(
-                                                          snapshot.data[index]
-                                                              .method);
-                                                    }
-                                                    print(selectedMethod);
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                            Text(
-                                              snapshot.data[index].method,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                          ],
+                                        itemBuilder: (context, index) =>
+                                            Container(
+                                          child:
+                                              // StatefulBuilder(
+                                              //   builder: (context, _setState) =>
+                                              //       Checkbox(
+                                              //     side: BorderSide(
+                                              //         color: Colors.orange),
+                                              //     value: isSelected,
+                                              //     onChanged: (bool? value) {
+                                              //       _setState(() {
+                                              //         isSelected = value!;
+                                              //         if (isSelected == true) {
+                                              //           selectedMethod.add(
+                                              //               snapshot.data[index]
+                                              //                   .method);
+                                              //         } else {
+                                              //           selectedMethod.remove(
+                                              //               snapshot.data[index]
+                                              //                   .method);
+                                              //         }
+                                              //         print(selectedMethod);
+                                              //       });
+                                              //     },
+                                              //   ),
+                                              // ),
+                                              // Text(
+                                              //   snapshot.data[index].method,
+                                              //   style: TextStyle(fontSize: 18),
+                                              // ),
+                                              buildingSingleCheckbox(
+                                                  CheckboxModal(
+                                                      title: snapshot
+                                                          .data[index].method)),
                                         ),
                                       );
                                     }
