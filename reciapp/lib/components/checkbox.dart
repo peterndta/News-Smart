@@ -31,3 +31,9 @@ class CheckBox extends StatelessWidget {
     );
   }
 }
+
+class CheckboxModal {
+  String? title;
+  bool value;
+  CheckboxModal({this.title, this.value = false});
+}

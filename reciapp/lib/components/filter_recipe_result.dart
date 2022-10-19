@@ -29,29 +29,19 @@ class Use {
 }
 
 class _FilterRecipeResultState extends State<FilterRecipeResult> {
-  var _controller = TextEditingController();
-  bool isSelected = false;
+  var controller = TextEditingController();
 
-  // Future getUseData() async {
-  //   var response = await http.get(
-  //     Uri.parse('https://reciapp.azurewebsites.net/api/Uses'),
-  //     headers: {
-  //       "content-type": "application/json",
-  //       "accept": "application/json",
-  //     },
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var jsonData = jsonDecode(response.body);
-  //     List<Use> uses = [];
-  //     for (var cate in jsonData['data']) {
-  //       Use use = Use(cate['id'], cate['usesOfFood']);
-  //       uses.add(use);
-  //     }
-  //     // print(methods.length);
-  //     // print(methods);
-  //     return uses;
-  //   }
-  // }
+  Widget buildingSingleCheckbox(CheckboxModal select) {
+    return StatefulBuilder(builder: (context, _setState) {
+      return CheckboxListTile(
+        value: select.value,
+        title: Text(select.title as String),
+        onChanged: (value) => _setState(() {
+          select.value = value!;
+        }),
+      );
+    });
+  }
 
   final List<int> selectedContinentID = [];
   final List<int> selectedUseID = [];
@@ -142,12 +132,12 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.height * 0.06,
                               child: TextField(
-                                controller: _controller,
+                                controller: controller,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: 'Keywords',
                                   suffixIcon: IconButton(
-                                    onPressed: _controller.clear,
+                                    onPressed: controller.clear,
                                     icon: Icon(Icons.clear),
                                   ),
                                 ),
@@ -193,39 +183,12 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                       return ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) => Row(
-                                          children: [
-                                            StatefulBuilder(
-                                                builder: (context, _setState) =>
-                                                    Checkbox(
-                                                      side: BorderSide(
-                                                          color: Colors.orange),
-                                                      value: isSelected,
-                                                      onChanged: (bool? value) {
-                                                        _setState(() {
-                                                          isSelected = value!;
-                                                          if (isSelected ==
-                                                              true) {
-                                                            selectedContinentID
-                                                                .add(snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          } else {
-                                                            selectedContinentID
-                                                                .remove(snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          }
-                                                          print(
-                                                              selectedContinentID);
-                                                        });
-                                                      },
-                                                    )),
-                                            Text(
-                                              snapshot.data[index].continents,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                          ],
+                                        itemBuilder: (context, index) =>
+                                            Container(
+                                          child: buildingSingleCheckbox(
+                                              CheckboxModal(
+                                                  title: snapshot
+                                                      .data[index].continents)),
                                         ),
                                       );
                                     }
@@ -269,44 +232,12 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                       return ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) => Row(
-                                          children: [
-                                            StatefulBuilder(
-                                                builder: (context, _setState) =>
-                                                    Checkbox(
-                                                      side: BorderSide(
-                                                          color: Colors.orange),
-                                                      value: isSelected,
-                                                      onChanged: (bool? value) {
-                                                        _setState(() {
-                                                          isSelected = value!;
-                                                          if (isSelected ==
-                                                              true) {
-                                                            selectedUseID.add(
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          } else {
-                                                            selectedUseID
-                                                                .remove(snapshot
-                                                                    .data[index]
-                                                                    .id);
-                                                          }
-                                                          print(selectedUseID);
-                                                        });
-                                                      },
-                                                    )),
+                                        itemBuilder: (context, index) =>
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.8,
-                                              child: Text(
-                                                snapshot.data[index].usesOfFood,
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                            ),
-                                          ],
+                                          child: buildingSingleCheckbox(
+                                              CheckboxModal(
+                                                  title: snapshot
+                                                      .data[index].usesOfFood)),
                                         ),
                                       );
                                     }

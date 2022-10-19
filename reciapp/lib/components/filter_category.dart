@@ -25,13 +25,21 @@ class Category {
 
 class _FilterCategoryState extends State<FilterCategory> {
   TextEditingController searchController = TextEditingController();
-  bool isSelected = false;
+  Widget buildingSingleCheckbox(CheckboxModal select) {
+    return StatefulBuilder(builder: (context, _setState) {
+      return CheckboxListTile(
+        value: select.value,
+        title: Text(select.title as String),
+        onChanged: (value) => _setState(() {
+          select.value = value!;
+        }),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final List<String> selectedType = [];
-    String categoryParams = '';
-    String searchParam = '';
 
     return FloatingActionButton(
       onPressed: () {
@@ -76,7 +84,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                             Container(
                               margin: EdgeInsets.only(right: 10),
                               child: OutlinedButton(
-                                onPressed: () {},
+                                onPressed: searchController.clear,
                                 style: OutlinedButton.styleFrom(
                                   padding: EdgeInsets.all(5),
                                   side: BorderSide(
@@ -173,35 +181,12 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       return ListView.builder(
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (context, index) => Row(
-                                          children: [
-                                            StatefulBuilder(
-                                              builder: (context, _setState) =>
-                                                  Checkbox(
-                                                side: BorderSide(
-                                                    color: Colors.orange),
-                                                value: isSelected,
-                                                onChanged: (bool? value) {
-                                                  _setState(() {
-                                                    isSelected = value!;
-                                                    if (isSelected == true) {
-                                                      selectedType.add(snapshot
-                                                          .data[index].type);
-                                                    } else {
-                                                      selectedType.remove(
-                                                          snapshot.data[index]
-                                                              .type);
-                                                    }
-                                                    //print(selectedType);
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                            Text(
-                                              snapshot.data[index].type,
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                          ],
+                                        itemBuilder: (context, index) =>
+                                            Container(
+                                          child: buildingSingleCheckbox(
+                                              CheckboxModal(
+                                                  title: snapshot
+                                                      .data[index].type)),
                                         ),
                                       );
                                     }
