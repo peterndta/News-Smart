@@ -52,6 +52,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   provider: ^6.0.3
   shared_preferences: ^2.0.15
+  youtube_player_flutter: 8.0.0
 
 
 dev_dependencies:

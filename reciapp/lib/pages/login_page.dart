@@ -23,7 +23,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
@@ -81,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
         );
         await submitData(data);
 
-        //print(FirebaseAuth.instance.currentUser!.displayName!);
-        //print(FirebaseAuth.instance.currentUser!.email!);
-        //print(FirebaseAuth.instance.currentUser!.photoURL!);
+        print(FirebaseAuth.instance.currentUser!.displayName!);
+        print(FirebaseAuth.instance.currentUser!.email!);
+        print(FirebaseAuth.instance.currentUser!.photoURL!);
       } catch (error) {
         print(error);
       }

@@ -132,4 +132,8 @@ class ListCategory {
         "id": id,
         "type": type,
       };
+  @override
+  String toString() {
+    return type;
+  }
 }
