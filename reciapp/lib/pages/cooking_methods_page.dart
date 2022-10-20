@@ -95,7 +95,10 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScrollMethods(),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: InfiniteScrollMethods(),
+              ),
             ),
           ],
         ),

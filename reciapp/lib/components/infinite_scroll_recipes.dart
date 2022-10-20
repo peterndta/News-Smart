@@ -98,79 +98,104 @@ class _InfiniteScrollRecipesState extends State<InfiniteScrollRecipes> {
                         border: Border(
                             top: BorderSide(color: Colors.grey, width: 0.5))),
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      margin: const EdgeInsets.fromLTRB(0, 20, 0, 15),
                       child: Row(
                         children: [
                           Image(
                             image: NetworkImage(post.imageUrl),
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.35,
                             height: MediaQuery.of(context).size.height * 0.14,
+                            fit: BoxFit.fill,
                           ),
                           SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  post.name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              post.userId == getUserID.userID
-                                  ? const Icon(
-                                      Icons.bookmark,
-                                      color: Colors.black,
-                                    )
-                                  : Container(),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 3),
-                                child: Row(
-                                  children: [
-                                    SmoothStarRating(
-                                      isReadOnly: true,
-                                      size: 16,
-                                      color: Colors.amber[600],
-                                      rating: post.averageRating.toDouble(),
-                                      borderColor: Colors.amber[600],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.width * 0.45,
                                   child: Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    post.name,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                post.userId == getUserID.userID
+                                    ? const Icon(
+                                        Icons.bookmark,
+                                        color: Colors.black,
+                                      )
+                                    : Container(),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 3),
+                                  child: Row(
+                                    children: [
+                                      SmoothStarRating(
+                                        isReadOnly: true,
+                                        size: 28,
+                                        color: Colors.amber[600],
+                                        rating: post.averageRating.toDouble(),
+                                        borderColor: Colors.amber[600],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: Text(
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      post.description)),
-                              Row(
-                                children: [
-                                  const Text('by '),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.01,
+                                      post.description,
+                                      style: const TextStyle(fontSize: 18),
+                                    )),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 15),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.28,
+                                        child: const Text(
+                                          'By ',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 12),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.02),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: Text(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          post.userName,
+                                          textAlign: TextAlign.start,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      post.userName,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
