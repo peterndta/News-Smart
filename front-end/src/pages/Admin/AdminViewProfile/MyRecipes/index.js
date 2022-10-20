@@ -48,10 +48,11 @@ const MyRecipes = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any post' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -68,10 +69,11 @@ const MyRecipes = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any post' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -105,8 +107,16 @@ const MyRecipes = () => {
                         </Box>
                         <SearchBox />
                     </Box>
-                    <RecipeList posts={recipes.list} />
-                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                    {recipes.length ? (
+                        <React.Fragment>
+                            <RecipeList posts={recipes.list} />
+                            {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                        </React.Fragment>
+                    ) : (
+                        <Typography ml={4.5} mt={2} fontWeight={500}>
+                            No posts were found.
+                        </Typography>
+                    )}
                 </React.Fragment>
             )}
         </React.Fragment>
