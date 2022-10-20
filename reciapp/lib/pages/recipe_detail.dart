@@ -1,22 +1,51 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
 import 'package:http/http.dart' as http;
 
-import '../login_support/check_auth.dart';
 import '../object/get_posts_homepage.dart';
+
+class Rating {
+  Rating({
+    required this.rating,
+  });
+
+  int rating;
+
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+        rating: json["rating"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "rating": rating,
+      };
+}
+
+class Bookmark {
+  Bookmark({
+    required this.bookmark,
+  });
+
+  bool bookmark;
+
+  factory Bookmark.fromJson(Map<String, dynamic> json) => Bookmark(
+        bookmark: json["bookmark"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "bookmark": bookmark,
+      };
+}
 
 class RecipeDetailPage extends StatefulWidget {
   final String id;
@@ -70,6 +99,40 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     final step = await fetchStep(id, token);
     PostDetail postDetail = PostDetail.fromJson(post.toJson(), step.toJson());
     return postDetail;
+  }
+
+  Future ratingPost(String postId, String token, int rating) async {
+    http.Response response = await http.post(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/rating'),
+      body: json.encode(Rating(rating: rating).toJson()),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {});
+    }
+  }
+
+  Future bookmarkPost(String postId, String token, bool bookmark) async {
+    http.Response response = await http.post(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/bookmark'),
+      body: json.encode(Bookmark(bookmark: bookmark).toJson()),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {});
+    }
   }
 
   @override
@@ -132,18 +195,21 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         children: [
                           Ink(
                             decoration: BoxDecoration(
-                              // border: Border.all(width: 1),
-                              color: Colors.orange,
+                              color: (snapshot.data.bookmark)
+                                  ? Colors.orange
+                                  : Color.fromARGB(255, 219, 214, 214),
                             ),
                             child: InkWell(
-                              //borderRadius: BorderRadius.circular(100.0),
-                              onTap: () {},
+                              onTap: () {
+                                bookmarkPost(widget.id, widget.token,
+                                    !snapshot.data.bookmark);
+                              },
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: Icon(
-                                  Icons.bookmark_border,
+                                  Icons.bookmark_border_outlined,
                                   size: 25.0,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -151,11 +217,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                           SizedBox(width: 3),
                           Ink(
                             decoration: BoxDecoration(
-                              // border: Border.all(width: 1),
-                              color: Color.fromARGB(255, 221, 218, 218),
+                              color: (snapshot.data.rating != null)
+                                  ? Colors.orange
+                                  : Color.fromARGB(255, 221, 218, 218),
                             ),
                             child: InkWell(
-                              //borderRadius: BorderRadius.circular(100.0),
                               onTap: () {},
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
@@ -170,11 +236,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                           SizedBox(width: 3),
                           Ink(
                             decoration: BoxDecoration(
-                              // border: Border.all(width: 1),
                               color: Color.fromARGB(255, 221, 218, 218),
                             ),
                             child: InkWell(
-                              //borderRadius: BorderRadius.circular(100.0),
                               onTap: () {},
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
@@ -207,8 +271,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               SimpleStarRating(
-                                onRated: ((rating) {
-                                }),
+                                isReadOnly: (snapshot.data.rating != null)
+                                    ? true
+                                    : false,
+                                onRated: (rate) {
+                                  // if(rating != null){
+                                  print('click');
+                                  ratingPost(
+                                      widget.id, widget.token, rate!.toInt());
+                                  // }
+                                },
                                 allowHalfRating: true,
                                 starCount: 5,
                                 rating: snapshot.data.averageRating * 1.0,

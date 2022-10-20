@@ -54,10 +54,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
-        home: //AuthService().handleAuthState(),
-            MyHomePage(
-          title: '',
-        ),
+        home: AuthService().handleAuthState(),
+        //     MyHomePage(
+        //   title: '',
+        // ),
       ),
     );
   }
