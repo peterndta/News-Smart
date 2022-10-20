@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/pages/user_profile.dart';
+import 'package:reciapp/object/filter_provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../login_support/check_auth.dart';
 import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class InfiniteScroll extends StatefulWidget {
-  const InfiniteScroll({Key? key}) : super(key: key);
+class InfiniteScrollCategory extends StatefulWidget {
+  const InfiniteScrollCategory({Key? key}) : super(key: key);
 
   @override
-  _InfiniteScrollState createState() => _InfiniteScrollState();
+  _InfiniteScrollCategoryState createState() => _InfiniteScrollCategoryState();
 }
 
-class _InfiniteScrollState extends State<InfiniteScroll> {
+class _InfiniteScrollCategoryState extends State<InfiniteScrollCategory> {
   final controller = ScrollController();
   final List<GetPosts> posts = [];
   int page = 1;
   bool isLoading = false;
   bool hasMore = true;
-
+  String urlFilter = '';
   Future fetchInfinitePosts() async {
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
+
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/category/post/page/$page?${urlFilter}PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -70,6 +71,7 @@ class _InfiniteScrollState extends State<InfiniteScroll> {
   @override
   Widget build(BuildContext context) {
     final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1,
       child: ListView.builder(
