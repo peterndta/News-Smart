@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/collection_page.dart';
-import 'package:reciapp/pages/recipes_result_page.dart';
+import 'package:reciapp/pages/recipes_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import 'package:reciapp/pages/home_page.dart';
 
@@ -47,7 +47,7 @@ class RecipeButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => RecipesResult(),
+          builder: (context) => RecipesPage(),
         ));
       },
       child: Container(

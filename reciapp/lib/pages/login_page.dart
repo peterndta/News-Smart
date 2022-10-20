@@ -89,49 +89,62 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 200,
-              height: 120,
-              child: Image(
-                image: AssetImage('assets/logo.png'),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 200,
+                height: 120,
+                child: Image(
+                  image: AssetImage('assets/logo.png'),
+                ),
               ),
-            ),
-            const Text(
-              'short description about the app',
-              style: TextStyle(
-                fontFamily: 'Times New Roman',
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      _handleSignIn();
-                    },
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.orange)),
-                    icon: const FaIcon(
-                      FontAwesomeIcons.google,
-                      color: Colors.red,
+              const Text(
+                'Best place for sharing and learning recipes',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: 'Gafata', fontSize: 20
+                    // fontStyle: FontStyle.italic,
+                    // fontWeight: FontWeight.bold,
                     ),
-                    label: const Text('Sign in with Google'),
-                  ),
-                ],
               ),
-            ),
-          ],
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              const Text(
+                'Stаrt the dаy with a better tаste!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Gafata', fontSize: 20, color: Colors.orange
+                    // fontStyle: FontStyle.italic,
+                    // fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        _handleSignIn();
+                      },
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.red)),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.google,
+                        color: Colors.white,
+                      ),
+                      label: const Text('Sign in with Google'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const Copyright(),

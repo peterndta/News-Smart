@@ -99,7 +99,10 @@ class _CategoryPageState extends State<CategoryPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScrollCategory(),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: InfiniteScrollCategory(),
+              ),
             ),
           ],
         ),
@@ -111,7 +114,7 @@ class _CategoryPageState extends State<CategoryPage> {
           SizedBox(
             width: 5,
           ),
-          FilterCategory(isSelected)
+          FilterCategory(isSelected),
         ],
       ),
       bottomNavigationBar: Copyright(),
