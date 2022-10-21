@@ -25,21 +25,26 @@ class Category {
 
 class _FilterCategoryState extends State<FilterCategory> {
   TextEditingController searchController = TextEditingController();
-  Widget buildingSingleCheckbox(CheckboxModal select) {
-    return StatefulBuilder(builder: (context, _setState) {
+  Widget buildingSingleCheckbox(
+      CheckboxModal select, List<dynamic> selectedItems) {
+    return StatefulBuilder(builder: (context, setState) {
       return CheckboxListTile(
         value: select.value,
-        title: Text(select.title as String),
-        onChanged: (value) => _setState(() {
+        title: Text(select.item.toString()),
+        onChanged: (value) => setState(() {
           select.value = value!;
+          (select.value)
+              ? selectedItems.add(select.item)
+              : selectedItems.remove(select.item);
+          print(selectedItems);
         }),
       );
     });
   }
 
+  final List<CategoryItem> selectedCategories = [];
   @override
   Widget build(BuildContext context) {
-    final List<String> selectedType = [];
     print(searchController.text);
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.25,
@@ -193,8 +198,10 @@ class _FilterCategoryState extends State<FilterCategory> {
                                               Container(
                                             child: buildingSingleCheckbox(
                                                 CheckboxModal(
-                                              title: snapshot.data[index].type,
-                                            )),
+                                              item: snapshot.data[index],
+                                            ),
+                                            selectedCategories
+                                            ),
                                           ),
                                         );
                                       }
