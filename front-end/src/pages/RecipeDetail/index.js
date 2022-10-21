@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -21,7 +22,6 @@ import {
     Container,
     Divider,
     Grid,
-    Link,
     List,
     ListItem,
     ListItemButton,
@@ -122,18 +122,6 @@ const RecipeDetail = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href="/" fontWeight={700}>
-            Home
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/recipes" fontWeight={700}>
-            Recipes
-        </Link>,
-        <Typography key="3" color="text.primary" fontWeight={700}>
-            {recipe?.name}
-        </Typography>,
-    ]
-
     return (
         <React.Fragment>
             {isFirstRender ? (
@@ -152,7 +140,23 @@ const RecipeDetail = () => {
                     <Container maxWidth="xl">
                         <Box mt={4}>
                             <Breadcrumbs separator="›" aria-label="breadcrumb">
-                                {breadcrumbs}
+                                <Link
+                                    to="/"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Home
+                                </Link>
+                                <Link
+                                    to="/recipes"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Recipes
+                                </Link>
+                                <Typography color="text.primary" fontWeight={700}>
+                                    {recipe?.name}
+                                </Typography>
                             </Breadcrumbs>
                             <Typography
                                 mt={4}
