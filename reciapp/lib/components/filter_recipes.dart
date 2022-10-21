@@ -13,8 +13,6 @@ class FilterRecipeResult extends StatefulWidget {
 }
 
 class _FilterRecipeResultState extends State<FilterRecipeResult> {
-  var keyword = TextEditingController();
-
   Widget buildingSingleCheckbox(
       CheckboxModal select, List<dynamic> selectedItems) {
     return StatefulBuilder(builder: (context, setState) {
@@ -32,6 +30,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
     });
   }
 
+  var keyword = TextEditingController();
   final List<RegionItem> selectedContinent = [];
   final List<UseItem> selectedUse = [];
 
@@ -84,7 +83,11 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    selectedUse.clear();
+                                    selectedContinent.clear();
+                                    keyword.clear();
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
                                     side: BorderSide(
