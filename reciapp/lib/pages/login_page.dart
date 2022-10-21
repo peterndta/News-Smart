@@ -80,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
         );
         await submitData(data);
 
-        print(FirebaseAuth.instance.currentUser!.displayName!);
-        print(FirebaseAuth.instance.currentUser!.email!);
-        print(FirebaseAuth.instance.currentUser!.photoURL!);
+        // print(FirebaseAuth.instance.currentUser!.displayName!);
+        // print(FirebaseAuth.instance.currentUser!.email!);
+        // print(FirebaseAuth.instance.currentUser!.photoURL!);
       } catch (error) {
         print(error);
       }

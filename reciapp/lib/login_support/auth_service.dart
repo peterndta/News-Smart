@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:reciapp/login_support/user_preference.dart';
 import 'package:reciapp/pages/home_page.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
+
+import '../object/user_info.dart';
 
 class AuthService {
   //1. handleAuthState()
@@ -14,9 +18,6 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            Future.delayed(Duration(seconds: 2), () {
-              return const HomePage();
-            });
             return const HomePage();
           } else {
             return const LoginPage();
@@ -39,13 +40,20 @@ class AuthService {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
     //once signed in, return the user credential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   //3. signOut()
+  Future logoutAuth() async {
+    UserData user = UserData(
+        userID: 0, name: '', imageURL: '', role: '', mail: '', token: '');
+    String userString = jsonEncode(user.toJson());
+    await UserPreferences.setUserInfo(userString);
+  }
+
   signOut() {
+    logoutAuth();
     GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
   }

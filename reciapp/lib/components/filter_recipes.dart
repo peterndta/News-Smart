@@ -8,43 +8,31 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FilterRecipeResult extends StatefulWidget {
-  bool isSelected;
-
-  FilterRecipeResult(this.isSelected);
-
   @override
   State<FilterRecipeResult> createState() => _FilterRecipeResultState();
 }
 
-class Continent {
-  int id;
-  String continent;
-  Continent(this.id, this.continent);
-}
-
-class Use {
-  int id;
-  String usesOfFood;
-  Use(this.id, this.usesOfFood);
-}
-
 class _FilterRecipeResultState extends State<FilterRecipeResult> {
-  var controller = TextEditingController();
-
-  Widget buildingSingleCheckbox(CheckboxModal select) {
-    return StatefulBuilder(builder: (context, _setState) {
+  Widget buildingSingleCheckbox(
+      CheckboxModal select, List<dynamic> selectedItems) {
+    return StatefulBuilder(builder: (context, setState) {
       return CheckboxListTile(
         value: select.value,
-        title: Text(select.title as String),
-        onChanged: (value) => _setState(() {
+        title: Text(select.item.toString()),
+        onChanged: (value) => setState(() {
           select.value = value!;
+          (select.value)
+              ? selectedItems.add(select.item)
+              : selectedItems.remove(select.item);
+          print(selectedItems);
         }),
       );
     });
   }
 
-  final List<int> selectedContinentID = [];
-  final List<int> selectedUseID = [];
+  var keyword = TextEditingController();
+  final List<RegionItem> selectedContinent = [];
+  final List<UseItem> selectedUse = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +43,9 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
         onPressed: () {
           showModalBottomSheet(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {
@@ -94,7 +83,11 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    selectedUse.clear();
+                                    selectedContinent.clear();
+                                    keyword.clear();
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
                                     side: BorderSide(
@@ -134,14 +127,14 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.06,
+                                    MediaQuery.of(context).size.height * 0.08,
                                 child: TextField(
-                                  controller: controller,
+                                  controller: keyword,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'Keywords',
                                     suffixIcon: IconButton(
-                                      onPressed: controller.clear,
+                                      onPressed: keyword.clear,
                                       icon: Icon(Icons.clear),
                                     ),
                                   ),
@@ -193,8 +186,8 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                               Container(
                                             child: buildingSingleCheckbox(
                                                 CheckboxModal(
-                                                    title: snapshot.data[index]
-                                                        .continents)),
+                                                    item: snapshot.data[index]),
+                                                selectedContinent),
                                           ),
                                         );
                                       }
@@ -245,8 +238,8 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                               Container(
                                             child: buildingSingleCheckbox(
                                                 CheckboxModal(
-                                                    title: snapshot.data[index]
-                                                        .usesOfFood)),
+                                                    item: snapshot.data[index]),
+                                                selectedUse),
                                           ),
                                         );
                                       }
