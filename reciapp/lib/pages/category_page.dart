@@ -47,7 +47,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    //print('At category page, token: ${getUserInfo.token}');
+    print('At category page, token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(

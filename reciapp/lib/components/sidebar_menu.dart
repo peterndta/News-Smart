@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/pages/category_page.dart';
@@ -11,6 +13,8 @@ import 'package:reciapp/pages/home_page.dart';
 
 import '../login_support/auth_service.dart';
 import '../login_support/check_auth.dart';
+import '../login_support/user_preference.dart';
+import '../object/user_info.dart';
 import '../pages/login_page.dart';
 
 class HomeButton extends StatelessWidget {
@@ -223,9 +227,19 @@ class ProfileButton extends StatelessWidget {
 class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+
     return InkWell(
       onTap: () {
+        getUserInfo.token = '';
+        getUserInfo.role = '';
+        getUserInfo.mail = '';
+        getUserInfo.userID = 0;
+        getUserInfo.name = '';
+        getUserInfo.imageURL = '';
         AuthService().signOut();
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: ((context) => LoginPage())));
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
