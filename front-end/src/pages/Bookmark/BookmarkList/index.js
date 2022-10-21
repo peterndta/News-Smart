@@ -4,7 +4,7 @@ import queryString from 'query-string'
 import { useLocation } from 'react-router-dom'
 
 import NumberItemPagination from '../../../components/NumberItemPagination'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import useMyBookmarks from '../../../recoil/my-bookmarks/action'
@@ -49,10 +49,11 @@ const BookmarkList = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any result' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -70,10 +71,11 @@ const BookmarkList = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any result' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -92,13 +94,21 @@ const BookmarkList = () => {
                         <SearchBox />
                         <Sort />
                     </Box>
-                    <NumberItemPagination
-                        from={fromTo.from}
-                        to={fromTo.to}
-                        all={fromTo.totalCount}
-                    />
-                    <Bookmarks posts={recipes.list} />
-                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                    {recipes.length ? (
+                        <React.Fragment>
+                            <NumberItemPagination
+                                from={fromTo.from}
+                                to={fromTo.to}
+                                all={fromTo.totalCount}
+                            />
+                            <Bookmarks posts={recipes.list} />
+                            {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                        </React.Fragment>
+                    ) : (
+                        <Typography mt={3} fontWeight={500}>
+                            No results were found.
+                        </Typography>
+                    )}
                 </React.Fragment>
             )}
         </React.Fragment>

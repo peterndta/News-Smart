@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
+import { Assignment } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
@@ -29,10 +30,11 @@ const MyRecipes = () => {
                 setRecipe(data)
                 setIsLoading(false)
             })
-            .catch(() => {
+            .catch((error) => {
+                const message = error.response.data.message
                 showSnackbar({
-                    severity: 'error',
-                    children: 'Something went wrong, please try again later.',
+                    severity: message == 'Do not have any post' ? 'info' : 'error',
+                    children: message || 'Something went wrong, please try again later.',
                 })
                 setIsLoading(false)
             })
@@ -45,24 +47,40 @@ const MyRecipes = () => {
             ) : (
                 <React.Fragment>
                     <Box>
-                        <Typography variant="h4" fontWeight={700} sx={{ color: grey[700] }}>
-                            Recently Recipes
-                        </Typography>
-                        <RecipeList posts={recipe} />
-                        {recipe.length > 6 ? (
-                            <Box display="flex" justifyContent="center" mt={6}>
-                                <Button
-                                    variant="contained"
-                                    size="large"
-                                    sx={{ color: grey[100] }}
-                                    component={Link}
-                                    to="/recipes/me"
-                                >
-                                    Show more
-                                </Button>
-                            </Box>
+                        <Box display="flex" alignItems="center">
+                            <Assignment fontSize="large" sx={{ color: grey[700] }} />
+                            <Typography
+                                ml={1}
+                                variant="h4"
+                                fontWeight={700}
+                                sx={{ color: grey[700] }}
+                            >
+                                Recently Recipes
+                            </Typography>
+                        </Box>
+                        {recipe.length ? (
+                            <React.Fragment>
+                                <RecipeList posts={recipe} />
+                                {recipe.length > 6 ? (
+                                    <Box display="flex" justifyContent="center" mt={6}>
+                                        <Button
+                                            variant="contained"
+                                            size="large"
+                                            sx={{ color: grey[100] }}
+                                            component={Link}
+                                            to="/recipes/me"
+                                        >
+                                            Show more
+                                        </Button>
+                                    </Box>
+                                ) : (
+                                    ''
+                                )}
+                            </React.Fragment>
                         ) : (
-                            ''
+                            <Typography mt={2} fontWeight={500}>
+                                No posts were found.
+                            </Typography>
                         )}
                     </Box>
                 </React.Fragment>
