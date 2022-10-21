@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
 import { useLocation } from 'react-router-dom'
 
-import { Grid } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../../../HOCs/SnackbarContext'
 import useRecipe from '../../../../recoil/recipe/action'
@@ -94,8 +95,34 @@ const RecipeList = () => {
             ) : (
                 <React.Fragment>
                     <Sort />
-                    <Recipes posts={recipes.list} />
-                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                    {recipes.list.length ? (
+                        <React.Fragment>
+                            <Recipes posts={recipes.list} />
+                            {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                        </React.Fragment>
+                    ) : (
+                        <Box alignItems="center" textAlign="center" mt={10}>
+                            <Typography fontSize={38} fontWeight={700} sx={{ color: grey[700] }}>
+                                Sorry, we couldn’t find any results
+                            </Typography>
+                            <Typography fontSize={20} mt={3} sx={{ color: grey[700] }}>
+                                Feel free to add your own recipe by clicking{' '}
+                                <Box component="span" fontWeight={700}>
+                                    Add A Recipe{' '}
+                                </Box>
+                                on your profile menu
+                            </Typography>
+                            <Box
+                                mt={4}
+                                component="img"
+                                alt="food"
+                                src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t1.15752-9/307589926_834744197705463_2982451241580080174_n.png?_nc_cat=111&ccb=1-7&_nc_sid=ae9488&_nc_ohc=YAQCDp9K8pkAX9rl9-z&_nc_ht=scontent.fsgn2-6.fna&oh=03_AdRFe2c-TMn6SeEmCClPqnvxknL6sOrF1rmtO59ij8T4wQ&oe=6378DC07"
+                                sx={{
+                                    width: '20%',
+                                }}
+                            />
+                        </Box>
+                    )}
                 </React.Fragment>
             )}
         </Grid>
