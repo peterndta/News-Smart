@@ -23,18 +23,24 @@ class Method {
 
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
   var controller = TextEditingController();
-  final List<String> selectedMethod = [];
-  Widget buildingSingleCheckbox(CheckboxModal select) {
-    return StatefulBuilder(builder: (context, _setState) {
+  Widget buildingSingleCheckbox(
+      CheckboxModal select, List<dynamic> selectedItems) {
+    return StatefulBuilder(builder: (context, setState) {
       return CheckboxListTile(
         value: select.value,
-        title: Text(select.title as String),
-        onChanged: (value) => _setState(() {
+        title: Text(select.item.toString()),
+        onChanged: (value) => setState(() {
           select.value = value!;
+          (select.value)
+              ? selectedItems.add(select.item)
+              : selectedItems.remove(select.item);
+          print(selectedItems);
         }),
       );
     });
   }
+
+  final List<MethodItem> selectedMethods = [];
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +218,8 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                                 // ),
                                                 buildingSingleCheckbox(
                                                     CheckboxModal(
-                                                        title: snapshot
-                                                            .data[index]
-                                                            .method)),
+                                                        item: snapshot
+                                                            .data[index]), selectedMethods),
                                           ),
                                         );
                                       }
