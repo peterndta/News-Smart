@@ -25,6 +25,9 @@ class PostDetail {
     required this.cookingTime,
     required this.preparingTime,
     required this.serving,
+    required this.rating,
+    required this.bookmark,
+    required this.isReport,
   });
 
   String id;
@@ -52,6 +55,9 @@ class PostDetail {
   int cookingTime;
   int preparingTime;
   int serving;
+  int rating;
+  bool bookmark;
+  bool isReport;
 
   factory PostDetail.fromJson(
           Map<String, dynamic> json1, Map<String, dynamic> json2) =>
@@ -74,6 +80,9 @@ class PostDetail {
         userName: json1["userName"],
         usesId: json1["usesId"],
         averageRating: json1["averageRating"],
+        rating: json1["rating"],
+        bookmark: json1["bookmark"],
+        isReport: json1["isReport"],
         ingredient: json2["ingredient"],
         processing: json2["processing"],
         cooking: json2["cooking"],
@@ -111,6 +120,9 @@ class PostDetail {
         "cookingTime": cookingTime,
         "preparingTime": preparingTime,
         "serving": serving,
+        "rating": rating,
+        "bookmark": bookmark,
+        "isReport": isReport,
       };
 }
 
@@ -132,4 +144,8 @@ class ListCategory {
         "id": id,
         "type": type,
       };
+  @override
+  String toString() {
+    return type;
+  }
 }
