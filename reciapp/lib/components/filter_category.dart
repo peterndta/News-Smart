@@ -9,10 +9,6 @@ import '../object/category_item.dart';
 import 'checkbox.dart';
 
 class FilterCategory extends StatefulWidget {
-  bool isSelected;
-
-  FilterCategory(this.isSelected);
-
   @override
   State<FilterCategory> createState() => _FilterCategoryState();
 }
@@ -42,6 +38,7 @@ class _FilterCategoryState extends State<FilterCategory> {
     });
   }
 
+  final checkboxListItem = [];
   final List<CategoryItem> selectedCategories = [];
   @override
   Widget build(BuildContext context) {
@@ -190,19 +187,20 @@ class _FilterCategoryState extends State<FilterCategory> {
                                       if (snapshot.data == null) {
                                         return Container();
                                       } else {
-                                        return ListView.builder(
+                                        for (var i in snapshot.data) {
+                                          checkboxListItem
+                                              .add(CheckboxModal(item: i));
+                                        }
+                                        return ListView(
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, index) =>
-                                              Container(
-                                            child: buildingSingleCheckbox(
-                                                CheckboxModal(
-                                              item: snapshot.data[index],
-                                            ),
-                                            selectedCategories
-                                            ),
-                                          ),
+                                          children: [
+                                            ...checkboxListItem
+                                                .map((item) =>
+                                                    buildingSingleCheckbox(item,
+                                                        selectedCategories))
+                                                .toList()
+                                          ],
                                         );
                                       }
                                     })),
