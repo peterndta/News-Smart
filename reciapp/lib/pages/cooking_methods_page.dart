@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/filter_cooking_methods.dart';
+// import 'package:reciapp/components/filter_cooking_methods.dart';
 import 'package:reciapp/components/infinite_scroll_methods.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
@@ -110,7 +110,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
           SizedBox(
             width: 5,
           ),
-          FilterCookingMethods(isSelected)
+          // FilterCookingMethods(isSelected)
         ],
       ),
       bottomNavigationBar: Copyright(),

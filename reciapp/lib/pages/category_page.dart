@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/components/infinite_scroll_category.dart';
-import '../components/filter_category.dart';
+// import '../components/filter_category.dart';
 import '../components/sidebar_menu.dart';
 import '../login_support/check_auth.dart';
 import '../components/back_to_top_button.dart';
@@ -47,7 +47,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    //print('At category page, token: ${getUserInfo.token}');
+    print('At category page, token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -114,7 +114,7 @@ class _CategoryPageState extends State<CategoryPage> {
           SizedBox(
             width: 5,
           ),
-          FilterCategory(isSelected),
+          // FilterCategory(isSelected),
         ],
       ),
       bottomNavigationBar: Copyright(),

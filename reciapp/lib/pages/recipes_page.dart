@@ -111,7 +111,7 @@ class _RecipesPageState extends State<RecipesPage> {
           SizedBox(
             width: 5,
           ),
-          FilterRecipeResult(isSelected)
+          FilterRecipeResult()
         ],
       ),
       bottomNavigationBar: Copyright(),
