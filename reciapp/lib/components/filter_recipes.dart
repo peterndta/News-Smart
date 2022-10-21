@@ -1,30 +1,36 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields, camel_case_types
+// ignore_for_file: prefer_const_constructors, prefer_final_fields
 
+import 'package:flutter/material.dart';
+import '../object/region_item.dart';
+import '../object/use_item.dart';
+import 'checkbox.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/object/filter_provider.dart';
-import '../object/category_item.dart';
-import 'checkbox.dart';
 
-class FilterCategory extends StatefulWidget {
+class FilterRecipeResult extends StatefulWidget {
   bool isSelected;
 
-  FilterCategory(this.isSelected);
+  FilterRecipeResult(this.isSelected);
 
   @override
-  State<FilterCategory> createState() => _FilterCategoryState();
+  State<FilterRecipeResult> createState() => _FilterRecipeResultState();
 }
 
-class Category {
+class Continent {
   int id;
-  String type;
-  Category(this.id, this.type);
+  String continent;
+  Continent(this.id, this.continent);
 }
 
-class _FilterCategoryState extends State<FilterCategory> {
-  TextEditingController searchController = TextEditingController();
+class Use {
+  int id;
+  String usesOfFood;
+  Use(this.id, this.usesOfFood);
+}
+
+class _FilterRecipeResultState extends State<FilterRecipeResult> {
+  var controller = TextEditingController();
+
   Widget buildingSingleCheckbox(CheckboxModal select) {
     return StatefulBuilder(builder: (context, _setState) {
       return CheckboxListTile(
@@ -37,10 +43,11 @@ class _FilterCategoryState extends State<FilterCategory> {
     });
   }
 
+  final List<int> selectedContinentID = [];
+  final List<int> selectedUseID = [];
+
   @override
   Widget build(BuildContext context) {
-    final List<String> selectedType = [];
-    print(searchController.text);
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.25,
       height: MediaQuery.of(context).size.height * 0.06,
@@ -87,7 +94,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
-                                  onPressed: searchController.clear,
+                                  onPressed: () {},
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
                                     side: BorderSide(
@@ -129,15 +136,12 @@ class _FilterCategoryState extends State<FilterCategory> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.06,
                                 child: TextField(
-                                  //autofocus: true,
-                                  controller: searchController,
-
-                                  //onSubmitted:
+                                  controller: controller,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'Keywords',
                                     suffixIcon: IconButton(
-                                      onPressed: searchController.clear,
+                                      onPressed: controller.clear,
                                       icon: Icon(Icons.clear),
                                     ),
                                   ),
@@ -156,16 +160,17 @@ class _FilterCategoryState extends State<FilterCategory> {
                               ),
                             ],
                           ),
+                          // color: Colors.yellow,
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height * 1.19,
+                          height: MediaQuery.of(context).size.height * 0.6,
                           padding: EdgeInsets.only(top: 5, left: 15),
                           alignment: Alignment.topLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Categories',
+                                'Continents',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
@@ -173,14 +178,9 @@ class _FilterCategoryState extends State<FilterCategory> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.01,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.height * 0.6,
-                                height:
-                                    MediaQuery.of(context).size.height * 1.02,
+                                    MediaQuery.of(context).size.height * 0.5,
                                 child: FutureBuilder(
-                                    future: fetchCategories(),
+                                    future: fetchRegions(),
                                     builder: ((context, snapshot) {
                                       if (snapshot.data == null) {
                                         return Container();
@@ -193,12 +193,68 @@ class _FilterCategoryState extends State<FilterCategory> {
                                               Container(
                                             child: buildingSingleCheckbox(
                                                 CheckboxModal(
-                                              title: snapshot.data[index].type,
-                                            )),
+                                                    title: snapshot.data[index]
+                                                        .continents)),
                                           ),
                                         );
                                       }
                                     })),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Divider(
+                                color: Colors.orange,
+                                height: 3,
+                                thickness: 2,
+                                indent: 50,
+                                endIndent: 60,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          padding: EdgeInsets.only(top: 5, left: 15),
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Uses',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                child: FutureBuilder(
+                                    future: fetchUses(),
+                                    builder: ((context, snapshot) {
+                                      if (snapshot.data == null) {
+                                        return Container();
+                                      } else {
+                                        return ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (context, index) =>
+                                              Container(
+                                            child: buildingSingleCheckbox(
+                                                CheckboxModal(
+                                                    title: snapshot.data[index]
+                                                        .usesOfFood)),
+                                          ),
+                                        );
+                                      }
+                                    })),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
                               ),
                               Center(
                                 child: ElevatedButton(

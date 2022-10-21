@@ -74,39 +74,41 @@ class _InfiniteScrollCategoryState extends State<InfiniteScrollCategory> {
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1,
+      //width: MediaQuery.of(context).size.width * 0.8,
       child: ListView.builder(
           controller: controller,
           itemCount: posts.length + 1,
           itemBuilder: (context, index) {
             if (index < posts.length) {
               final post = posts[index];
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: InkWell(
-                  //   onTap: () {
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //       builder: (context) => /**foward đến recipe detail của recipe vừa bấm */));
-                  // },
+              return InkWell(
+                //   onTap: () {
+                //   Navigator.of(context).push(MaterialPageRoute(
+                //       builder: (context) => /**foward đến recipe detail của recipe vừa bấm */));
+                // },
+                child: Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(color: Colors.grey, width: 0.5))),
                   child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: Colors.grey, width: 0.5))),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        children: [
-                          Image(
-                            image: NetworkImage(post.imageUrl),
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.height * 0.14,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          Column(
+                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 15),
+                    child: Row(
+                      children: [
+                        Image(
+                          image: NetworkImage(post.imageUrl),
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          height: MediaQuery.of(context).size.height * 0.14,
+                          fit: BoxFit.fill,
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -129,7 +131,7 @@ class _InfiniteScrollCategoryState extends State<InfiniteScrollCategory> {
                                   children: [
                                     SmoothStarRating(
                                       isReadOnly: true,
-                                      size: 16,
+                                      size: 28,
                                       color: Colors.amber[600],
                                       rating: post.averageRating.toDouble(),
                                       borderColor: Colors.amber[600],
@@ -141,33 +143,49 @@ class _InfiniteScrollCategoryState extends State<InfiniteScrollCategory> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.5,
                                   child: Text(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      post.description)),
-                              Row(
-                                children: [
-                                  const Text('by '),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.01,
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      post.userName,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    post.description,
+                                    style: const TextStyle(fontSize: 18),
+                                  )),
+                              Container(
+                                margin: const EdgeInsets.only(top: 15),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
+                                      child: const Text(
+                                        'By ',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 12),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.02),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
+                                        post.userName,
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
