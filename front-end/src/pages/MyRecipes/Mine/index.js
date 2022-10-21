@@ -99,7 +99,7 @@ const Mine = () => {
                         <SearchBox />
                         <Sort />
                     </Box>
-                    {recipes.length ? (
+                    {recipes.list.length ? (
                         <React.Fragment>
                             <NumberItemPagination
                                 from={fromTo.from}

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ButtonAddRecipe from '../../components/AddRecipe'
 import Navs from '../../components/Navs'
 import { Box, Grid } from '@mui/material'
 
@@ -11,6 +12,7 @@ const Bookmark = () => {
             <Grid container columnSpacing={4}>
                 <Grid item md={3}>
                     <Navs />
+                    <ButtonAddRecipe />
                 </Grid>
                 <Grid item md={9} display="flex" flexDirection="column">
                     <RatingList />

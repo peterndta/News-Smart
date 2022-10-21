@@ -78,9 +78,30 @@ const MyRecipes = () => {
                                 )}
                             </React.Fragment>
                         ) : (
-                            <Typography mt={2} fontWeight={500}>
-                                No posts were found.
-                            </Typography>
+                            <Box alignItems="center" textAlign="center" mt={6}>
+                                <Typography
+                                    fontSize={24}
+                                    fontWeight={700}
+                                    sx={{ color: grey[700] }}
+                                >
+                                    You haven’t created any recipes yet
+                                </Typography>
+                                <Typography fontSize={16} mt={2} sx={{ color: grey[700] }}>
+                                    To add a recipe click the button{' '}
+                                    <Box component="span" fontWeight={700}>
+                                        ADD A RECIPE
+                                    </Box>
+                                </Typography>
+                                <Box
+                                    mt={3}
+                                    component="img"
+                                    alt="food"
+                                    src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t1.15752-9/307589926_834744197705463_2982451241580080174_n.png?_nc_cat=111&ccb=1-7&_nc_sid=ae9488&_nc_ohc=YAQCDp9K8pkAX9rl9-z&_nc_ht=scontent.fsgn2-6.fna&oh=03_AdRFe2c-TMn6SeEmCClPqnvxknL6sOrF1rmtO59ij8T4wQ&oe=6378DC07"
+                                    sx={{
+                                        width: '10%',
+                                    }}
+                                />
+                            </Box>
                         )}
                     </Box>
                 </React.Fragment>
