@@ -18,9 +18,6 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            Future.delayed(Duration(seconds: 2), () {
-              return const HomePage();
-            });
             return const HomePage();
           } else {
             return const LoginPage();
@@ -43,7 +40,6 @@ class AuthService {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-
     //once signed in, return the user credential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }

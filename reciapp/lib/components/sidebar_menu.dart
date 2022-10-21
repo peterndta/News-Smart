@@ -2,8 +2,10 @@
 
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/main.dart';
 import 'package:reciapp/pages/category_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/collection_page.dart';
@@ -228,6 +230,12 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
+    // Future logoutAuth() async {
+    //   UserData user = UserData(
+    //       userID: 0, name: '', imageURL: '', role: '', mail: '', token: '');
+    //   String userString = jsonEncode(user.toJson());
+    //   await UserPreferences.setUserInfo(userString);
+    // }
 
     return InkWell(
       onTap: () {
@@ -238,8 +246,10 @@ class LogoutButton extends StatelessWidget {
         getUserInfo.name = '';
         getUserInfo.imageURL = '';
         AuthService().signOut();
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: ((context) => LoginPage())));
+        //      logoutAuth();
+
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: ((context) => MyApp())));
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
