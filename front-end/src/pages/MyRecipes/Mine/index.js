@@ -26,7 +26,6 @@ const filterStringGenerator = ({ search, sort }) => {
 
     return filterString
 }
-
 const Mine = () => {
     const { search: query } = useLocation()
     const { search, sort, pageNum } = queryString.parse(query)
@@ -99,7 +98,7 @@ const Mine = () => {
                         <SearchBox />
                         <Sort />
                     </Box>
-                    {recipes.length ? (
+                    {recipes.list.length ? (
                         <React.Fragment>
                             <NumberItemPagination
                                 from={fromTo.from}
