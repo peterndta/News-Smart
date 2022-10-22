@@ -53,6 +53,7 @@ dependencies:
   provider: ^6.0.3
   shared_preferences: ^2.0.15
   youtube_player_flutter: 8.0.0
+  flutter_launcher_icons: ^0.10.0
 
 
 dev_dependencies:
@@ -66,6 +67,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_icons:
+  android: true
+  image_path: "assets/Main_Reci_Logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo_foreground.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
