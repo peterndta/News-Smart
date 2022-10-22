@@ -16,10 +16,10 @@ namespace reciWebApp.Data.IRepositories
         List<Post> GetPostsByPostCategories(List<PostCategory> postCategories);
         List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
         List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
-        List<Post>? GetPostsByFoodCollections(List<FoodCollection> foodCollections);
-        List<Post>? GetPostsByUses(List<Use> uses);
+        List<Post> GetPostsByFoodCollections(List<FoodCollection> foodCollections);
+        List<Post> GetPostsByUses(List<Use> uses);
         List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
-        Task<List<Post>?> GetAllPostsAsync(PostParams postParams);
+        //Task<List<Post>?> GetAllPostsAsync(PostParams postParams);
         Task<List<Post>?> GetPostsFilterByMethodsAsync(PostParams postParams);
         Task<List<Post>?> GetPostsFilterByCategoriesAsync(PostParams postParams);
         Task<List<Post>?> GetPostsFilterByUsesAndRegionsAsync(PostParams postParams);

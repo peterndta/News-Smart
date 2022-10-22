@@ -5,7 +5,7 @@ namespace reciWebApp.Data.IRepositories
     public interface IFoodCollectionRepository
     {
         void CreateFoodCollection(FoodCollection foodCollection);
-        List<FoodCollection?> GetFoodCollectionsByCollections(List<Collection?> collections);
+        List<FoodCollection> GetFoodCollectionsByCollections(List<Collection> collections);
         //Task<List<FoodCollection>?> GetAllFoodCollectionsAsync(List<Collection?> collections);
     }
 }
