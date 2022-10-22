@@ -9,6 +9,7 @@ using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
+using System.Net.WebSockets;
 
 namespace reciWebApp.Controllers
 {
@@ -50,6 +51,10 @@ namespace reciWebApp.Controllers
                 {
                     return BadRequest(new Response(400, "User id does not exist"));
                 }
+                if (PostReportDTO.Reason == null)
+                {
+                    return BadRequest(new Response(400, "You can not report without reasons"));
+                }
 
                 var createPostReportDTO = _mapper.Map<PostReport>(PostReportDTO);
                 createPostReportDTO.Status = 0;
@@ -67,40 +72,52 @@ namespace reciWebApp.Controllers
             
         }
 
-        //[Route("~/api/admin/report")]
-        //[HttpPut]
-        //public async Task<IActionResult> ApproveReport (string postId, int reportId)
-        //{
-        //    try
-        //    {
-        //        var currentUser = await _servicesManager.AuthService.GetUser(Request);
+        [Route("~/api/admin/report")]
+        [HttpPut]
+        public async Task<IActionResult> DenyReport(int reportId)
+        {
+            try
+            {
+                var postReport = _repoManager.PostReport.GetPostReportById(reportId);
+                var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-        //        if (currentUser == null)
-        //        {
-        //            return BadRequest(new Response(400, "Invalid user"));
-        //        }
-        //        var post = _repoManager.Post.GetPostById(postId);
-        //        if (post == null)
-        //        {
-        //            return BadRequest(new Response(400, "Post id does not exist"));
-        //        }
-        //        var user = _repoManager.User.GetUserById(post.UsesId);
-        //        if (user == null)
-        //        {
-        //            return BadRequest(new Response(400, "User id does not exist"));
-        //        }
+                if (currentUser == null)
+                {
+                    return BadRequest(new Response(400, "invalid user"));
+                }
 
-        //        var postReport = _repoManager.PostReport.GetPostReportById(reportId);
-        //        var updateReport = _mapper.Map<PostReport>(postReport);
-        //        _repoManager.PostReport.ApproveReport(updateReport);
-        //        _repoManager.Post.DeletePost(post);
-        //        await _repoManager.SaveChangesAsync();
-        //        return Ok(new Response(200, "Update successfully"));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new Response(400, e.Message));
-        //    }
-        //}
+                if (postReport == null)
+                {
+                    return BadRequest(new Response(400, "Report id does not exist"));
+                }
+
+                var post = _repoManager.Post.GetPostById(postReport.PostsId);
+                if (post == null)
+                {
+                    return BadRequest(new Response(400, "Post id does not exist"));
+                }
+
+                var user = _repoManager.User.GetUserById(postReport.UserId);
+                if (user == null)
+                {
+                    return BadRequest(new Response(400, "User id does not exist"));
+                }
+
+                if (postReport.Status != 0)
+                {
+                    return BadRequest(new Response(400, "Report has already processed"));
+                }
+                
+                var updateReport = _mapper.Map<PostReport>(postReport);
+                _repoManager.PostReport.DenyReport(updateReport);
+                await _repoManager.SaveChangesAsync();
+                return Ok(new Response(200, "Deny report successfully"));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new Response(400, e.Message));
+            }
+        }
+
     }
 }

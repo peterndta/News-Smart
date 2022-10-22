@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 import {
     BookmarkAdded,
     BookmarkBorder,
+    Flag,
     FlagTwoTone,
     Kitchen,
     ShoppingCart,
@@ -19,7 +22,6 @@ import {
     Container,
     Divider,
     Grid,
-    Link,
     List,
     ListItem,
     ListItemButton,
@@ -31,6 +33,7 @@ import { blueGrey, grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Loading from '../../pages/Loading'
+import authAtom from '../../recoil/auth/atom'
 import { useBookmark } from '../../recoil/bookmark'
 import { useRecipe } from '../../recoil/recipe'
 import RecipeRating from './RecipeRating'
@@ -48,9 +51,14 @@ const RecipeDetail = () => {
     const [openCreateFeedback, setOpenCreateFeedback] = useState(false)
     const [isFirstRender, setIsFirstRender] = useState(true)
     const [isBookmark, setIsBookmark] = useState(false)
+    const [isReport, setIsReport] = useState(false)
     const bookmarkAction = useBookmark()
-    const handleClickOpen = () => {
+    const auth = useRecoilValue(authAtom)
+    const handleClickOpenReport = () => {
         setOpen(true)
+    }
+    const handleClickCloseReport = () => {
+        setOpen(false)
     }
     const openCreateFeedbackHandler = () => {
         setOpenCreateFeedback(true)
@@ -114,29 +122,41 @@ const RecipeDetail = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href="/" fontWeight={700}>
-            Home
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/recipes" fontWeight={700}>
-            Recipes
-        </Link>,
-        <Typography key="3" color="text.primary" fontWeight={700}>
-            {recipe?.name}
-        </Typography>,
-    ]
-
     return (
         <React.Fragment>
             {isFirstRender ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    {open && <DetailPopup status={open} onClose={() => setOpen(false)} />}
+                    {open && (
+                        <DetailPopup
+                            status={open}
+                            onClose={handleClickCloseReport}
+                            userId={auth.userId}
+                            postId={recipe.id}
+                            setIsReport={setIsReport}
+                        />
+                    )}
                     <Container maxWidth="xl">
                         <Box mt={4}>
                             <Breadcrumbs separator="›" aria-label="breadcrumb">
-                                {breadcrumbs}
+                                <Link
+                                    to="/"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Home
+                                </Link>
+                                <Link
+                                    to="/recipes"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Recipes
+                                </Link>
+                                <Typography color="text.primary" fontWeight={700}>
+                                    {recipe?.name}
+                                </Typography>
                             </Breadcrumbs>
                             <Typography
                                 mt={4}
@@ -317,15 +337,17 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                // disabled={recipe.rating !== null || star !== 0}
-                                                onClick={handleClickOpen}
+                                                disabled={recipe.isReport === true || isReport}
+                                                onClick={handleClickOpenReport}
                                             >
                                                 <ListItemIcon>
-                                                    {/* {recipe.rating === null || star === 0 ? ( */}
-                                                    <FlagTwoTone sx={{ color: blueGrey[800] }} />
-                                                    {/* ) : (
+                                                    {recipe.isReport || isReport ? (
                                                         <Flag color="primary" />
-                                                    )} */}
+                                                    ) : (
+                                                        <FlagTwoTone
+                                                            sx={{ color: blueGrey[800] }}
+                                                        />
+                                                    )}
                                                 </ListItemIcon>
                                             </ListItemButton>
                                         </ListItem>

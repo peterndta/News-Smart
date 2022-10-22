@@ -14,13 +14,14 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-import ConfirmPopup from '../ConfirmPopup'
+import ConfirmPopup from './ConfirmPopup'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 const isEmpty = (incomeValue) => incomeValue.trim().length === 0
 const defaultTextFieldValue = { value: '', isTouched: false }
+
 const DetailPopup = (props) => {
     const [openConfirm, setOpenConfirm] = React.useState(false)
     const [description, setDescription] = useState(defaultTextFieldValue)
@@ -33,15 +34,23 @@ const DetailPopup = (props) => {
     const handleOpenConfirm = () => {
         setOpenConfirm(true)
     }
+    const handleClickCloseConfirm = () => {
+        setOpenConfirm(false)
+    }
     const descriptionIsInValid = isEmpty(description.value) && description.isTouched
+    const overallTextFieldIsValid = !isEmpty(description.value)
+
     return (
         <Box>
             {openConfirm && (
                 <ConfirmPopup
                     status={openConfirm}
-                    onClose={function () {
-                        setOpenConfirm(false)
-                    }}
+                    onClose={handleClickCloseConfirm}
+                    userId={props.userId}
+                    postId={props.postId}
+                    reason={description}
+                    setIsReport={props.setIsReport}
+                    closeReport={props.onClose}
                 />
             )}
             <Dialog
@@ -54,6 +63,7 @@ const DetailPopup = (props) => {
             >
                 <DialogTitle>
                     <Typography
+                        component={'span'}
                         variant="h5"
                         sx={{
                             fontWeight: 700,
@@ -65,6 +75,7 @@ const DetailPopup = (props) => {
                 </DialogTitle>
                 <DialogContent dividers={true}>
                     <TextField
+                        required
                         autoFocus
                         margin="dense"
                         id="name"
@@ -79,6 +90,7 @@ const DetailPopup = (props) => {
                     />
                     <DialogContentText mt={4} id="alert-dialog-slide-description">
                         <Typography
+                            component={'span'}
                             variant="subtitle1"
                             sx={{ fontSize: 13, color: blueGrey[400] }}
                             fontWeight={400}
@@ -91,7 +103,9 @@ const DetailPopup = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Close</Button>
-                    <Button onClick={handleOpenConfirm}>Send</Button>
+                    <Button disabled={!overallTextFieldIsValid} onClick={handleOpenConfirm}>
+                        Send
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box>

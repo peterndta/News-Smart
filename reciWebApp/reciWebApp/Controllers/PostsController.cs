@@ -70,10 +70,10 @@ namespace reciWebApp.Controllers
             {
                 var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Search, id);
 
-                if (!posts.Any())
-                {
-                    return BadRequest(new Response(400, "Do not have any post"));
-                }
+                // if (!posts.Any())
+                // {
+                //     return BadRequest(new Response(400, "Do not have any post"));
+                // }
 
                 myPostParams.PageNumber = pageNumber;
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
@@ -302,10 +302,10 @@ namespace reciWebApp.Controllers
 
                 var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(currentUser.Id);
 
-                if (bookmarks.Count == 0)
-                {
-                    return BadRequest(new Response(400, "Do not have any result"));
-                }
+                // if (bookmarks.Count == 0)
+                // {
+                //     return BadRequest(new Response(400, "Do not have any result"));
+                // }
 
                 var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
@@ -343,10 +343,10 @@ namespace reciWebApp.Controllers
 
                 var ratings = await _repoManager.UserInteract.GetRatingAsync(currentUser.Id);
 
-                if (ratings.Count == 0)
-                {
-                    return BadRequest(new Response(400, "Do not have any result"));
-                }
+                // if (ratings.Count == 0)
+                // {
+                //     return BadRequest(new Response(400, "Do not have any result"));
+                // }
 
                 ratingParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Search);
@@ -520,6 +520,33 @@ namespace reciWebApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpGet]
+        [Route("~/api/name/post/page/{pageNumber}")]
+        public async Task<IActionResult> GetPostByName (int pageNumber, [FromQuery] PostFilterByNameParams postFilterByNameParams)
+        {
+            try
+            {
+                var listPost = await _repoManager.Post.GetPostByNameAsync(postFilterByNameParams);
+                if (!listPost.Any())
+                {
+                    return BadRequest(new Response(400, "Do not have any post"));
+                }    
+                var showListPost = _mapper.Map<List<ShowPostDTO>>(listPost);
+
+                postFilterByNameParams.PageNumber = pageNumber;
+                for (int i = 0; i < showListPost.Count; i++)
+                {
+                    showListPost[i]= _servicesManager.PostService.GetPostInfo(showListPost[i]);
+                }    
+                var result = PaginatedList<ShowPostDTO>.Create(showListPost, postFilterByNameParams.PageNumber, postFilterByNameParams.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
+            }
+            catch(Exception e)
+            {
+                return BadRequest (new Response(400, e.Message));
             }
         }
     }

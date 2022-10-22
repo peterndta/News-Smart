@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
 import '../components/head_bar.dart';
@@ -19,47 +20,34 @@ import 'package:http/http.dart' as http;
 class IconDetail extends StatelessWidget {
   final IconData icon;
   final Color color;
-  final int number;
   final String text;
   final dynamic page;
   const IconDetail(
       {super.key,
       required this.color,
-      required this.number,
       required this.icon,
       required this.text,
       required this.page});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          iconSize: 40,
-          color: color,
-          icon: Icon(icon),
-          tooltip: text,
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => page,
-            ));
-          },
-        ),
-        Text(
-          '$number',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        )
-      ],
+    return IconButton(
+      iconSize: 40,
+      color: color,
+      icon: Icon(icon),
+      tooltip: text,
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => page,
+        ));
+      },
     );
   }
 }
 
 class UserProfile extends StatefulWidget {
   final UserInfoProvider userInfoProvider;
-  const UserProfile({
-    required this.userInfoProvider,
-    super.key
-  });
+  const UserProfile({required this.userInfoProvider, super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -71,7 +59,6 @@ class _UserProfileState extends State<UserProfile> {
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts(int userId) async {
-    userId = 4;
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
@@ -85,6 +72,7 @@ class _UserProfileState extends State<UserProfile> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;
@@ -95,6 +83,10 @@ class _UserProfileState extends State<UserProfile> {
         _listReciepReviews.addAll(responseJson['data']
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
       });
     }
   }
@@ -114,7 +106,8 @@ class _UserProfileState extends State<UserProfile> {
       widget.userInfoProvider.role = userData.role;
       widget.userInfoProvider.mail = userData.mail;
     }
-    fetchInfinitePosts(widget.userInfoProvider.userID);
+    userId = widget.userInfoProvider.userID;
+    fetchInfinitePosts(userId);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts(widget.userInfoProvider.userID);
@@ -169,7 +162,29 @@ class _UserProfileState extends State<UserProfile> {
                               fontWeight: FontWeight.bold,
                             )),
                         const SizedBox(height: 20),
-                        Text(widget.userInfoProvider.mail)
+                        Text.rich(
+                          TextSpan(
+                            children: <InlineSpan>[
+                              const WidgetSpan(
+                                child: Text(
+                                  'Email: ',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                              WidgetSpan(
+                                child: Text(
+                                  widget.userInfoProvider.mail,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     )
                   ],
@@ -187,21 +202,18 @@ class _UserProfileState extends State<UserProfile> {
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
-                    number: 3,
                     text: "Press to your recipes",
                     page: UserRecipesPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
-                    number: 20,
                     text: "Press to your bookmarks",
                     page: CollectionPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
-                    number: 15,
                     text: "Press to your ratings",
                     page: UserRatingsPage(widget.userInfoProvider.userID),
                   ),
@@ -226,6 +238,15 @@ class _UserProfileState extends State<UserProfile> {
         ),
       ),
       bottomNavigationBar: const Copyright(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateRecipePage(),
+          ));
+        },
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { v4 } from 'uuid'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Breadcrumbs } from '@mui/material'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import authAtom from '../../recoil/auth'
@@ -66,12 +67,35 @@ const CreateRecipe = () => {
         }
     }
     return (
-        <Box mt={8}>
-            <Typography variant="h3" align="center" color="primary" fontWeight={700}>
-                Create Recipe
-            </Typography>
-            <CreateRecipeForm createRecipeHandler={createRecipeHandler} />
-        </Box>
+        <React.Fragment>
+            <Box mt={4}>
+                <Breadcrumbs separator="›" aria-label="breadcrumb">
+                    <Link
+                        to="/"
+                        style={{ color: '#637381', textDecoration: 'none' }}
+                        fontWeight={700}
+                    >
+                        Home
+                    </Link>
+                    <Link
+                        to="/recipes/me"
+                        style={{ color: '#637381', textDecoration: 'none' }}
+                        fontWeight={700}
+                    >
+                        My Recipes
+                    </Link>
+                    <Typography color="text.primary" fontWeight={700}>
+                        Add A Recipe
+                    </Typography>
+                </Breadcrumbs>
+            </Box>
+            <Box mt={4}>
+                <Typography variant="h3" align="center" color="primary" fontWeight={700}>
+                    Create Recipe
+                </Typography>
+                <CreateRecipeForm createRecipeHandler={createRecipeHandler} />
+            </Box>
+        </React.Fragment>
     )
 }
 

@@ -2,14 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/components/filter_cooking_methods.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
-
+import 'package:reciapp/components/infinite_scroll_category.dart';
+// import '../components/filter_category.dart';
 import '../components/filter_category.dart';
-import '../components/filter_new_old_popular.dart';
 import '../components/sidebar_menu.dart';
 import '../login_support/check_auth.dart';
-import '../object/food_list.dart';
 import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
@@ -103,7 +100,10 @@ class _CategoryPageState extends State<CategoryPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 3),
               height: MediaQuery.of(context).size.height * 0.7,
-              child: InfiniteScroll(),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: InfiniteScrollCategory(),
+              ),
             ),
           ],
         ),
@@ -115,7 +115,7 @@ class _CategoryPageState extends State<CategoryPage> {
           SizedBox(
             width: 5,
           ),
-          FilterCategory(isSelected)
+          FilterCategory(),
         ],
       ),
       bottomNavigationBar: Copyright(),

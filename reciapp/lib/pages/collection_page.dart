@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/filter_course.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
 
 import '../login_support/check_auth.dart';
 import '../components/copyright.dart';
+import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
+
+import '../object/user_info.dart';
 
 class CollectionPage extends StatefulWidget {
   CollectionPage(this.userId, {super.key});
@@ -24,16 +28,21 @@ class _CollectionPageState extends State<CollectionPage> {
   int page = 1;
   bool isLoading = false;
   bool hasMore = true;
-  Future fetchInfinitePosts(int userId) async {
+  Future fetchInfinitePosts() async {
     if (isLoading) return;
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     isLoading = true;
     const limit = 6;
+    String searchKey =
+        keywords.text.isNotEmpty ? '&Search=${keywords.text}' : '';
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/post/bookmark/page/$page?PageSize=$limit$searchKey'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     if (response.statusCode == 200) {
@@ -50,6 +59,10 @@ class _CollectionPageState extends State<CollectionPage> {
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
       });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
+      });
     }
   }
 
@@ -59,12 +72,10 @@ class _CollectionPageState extends State<CollectionPage> {
   void initState() {
     super.initState();
     userId = widget.userId;
-    print("User ID: $userId");
-    fetchInfinitePosts(userId);
+    fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetchInfinitePosts(userId);
-        print(' more');
+        fetchInfinitePosts();
       }
     });
   }
@@ -75,6 +86,7 @@ class _CollectionPageState extends State<CollectionPage> {
     super.dispose();
   }
 
+  final _formKey = GlobalKey<FormState>();
   final List<GetPosts> _listReciepReviews = [];
 
   @override
@@ -98,7 +110,19 @@ class _CollectionPageState extends State<CollectionPage> {
               alignment: Alignment.topCenter,
               height: MediaQuery.of(context).size.height * 0.1,
               child: Form(
+                  key: _formKey,
                   child: TextFormField(
+                      onFieldSubmitted: (value) {
+                        if (_formKey.currentState!.validate()) {
+                          isLoading = false;
+                          hasMore = true;
+                          page = 1;
+                          setState(() {
+                            _listReciepReviews.clear();
+                          });
+                          fetchInfinitePosts();
+                        }
+                      },
                       validator: (String? value) {
                         return (value == null || value.isEmpty)
                             ? 'Please enter'

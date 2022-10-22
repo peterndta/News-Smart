@@ -333,7 +333,7 @@ const CommonHeader = () => {
                                             <ListItemIcon>
                                                 <AddCircleOutline fontSize="large" />
                                             </ListItemIcon>
-                                            <Typography ml={1}>Create Recipe</Typography>
+                                            <Typography ml={1}>Add A Recipe</Typography>
                                         </MenuItem>
 
                                         <MenuItem

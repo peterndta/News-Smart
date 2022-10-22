@@ -4,7 +4,9 @@ import queryString from 'query-string'
 import { useLocation } from 'react-router-dom'
 
 import NumberItemPagination from '../../../components/NumberItemPagination'
-import { Box } from '@mui/material'
+import { Star } from '@mui/icons-material'
+import { Box, Typography } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import useMyRatings from '../../../recoil/my-ratings/action'
@@ -49,10 +51,11 @@ const RatingList = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any result' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -70,10 +73,11 @@ const RatingList = () => {
                         setIsLoading(false)
                     }, 500)
                 })
-                .catch(() => {
+                .catch((error) => {
+                    const message = error.response.data.message
                     showSnackBar({
-                        severity: 'error',
-                        children: 'Something went wrong, please try again later.',
+                        severity: message == 'Do not have any result' ? 'info' : 'error',
+                        children: message || 'Something went wrong, please try again later.',
                     })
                     setTimeout(() => {
                         setIsLoading(false)
@@ -93,13 +97,38 @@ const RatingList = () => {
                         <SearchBox />
                         <Sort />
                     </Box>
-                    <NumberItemPagination
-                        from={fromTo.from}
-                        to={fromTo.to}
-                        all={fromTo.totalCount}
-                    />
-                    <Ratings posts={recipes.list} />
-                    {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                    {recipes.list.length ? (
+                        <React.Fragment>
+                            <NumberItemPagination
+                                from={fromTo.from}
+                                to={fromTo.to}
+                                all={fromTo.totalCount}
+                            />
+                            <Ratings posts={recipes.list} />
+                            {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
+                        </React.Fragment>
+                    ) : (
+                        <Box alignItems="center" textAlign="center" mt={5}>
+                            <Typography fontSize={38} fontWeight={700} sx={{ color: grey[700] }}>
+                                You haven’t rated any recipes yet
+                            </Typography>
+                            <Box display="flex" alignItems="center" mt={3} justifyContent="center">
+                                <Typography fontSize={20} sx={{ color: grey[700] }}>
+                                    To rate a recipe go to a specific recipe and click Star
+                                </Typography>
+                                <Star fontSize="medium" sx={{ color: grey[700] }} />
+                            </Box>
+                            <Box
+                                mt={4}
+                                component="img"
+                                alt="food"
+                                src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t1.15752-9/307589926_834744197705463_2982451241580080174_n.png?_nc_cat=111&ccb=1-7&_nc_sid=ae9488&_nc_ohc=YAQCDp9K8pkAX9rl9-z&_nc_ht=scontent.fsgn2-6.fna&oh=03_AdRFe2c-TMn6SeEmCClPqnvxknL6sOrF1rmtO59ij8T4wQ&oe=6378DC07"
+                                sx={{
+                                    width: '20%',
+                                }}
+                            />
+                        </Box>
+                    )}
                 </React.Fragment>
             )}
         </React.Fragment>
