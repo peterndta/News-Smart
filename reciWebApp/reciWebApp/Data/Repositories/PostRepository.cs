@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualBasic;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
@@ -247,6 +248,11 @@ namespace reciWebApp.Data.Repositories
         public async Task<List<Post>?> GetPostOfAllCollectionsAsync()
         {
             return await GetAll().ToListAsync();
+        }
+
+        public async Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams)
+        {
+            return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Name).ToListAsync();
         }
     }
 }
