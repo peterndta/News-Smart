@@ -72,6 +72,7 @@ class _UserProfileState extends State<UserProfile> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;

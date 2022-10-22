@@ -1,20 +1,51 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
-import '../components/copyright.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
 import 'package:http/http.dart' as http;
 
-import '../login_support/check_auth.dart';
 import '../object/get_posts_homepage.dart';
+
+class Rating {
+  Rating({
+    required this.rating,
+  });
+
+  int rating;
+
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+        rating: json["rating"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "rating": rating,
+      };
+}
+
+class Bookmark {
+  Bookmark({
+    required this.bookmark,
+  });
+
+  bool bookmark;
+
+  factory Bookmark.fromJson(Map<String, dynamic> json) => Bookmark(
+        bookmark: json["bookmark"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "bookmark": bookmark,
+      };
+}
 
 class RecipeDetailPage extends StatefulWidget {
   final String id;
@@ -70,6 +101,40 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     return postDetail;
   }
 
+  Future ratingPost(String postId, String token, int rating) async {
+    http.Response response = await http.post(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/rating'),
+      body: json.encode(Rating(rating: rating).toJson()),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {});
+    }
+  }
+
+  Future bookmarkPost(String postId, String token, bool bookmark) async {
+    http.Response response = await http.post(
+      Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/bookmark'),
+      body: json.encode(Bookmark(bookmark: bookmark).toJson()),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     fetchPosts(widget.id, widget.token);
@@ -106,166 +171,414 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
             future: fetchData(widget.id, widget.token),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                YoutubePlayerController? controller;
+                controller = YoutubePlayerController(
+                  initialVideoId:
+                      YoutubePlayer.convertUrlToId(snapshot.data.videoUrl)
+                          as String,
+                  flags: YoutubePlayerFlags(
+                    autoPlay: false,
+                    mute: false,
+                    loop: false,
+                    forceHD: false,
+                    isLive: false,
+                    disableDragSeek: false,
+                  ),
+                );
                 return SingleChildScrollView(
                   // controller: scrollController,
                   padding: EdgeInsets.all(15),
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
-                            flex: 4,
-                            child: Text(
-                              snapshot.data.name,
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
+                          Ink(
+                            decoration: BoxDecoration(
+                              color: (snapshot.data.bookmark)
+                                  ? Colors.orange
+                                  : Color.fromARGB(255, 219, 214, 214),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                bookmarkPost(widget.id, widget.token,
+                                    !snapshot.data.bookmark);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(
+                                  Icons.bookmark_border_outlined,
+                                  size: 25.0,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Ink(
-                                  decoration: BoxDecoration(
-                                    // border: Border.all(width: 1),
-                                    color: Colors.orange,
-                                  ),
-                                  child: InkWell(
-                                    //borderRadius: BorderRadius.circular(100.0),
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.bookmark_border,
-                                        size: 25.0,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 1),
-                                Ink(
-                                  decoration: BoxDecoration(
-                                    // border: Border.all(width: 1),
-                                    color: Color.fromARGB(255, 221, 218, 218),
-                                  ),
-                                  child: InkWell(
-                                    //borderRadius: BorderRadius.circular(100.0),
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.star_outline,
-                                        size: 25.0,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          SizedBox(width: 3),
+                          Ink(
+                            decoration: BoxDecoration(
+                              color: (snapshot.data.rating != null)
+                                  ? Colors.orange
+                                  : Color.fromARGB(255, 221, 218, 218),
                             ),
-                          )),
+                            child: InkWell(
+                              onTap: () {},
+                              child: Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(
+                                  Icons.star_outline,
+                                  size: 25.0,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 3),
+                          Ink(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 221, 218, 218),
+                            ),
+                            child: InkWell(
+                              onTap: () {},
+                              child: Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(
+                                  Icons.flag,
+                                  size: 25.0,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SimpleStarRating(
-                            allowHalfRating: true,
-                            starCount: 5,
-                            rating: snapshot.data.averageRating * 1.0,
-                            size: 15,
-                            spacing: 10,
+                          Text(
+                            snapshot.data.name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 35),
                           ),
                           SizedBox(
-                            width: 4,
+                            height: MediaQuery.of(context).size.height * 0.025,
                           ),
-                          Text(
-                            '${snapshot.data.averageRating}',
-                            style: TextStyle(fontSize: 15),
-                          )
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Image(
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            '${snapshot.data.imageUrl}',
+                          Row(
+                            children: [
+                              Text(
+                                'Rating: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              SimpleStarRating(
+                                isReadOnly: (snapshot.data.rating != null)
+                                    ? true
+                                    : false,
+                                onRated: (rate) {
+                                  // if(rating != null){
+                                  print('click');
+                                  ratingPost(
+                                      widget.id, widget.token, rate!.toInt());
+                                  // }
+                                },
+                                allowHalfRating: true,
+                                starCount: 5,
+                                rating: snapshot.data.averageRating * 1.0,
+                                size: 16,
+                                spacing: 10,
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      IntrinsicHeight(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  'Preparing',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015,
+                          ),
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Method: ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    snapshot.data.method,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.08,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Region: ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    snapshot.data.continents,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Categories: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              Text(
+                                snapshot.data.listCategories.join(', '),
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.025,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(bottom: 2),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.orange,
+                                      width: 2.0,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 10),
-                                Text('${snapshot.data.preparingTime} minutes')
-                              ],
-                            ),
-                            VerticalDivider(
-                              width: 30,
-                              thickness: 1,
-                              // indent: 10,
-                              // endIndent: 0,
-                              color: Colors.grey,
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  'Processing',
+                                child: Text(
+                                  'About this recipe',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: 10),
-                                Text('${snapshot.data.processingTime} minutes')
-                              ],
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                snapshot.data.description,
+                                style: TextStyle(fontSize: 16),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.025,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Image(
+                              // width: MediaQuery.of(context).size.width * 0.95,
+                              height: MediaQuery.of(context).size.height * 0.25,
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                '${snapshot.data.imageUrl}',
+                              ),
                             ),
-                            const VerticalDivider(
-                              width: 30,
-                              thickness: 1,
-                              // indent: 10,
-                              // endIndent: 0,
-                              color: Colors.grey,
-                            ),
-                            Column(
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.025,
+                          ),
+                          IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Cooking',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Preparing',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        '${snapshot.data.preparingTime} minutes')
+                                  ],
                                 ),
-                                SizedBox(height: 10),
-                                Text('${snapshot.data.cookingTime} minutes')
+                                VerticalDivider(
+                                  width: 40,
+                                  thickness: 1,
+                                  // indent: 10,
+                                  // endIndent: 0,
+                                  color: Colors.grey,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Processing',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        '${snapshot.data.processingTime} minutes')
+                                  ],
+                                ),
+                                const VerticalDivider(
+                                  width: 40,
+                                  thickness: 1,
+                                  // indent: 10,
+                                  // endIndent: 0,
+                                  color: Colors.grey,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Cooking',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text('${snapshot.data.cookingTime} minutes')
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        child: Column(
-                          children: [
-                            Row(
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(bottom: 2),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.orange,
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Preparing',
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          RichText(
+                                              text: TextSpan(children: [
+                                            WidgetSpan(
+                                              child:
+                                                  Icon(Icons.people, size: 14),
+                                            ),
+                                            TextSpan(
+                                                text: " Serving: ",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                )),
+                                            TextSpan(
+                                                text:
+                                                    "${snapshot.data.serving} people",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ))
+                                          ]))
+                                        ],
+                                      ),
+                                    )),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 10, left: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Ingredients:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
+                                        child: RichText(
+                                            text: TextSpan(children: [
+                                          WidgetSpan(
+                                              child: Icon(Icons.shopping_cart,
+                                                  size: 10),
+                                              alignment:
+                                                  PlaceholderAlignment.middle),
+                                          TextSpan(
+                                              text:
+                                                  " ${snapshot.data.ingredient}",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              )),
+                                        ])),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        'Tool needed:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
+                                        child: RichText(
+                                            text: TextSpan(children: [
+                                          WidgetSpan(
+                                              child: Icon(Icons.shopping_bag,
+                                                  size: 10),
+                                              alignment:
+                                                  PlaceholderAlignment.middle),
+                                          TextSpan(
+                                              text: " ${snapshot.data.tool}",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              )),
+                                        ])),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
+                                  padding: EdgeInsets.only(bottom: 2),
+                                  // alignment: Alignment.topLeft,
                                   decoration: BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
@@ -275,210 +588,126 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     ),
                                   ),
                                   child: Text(
-                                    'Preparing',
+                                    'Processing',
                                     style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                    child: Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      RichText(
-                                          text: TextSpan(children: [
-                                        WidgetSpan(
-                                          child: Icon(Icons.people, size: 14),
-                                        ),
-                                        TextSpan(
-                                            text: " Serving: ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            )),
-                                        TextSpan(
-                                            text:
-                                                "${snapshot.data.serving} people",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ))
-                                      ]))
-                                    ],
-                                  ),
-                                )),
+                                Container(
+                                  padding: EdgeInsets.only(top: 10, left: 10),
+                                  child: Text('${snapshot.data.processing}'),
+                                )
                               ],
                             ),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, left: 10),
-                              child: Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Ingredients:',
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  // alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(bottom: 2),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.orange,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Cooking',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: RichText(
-                                        text: TextSpan(children: [
-                                      WidgetSpan(
-                                          child: Icon(Icons.circle, size: 8),
-                                          alignment:
-                                              PlaceholderAlignment.middle),
-                                      TextSpan(
-                                          text: " ${snapshot.data.ingredient}",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          )),
-                                    ])),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Tool needed:',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: RichText(
-                                        text: TextSpan(children: [
-                                      WidgetSpan(
-                                          child: Icon(Icons.circle, size: 8),
-                                          alignment:
-                                              PlaceholderAlignment.middle),
-                                      TextSpan(
-                                          text: " ${snapshot.data.tool}",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                          )),
-                                    ])),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              // alignment: Alignment.topLeft,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.orange,
-                                    width: 2.0,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: Text(
-                                'Processing',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 10, left: 10),
+                                  child: Text(
+                                    '${snapshot.data.cooking}',
+                                  ),
+                                )
+                              ],
                             ),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, left: 10),
-                              child: Text('${snapshot.data.processing}'),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              // alignment: Alignment.topLeft,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.orange,
-                                    width: 2.0,
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.025,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(bottom: 2),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.orange,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Video',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              child: Text(
-                                'Cooking',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+                              controller != null
+                                  ? Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.3,
+                                      child: YoutubePlayer(
+                                        controller: controller,
+                                        liveUIColor: Colors.amber,
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Text('No videos'),
+                                    )
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  children: <InlineSpan>[
+                                    const WidgetSpan(
+                                      child: Text(
+                                        'By',
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ),
+                                    WidgetSpan(
+                                      child: Text(
+                                        snapshot.data.userName,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, left: 10),
-                              child: Text(
-                                '${snapshot.data.cooking}',
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              // alignment: Alignment.topLeft,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.orange,
-                                    width: 2.0,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                'Nutrion Facts',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, left: 10),
-                              child: Text(
-                                  '152 calories; protein 13.1g; carbohydrates 4.2g; fat 8.9g; cholesterol 36.9mg; sodium 67.6mg.'),
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(top: 20),
-                                alignment: Alignment.topRight,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Recipe by ',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 119, 118, 118)),
-                                    children: [
-                                      TextSpan(
-                                          text: '${snapshot.data.userName}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black)),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        ),
-                      ),
+                            ],
+                          )
+                        ],
+                      )
                     ],
                   ),
                 );

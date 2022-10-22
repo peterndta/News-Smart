@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/filter_course.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/components/infinite_scroll.dart';
 
 import '../login_support/check_auth.dart';
 import '../components/copyright.dart';
