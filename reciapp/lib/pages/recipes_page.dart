@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/infinite_scroll_recipes.dart';
 import '../components/filter_recipes.dart';
@@ -8,6 +11,11 @@ import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
+import '../login_support/user_preference.dart';
+import '../object/get_posts_homepage.dart';
+import '../object/recipe_review.dart';
+import '../object/user_info.dart';
+import 'package:http/http.dart' as http;
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({Key? key}) : super(key: key);
@@ -17,42 +25,124 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
-  bool isSelected = false;
+  // ScrollController scrollController = ScrollController();
+  // bool showbtn = false;
+  // bool isSelected = false;
 
   @override
   void initState() {
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
+    // scrollController.addListener(() {
+    //   //scroll listener
+    //   double showoffset =
+    //       10.0; //Back to top botton will show on scroll offset 10.0
 
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
+    //   if (scrollController.offset > showoffset) {
+    //     showbtn = true;
+    //     setState(() {
+    //       //update state
+    //     });
+    //   } else {
+    //     showbtn = false;
+    //     setState(() {
+    //       //update state
+    //     });
+    //   }
+    // });
+    super.initState();
+    print(listContinets);
+    print(listUses);
+    fetchInfinitePosts(listContinets, listUses, keywords, 0);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(listContinets, listUses, keywords, 0);
       }
     });
-    super.initState();
   }
+
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  List<String> listContinets = [];
+  List<String> listUses = [];
+  String keywords = "";
+  Future fetchInfinitePosts(List<String> continets, List<String> uses,
+      String keywords, int pages) async {
+    if (isLoading) return;
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    isLoading = true;
+    const limit = 6;
+    var continetsString = "";
+    if (continets.isNotEmpty) {
+      continetsString = "&Continent=" + continets.join(",");
+    }
+    var usesString = "";
+    if (uses.isNotEmpty) {
+      usesString = "&Uses=" + uses.join(",");
+    }
+    var search = "";
+    if (keywords.isNotEmpty) {
+      search = "&Search=" + keywords;
+      print(search);
+    }
+    if (pages != 0) page = pages;
+    print(
+        'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search');
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      if (!mounted) return;
+      setState(() {
+        //final List jsonData = responseJson['data'];
+        isLoading = false;
+        if (pages != 0) page = pages;
+        page++;
+        if (responseJson['data'].length < limit) {
+          print(responseJson['data'].length);
+          hasMore = false;
+        }
+        if (pages == 1) _listReciepReviews.clear();
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: SideBarMenu(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
         child: HeadBar(),
       ),
       body: SingleChildScrollView(
-        controller: scrollController,
+        // controller: scrollController,
         child: Column(
           children: [
             SizedBox(
@@ -93,25 +183,23 @@ class _RecipesPageState extends State<RecipesPage> {
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                child: InfiniteScrollRecipes(),
-              ),
-            ),
+            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          BackToTopButton(scrollController, showbtn),
-          SizedBox(
-            width: 5,
-          ),
-          FilterRecipeResult()
+          // BackToTopButton(scrollController, showbtn),
+          // SizedBox(
+          //   width: 5,
+          // ),
+          FilterRecipeResult(
+              fetchInfinitePosts: fetchInfinitePosts,
+              listContinets: listContinets,
+              listUses: listUses,
+              keywords: keywords,
+              dispose: dispose)
         ],
       ),
       bottomNavigationBar: Copyright(),

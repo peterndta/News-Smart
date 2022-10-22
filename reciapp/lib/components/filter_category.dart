@@ -9,18 +9,23 @@ import '../object/category_item.dart';
 import 'checkbox.dart';
 
 class FilterCategory extends StatefulWidget {
+  Function fetchInfinitePosts;
+  Function dispose;
+  List<String> listCategories;
+  String keywords;
+
+  FilterCategory({
+    required this.fetchInfinitePosts,
+    required this.dispose,
+    required this.listCategories,
+    required this.keywords,
+  });
+
   @override
   State<FilterCategory> createState() => _FilterCategoryState();
 }
 
-class Category {
-  int id;
-  String type;
-  Category(this.id, this.type);
-}
-
 class _FilterCategoryState extends State<FilterCategory> {
-  TextEditingController searchController = TextEditingController();
   Widget buildingSingleCheckbox(
       CheckboxModal select, List<dynamic> selectedItems) {
     return StatefulBuilder(builder: (context, setState) {
@@ -38,11 +43,11 @@ class _FilterCategoryState extends State<FilterCategory> {
     });
   }
 
+  TextEditingController searchController = TextEditingController();
   final checkboxListItem = [];
   final List<CategoryItem> selectedCategories = [];
   @override
   Widget build(BuildContext context) {
-    print(searchController.text);
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.25,
       height: MediaQuery.of(context).size.height * 0.06,
@@ -89,7 +94,13 @@ class _FilterCategoryState extends State<FilterCategory> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
-                                  onPressed: searchController.clear,
+                                  onPressed: () {
+                                    setState(() {
+                                      checkboxListItem.clear();
+                                      selectedCategories.clear();
+                                      searchController.clear();
+                                    });
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
                                     side: BorderSide(
@@ -214,7 +225,16 @@ class _FilterCategoryState extends State<FilterCategory> {
                                         MediaQuery.of(context).size.height *
                                             0.06),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    List<String> categories = [];
+                                    selectedCategories.forEach((element) {
+                                      categories.add(element.type);
+                                    });
+                                    widget.listCategories = categories;
+                                    widget.keywords = searchController.text;
+                                    widget.fetchInfinitePosts(
+                                        categories, searchController.text, 1);
+                                  },
                                   child: const Text(
                                     'Show Result',
                                     style: TextStyle(

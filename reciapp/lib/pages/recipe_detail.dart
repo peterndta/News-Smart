@@ -57,8 +57,6 @@ class RecipeDetailPage extends StatefulWidget {
 }
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
   Future fetchPosts(String id, String token) async {
     print('Bearer $token');
     http.Response response = await http.get(
@@ -137,24 +135,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   @override
   void initState() {
-    fetchPosts(widget.id, widget.token);
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
-      }
-    });
     super.initState();
   }
 
@@ -166,7 +146,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
           preferredSize: const Size.fromHeight(55),
           child: HeadBar(),
         ),
-        floatingActionButton: BackToTopButton(scrollController, showbtn),
         body: FutureBuilder(
             future: fetchData(widget.id, widget.token),
             builder: (ctx, snapshot) {

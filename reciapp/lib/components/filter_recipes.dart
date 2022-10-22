@@ -8,6 +8,20 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FilterRecipeResult extends StatefulWidget {
+  Function fetchInfinitePosts;
+  Function dispose;
+  List<String> listContinets;
+  List<String> listUses;
+  String keywords;
+
+  FilterRecipeResult({
+    required this.fetchInfinitePosts,
+    required this.dispose,
+    required this.listContinets,
+    required this.listUses,
+    required this.keywords,
+  });
+
   @override
   State<FilterRecipeResult> createState() => _FilterRecipeResultState();
 }
@@ -33,6 +47,8 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
   var keyword = TextEditingController();
   final List<RegionItem> selectedContinent = [];
   final List<UseItem> selectedUse = [];
+  final checkboxListRegionItem = [];
+  final checkboxListUseItem = [];
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +100,13 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
                                   onPressed: () {
-                                    selectedUse.clear();
-                                    selectedContinent.clear();
-                                    keyword.clear();
+                                    setState(() {
+                                      checkboxListRegionItem.clear();
+                                      checkboxListUseItem.clear();
+                                      selectedUse.clear();
+                                      selectedContinent.clear();
+                                      keyword.clear();
+                                    });
                                   },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
@@ -122,12 +142,12 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.023,
+                                    MediaQuery.of(context).size.height * 0.013,
                               ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.08,
+                                    MediaQuery.of(context).size.height * 0.07,
                                 child: TextField(
                                   controller: keyword,
                                   decoration: InputDecoration(
@@ -178,17 +198,20 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                       if (snapshot.data == null) {
                                         return Container();
                                       } else {
-                                        return ListView.builder(
+                                        for (var i in snapshot.data) {
+                                          checkboxListRegionItem
+                                              .add(CheckboxModal(item: i));
+                                        }
+                                        return ListView(
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, index) =>
-                                              Container(
-                                            child: buildingSingleCheckbox(
-                                                CheckboxModal(
-                                                    item: snapshot.data[index]),
-                                                selectedContinent),
-                                          ),
+                                          children: [
+                                            ...checkboxListRegionItem
+                                                .map((item) =>
+                                                    buildingSingleCheckbox(item,
+                                                        selectedContinent))
+                                                .toList()
+                                          ],
                                         );
                                       }
                                     })),
@@ -230,17 +253,20 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                       if (snapshot.data == null) {
                                         return Container();
                                       } else {
-                                        return ListView.builder(
+                                        for (var i in snapshot.data) {
+                                          checkboxListUseItem
+                                              .add(CheckboxModal(item: i));
+                                        }
+                                        return ListView(
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, index) =>
-                                              Container(
-                                            child: buildingSingleCheckbox(
-                                                CheckboxModal(
-                                                    item: snapshot.data[index]),
-                                                selectedUse),
-                                          ),
+                                          children: [
+                                            ...checkboxListUseItem
+                                                .map((item) =>
+                                                    buildingSingleCheckbox(
+                                                        item, selectedUse))
+                                                .toList()
+                                          ],
                                         );
                                       }
                                     })),
@@ -258,7 +284,22 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                         MediaQuery.of(context).size.height *
                                             0.06),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    // widget.dispose();
+                                    List<String> continents = [];
+                                    selectedContinent.forEach((element) {
+                                      continents.add(element.continents);
+                                    });
+                                    List<String> uses = [];
+                                    selectedUse.forEach((element) {
+                                      uses.add(element.usesOfFood);
+                                    });
+                                    widget.listContinets = continents;
+                                    widget.listUses = uses;
+                                    widget.keywords = keyword.text;
+                                    widget.fetchInfinitePosts(
+                                        continents, uses, keyword.text, 1);
+                                  },
                                   child: const Text(
                                     'Show Result',
                                     style: TextStyle(
