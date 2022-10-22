@@ -4,7 +4,9 @@ using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.Data.Repositories.Extensions;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.Services.Utils;
+using reciWebApp.DTOs.PostReportDTO;
 
 namespace reciWebApp.Data.Repositories
 {
@@ -40,5 +42,6 @@ namespace reciWebApp.Data.Repositories
             var report = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).FirstOrDefault();
             return report != null;
         }
+        
     }
 }
