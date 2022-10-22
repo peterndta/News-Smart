@@ -1,6 +1,7 @@
 ﻿using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Data.IRepositories
