@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../components/dropdown_button.dart';
 import '../components/filter_recipes.dart';
 
 import '../components/copyright.dart';
@@ -25,6 +26,7 @@ class RecipesPage extends StatefulWidget {
 class _RecipesPageState extends State<RecipesPage> {
   @override
   void initState() {
+    sortKey = listSort.first;
     super.initState();
     fetchInfinitePosts(listContinets, listUses, keywords, 0);
     controller.addListener(() {
@@ -42,7 +44,7 @@ class _RecipesPageState extends State<RecipesPage> {
   List<String> listUses = [];
   String keywords = "";
   Future fetchInfinitePosts(List<String> continets, List<String> uses,
-      String keywords, int pages) async {
+      String keyword, int pages) async {
     if (isLoading) return;
     UserData userData =
         UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
@@ -57,13 +59,17 @@ class _RecipesPageState extends State<RecipesPage> {
       usesString = "&Uses=" + uses.join(",");
     }
     var search = "";
-    if (keywords.isNotEmpty) {
-      search = "&Search=" + keywords;
+    if (keyword.isNotEmpty) {
+      search = "&Search=" + keyword;
     }
-    if (pages != 0) page = pages;
+    if (pages != 0) {
+      page = pages;
+    }
+    print("Call: " +
+        'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search&Sort=$sortKey');
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search'),
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search&Sort=$sortKey'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -71,12 +77,15 @@ class _RecipesPageState extends State<RecipesPage> {
       },
     );
     if (response.statusCode == 200) {
+      print('Sucessfully');
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
+        listContinets = continets;
+        listUses = uses;
+        keywords = keyword;
         isLoading = false;
-        if (pages != 0) page = pages;
         page++;
         if (responseJson['data'].length < limit) {
           hasMore = false;
@@ -86,7 +95,8 @@ class _RecipesPageState extends State<RecipesPage> {
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
       });
-    } else if (response.statusCode == 400) {
+    } else {
+      print('Failed');
       setState(() {
         hasMore = false;
       });
@@ -100,6 +110,8 @@ class _RecipesPageState extends State<RecipesPage> {
   }
 
   final List<GetPosts> _listReciepReviews = [];
+  List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
+  String sortKey = "";
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +163,47 @@ class _RecipesPageState extends State<RecipesPage> {
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.only(right: 15),
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    value: sortKey,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        sortKey = newValue!;
+                      });
+                      print(keywords);
+                      fetchInfinitePosts(listContinets, listUses, keywords, 1);
+                    },
+                    items:
+                        listSort.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
           ],
@@ -159,16 +212,9 @@ class _RecipesPageState extends State<RecipesPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // BackToTopButton(scrollController, showbtn),
-          // SizedBox(
-          //   width: 5,
-          // ),
           FilterRecipeResult(
-              fetchInfinitePosts: fetchInfinitePosts,
-              listContinets: listContinets,
-              listUses: listUses,
-              keywords: keywords,
-              dispose: dispose)
+            fetchInfinitePosts: fetchInfinitePosts,
+          )
         ],
       ),
       bottomNavigationBar: Copyright(),

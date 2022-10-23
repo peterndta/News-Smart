@@ -7,17 +7,9 @@ import 'checkbox.dart';
 
 class FilterRecipeResult extends StatefulWidget {
   Function fetchInfinitePosts;
-  Function dispose;
-  List<String> listContinets;
-  List<String> listUses;
-  String keywords;
 
   FilterRecipeResult({
     required this.fetchInfinitePosts,
-    required this.dispose,
-    required this.listContinets,
-    required this.listUses,
-    required this.keywords,
   });
 
   @override
@@ -152,7 +144,9 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                     border: OutlineInputBorder(),
                                     hintText: 'Keywords',
                                     suffixIcon: IconButton(
-                                      onPressed: keyword.clear,
+                                      onPressed: () {
+                                        keyword.clear();
+                                      },
                                       icon: Icon(Icons.clear),
                                     ),
                                   ),
@@ -283,7 +277,6 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                             0.06),
                                   ),
                                   onPressed: () {
-                                    // widget.dispose();
                                     List<String> continents = [];
                                     selectedContinent.forEach((element) {
                                       continents.add(element.continents);
@@ -292,9 +285,6 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                     selectedUse.forEach((element) {
                                       uses.add(element.usesOfFood);
                                     });
-                                    widget.listContinets = continents;
-                                    widget.listUses = uses;
-                                    widget.keywords = keyword.text;
                                     widget.fetchInfinitePosts(
                                         continents, uses, keyword.text, 1);
                                   },
