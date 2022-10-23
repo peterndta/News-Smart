@@ -14,7 +14,7 @@ import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import '../components/back_to_top_button.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+// import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
@@ -229,18 +229,18 @@ class _HomePageState extends State<HomePage> {
                                                           vertical: 3),
                                                       child: Row(
                                                         children: [
-                                                          SmoothStarRating(
-                                                            isReadOnly: true,
-                                                            size: 28,
-                                                            color: Colors
-                                                                .amber[600],
-                                                            rating: snapshot
-                                                                .data[index]
-                                                                .averageRating
-                                                                .toDouble(),
-                                                            borderColor: Colors
-                                                                .amber[600],
-                                                          ),
+                                                          // SmoothStarRating(
+                                                          //   isReadOnly: true,
+                                                          //   size: 28,
+                                                          //   color: Colors
+                                                          //       .amber[600],
+                                                          //   rating: snapshot
+                                                          //       .data[index]
+                                                          //       .averageRating
+                                                          //       .toDouble(),
+                                                          //   borderColor: Colors
+                                                          //       .amber[600],
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),
