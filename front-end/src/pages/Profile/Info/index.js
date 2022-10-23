@@ -76,9 +76,9 @@ const Info = () => {
                             px={3}
                         >
                             <Box display="flex" alignItems="center">
-                                <Link to="/recipes/me">
+                                <Link to="/me">
                                     <Description
-                                        to="/recipes/me"
+                                        to="/me"
                                         sx={{
                                             width: 50,
                                             height: 50,
@@ -101,7 +101,7 @@ const Info = () => {
                                 </Box>
                             </Box>
                             <Box display="flex" alignItems="center">
-                                <Link to="/recipes/bookmark">
+                                <Link to="/bookmark">
                                     <BookmarkOutlined
                                         sx={{
                                             width: 50,
@@ -125,7 +125,7 @@ const Info = () => {
                                 </Box>
                             </Box>
                             <Box display="flex" alignItems="center">
-                                <Link to="/recipes/my-ratings">
+                                <Link to="/my-ratings">
                                     <StarOutlined
                                         sx={{
                                             width: 50,
