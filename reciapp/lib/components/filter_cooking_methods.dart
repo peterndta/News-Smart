@@ -33,14 +33,15 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
           (select.value)
               ? selectedItems.add(select.item)
               : selectedItems.remove(select.item);
+          print(selectedItems);
         }),
       );
     });
   }
 
-  final checkboxListItem = [];
-  TextEditingController searchController = TextEditingController();
+  var searchController = TextEditingController();
   final List<MethodItem> selectedMethods = [];
+  final checkboxListItem = [];
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,9 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
         onPressed: () {
           showModalBottomSheet(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {

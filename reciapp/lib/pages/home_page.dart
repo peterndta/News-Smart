@@ -3,17 +3,14 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_page.dart';
-import 'package:simple_star_rating/clip_half.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-// import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
@@ -122,7 +119,6 @@ class _HomePageState extends State<HomePage> {
         margin: EdgeInsets.symmetric(horizontal: 5),
         height: MediaQuery.of(context).size.height * 0.9,
         child: SingleChildScrollView(
-          // controller: scrollController,
           child: Column(
             children: [
               SizedBox(

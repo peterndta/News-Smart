@@ -4,10 +4,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/infinite_scroll_recipes.dart';
 import '../components/filter_recipes.dart';
 
-import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
@@ -25,32 +23,9 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
-  // ScrollController scrollController = ScrollController();
-  // bool showbtn = false;
-  // bool isSelected = false;
-
   @override
   void initState() {
-    // scrollController.addListener(() {
-    //   //scroll listener
-    //   double showoffset =
-    //       10.0; //Back to top botton will show on scroll offset 10.0
-
-    //   if (scrollController.offset > showoffset) {
-    //     showbtn = true;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   } else {
-    //     showbtn = false;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   }
-    // });
     super.initState();
-    print(listContinets);
-    print(listUses);
     fetchInfinitePosts(listContinets, listUses, keywords, 0);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -84,11 +59,8 @@ class _RecipesPageState extends State<RecipesPage> {
     var search = "";
     if (keywords.isNotEmpty) {
       search = "&Search=" + keywords;
-      print(search);
     }
     if (pages != 0) page = pages;
-    print(
-        'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search');
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search'),
@@ -98,8 +70,6 @@ class _RecipesPageState extends State<RecipesPage> {
         HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
-    var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
@@ -109,7 +79,6 @@ class _RecipesPageState extends State<RecipesPage> {
         if (pages != 0) page = pages;
         page++;
         if (responseJson['data'].length < limit) {
-          print(responseJson['data'].length);
           hasMore = false;
         }
         if (pages == 1) _listReciepReviews.clear();

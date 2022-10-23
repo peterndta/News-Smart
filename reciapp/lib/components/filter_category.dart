@@ -1,10 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, camel_case_types
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/object/filter_provider.dart';
 import '../object/category_item.dart';
 import 'checkbox.dart';
 
@@ -37,7 +33,6 @@ class _FilterCategoryState extends State<FilterCategory> {
           (select.value)
               ? selectedItems.add(select.item)
               : selectedItems.remove(select.item);
-          print(selectedItems);
         }),
       );
     });

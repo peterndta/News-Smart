@@ -1,15 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-// import 'package:reciapp/components/filter_cooking_methods.dart';
 import '../components/filter_cooking_methods.dart';
 import '../components/sidebar_menu.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
-// import '../components/filter_category.dart';
 import 'dart:convert';
 import 'dart:io';
-
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
@@ -24,29 +21,8 @@ class CookingMethodsPage extends StatefulWidget {
 }
 
 class _CookingMethodsPageState extends State<CookingMethodsPage> {
-// ScrollController scrollController = ScrollController();
-  // bool showbtn = false;
-  // bool isSelected = false;
-
   @override
   void initState() {
-    // scrollController.addListener(() {
-    //   //scroll listener
-    //   double showoffset =
-    //       10.0; //Back to top botton will show on scroll offset 10.0
-
-    //   if (scrollController.offset > showoffset) {
-    //     showbtn = true;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   } else {
-    //     showbtn = false;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   }
-    // });
     super.initState();
 
     fetchInfinitePosts(listMethods, keywords, 0);
@@ -63,6 +39,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   bool hasMore = true;
   List<String> listMethods = [];
   String keywords = "";
+
   Future fetchInfinitePosts(
       List<String> methods, String keywords, int pages) async {
     if (isLoading) return;
@@ -79,7 +56,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
       search = "&Search=" + keywords;
     }
     if (pages != 0) page = pages;
-    print(listMethods);
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search'),
@@ -89,8 +65,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
         HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
-    var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
@@ -100,7 +74,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
         if (pages != 0) page = pages;
         page++;
         if (responseJson['data'].length < limit) {
-          print(responseJson['data'].length);
           hasMore = false;
         }
         if (pages == 1) _listReciepReviews.clear();

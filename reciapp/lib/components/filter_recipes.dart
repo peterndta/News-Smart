@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
 import 'checkbox.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class FilterRecipeResult extends StatefulWidget {
   Function fetchInfinitePosts;
