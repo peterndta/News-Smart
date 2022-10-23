@@ -1,16 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, camel_case_types
 
 import 'package:flutter/material.dart';
-import '../object/method_item.dart';
+import 'package:reciapp/object/method_item.dart';
 import 'checkbox.dart';
 
-class FilterCookingMethods extends StatefulWidget {
+class FilterMethod extends StatefulWidget {
   Function fetchInfinitePosts;
   Function dispose;
   List<String> listMethods;
   String keywords;
 
-  FilterCookingMethods({
+  FilterMethod({
     required this.fetchInfinitePosts,
     required this.dispose,
     required this.listMethods,
@@ -18,10 +18,10 @@ class FilterCookingMethods extends StatefulWidget {
   });
 
   @override
-  State<FilterCookingMethods> createState() => _FilterCookingMethodsState();
+  State<FilterMethod> createState() => _FilterMethodState();
 }
 
-class _FilterCookingMethodsState extends State<FilterCookingMethods> {
+class _FilterMethodState extends State<FilterMethod> {
   Widget buildingSingleCheckbox(
       CheckboxModal select, List<dynamic> selectedItems) {
     return StatefulBuilder(builder: (context, setState) {
@@ -33,16 +33,14 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
           (select.value)
               ? selectedItems.add(select.item)
               : selectedItems.remove(select.item);
-          print(selectedItems);
         }),
       );
     });
   }
 
-  var searchController = TextEditingController();
-  final List<MethodItem> selectedMethods = [];
+  TextEditingController searchController = TextEditingController();
   final checkboxListItem = [];
-
+  final List<MethodItem> selectedMethods = [];
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -118,8 +116,10 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 15, left: 15),
+                          // alignment: Alignment.bottomLeft,
                           height: MediaQuery.of(context).size.height * 0.17,
                           child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -138,7 +138,10 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.06,
                                 child: TextField(
+                                  //autofocus: true,
                                   controller: searchController,
+
+                                  //onSubmitted:
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'Keywords',
@@ -164,14 +167,14 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.95,
+                          height: MediaQuery.of(context).size.height * 1.19,
                           padding: EdgeInsets.only(top: 5, left: 15),
                           alignment: Alignment.topLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Cooking Methods',
+                                'Methods',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
@@ -179,11 +182,12 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               SizedBox(
+                                width: MediaQuery.of(context).size.height * 0.6,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.73,
+                                    MediaQuery.of(context).size.height * 1.02,
                                 child: FutureBuilder(
                                     future: fetchMethods(),
                                     builder: ((context, snapshot) {
@@ -208,10 +212,6 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                       }
                                     })),
                               ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.03,
-                              ),
                               Center(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -222,14 +222,14 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                             0.06),
                                   ),
                                   onPressed: () {
-                                    List<String> categories = [];
+                                    List<String> methods = [];
                                     selectedMethods.forEach((element) {
-                                      categories.add(element.method);
+                                      methods.add(element.method);
                                     });
-                                    widget.listMethods = categories;
+                                    widget.listMethods = methods;
                                     widget.keywords = searchController.text;
                                     widget.fetchInfinitePosts(
-                                        categories, searchController.text, 1);
+                                        methods, searchController.text, 1);
                                   },
                                   child: const Text(
                                     'Show Result',

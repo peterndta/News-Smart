@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import '../components/filter_cooking_methods.dart';
+import 'package:reciapp/components/filter_methods.dart';
 import '../components/sidebar_menu.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
@@ -24,7 +24,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   @override
   void initState() {
     super.initState();
-
     fetchInfinitePosts(listMethods, keywords, 0);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -56,6 +55,8 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
       search = "&Search=" + keywords;
     }
     if (pages != 0) page = pages;
+    print('Call: ' +
+        'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search');
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search'),
@@ -81,7 +82,9 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
       });
-    } else if (response.statusCode == 400) {
+      print('Sucessfully');
+    } else {
+      print(json.decode(response.body));
       setState(() {
         hasMore = false;
       });
@@ -95,7 +98,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   }
 
   final List<GetPosts> _listReciepReviews = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +107,6 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
         child: HeadBar(),
       ),
       body: SingleChildScrollView(
-        // controller: scrollController,
         child: Column(
           children: [
             SizedBox(
@@ -123,7 +124,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.55,
+                      width: MediaQuery.of(context).size.width * 0.35,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.black, width: 0.5)),
@@ -131,7 +132,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                         margin:
                             EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         child: Text(
-                          'Cooking Methods',
+                          'Method',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -153,11 +154,11 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FilterCookingMethods(
+          FilterMethod(
               fetchInfinitePosts: fetchInfinitePosts,
               listMethods: listMethods,
               keywords: keywords,
-              dispose: dispose)
+              dispose: dispose),
         ],
       ),
       bottomNavigationBar: Copyright(),

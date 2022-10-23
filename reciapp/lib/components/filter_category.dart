@@ -50,8 +50,9 @@ class _FilterCategoryState extends State<FilterCategory> {
         onPressed: () {
           showModalBottomSheet(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {

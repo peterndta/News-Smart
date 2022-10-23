@@ -1,18 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/components/infinite_scroll_category.dart';
-// import '../components/filter_category.dart';
 import '../components/filter_category.dart';
 import '../components/sidebar_menu.dart';
-import '../login_support/check_auth.dart';
-import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import 'dart:convert';
 import 'dart:io';
-
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
@@ -27,32 +21,9 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-// ScrollController scrollController = ScrollController();
-  // bool showbtn = false;
-  // bool isSelected = false;
-
   @override
   void initState() {
-    // scrollController.addListener(() {
-    //   //scroll listener
-    //   double showoffset =
-    //       10.0; //Back to top botton will show on scroll offset 10.0
-
-    //   if (scrollController.offset > showoffset) {
-    //     showbtn = true;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   } else {
-    //     showbtn = false;
-    //     setState(() {
-    //       //update state
-    //     });
-    //   }
-    // });
     super.initState();
-    print(listCategories);
-
     fetchInfinitePosts(listCategories, keywords, 0);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -67,6 +38,7 @@ class _CategoryPageState extends State<CategoryPage> {
   bool hasMore = true;
   List<String> listCategories = [];
   String keywords = "";
+
   Future fetchInfinitePosts(
       List<String> categories, String keywords, int pages) async {
     if (isLoading) return;
@@ -81,10 +53,8 @@ class _CategoryPageState extends State<CategoryPage> {
     var search = "";
     if (keywords.isNotEmpty) {
       search = "&Search=" + keywords;
-      print(search);
     }
     if (pages != 0) page = pages;
-    print(listCategories);
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/category/post/page/$page?PageSize=$limit$categoriesString$search'),
@@ -94,8 +64,6 @@ class _CategoryPageState extends State<CategoryPage> {
         HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
-    var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
@@ -129,8 +97,6 @@ class _CategoryPageState extends State<CategoryPage> {
   final List<GetPosts> _listReciepReviews = [];
   @override
   Widget build(BuildContext context) {
-    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    print('At category page, token: ${getUserInfo.token}');
     return Scaffold(
       drawer: SideBarMenu(),
       appBar: PreferredSize(
@@ -196,3 +162,5 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 }
+
+// CookingMethodsPage
