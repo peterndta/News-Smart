@@ -3,26 +3,25 @@
 import 'package:flutter/material.dart';
 import '../object/method_item.dart';
 import 'checkbox.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class FilterCookingMethods extends StatefulWidget {
-  bool isSelected;
+  Function fetchInfinitePosts;
+  Function dispose;
+  List<String> listMethods;
+  String keywords;
 
-  FilterCookingMethods(this.isSelected);
+  FilterCookingMethods({
+    required this.fetchInfinitePosts,
+    required this.dispose,
+    required this.listMethods,
+    required this.keywords,
+  });
 
   @override
   State<FilterCookingMethods> createState() => _FilterCookingMethodsState();
 }
 
-class Method {
-  int id;
-  String method;
-  Method(this.id, this.method);
-}
-
 class _FilterCookingMethodsState extends State<FilterCookingMethods> {
-  var controller = TextEditingController();
   Widget buildingSingleCheckbox(
       CheckboxModal select, List<dynamic> selectedItems) {
     return StatefulBuilder(builder: (context, setState) {
@@ -34,12 +33,13 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
           (select.value)
               ? selectedItems.add(select.item)
               : selectedItems.remove(select.item);
-          print(selectedItems);
         }),
       );
     });
   }
 
+  final checkboxListItem = [];
+  TextEditingController searchController = TextEditingController();
   final List<MethodItem> selectedMethods = [];
 
   @override
@@ -90,7 +90,13 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    setState(() {
+                                      checkboxListItem.clear();
+                                      selectedMethods.clear();
+                                      searchController.clear();
+                                    });
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(5),
                                     side: BorderSide(
@@ -130,12 +136,12 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.06,
                                 child: TextField(
-                                  controller: controller,
+                                  controller: searchController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'Keywords',
                                     suffixIcon: IconButton(
-                                      onPressed: controller.clear,
+                                      onPressed: searchController.clear,
                                       icon: Icon(Icons.clear),
                                     ),
                                   ),
@@ -182,45 +188,20 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                       if (snapshot.data == null) {
                                         return Container();
                                       } else {
-                                        return ListView.builder(
+                                        for (var i in snapshot.data) {
+                                          checkboxListItem
+                                              .add(CheckboxModal(item: i));
+                                        }
+                                        return ListView(
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data.length,
-                                          itemBuilder: (context, index) =>
-                                              Container(
-                                            child:
-                                                // StatefulBuilder(
-                                                //   builder: (context, _setState) =>
-                                                //       Checkbox(
-                                                //     side: BorderSide(
-                                                //         color: Colors.orange),
-                                                //     value: isSelected,
-                                                //     onChanged: (bool? value) {
-                                                //       _setState(() {
-                                                //         isSelected = value!;
-                                                //         if (isSelected == true) {
-                                                //           selectedMethod.add(
-                                                //               snapshot.data[index]
-                                                //                   .method);
-                                                //         } else {
-                                                //           selectedMethod.remove(
-                                                //               snapshot.data[index]
-                                                //                   .method);
-                                                //         }
-                                                //         print(selectedMethod);
-                                                //       });
-                                                //     },
-                                                //   ),
-                                                // ),
-                                                // Text(
-                                                //   snapshot.data[index].method,
-                                                //   style: TextStyle(fontSize: 18),
-                                                // ),
-                                                buildingSingleCheckbox(
-                                                    CheckboxModal(
-                                                        item: snapshot
-                                                            .data[index]), selectedMethods),
-                                          ),
+                                          children: [
+                                            ...checkboxListItem
+                                                .map((item) =>
+                                                    buildingSingleCheckbox(
+                                                        item, selectedMethods))
+                                                .toList()
+                                          ],
                                         );
                                       }
                                     })),
@@ -238,7 +219,16 @@ class _FilterCookingMethodsState extends State<FilterCookingMethods> {
                                         MediaQuery.of(context).size.height *
                                             0.06),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    List<String> categories = [];
+                                    selectedMethods.forEach((element) {
+                                      categories.add(element.method);
+                                    });
+                                    widget.listMethods = categories;
+                                    widget.keywords = searchController.text;
+                                    widget.fetchInfinitePosts(
+                                        categories, searchController.text, 1);
+                                  },
                                   child: const Text(
                                     'Show Result',
                                     style: TextStyle(
