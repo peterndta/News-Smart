@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
@@ -152,40 +150,48 @@ class _UserProfileState extends State<UserProfile> {
                         width: MediaQuery.of(context).size.width * 0.3,
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(widget.userInfoProvider.name,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        const SizedBox(height: 20),
-                        Text.rich(
-                          TextSpan(
-                            children: <InlineSpan>[
-                              const WidgetSpan(
-                                child: Text(
-                                  'Email: ',
-                                  style: TextStyle(
-                                    fontSize: 12.0,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(widget.userInfoProvider.name,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          const SizedBox(height: 20),
+                          Text.rich(
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                            TextSpan(
+                              children: <InlineSpan>[
+                                const WidgetSpan(
+                                  child: Text(
+                                    'Email: ',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              WidgetSpan(
-                                child: Text(
-                                  widget.userInfoProvider.mail,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12.0,
+                                WidgetSpan(
+                                  child: Text(
+                                    widget.userInfoProvider.mail,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),
