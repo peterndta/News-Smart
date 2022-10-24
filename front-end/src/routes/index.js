@@ -52,14 +52,14 @@ const hybridRoutes = [
 
 const privateRoutes = [
     {
-        path: '/recipes/bookmark',
+        path: '/bookmark',
         name: 'bookmark',
         component: lazy(() => import('../pages/Bookmark')),
         layout: 'common',
         role: 'user',
     },
     {
-        path: '/recipes/my-ratings',
+        path: '/my-ratings',
         name: 'rating recipes',
         component: lazy(() => import('../pages/Rating')),
         layout: 'common',
@@ -73,7 +73,7 @@ const privateRoutes = [
         role: 'user',
     },
     {
-        path: '/recipes/me',
+        path: '/me',
         name: 'my Recipes',
         component: lazy(() => import('../pages/MyRecipes')),
         layout: 'common',

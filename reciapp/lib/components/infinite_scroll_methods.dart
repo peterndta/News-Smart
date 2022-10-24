@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/object/filter_provider.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+// import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../login_support/check_auth.dart';
 import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
@@ -132,13 +132,13 @@ class _InfiniteScrollMethodsState extends State<InfiniteScrollMethods> {
                                       const EdgeInsets.symmetric(vertical: 3),
                                   child: Row(
                                     children: [
-                                      SmoothStarRating(
-                                        isReadOnly: true,
-                                        size: 28,
-                                        color: Colors.amber[600],
-                                        rating: post.averageRating.toDouble(),
-                                        borderColor: Colors.amber[600],
-                                      ),
+                                      // SmoothStarRating(
+                                      //   isReadOnly: true,
+                                      //   size: 28,
+                                      //   color: Colors.amber[600],
+                                      //   rating: post.averageRating.toDouble(),
+                                      //   borderColor: Colors.amber[600],
+                                      // ),
                                     ],
                                   ),
                                 ),

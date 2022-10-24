@@ -137,6 +137,62 @@ const CommonHeader = () => {
                                         RECIPES
                                     </Typography>
                                 </Box>
+                                <Box
+                                    component={NavLink}
+                                    exact
+                                    to="/recipes/collection"
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: grey[100],
+                                        position: 'relative',
+                                        '&:hover:after': {
+                                            width: '100%',
+                                        },
+                                        ml: 5,
+                                        fontFamily: 'Roboto',
+                                    }}
+                                >
+                                    <Typography component="span" variant="h5">
+                                        COLLECTION
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    component={NavLink}
+                                    to="/recipes/category"
+                                    exact
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: grey[100],
+                                        position: 'relative',
+                                        '&:hover:after': {
+                                            width: '100%',
+                                        },
+                                        ml: 5,
+                                        fontFamily: 'Roboto',
+                                    }}
+                                >
+                                    <Typography component="span" variant="h5">
+                                        CATEGORY
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    component={NavLink}
+                                    to="/recipes/method"
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: grey[100],
+                                        position: 'relative',
+                                        '&:hover:after': {
+                                            width: '100%',
+                                        },
+                                        ml: 5,
+                                        fontFamily: 'Roboto',
+                                    }}
+                                >
+                                    <Typography component="span" variant="h5">
+                                        METHOD
+                                    </Typography>
+                                </Box>
                             </Box>
                         </Box>
                         <Box
@@ -165,67 +221,7 @@ const CommonHeader = () => {
                                 },
                             }}
                         >
-                            <Box
-                                component={NavLink}
-                                exact
-                                to="/recipes/collection"
-                                sx={{
-                                    textDecoration: 'none',
-                                    color: grey[100],
-                                    position: 'relative',
-                                    '&:hover:after': {
-                                        width: '100%',
-                                    },
-                                    ml: 5,
-                                    fontFamily: 'Roboto',
-                                }}
-                            >
-                                <Typography component="span" variant="h5">
-                                    COLLECTION
-                                </Typography>
-                            </Box>
-                            <Box
-                                component={NavLink}
-                                to="/recipes/category"
-                                exact
-                                sx={{
-                                    textDecoration: 'none',
-                                    color: grey[100],
-                                    position: 'relative',
-                                    '&:hover:after': {
-                                        width: '100%',
-                                    },
-                                    ml: 5,
-                                    fontFamily: 'Roboto',
-                                }}
-                            >
-                                <Typography component="span" variant="h5">
-                                    CATEGORY
-                                </Typography>
-                            </Box>
-                            <Box
-                                component={NavLink}
-                                to="/recipes/method"
-                                sx={{
-                                    textDecoration: 'none',
-                                    color: grey[100],
-                                    position: 'relative',
-                                    '&:hover:after': {
-                                        width: '100%',
-                                    },
-                                    ml: 5,
-                                    fontFamily: 'Roboto',
-                                }}
-                            >
-                                <Typography component="span" variant="h5">
-                                    METHOD
-                                </Typography>
-                            </Box>
-                            <Box
-                                component={Link}
-                                to="/recipes/bookmark"
-                                sx={{ textDecoration: ' none' }}
-                            >
+                            <Box component={Link} to="/bookmark" sx={{ textDecoration: ' none' }}>
                                 <IconButton component="label" size="large" sx={{ ml: 3 }}>
                                     <BookmarkBorderIcon
                                         fontSize="large"
@@ -308,7 +304,7 @@ const CommonHeader = () => {
 
                                         <MenuItem
                                             sx={{ display: 'flex', pr: 5 }}
-                                            onClick={() => history.push('/recipes/me')}
+                                            onClick={() => history.push('/me')}
                                         >
                                             <ListItemIcon>
                                                 <Description fontSize="large" />
@@ -318,7 +314,7 @@ const CommonHeader = () => {
 
                                         <MenuItem
                                             sx={{ display: 'flex', pr: 5 }}
-                                            onClick={() => history.push('/recipes/bookmark')}
+                                            onClick={() => history.push('/bookmark')}
                                         >
                                             <ListItemIcon>
                                                 <Bookmark fontSize="large" />
