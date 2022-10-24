@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
+import 'package:reciapp/pages/update_recipe_page.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/head_bar.dart';
@@ -241,7 +242,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     color: Colors.blue,
                                   ),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) => UpdateRecipePage(
+                                            postDetail: snapshot.data),
+                                      ));
+                                    },
                                     child: Padding(
                                       padding: EdgeInsets.all(4.0),
                                       child: Row(
