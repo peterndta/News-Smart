@@ -1,13 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/infinite_scroll_recipes.dart';
 import '../components/filter_recipes.dart';
 
-import '../components/back_to_top_button.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
+import '../login_support/user_preference.dart';
+import '../object/get_posts_homepage.dart';
+import '../object/recipe_review.dart';
+import '../object/user_info.dart';
+import 'package:http/http.dart' as http;
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({Key? key}) : super(key: key);
@@ -17,42 +23,106 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
-  bool isSelected = false;
-
   @override
   void initState() {
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
+    // sortKey = listSort.first;
+    super.initState();
+    fetchInfinitePosts(listContinets, listUses, keywords, 0);
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts(listContinets, listUses, keywords, 0);
       }
     });
-    super.initState();
   }
+
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  List<String> listContinets = [];
+  List<String> listUses = [];
+  String keywords = "";
+  Future fetchInfinitePosts(List<String> continets, List<String> uses,
+      String keyword, int pages) async {
+    if (isLoading) return;
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    isLoading = true;
+    const limit = 6;
+    var continetsString = "";
+    if (continets.isNotEmpty) {
+      continetsString = "&Continent=" + continets.join(",");
+    }
+    var usesString = "";
+    if (uses.isNotEmpty) {
+      usesString = "&Uses=" + uses.join(",");
+    }
+    var search = "";
+    if (keyword.isNotEmpty) {
+      search = "&Search=" + keyword;
+    }
+    if (pages != 0) {
+      page = pages;
+    }
+    print("Call: " +
+        'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search&Sort=$sortKey');
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit$continetsString$usesString$search&Sort=$sortKey'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+    if (response.statusCode == 200) {
+      print('Sucessfully');
+      var responseJson = json.decode(response.body);
+      if (!mounted) return;
+      setState(() {
+        listContinets = continets;
+        listUses = uses;
+        keywords = keyword;
+        isLoading = false;
+        if (pages != 0) page = pages;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        if (pages == 1) _listReciepReviews.clear();
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    } else {
+      print('Failed');
+      setState(() {
+        hasMore = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
+  List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
+  String sortKey = "Newest";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: SideBarMenu(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
         child: HeadBar(),
       ),
       body: SingleChildScrollView(
-        controller: scrollController,
+        // controller: scrollController,
         child: Column(
           children: [
             SizedBox(
@@ -92,26 +162,57 @@ class _RecipesPageState extends State<RecipesPage> {
                 ],
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                child: InfiniteScrollRecipes(),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.only(right: 15),
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    value: sortKey,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        sortKey = newValue!;
+                      });
+                      fetchInfinitePosts(listContinets, listUses, keywords, 1);
+                    },
+                    items:
+                        listSort.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          BackToTopButton(scrollController, showbtn),
-          SizedBox(
-            width: 5,
-          ),
-          FilterRecipeResult()
+          FilterRecipeResult(
+            fetchInfinitePosts: fetchInfinitePosts,
+          )
         ],
       ),
       bottomNavigationBar: Copyright(),

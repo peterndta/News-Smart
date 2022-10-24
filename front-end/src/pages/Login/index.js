@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import queryString from 'query-string'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import GoogleButton from '../../components/Buttons/GoogleButton'
 import Carousel from '../../components/Carousel'
 import Copyright from '../../components/Copyright'
+import HomeIcon from '@mui/icons-material/Home'
 import { Typography, Grid, CssBaseline, Box, Avatar, Paper } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Logo from '../../assets/images/logo.png'
@@ -24,7 +26,7 @@ const imageList = [
         size: 'contain',
     },
     {
-        src: 'https://scontent.fsgn2-5.fna.fbcdn.net/v/t1.15752-9/305100729_1981886925339506_596451334788749172_n.png?_nc_cat=106&ccb=1-7&_nc_sid=ae9488&_nc_ohc=l-qiPfrLCOkAX947wSM&tn=c1NGR-hXQErPv9Vx&_nc_ht=scontent.fsgn2-5.fna&oh=03_AVLZaV_iyNx7MEtkQf8jG7ljoh6nu82AQ9nwdUlqsWOQWQ&oe=634E8634',
+        src: 'https://www.expatica.com/app/uploads/sites/11/2014/05/russian-cuisine.jpg',
         size: 'contain',
     },
     {
@@ -88,6 +90,11 @@ const Login = () => {
                 elevation={12}
                 square
             >
+                <Box mt={2}>
+                    <Link to="/">
+                        <HomeIcon fontSize="large" sx={{ color: grey[800] }} />
+                    </Link>
+                </Box>
                 <Box
                     sx={{
                         my: 6,
@@ -99,7 +106,9 @@ const Login = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar src={Logo} alt="SEEMS logo" sx={{ width: 200, height: 80 }}></Avatar>
+                    <Link to="/">
+                        <Avatar src={Logo} alt="Reci logo" sx={{ width: 200, height: 80 }}></Avatar>
+                    </Link>
                     <Typography
                         variant="h5"
                         textAlign="center"
