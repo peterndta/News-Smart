@@ -206,11 +206,18 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               },
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.bookmark_border_outlined,
-                                  size: 25.0,
-                                  color: Colors.black,
-                                ),
+                                child: (snapshot.data.bookmark)
+                                    ? Icon(
+                                        Icons.bookmark_added,
+                                        size: 25.0,
+                                        color:
+                                            Color.fromARGB(255, 212, 198, 178),
+                                      )
+                                    : Icon(
+                                        Icons.bookmark_border_outlined,
+                                        size: 25.0,
+                                        color: Colors.black,
+                                      ),
                               ),
                             ),
                           ),
