@@ -11,7 +11,9 @@ import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
 import 'package:http/http.dart' as http;
 
+import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
+import '../object/user_info.dart';
 
 class Rating {
   Rating({
@@ -95,6 +97,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     final post = await fetchPosts(id, token);
     final step = await fetchStep(id, token);
     PostDetail postDetail = PostDetail.fromJson(post.toJson(), step.toJson());
+    if (postDetail.userId == userData.userID) {
+      checkAuth = true;
+    }
     return postDetail;
   }
 
@@ -131,6 +136,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+  bool checkAuth = false;
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
   @override
   void initState() {
     super.initState();
@@ -199,7 +207,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   : Color.fromARGB(255, 221, 218, 218),
                             ),
                             child: InkWell(
-                              onTap: () {},
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: Icon(
@@ -227,6 +234,35 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               ),
                             ),
                           ),
+                          SizedBox(width: 3),
+                          checkAuth
+                              ? Ink(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            'Edit',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
                         ],
                       ),
                       Column(

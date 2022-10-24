@@ -14,7 +14,6 @@ PostSendItem postSendItemFromJson(String str) =>
 String postSendItemToJson(PostSendItem data) => json.encode(data.toJson());
 
 Future<int> submitData(PostSendItem post) async {
-  print(postSendItemToJson(post));
   UserData userData =
       UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
   var response = await http.post(
@@ -27,8 +26,6 @@ Future<int> submitData(PostSendItem post) async {
       HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
     },
   );
-  String responseString = response.body;
-
   return response.statusCode as int;
 }
 
