@@ -207,86 +207,86 @@ namespace reciWebApp.Controllers
             }
         }
             
-        [HttpGet("page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostParams filterAndSort)
-        {
-            try
-            {
-                //var user = await _servicesManager.AuthService.GetUser(Request);
+        //[HttpGet("page/{pageNumber}")]
+        //public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostParams filterAndSort)
+        //{
+        //    try
+        //    {
+        //        //var user = await _servicesManager.AuthService.GetUser(Request);
 
-                //if (user == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
-                List<Post>? getPostsByCategories = null;
-                if (filterAndSort.Category != null)
-                {
-                    var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
-                    var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
-                    getPostsByCategories = _repoManager.Post.GetPostsByPostCategories(postCategories);
-                }
+        //        //if (user == null)
+        //        //{
+        //        //    return BadRequest(new Response(400, "Invalid user"));
+        //        //}
+        //        List<Post>? getPostsByCategories = null;
+        //        if (filterAndSort.Category != null)
+        //        {
+        //            var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
+        //            var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
+        //            getPostsByCategories = _repoManager.Post.GetPostsByPostCategories(postCategories);
+        //        }
 
-                List<Post>? getPostsByCookingMethods = null;
-                if (filterAndSort.Method != null)
-                {
-                    var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filterAndSort.Method);
-                    getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
-                }
+        //        List<Post>? getPostsByCookingMethods = null;
+        //        if (filterAndSort.Method != null)
+        //        {
+        //            var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filterAndSort.Method);
+        //            getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
+        //        }
 
-                List<Post>? getPostsByRecipeRegions = null;
-                if (filterAndSort.Continent != null)
-                {
-                    var recipeRegions = _repoManager.RecipeRegion.GetRecipeRegionsByName(filterAndSort.Continent);
-                    getPostsByRecipeRegions = _repoManager.Post.GetPostsByRecipeRegions(recipeRegions);
-                }
+        //        List<Post>? getPostsByRecipeRegions = null;
+        //        if (filterAndSort.Continent != null)
+        //        {
+        //            var recipeRegions = _repoManager.RecipeRegion.GetRecipeRegionsByName(filterAndSort.Continent);
+        //            getPostsByRecipeRegions = _repoManager.Post.GetPostsByRecipeRegions(recipeRegions);
+        //        }
 
-                List<Post>? getPostsByUses = null;
-                if (filterAndSort.Uses != null)
-                {
-                    var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
-                    getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
-                }
+        //        List<Post>? getPostsByUses = null;
+        //        if (filterAndSort.Uses != null)
+        //        {
+        //            var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
+        //            getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
+        //        }
 
-                List<Post>? getPostsByCollections = null;
-                if (filterAndSort.Collection != null)
-                {
-                    var collection = _repoManager.Collection.GetCollectionsByNames(filterAndSort.Collection);
-                    var foodCollections = _repoManager.FoodCollection.GetFoodCollectionsByCollections(collection);
-                    getPostsByCollections = _repoManager.Post.GetPostsByFoodCollections(foodCollections);
-                }
-                var postParams = new PostParams
-                {
-                    Name = filterAndSort.Search,
-                    PostsByCookingMethods = getPostsByCookingMethods,
-                    PostsRecipeRegions = getPostsByRecipeRegions,
-                    PostsByCategories = getPostsByCategories,
-                    PageNumber = filterAndSort.PageNumber,
-                    PageSize = filterAndSort.PageSize,
-                    Type = filterAndSort.Sort,
-                    PostsByUses = getPostsByUses,
-                    PostsByCollections = getPostsByCollections,
-                };
-                postParams.PageNumber = pageNumber;
-                var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
-                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
-                for (int i = 0; i < showPosts.Count; i++)
-                {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
-                }
+        //        List<Post>? getPostsByCollections = null;
+        //        if (filterAndSort.Collection != null)
+        //        {
+        //            var collection = _repoManager.Collection.GetCollectionsByNames(filterAndSort.Collection);
+        //            var foodCollections = _repoManager.FoodCollection.GetFoodCollectionsByCollections(collection);
+        //            getPostsByCollections = _repoManager.Post.GetPostsByFoodCollections(foodCollections);
+        //        }
+        //        var postParams = new PostParams
+        //        {
+        //            Name = filterAndSort.Search,
+        //            PostsByCookingMethods = getPostsByCookingMethods,
+        //            PostsRecipeRegions = getPostsByRecipeRegions,
+        //            PostsByCategories = getPostsByCategories,
+        //            PageNumber = filterAndSort.PageNumber,
+        //            PageSize = filterAndSort.PageSize,
+        //            Type = filterAndSort.Sort,
+        //            PostsByUses = getPostsByUses,
+        //            PostsByCollections = getPostsByCollections,
+        //        };
+        //        postParams.PageNumber = pageNumber;
+        //        var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
+        //        var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+        //        for (int i = 0; i < showPosts.Count; i++)
+        //        {
+        //            showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+        //        }
 
-                if (postParams.Type != null)
-                {
-                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
-                }
+        //        if (postParams.Type != null)
+        //        {
+        //            showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
+        //        }
 
-                var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
-                return Ok(new Response(200, result, "", result.Meta));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new Response(500, ex.Message));
-            }
-        }
+        //        var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
+        //        return Ok(new Response(200, result, "", result.Meta));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new Response(500, ex.Message));
+        //    }
+        //}
 
         [HttpGet("bookmark/page/{pageNumber}")]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] BookmarkParams bookmarkParams)
@@ -520,33 +520,6 @@ namespace reciWebApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new Response(500, ex.Message));
-            }
-        }
-
-        [HttpGet]
-        [Route("~/api/name/post/page/{pageNumber}")]
-        public async Task<IActionResult> GetPostByName (int pageNumber, [FromQuery] PostFilterByNameParams postFilterByNameParams)
-        {
-            try
-            {
-                var listPost = await _repoManager.Post.GetPostByNameAsync(postFilterByNameParams);
-                if (!listPost.Any())
-                {
-                    return BadRequest(new Response(400, "Do not have any post"));
-                }    
-                var showListPost = _mapper.Map<List<ShowPostDTO>>(listPost);
-
-                postFilterByNameParams.PageNumber = pageNumber;
-                for (int i = 0; i < showListPost.Count; i++)
-                {
-                    showListPost[i]= _servicesManager.PostService.GetPostInfo(showListPost[i]);
-                }    
-                var result = PaginatedList<ShowPostDTO>.Create(showListPost, postFilterByNameParams.PageNumber, postFilterByNameParams.PageSize);
-                return Ok(new Response(200, result, "", result.Meta));
-            }
-            catch(Exception e)
-            {
-                return BadRequest (new Response(400, e.Message));
             }
         }
     }
