@@ -87,6 +87,12 @@ const privateRoutes = [
         role: 'user',
     },
     {
+        path: '/recipes/:id/update',
+        name: 'update recipe',
+        component: lazy(() => import('../pages/UpdateRecipe')),
+        layout: 'common',
+    },
+    {
         path: '/recipes/:id',
         name: 'recipe detail',
         component: lazy(() => import('../pages/RecipeDetail')),
