@@ -40,7 +40,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   String keywords = "";
 
   Future fetchInfinitePosts(
-      List<String> methods, String keywords, int pages) async {
+      List<String> methods, String keyword, int pages) async {
     if (isLoading) return;
     UserData userData =
         UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
@@ -51,15 +51,15 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
       methodsString = "&Method=" + methods.join(",");
     }
     var search = "";
-    if (keywords.isNotEmpty) {
-      search = "&Search=" + keywords;
+    if (keyword.isNotEmpty) {
+      search = "&Search=" + keyword;
     }
     if (pages != 0) page = pages;
     print('Call: ' +
-        'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search');
+        'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search&Sort=$sortKey');
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search'),
+          'https://reciapp.azurewebsites.net/api/method/post/page/$page?PageSize=$limit$methodsString$search&Sort=$sortKey'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -70,7 +70,8 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
-        //final List jsonData = responseJson['data'];
+        listMethods = methods;
+        keywords = keyword;
         isLoading = false;
         if (pages != 0) page = pages;
         page++;
@@ -98,6 +99,9 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   }
 
   final List<GetPosts> _listReciepReviews = [];
+  List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
+  String sortKey = "Newest";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,6 +150,46 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.only(right: 15),
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    value: sortKey,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        sortKey = newValue!;
+                      });
+                      fetchInfinitePosts(listMethods, keywords, 1);
+                    },
+                    items:
+                        listSort.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
           ],
@@ -155,10 +199,8 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FilterMethod(
-              fetchInfinitePosts: fetchInfinitePosts,
-              listMethods: listMethods,
-              keywords: keywords,
-              dispose: dispose),
+            fetchInfinitePosts: fetchInfinitePosts,
+          ),
         ],
       ),
       bottomNavigationBar: Copyright(),

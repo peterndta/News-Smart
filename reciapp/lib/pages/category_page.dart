@@ -40,7 +40,7 @@ class _CategoryPageState extends State<CategoryPage> {
   String keywords = "";
 
   Future fetchInfinitePosts(
-      List<String> categories, String keywords, int pages) async {
+      List<String> categories, String keyword, int pages) async {
     if (isLoading) return;
     UserData userData =
         UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
@@ -51,13 +51,15 @@ class _CategoryPageState extends State<CategoryPage> {
       categoriesString = "&Category=" + categories.join(",");
     }
     var search = "";
-    if (keywords.isNotEmpty) {
-      search = "&Search=" + keywords;
+    if (keyword.isNotEmpty) {
+      search = "&Search=" + keyword;
     }
     if (pages != 0) page = pages;
+    print("Call: " +
+        'https://reciapp.azurewebsites.net/api/category/post/page/$page?PageSize=$limit$categoriesString$search&Sort=$sortKey');
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/category/post/page/$page?PageSize=$limit$categoriesString$search'),
+          'https://reciapp.azurewebsites.net/api/category/post/page/$page?PageSize=$limit$categoriesString$search&Sort=$sortKey'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -65,15 +67,16 @@ class _CategoryPageState extends State<CategoryPage> {
       },
     );
     if (response.statusCode == 200) {
+      print('Sucessfully');
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
-        //final List jsonData = responseJson['data'];
+        listCategories = categories;
+        keywords = keyword;
         isLoading = false;
         if (pages != 0) page = pages;
         page++;
         if (responseJson['data'].length < limit) {
-          print(responseJson['data'].length);
           hasMore = false;
         }
         if (pages == 1) _listReciepReviews.clear();
@@ -81,7 +84,8 @@ class _CategoryPageState extends State<CategoryPage> {
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
       });
-    } else if (response.statusCode == 400) {
+    } else {
+      print('Failed');
       setState(() {
         hasMore = false;
       });
@@ -95,6 +99,9 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   final List<GetPosts> _listReciepReviews = [];
+  List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
+  String sortKey = "Newest";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +150,46 @@ class _CategoryPageState extends State<CategoryPage> {
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.only(right: 15),
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    value: sortKey,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        sortKey = newValue!;
+                      });
+                      fetchInfinitePosts(listCategories, keywords, 1);
+                    },
+                    items:
+                        listSort.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
           ],
@@ -152,15 +199,11 @@ class _CategoryPageState extends State<CategoryPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FilterCategory(
-              fetchInfinitePosts: fetchInfinitePosts,
-              listCategories: listCategories,
-              keywords: keywords,
-              dispose: dispose),
+            fetchInfinitePosts: fetchInfinitePosts,
+          ),
         ],
       ),
       bottomNavigationBar: Copyright(),
     );
   }
 }
-
-// CookingMethodsPage

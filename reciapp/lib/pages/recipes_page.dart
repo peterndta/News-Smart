@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../components/dropdown_button.dart';
 import '../components/filter_recipes.dart';
 
 import '../components/copyright.dart';
@@ -26,7 +25,7 @@ class RecipesPage extends StatefulWidget {
 class _RecipesPageState extends State<RecipesPage> {
   @override
   void initState() {
-    sortKey = listSort.first;
+    // sortKey = listSort.first;
     super.initState();
     fetchInfinitePosts(listContinets, listUses, keywords, 0);
     controller.addListener(() {
@@ -81,11 +80,11 @@ class _RecipesPageState extends State<RecipesPage> {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
-        //final List jsonData = responseJson['data'];
         listContinets = continets;
         listUses = uses;
         keywords = keyword;
         isLoading = false;
+        if (pages != 0) page = pages;
         page++;
         if (responseJson['data'].length < limit) {
           hasMore = false;
@@ -111,7 +110,7 @@ class _RecipesPageState extends State<RecipesPage> {
 
   final List<GetPosts> _listReciepReviews = [];
   List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
-  String sortKey = "";
+  String sortKey = "Newest";
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +186,6 @@ class _RecipesPageState extends State<RecipesPage> {
                       setState(() {
                         sortKey = newValue!;
                       });
-                      print(keywords);
                       fetchInfinitePosts(listContinets, listUses, keywords, 1);
                     },
                     items:
