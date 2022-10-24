@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/object/post_detail.dart';
@@ -10,7 +9,6 @@ import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-import '../components/back_to_top_button.dart';
 import 'package:http/http.dart' as http;
 
 import '../object/get_posts_homepage.dart';
@@ -57,10 +55,7 @@ class RecipeDetailPage extends StatefulWidget {
 }
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
   Future fetchPosts(String id, String token) async {
-    print('Bearer $token');
     http.Response response = await http.get(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$id'),
       headers: {
@@ -71,9 +66,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
-      print(responseJson['data']);
       GetPosts post = GetPosts.fromJson(responseJson['data']);
       return post;
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -88,9 +84,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
-      print(responseJson['data']);
       StepItem step = StepItem.fromJson(responseJson['data']);
       return step;
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -111,10 +108,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         HttpHeaders.authorizationHeader: 'Bearer $token'
       },
     );
-    var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       setState(() {});
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -129,7 +126,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       },
     );
     var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       setState(() {});
     }
@@ -137,24 +133,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   @override
   void initState() {
-    fetchPosts(widget.id, widget.token);
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
-      }
-    });
     super.initState();
   }
 
@@ -166,7 +144,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
           preferredSize: const Size.fromHeight(55),
           child: HeadBar(),
         ),
-        floatingActionButton: BackToTopButton(scrollController, showbtn),
         body: FutureBuilder(
             future: fetchData(widget.id, widget.token),
             builder: (ctx, snapshot) {
@@ -276,7 +253,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     : false,
                                 onRated: (rate) {
                                   // if(rating != null){
-                                  print('click');
                                   ratingPost(
                                       widget.id, widget.token, rate!.toInt());
                                   // }

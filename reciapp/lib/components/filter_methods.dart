@@ -1,22 +1,21 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, camel_case_types
 
 import 'package:flutter/material.dart';
-import '../object/region_item.dart';
-import '../object/use_item.dart';
+import 'package:reciapp/object/method_item.dart';
 import 'checkbox.dart';
 
-class FilterRecipeResult extends StatefulWidget {
+class FilterMethod extends StatefulWidget {
   Function fetchInfinitePosts;
 
-  FilterRecipeResult({
+  FilterMethod({
     required this.fetchInfinitePosts,
   });
 
   @override
-  State<FilterRecipeResult> createState() => _FilterRecipeResultState();
+  State<FilterMethod> createState() => _FilterMethodState();
 }
 
-class _FilterRecipeResultState extends State<FilterRecipeResult> {
+class _FilterMethodState extends State<FilterMethod> {
   Widget buildingSingleCheckbox(
       CheckboxModal select, List<dynamic> selectedItems) {
     return StatefulBuilder(builder: (context, setState) {
@@ -33,12 +32,9 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
     });
   }
 
-  var keyword = TextEditingController();
-  final List<RegionItem> selectedContinent = [];
-  final List<UseItem> selectedUse = [];
-  final checkboxListRegionItem = [];
-  final checkboxListUseItem = [];
-
+  TextEditingController searchController = TextEditingController();
+  final checkboxListItem = [];
+  final List<MethodItem> selectedMethods = [];
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -92,11 +88,9 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                   child: OutlinedButton(
                                     onPressed: () {
                                       setModalState(() {
-                                        checkboxListRegionItem.clear();
-                                        checkboxListUseItem.clear();
-                                        selectedUse.clear();
-                                        selectedContinent.clear();
-                                        keyword.clear();
+                                        checkboxListItem.clear();
+                                        selectedMethods.clear();
+                                        searchController.clear();
                                       });
                                     },
                                     style: OutlinedButton.styleFrom(
@@ -133,22 +127,23 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                 ),
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height *
-                                      0.013,
+                                      0.023,
                                 ),
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.07,
+                                      MediaQuery.of(context).size.height * 0.06,
                                   child: TextField(
-                                    controller: keyword,
+                                    //autofocus: true,
+                                    controller: searchController,
+
+                                    //onSubmitted:
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       hintText: 'Keywords',
                                       suffixIcon: IconButton(
-                                        onPressed: () {
-                                          keyword.clear();
-                                        },
+                                        onPressed: searchController.clear,
                                         icon: Icon(Icons.clear),
                                       ),
                                     ),
@@ -167,17 +162,16 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                 ),
                               ],
                             ),
-                            // color: Colors.yellow,
                           ),
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.6,
+                            height: MediaQuery.of(context).size.height * 1.19,
                             padding: EdgeInsets.only(top: 5, left: 15),
                             alignment: Alignment.topLeft,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Continents',
+                                  'Methods',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 25,
@@ -185,90 +179,37 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.5,
+                                      MediaQuery.of(context).size.height * 0.01,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.6,
+                                  height:
+                                      MediaQuery.of(context).size.height * 1.02,
                                   child: FutureBuilder(
-                                      future: fetchRegions(),
+                                      future: fetchMethods(),
                                       builder: ((context, snapshot) {
                                         if (snapshot.data == null) {
                                           return Container();
                                         } else {
                                           for (var i in snapshot.data) {
-                                            checkboxListRegionItem
+                                            checkboxListItem
                                                 .add(CheckboxModal(item: i));
                                           }
                                           return ListView(
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             children: [
-                                              ...checkboxListRegionItem
+                                              ...checkboxListItem
                                                   .map((item) =>
                                                       buildingSingleCheckbox(
                                                           item,
-                                                          selectedContinent))
+                                                          selectedMethods))
                                                   .toList()
                                             ],
                                           );
                                         }
                                       })),
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.02,
-                                ),
-                                Divider(
-                                  color: Colors.orange,
-                                  height: 3,
-                                  thickness: 2,
-                                  indent: 50,
-                                  endIndent: 60,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            padding: EdgeInsets.only(top: 5, left: 15),
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Uses',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.6,
-                                  child: FutureBuilder(
-                                      future: fetchUses(),
-                                      builder: ((context, snapshot) {
-                                        if (snapshot.data == null) {
-                                          return Container();
-                                        } else {
-                                          for (var i in snapshot.data) {
-                                            checkboxListUseItem
-                                                .add(CheckboxModal(item: i));
-                                          }
-                                          return ListView(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            children: [
-                                              ...checkboxListUseItem
-                                                  .map((item) =>
-                                                      buildingSingleCheckbox(
-                                                          item, selectedUse))
-                                                  .toList()
-                                            ],
-                                          );
-                                        }
-                                      })),
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.04,
                                 ),
                                 Center(
                                   child: ElevatedButton(
@@ -281,17 +222,13 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                               0.06),
                                     ),
                                     onPressed: () {
-                                      List<String> continents = [];
-                                      selectedContinent.forEach((element) {
-                                        continents.add(element.continents);
-                                      });
-                                      List<String> uses = [];
-                                      selectedUse.forEach((element) {
-                                        uses.add(element.usesOfFood);
+                                      List<String> methods = [];
+                                      selectedMethods.forEach((element) {
+                                        methods.add(element.method);
                                       });
                                       widget
                                           .fetchInfinitePosts(
-                                              continents, uses, keyword.text, 1)
+                                              methods, searchController.text, 1)
                                           .whenComplete(() {
                                         Navigator.pop(context);
                                       });

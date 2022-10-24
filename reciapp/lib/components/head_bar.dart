@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/collection_page.dart';
 import 'package:reciapp/pages/home_page.dart';
-import '../pages/bookmark_page.dart';
+import '../login_support/user_preference.dart';
+import '../object/user_info.dart';
 
 class HeadBar extends StatefulWidget {
   const HeadBar({super.key});
@@ -74,8 +78,10 @@ class _HeadBarState extends State<HeadBar> {
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               InkWell(
                   onTap: () {
+                    UserData userData = UserData.fromJson(
+                        jsonDecode(UserPreferences.getUserInfo()));
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BookmarkPage()));
+                        builder: (context) => CollectionPage(userData.userID)));
                   },
                   child: Icon(
                     Icons.bookmark,
