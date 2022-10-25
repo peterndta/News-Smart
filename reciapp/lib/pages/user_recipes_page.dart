@@ -92,7 +92,7 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
       appBar: AppBar(
         title: const Text('User Recipes'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         foregroundColor: Colors.orange,
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(
@@ -139,7 +139,6 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const Copyright(),
     );
   }
 }
