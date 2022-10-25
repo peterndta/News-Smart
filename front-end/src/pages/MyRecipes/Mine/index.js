@@ -11,6 +11,7 @@ import { grey } from '@mui/material/colors'
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import authAtom from '../../../recoil/auth/atom'
 import useMyRecipe from '../../../recoil/my-recipe/action'
+import useRecipe from '../../../recoil/recipe/action'
 import Loading from '../../Loading'
 import Paging from './Pagination'
 import Recipes from './Recipes'
@@ -31,6 +32,7 @@ const Mine = () => {
     const { search, sort, pageNum } = queryString.parse(query)
     const auth = useRecoilValue(authAtom)
     const myRecipesAction = useMyRecipe()
+    const { deleteRecipe } = useRecipe()
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
@@ -88,6 +90,23 @@ const Mine = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, sort, pageNum])
 
+    const deleteRecipeHandler = (postId) => {
+        console.log(postId)
+        deleteRecipe(postId)
+            .then((res) => {
+                const cloneRecipes = { ...recipes }
+                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== id)
+                setRecipes({ ...recipes, list: newRecipes })
+            })
+            .catch((error) => {
+                const message = error.response.data.message
+                showSnackBar({
+                    severity: 'error',
+                    children: message || 'Something went wrong, please try again later.',
+                })
+            })
+    }
+
     return (
         <React.Fragment>
             {isLoading ? (
@@ -105,7 +124,10 @@ const Mine = () => {
                                 to={fromTo.to}
                                 all={fromTo.totalCount}
                             />
-                            <Recipes posts={recipes.list} />
+                            <Recipes
+                                posts={recipes.list}
+                                deleteRecipeHandler={deleteRecipeHandler}
+                            />
                             {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                         </React.Fragment>
                     ) : (
