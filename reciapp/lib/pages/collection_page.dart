@@ -96,7 +96,7 @@ class _CollectionPageState extends State<CollectionPage> {
       appBar: AppBar(
         title: const Text('User Bookmark'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
@@ -142,7 +142,6 @@ class _CollectionPageState extends State<CollectionPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const Copyright(),
     );
   }
 }
