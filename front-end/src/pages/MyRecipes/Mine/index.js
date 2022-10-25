@@ -91,18 +91,20 @@ const Mine = () => {
     }, [search, sort, pageNum])
 
     const deleteRecipeHandler = (postId) => {
-        console.log(postId)
+        setIsLoading(true)
         deleteRecipe(postId)
-            .then((res) => {
+            .then(() => {
+                console.log(true)
                 const cloneRecipes = { ...recipes }
-                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== id)
+                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== postId)
+                setIsLoading(false)
                 setRecipes({ ...recipes, list: newRecipes })
             })
-            .catch((error) => {
-                const message = error.response.data.message
+            .catch(() => {
+                setIsLoading(false)
                 showSnackBar({
                     severity: 'error',
-                    children: message || 'Something went wrong, please try again later.',
+                    children: 'Something went wrong, please try again later.',
                 })
             })
     }

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
 import { v4 } from 'uuid'
 
-import { Box, Typography, Breadcrumbs } from '@mui/material'
+import { Box, Breadcrumbs, Typography } from '@mui/material'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
-import authAtom from '../../recoil/auth'
 import useRecipe from '../../recoil/recipe/action'
 import { storage } from '../../utils/Firebase'
 import Loading from '../Loading'
@@ -16,7 +14,6 @@ import CreateRecipeForm from './CreareRecipeForm'
 
 const UpdateRecipe = () => {
     const showSnackbar = useSnackbar()
-    const auth = useRecoilValue(authAtom)
     const recipeAction = useRecipe()
     const history = useHistory()
     const { id } = useParams()
@@ -58,7 +55,26 @@ const UpdateRecipe = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const createRecipeHandler = (poster, recipe) => {
-        if (poster.file) {
+        if (poster.file == null) {
+            console.log(false)
+            recipe.imageUrl = poster.src
+            recipeAction
+                .updateRecipe(id, recipe)
+                .then(() => {
+                    showSnackbar({
+                        severity: 'success',
+                        children: 'Update recipe successfully',
+                    })
+                    history.push('/me')
+                })
+                .catch(() => {
+                    showSnackbar({
+                        severity: 'error',
+                        children: 'Something went wrong, cannot upload recipe image.',
+                    })
+                })
+        } else if (poster.file) {
+            console.log(true)
             let fileType = 'png'
             if (poster.file.type.endsWith('jpg')) fileType = 'jpg'
             else if (poster.file.type.endsWith('jpeg')) fileType = 'jpeg'
@@ -78,13 +94,13 @@ const UpdateRecipe = () => {
                         .then((url) => {
                             recipe.imageUrl = url
                             recipeAction
-                                .createRecipe(+auth.userId, recipe)
+                                .updateRecipe(id, recipe)
                                 .then(() => {
                                     showSnackbar({
                                         severity: 'success',
-                                        children: 'Create recipe successfully',
+                                        children: 'Update recipe successfully',
                                     })
-                                    history.push('/recipes/me')
+                                    history.push('/me')
                                 })
                                 .catch(() => {
                                     showSnackbar({

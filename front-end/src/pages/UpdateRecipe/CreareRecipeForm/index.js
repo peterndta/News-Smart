@@ -248,7 +248,7 @@ const CreateRecipeForm = ({ createRecipeHandler, recipe, step }) => {
                                         sx={{ display: 'inline-block' }}
                                     >
                                         <input
-                                            required
+                                            required={poster.src ? false : true}
                                             style={{ opacity: 0, maxWidth: 0.5 }}
                                             id="upload-photo"
                                             type="file"
