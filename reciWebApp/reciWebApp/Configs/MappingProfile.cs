@@ -41,6 +41,9 @@ namespace reciWebApp.Configs
             CreateMap<Use, ShowUseDTO>();
             CreateMap<CreatePostReportDTO, PostReport>();
             CreateMap<PostReport, ShowPostReportDTO>();
+            CreateMap<PostReport, ReturnReportDTO>();
+            CreateMap<PostReportParams, ReturnReportDTO>();
+            CreateMap<UserReportParams, ReturnReportDTO>();
         }
     }
 }
