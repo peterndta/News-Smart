@@ -15,27 +15,27 @@ namespace reciWebApp.Data.Repositories
             Create(collection);
         }
 
-        public Task<Collection> GetCollectionAsync(int id)
+        public Task<Collection?> GetCollectionAsync(int id)
         {
             return GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
         }
 
-        public Collection GetCollectionByName (string name)
+        public Collection? GetCollectionByName (string name)
         {
             return GetByCondition(x => x.CollectionName.Equals(name)).SingleOrDefault();
         }
 
-        public async Task<Collection> GetCollectionByNameAsync(string name)
+        public async Task<Collection?> GetCollectionByNameAsync(string name)
         {
             return await GetByCondition(x => x.CollectionName.Equals(name)).SingleOrDefaultAsync();
         }
 
-        public Task<List<Collection>?> GetCollectionsAsync()
+        public Task<List<Collection>> GetCollectionsAsync()
         {
             return GetAll().ToListAsync();
         }
 
-        public List<Collection?> GetCollectionsByNames(List<string?> names)
+        public List<Collection> GetCollectionsByNames(List<string?> names)
         {
             var collections = new List<Collection>();
             foreach (var name in names)
