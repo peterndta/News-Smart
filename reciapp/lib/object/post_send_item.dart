@@ -29,6 +29,22 @@ Future<int> submitData(PostSendItem post) async {
   return response.statusCode as int;
 }
 
+Future<int> updateData(PostSendItem post, String postId) async {
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+  var response = await http.post(
+    Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId'),
+    body: postSendItemToJson(post),
+    headers: {
+      "content-type": "application/json",
+      "accept": "application/json",
+      HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+    },
+  );
+  print(response.statusCode);
+  return response.statusCode as int;
+}
+
 class PostSendItem {
   PostSendItem({
     required this.name,

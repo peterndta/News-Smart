@@ -35,11 +35,9 @@ class RecipeReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        UserData userData =
-            UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
-              RecipeDetailPage(id: post.id, token: userData.token),
+              RecipeDetailPage(id: post.id),
         ));
       },
       splashColor: const Color.fromARGB(255, 211, 210, 210),

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:reciapp/components/copyright.dart';
 import 'package:reciapp/components/dropdown_button.dart';
 import 'package:reciapp/components/textbox_form.dart';
-import 'package:reciapp/object/post_send_item.dart';
+import 'package:reciapp/pages/recipe_detail.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import '../components/dropdown_multiple_choice_button.dart';
 import '../components/head_bar.dart';
@@ -17,6 +17,7 @@ import '../components/sidebar_menu.dart';
 import '../login_support/check_auth.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
+import '../object/post_send_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
 import 'package:reciapp/object/post_detail.dart';
@@ -96,10 +97,10 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
     linkVideo = TextEditingController(text: widget.postDetail.videoUrl);
     imageURL = widget.postDetail.imageUrl;
 
-    userId = widget.postDetail.userId;
+    postd = widget.postDetail.id;
   }
 
-  int? userId;
+  String? postd;
   List<CategoryItem> categories = [];
   List<CategoryItem> selectedCategorys = [];
 
@@ -153,135 +154,138 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
     return imageUrl;
   }
 
-  Future updateRecipe(BuildContext context) async {
-    // showDialog(
-    //     // The user CANNOT close this dialog  by pressing outsite it
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (_) {
-    //       return Dialog(
-    //         // The background color
-    //         backgroundColor: Colors.white,
-    //         child: Padding(
-    //           padding: const EdgeInsets.symmetric(vertical: 20),
-    //           child: Column(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: const [
-    //               // The loading indicator
-    //               CircularProgressIndicator(),
-    //               SizedBox(
-    //                 height: 15,
-    //               ),
-    //               // Some text
-    //               Text('Loading...')
-    //             ],
-    //           ),
-    //         ),
-    //       );
-    //     });
-    // await uploadFile();
-    // PostSendItem post = PostSendItem(
-    //     name: title.text,
-    //     cookingMethodId: selectedMethod!.id,
-    //     recipeRegionId: selectedRegion!.id,
-    //     imageUrl: imageURL.toString(),
-    //     videoUrl: linkVideo.text,
-    //     usesId: selectedUse!.id,
-    //     description: description.text,
-    //     categoriesId: selectedCategorys.map((e) => e.id).toList(),
-    //     ingredient: ingredients.text,
-    //     processing: processing.text,
-    //     cooking: cooking.text,
-    //     tool: tools.text,
-    //     processingTime: selectedTimeProcessing!.toInt(),
-    //     cookingTime: selectedTimeCooking!.toInt(),
-    //     preparingTime: selectedTimePreparing!.toInt(),
-    //     serving: selectedServe!.toInt());
-    // int data = await submitData(post).whenComplete(() {
-    //   Navigator.of(context).pop();
-    // });
-    // if (data == 200) {
-    //   showDialog(
-    //       // The user CANNOT close this dialog  by pressing outsite it
-    //       barrierDismissible: false,
-    //       context: context,
-    //       builder: (_) {
-    //         return Dialog(
-    //           // The background color
-    //           backgroundColor: Colors.white,
-    //           child: Padding(
-    //             padding: const EdgeInsets.symmetric(vertical: 20),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: const [
-    //                 // The loading indicator
-    //                 Icon(
-    //                   Icons.check_circle_outline,
-    //                   color: Colors.green,
-    //                   size: 40.0,
-    //                 ),
-    //                 SizedBox(
-    //                   height: 15,
-    //                 ),
-    //                 // Some text
-    //                 Text('Uploaded')
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     Navigator.of(context).pop();
-    //   });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-    //     Navigator.of(context).push(MaterialPageRoute(
-    //       builder: (context) => UserProfile(userInfoProvider: getUserID),
-    //     ));
-    //   });
-    // } else {
-    //   showDialog(
-    //       // The user CANNOT close this dialog  by pressing outsite it
-    //       barrierDismissible: false,
-    //       context: context,
-    //       builder: (_) {
-    //         return Dialog(
-    //           // The background color
-    //           backgroundColor: Colors.white,
-    //           child: Padding(
-    //             padding: const EdgeInsets.symmetric(vertical: 20),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: const [
-    //                 // The loading indicator
-    //                 Icon(
-    //                   Icons.error_outline_outlined,
-    //                   color: Colors.red,
-    //                   size: 40.0,
-    //                 ),
-    //                 SizedBox(
-    //                   height: 15,
-    //                 ),
-    //                 // Some text
-    //                 Text('Uploaded')
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     Navigator.of(context).pop();
-    //   });
-    // }
+  Future updateRecipe(BuildContext context, String postId) async {
+    showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            // The background color
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Loading...')
+                ],
+              ),
+            ),
+          );
+        });
+    await uploadFile();
+    PostSendItem post = PostSendItem(
+        name: title.text,
+        cookingMethodId: selectedMethod!.id,
+        recipeRegionId: selectedRegion!.id,
+        imageUrl: imageURL.toString(),
+        videoUrl: linkVideo.text,
+        usesId: selectedUse!.id,
+        description: description.text,
+        categoriesId: selectedCategorys.map((e) => e.id).toList(),
+        ingredient: ingredients.text,
+        processing: processing.text,
+        cooking: cooking.text,
+        tool: tools.text,
+        processingTime: selectedTimeProcessing!.toInt(),
+        cookingTime: selectedTimeCooking!.toInt(),
+        preparingTime: selectedTimePreparing!.toInt(),
+        serving: selectedServe!.toInt());
+    int data = await updateData(post, postId).whenComplete(() {
+      Navigator.of(context).pop();
+    });
+    if (data == 200) {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Updated')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => RecipeDetailPage(id: postId),
+        ));
+      });
+    } else {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.error_outline_outlined,
+                      color: Colors.red,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Fail to update')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Edit Recipe'),
+        centerTitle: true,
+        elevation: 1,
+        foregroundColor: Colors.orange,
+        backgroundColor: Colors.white,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
       body: Form(
         key: _formKey,
@@ -290,16 +294,8 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20, top: 15),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'EDIT RECIPE',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.orange),
-                  ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
                 ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
@@ -549,7 +545,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                 ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  child: const Text('SUBMIT',
+                  child: const Text('UPDATE',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -557,7 +553,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      updateRecipe(context);
+                      updateRecipe(context, postd!);
                     }
                   },
                 ),

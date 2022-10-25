@@ -33,7 +33,7 @@ class IconDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      iconSize: 40,
+      iconSize: 35,
       color: color,
       icon: Icon(icon),
       tooltip: text,
@@ -178,14 +178,7 @@ class _UserProfileState extends State<UserProfile> {
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
-                          // borderRadius: BorderRadius.circular(50),
                           border: Border.all(color: Colors.white)),
-                      // child: Image(
-                      //   image: NetworkImage(widget.userInfoProvider.imageURL),
-                      // height: MediaQuery.of(context).size.height * 0.15,
-                      // width: MediaQuery.of(context).size.width * 0.3,
-                      // fit: BoxFit.fill,
-                      // ),
                     ),
                     Expanded(
                       child: Column(
@@ -197,7 +190,7 @@ class _UserProfileState extends State<UserProfile> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: const TextStyle(
-                                fontSize: 30,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
@@ -264,13 +257,13 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 2, bottom: 5),
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
               child: Row(
                 children: const [
                   Icon(Icons.assignment),
                   Text(
                     ' Recently Recipes',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   )
                 ],
               ),
