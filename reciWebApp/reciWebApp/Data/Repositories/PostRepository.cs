@@ -249,11 +249,6 @@ namespace reciWebApp.Data.Repositories
             return await posts.ToListAsync();
         }
 
-        public async Task<List<Post>?> GetPostOfAllCollectionsAsync()
-        {
-            return await GetAll().ToListAsync();
-        }
-
         public async Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams)
         {
             return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Name).ToListAsync();

@@ -8,6 +8,7 @@ using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.DTOs.RecipeRegionDTOs;
 using reciWebApp.DTOs.StepDTOs;
+using reciWebApp.DTOs.SubCollectionDTOs;
 using reciWebApp.DTOs.UseDTOs;
 using reciWebApp.DTOs.UserDTOs;
 
@@ -19,7 +20,7 @@ namespace reciWebApp.Configs
         {
             CreateMap<CreatePostDTO, Post>();
             CreateMap<Post, ShowPostDTO>();
-            CreateMap<UpdatePostDTO, Post>();
+            CreateMap<UpdatePostDTO, Post>().ForMember(x => x.CreateDate, otp => otp.Ignore());
             CreateMap<AuthMobile, User>();
             CreateMap<CreateStepDTO, Step>();
             CreateMap<Step, ShowStepDTO>();
@@ -41,6 +42,8 @@ namespace reciWebApp.Configs
             CreateMap<Use, ShowUseDTO>();
             CreateMap<CreatePostReportDTO, PostReport>();
             CreateMap<PostReport, ShowPostReportDTO>();
+            CreateMap<SubCollection, ShowSubCollectionDTO>();
+            CreateMap<UpdatePostDTO, Step>();
         }
     }
 }

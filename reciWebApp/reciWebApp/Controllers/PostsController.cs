@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Apis.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
@@ -6,6 +7,7 @@ using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.SubCollectionDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -28,6 +30,7 @@ namespace reciWebApp.Controllers
             _servicesManager = servicesManager;
         }
 
+        //Get recipe detail
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id, int id1)
         {
@@ -69,11 +72,6 @@ namespace reciWebApp.Controllers
             try
             {
                 var posts = await _repoManager.Post.GetAllPostsByUserIdAsync(myPostParams.Search, id);
-
-                // if (!posts.Any())
-                // {
-                //     return BadRequest(new Response(400, "Do not have any post"));
-                // }
 
                 myPostParams.PageNumber = pageNumber;
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
@@ -143,9 +141,9 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var user = await _servicesManager.AuthService.GetUser(Request);
+                var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-                if (user == null)
+                if (currentUser == null)
                 {
                     return BadRequest(new Response(400, "Invalid user"));
                 }
@@ -156,15 +154,32 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid post id"));
                 }
 
-                if (!_servicesManager.PostService.CheckPostAuthority(user.Id, id))
+                if (!_servicesManager.PostService.CheckPostAuthority(currentUser.Id, id))
                 {
                     return BadRequest(new Response(400, "You do not have permission"));
                 }
 
-                post = _mapper.Map<Post>(updatePostDTO);
+                _mapper.Map(updatePostDTO, post);
                 _repoManager.Post.UpdatePost(post);
+
+                var step = await _repoManager.Step.GetStepByPostIdAsync(id);
+                _mapper.Map(updatePostDTO, step);
+                _repoManager.Step.UpdateStep(step);
+
+                _repoManager.PostCategory.RemovePostCategory(id);
+
+                foreach (var categoryId in updatePostDTO.CategoriesId)
+                {
+                    var postCategory = new PostCategory
+                    {
+                        PostId = id,
+                        CategoryId = categoryId
+                    };
+                    _repoManager.PostCategory.CreatePostCategory(postCategory);
+                }
+
                 await _repoManager.SaveChangesAsync();
-                return Ok(new Response(200, "Update successfully"));
+                return Ok(new Response(200, "", "Update successfully"));
             }
             catch (Exception ex)
             {
@@ -288,6 +303,7 @@ namespace reciWebApp.Controllers
         //    }
         //}
 
+        //Get my bookmark recipes
         [HttpGet("bookmark/page/{pageNumber}")]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] BookmarkParams bookmarkParams)
         {
@@ -301,11 +317,6 @@ namespace reciWebApp.Controllers
                 }
 
                 var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(currentUser.Id);
-
-                // if (bookmarks.Count == 0)
-                // {
-                //     return BadRequest(new Response(400, "Do not have any result"));
-                // }
 
                 var posts = await _repoManager.Post.GetPostByUserInteractsAsync(bookmarks, bookmarkParams.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
@@ -329,6 +340,7 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Get my rating recipes
         [HttpGet("rating/page/{pageNumber}")]
         public async Task<IActionResult> Get(int pageNumber, int userId, [FromQuery] RatingParams ratingParams)
         {
@@ -342,11 +354,6 @@ namespace reciWebApp.Controllers
                 }
 
                 var ratings = await _repoManager.UserInteract.GetRatingAsync(currentUser.Id);
-
-                // if (ratings.Count == 0)
-                // {
-                //     return BadRequest(new Response(400, "Do not have any result"));
-                // }
 
                 ratingParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostByUserInteractsAsync(ratings, ratingParams.Search);
@@ -370,18 +377,13 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Get all recipes by method
         [HttpGet]
         [Route("~/api/method/post/page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByMethodParams filter)
+        public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByMethodParams filter)
         {
             try
             {
-                //var user = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (user == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
                 List<Post>? getPostsByCookingMethods = null;
                 if (filter.Method != null)
                 {
@@ -418,18 +420,13 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Get all recipes by category
         [HttpGet]
         [Route("~/api/category/post/page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByCategoryParams filter)
+        public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByCategoryParams filter)
         {
             try
             {
-                //var user = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (user == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
                 List<Post>? getPostsByCategories = null;
                 if (filter.Category != null)
                 {
@@ -467,18 +464,13 @@ namespace reciWebApp.Controllers
             }
         }
 
+        //Get all recipes by use and region
         [HttpGet]
         [Route("~/api/recipes/post/page/{pageNumber}")]
-        public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterByUsesAndRegionsParams filter)
+        public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByUsesAndRegionsParams filter)
         {
             try
             {
-                //var user = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (user == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
                 List<Post>? getPostsByRecipeRegions = null;
                 if (filter.Continent != null)
                 {
@@ -516,6 +508,66 @@ namespace reciWebApp.Controllers
 
                 var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
                 return Ok(new Response(200, result, "", result.Meta));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        //Get collections recipe
+        [HttpGet]
+        [Route("~/api/collections/post")]
+        public async Task<IActionResult> Get( [FromQuery] FilterByCollectionParams filter)
+        {
+            try
+            {
+                var collection = await _repoManager.Collection.GetCollectionByNameAsync(filter.Collection);
+                if (collection == null)
+                {
+                    return BadRequest(new Response(400, "Not found collection"));
+                }
+
+                var subCollections = await _repoManager.SubCollection.GetAllSubCollectionAsync(collection.Id);
+                var showSubCollectionDTOs = _mapper.Map<List<ShowSubCollectionDTO>>(subCollections);
+                
+                List<FoodCollection> foodCollectionList;
+                foreach (var showSubCollectionDTO in showSubCollectionDTOs)
+                {
+                    foodCollectionList = await _repoManager.FoodCollection.GetFoodCollectionsAsync(showSubCollectionDTO.Id);
+                    foreach (var foodCollection in foodCollectionList)
+                    {
+                        var post = _repoManager.Post.GetPostById(foodCollection.PostsId);
+                        var showPost = _mapper.Map<ShowPostDTO>(post);
+                        if (showPost != null)
+                        {
+                            showSubCollectionDTO.Post.Add(_servicesManager.PostService.GetPostInfo(showPost));
+                        }
+                    }
+                }
+
+                return Ok(new Response(200, showSubCollectionDTOs, ""));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        //Get post to add collections recipe
+        [HttpGet]
+        [Route("~/api/addcollections/{id}/post/page/{pageNumber}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var collection = await _repoManager.Collection.GetCollectionAsync(id);
+                if (collection == null)
+                {
+                    return BadRequest(new Response(400, "Not found collection"));
+                }
+
+                return Ok(new Response(200, "", "Chua co lam dau"));
             }
             catch (Exception ex)
             {

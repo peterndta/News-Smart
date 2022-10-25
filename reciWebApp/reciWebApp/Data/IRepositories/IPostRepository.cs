@@ -23,7 +23,6 @@ namespace reciWebApp.Data.IRepositories
         Task<List<Post>?> GetPostsFilterByMethodsAsync(PostParams postParams);
         Task<List<Post>?> GetPostsFilterByCategoriesAsync(PostParams postParams);
         Task<List<Post>?> GetPostsFilterByUsesAndRegionsAsync(PostParams postParams);
-        Task<List<Post>?> GetPostOfAllCollectionsAsync();
         Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId);
         Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name);
         Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams);
