@@ -253,5 +253,15 @@ namespace reciWebApp.Data.Repositories
         {
             return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Name).ToListAsync();
         }
+
+        public async Task<List<Post>?> GetPostToAddToCollectionAsync(List<string>? postId)
+        {
+            var posts = GetAll();
+            foreach (var id in postId)
+            {
+                posts = posts.Except(GetByCondition(x => x.Id.Equals(id)));
+            }
+            return await posts.ToListAsync();
+        }
     }
 }
