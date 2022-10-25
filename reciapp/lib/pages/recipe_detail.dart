@@ -1,19 +1,20 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
+import 'package:reciapp/pages/update_recipe_page.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-import '../components/back_to_top_button.dart';
 import 'package:http/http.dart' as http;
 
+import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
+import '../object/user_info.dart';
 
 class Rating {
   Rating({
@@ -57,10 +58,7 @@ class RecipeDetailPage extends StatefulWidget {
 }
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
   Future fetchPosts(String id, String token) async {
-    print('Bearer $token');
     http.Response response = await http.get(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$id'),
       headers: {
@@ -71,9 +69,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
-      print(responseJson['data']);
       GetPosts post = GetPosts.fromJson(responseJson['data']);
       return post;
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -88,9 +87,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
-      print(responseJson['data']);
       StepItem step = StepItem.fromJson(responseJson['data']);
       return step;
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -98,6 +98,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     final post = await fetchPosts(id, token);
     final step = await fetchStep(id, token);
     PostDetail postDetail = PostDetail.fromJson(post.toJson(), step.toJson());
+    if (postDetail.userId == userData.userID) {
+      checkAuth = true;
+    }
     return postDetail;
   }
 
@@ -111,10 +114,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         HttpHeaders.authorizationHeader: 'Bearer $token'
       },
     );
-    var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       setState(() {});
+    } else {
+      print('Error: ' + json.decode(response.body));
     }
   }
 
@@ -129,32 +132,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
       },
     );
     var responseJson = json.decode(response.body);
-    print(responseJson);
     if (response.statusCode == 200) {
       setState(() {});
     }
   }
 
+  bool checkAuth = false;
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
   @override
   void initState() {
-    fetchPosts(widget.id, widget.token);
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
-      }
-    });
     super.initState();
   }
 
@@ -166,7 +153,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
           preferredSize: const Size.fromHeight(55),
           child: HeadBar(),
         ),
-        floatingActionButton: BackToTopButton(scrollController, showbtn),
         body: FutureBuilder(
             future: fetchData(widget.id, widget.token),
             builder: (ctx, snapshot) {
@@ -222,7 +208,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   : Color.fromARGB(255, 221, 218, 218),
                             ),
                             child: InkWell(
-                              onTap: () {},
                               child: Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: Icon(
@@ -250,6 +235,41 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               ),
                             ),
                           ),
+                          SizedBox(width: 3),
+                          checkAuth
+                              ? Ink(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) => UpdateRecipePage(
+                                            postDetail: snapshot.data),
+                                      ));
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            'Edit',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
                         ],
                       ),
                       Column(
@@ -276,7 +296,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     : false,
                                 onRated: (rate) {
                                   // if(rating != null){
-                                  print('click');
                                   ratingPost(
                                       widget.id, widget.token, rate!.toInt());
                                   // }

@@ -67,7 +67,8 @@ class RecipeButton extends StatelessWidget {
               size: 30,
             ),
             SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-            Text('Recipe', style: TextStyle(color: Colors.white, fontSize: 25)),
+            Text('Continent/Use',
+                style: TextStyle(color: Colors.white, fontSize: 25)),
           ],
         ),
       ),
@@ -230,12 +231,6 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    // Future logoutAuth() async {
-    //   UserData user = UserData(
-    //       userID: 0, name: '', imageURL: '', role: '', mail: '', token: '');
-    //   String userString = jsonEncode(user.toJson());
-    //   await UserPreferences.setUserInfo(userString);
-    // }
 
     return InkWell(
       onTap: () {

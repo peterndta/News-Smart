@@ -48,11 +48,11 @@ dependencies:
   firebase_auth: ^3.11.2
   simple_star_rating: ^0.0.3
   flutter_rating_bar: ^4.0.1
-  smooth_star_rating: ^1.1.1
   jwt_decoder: ^2.0.1
   provider: ^6.0.3
   shared_preferences: ^2.0.15
   youtube_player_flutter: 8.0.0
+  flutter_launcher_icons: ^0.10.0
 
 
 dev_dependencies:
@@ -66,6 +66,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_icons:
+  android: true
+  image_path: "assets/Main_Reci_Logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo_foreground.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

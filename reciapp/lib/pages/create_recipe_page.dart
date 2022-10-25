@@ -6,29 +6,31 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/components/copyright.dart';
 import 'package:reciapp/components/dropdown_button.dart';
 import 'package:reciapp/components/textbox_form.dart';
 import 'package:reciapp/object/post_send_item.dart';
+import 'package:reciapp/pages/user_profile.dart';
 import '../components/dropdown_multiple_choice_button.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
+import '../login_support/check_auth.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
-import 'package:http/http.dart' as http;
 
-class SelectedItem {
-  dynamic data;
+// class SelectedItem {
+//   dynamic data;
 
-  SelectedItem({this.data});
+//   SelectedItem({this.data});
 
-  @override
-  String toString() {
-    return data ?? '';
-  }
-}
+//   @override
+//   String toString() {
+//     return data ?? '';
+//   }
+// }
 
 class CreateRecipePage extends StatefulWidget {
   String? title;
@@ -148,15 +150,38 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     uploadTask = ref.putFile(image!);
     final snapshot = await uploadTask!.whenComplete(() {});
     final imageUrl = await snapshot.ref.getDownloadURL();
-    // print('url:'+imageUrl);
     setState(() {
       imageURL = imageUrl;
     });
-    print('url:' + imageURL!);
     return imageUrl;
   }
 
-  Future postRecipe() async {
+  Future postRecipe(BuildContext context) async {
+    showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            // The background color
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Loading...')
+                ],
+              ),
+            ),
+          );
+        });
     await uploadFile();
     PostSendItem post = PostSendItem(
         name: title.text,
@@ -175,35 +200,102 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
         cookingTime: selectedTimeCooking!.toInt(),
         preparingTime: selectedTimePreparing!.toInt(),
         serving: selectedServe!.toInt());
-    submitData(post);
+    int data = await submitData(post).whenComplete(() {
+      Navigator.of(context).pop();
+    });
+    if (data == 200) {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Uploaded')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      }).whenComplete(() {
+        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => UserProfile(userInfoProvider: getUserID),
+        ));
+      });
+    } else {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.error_outline_outlined,
+                      color: Colors.red,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Uploaded')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Create Recipe'),
+        centerTitle: true,
+        elevation: 1,
+        foregroundColor: Colors.orange,
+        backgroundColor: Colors.white,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20, top: 15),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'CREATE RECIPE',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.orange),
-                  ),
-                ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -453,14 +545,13 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      postRecipe();
+                      postRecipe(context);
                     }
                   },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                const Copyright()
               ],
             ),
           ),

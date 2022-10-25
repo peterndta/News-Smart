@@ -17,6 +17,7 @@ Future fetchPosts() async {
       "accept": "application/json",
     },
   );
+  print(response.body);
   var responseJson = json.decode(response.body);
   return (responseJson['data'] as List)
       .map((p) => GetPosts.fromJson(p))

@@ -23,7 +23,7 @@ namespace reciWebApp.Controllers
             _servicesManager = servicesManager;
             _mapper = mapper;
         }
-        // POST api/<FoodCollectionsController>
+        // Create food collection
         [HttpPost]
         [Route("~/api/collection/{id}/foodcollection")]
         public async Task<IActionResult> Post(int id, [FromBody] CreateFoodCollecitionDTO foodCollecitionDTO)
@@ -47,6 +47,8 @@ namespace reciWebApp.Controllers
                 {
                     return BadRequest(new Response(400, "Collection id is invalid"));
                 }
+;
+                var subCollectionId = _repoManager.SubCollection.CreateSubCollection(id);
 
                 if (foodCollecitionDTO.PostsId != null)
                 {
@@ -57,9 +59,13 @@ namespace reciWebApp.Controllers
                         {
                             _repoManager.FoodCollection.CreateFoodCollection(new FoodCollection
                             {
-                                Id = id,
                                 PostsId = postId,
+                                SubCollectionId = subCollectionId,
                             });
+                        }
+                        else
+                        {
+                            return BadRequest(new Response(400, "Post id is invalid"));
                         }
                     }
                     await _repoManager.SaveChangesAsync();

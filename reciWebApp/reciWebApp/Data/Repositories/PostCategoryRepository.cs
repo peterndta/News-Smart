@@ -37,5 +37,11 @@ namespace reciWebApp.Data.Repositories
         {
             return GetAll().ToList();
         }
+
+        public void RemovePostCategory(string postId)
+        {
+            var postCategory = GetByCondition(x => x.PostId.Equals(postId));
+            BulkDelete(postCategory);
+        }
     }
 }
