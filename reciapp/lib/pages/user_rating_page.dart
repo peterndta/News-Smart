@@ -92,7 +92,7 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
       appBar: AppBar(
         title: const Text('User Ratings'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         foregroundColor: Colors.orange,
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(
@@ -138,7 +138,6 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const Copyright(),
     );
   }
 }

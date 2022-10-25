@@ -176,7 +176,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: Copyright(),
     );
   }
 }
