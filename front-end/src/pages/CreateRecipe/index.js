@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { v4 } from 'uuid'
 

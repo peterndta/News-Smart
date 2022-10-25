@@ -1,4 +1,4 @@
-import { get, post } from '../../utils/ApiCaller'
+import { get, post, put, remove } from '../../utils/ApiCaller'
 
 const useRecipe = () => {
     const getRecipe = (id) =>
@@ -16,6 +16,15 @@ const useRecipe = () => {
             endpoint: `/api/user/${userId}/post`,
             body: recipe,
         })
+    const updateRecipe = (userId, recipe) =>
+        put({
+            endpoint: `/api/post/${userId}`,
+            body: recipe,
+        })
+    const deleteRecipe = (postId) =>
+        remove({
+            endpoint: `/api/post/${postId}`,
+        })
 
     const getRecipes = (filters, pageNum = 1) =>
         get({ endpoint: `/api/recipes/post/page/${pageNum}${filters}` })
@@ -23,6 +32,8 @@ const useRecipe = () => {
     return {
         getRecipe,
         createRecipe,
+        updateRecipe,
+        deleteRecipe,
         getStep,
         getRecipes,
     }

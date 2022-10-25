@@ -1,4 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, unnecessary_this
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -20,44 +19,18 @@ import '../object/category_item.dart';
 import '../object/method_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
+import 'package:reciapp/object/post_detail.dart';
 
-// class SelectedItem {
-//   dynamic data;
+class UpdateRecipePage extends StatefulWidget {
+  PostDetail postDetail;
 
-//   SelectedItem({this.data});
-
-//   @override
-//   String toString() {
-//     return data ?? '';
-//   }
-// }
-
-class CreateRecipePage extends StatefulWidget {
-  String? title;
-  String? description;
-  String? tools;
-  String? ingredients;
-  String? processing;
-  String? cooking;
-  String? linkVideo;
-  CreateRecipePage({super.key});
-
-  CreateRecipePage.fromForm({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.tools,
-    required this.ingredients,
-    required this.processing,
-    required this.cooking,
-    required this.linkVideo,
-  });
+  UpdateRecipePage({required this.postDetail});
 
   @override
-  State<CreateRecipePage> createState() => _CreateRecipePageState();
+  State<UpdateRecipePage> createState() => _UpdateRecipePageState();
 }
 
-class _CreateRecipePageState extends State<CreateRecipePage> {
+class _UpdateRecipePageState extends State<UpdateRecipePage> {
   File? image;
   String? imageURL;
   UploadTask? uploadTask;
@@ -70,10 +43,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   TextEditingController cooking = TextEditingController();
   TextEditingController linkVideo = TextEditingController();
   Future getAllData() async {
-    selectedServe = serving[0];
-    selectedTimeCooking = times[0];
-    selectedTimePreparing = times[0];
-    selectedTimeProcessing = times[0];
     var categories = await fetchCategories();
     var methods = await fetchMethods();
     var uses = await fetchUses();
@@ -84,9 +53,33 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
       this.methods = methods;
       this.uses = uses;
       this.regions = regions;
-      this.selectedMethod = this.methods[0];
-      this.selectedRegion = this.regions[0];
-      this.selectedUse = this.uses[0];
+      selectedServe = widget.postDetail.serving;
+      selectedTimeCooking = widget.postDetail.cookingTime;
+      selectedTimePreparing = widget.postDetail.preparingTime;
+      selectedTimeProcessing = widget.postDetail.processingTime;
+      methods.forEach((element) {
+        if (element.method == widget.postDetail.method) {
+          selectedMethod = element;
+        }
+      });
+      regions.forEach((element) {
+        if (element.continents == widget.postDetail.continents) {
+          selectedRegion = element;
+        }
+      });
+      uses.forEach((element) {
+        if (element.id == widget.postDetail.usesId) {
+          selectedUse = element;
+        }
+      });
+      categories.forEach((element) {
+        for (var item in widget.postDetail.listCategories) {
+          if (item.id == element.id) {
+            selectedCategorys.add(element);
+            break;
+          }
+        }
+      });
     });
   }
 
@@ -94,15 +87,19 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   void initState() {
     super.initState();
     getAllData();
-    title = TextEditingController(text: widget.title);
-    description = TextEditingController(text: widget.description);
-    tools = TextEditingController(text: widget.tools);
-    ingredients = TextEditingController(text: widget.ingredients);
-    processing = TextEditingController(text: widget.processing);
-    cooking = TextEditingController(text: widget.cooking);
-    linkVideo = TextEditingController(text: widget.linkVideo);
+    title = TextEditingController(text: widget.postDetail.name);
+    description = TextEditingController(text: widget.postDetail.description);
+    tools = TextEditingController(text: widget.postDetail.tool);
+    ingredients = TextEditingController(text: widget.postDetail.ingredient);
+    processing = TextEditingController(text: widget.postDetail.processing);
+    cooking = TextEditingController(text: widget.postDetail.cooking);
+    linkVideo = TextEditingController(text: widget.postDetail.videoUrl);
+    imageURL = widget.postDetail.imageUrl;
+
+    userId = widget.postDetail.userId;
   }
 
+  int? userId;
   List<CategoryItem> categories = [];
   List<CategoryItem> selectedCategorys = [];
 
@@ -156,146 +153,154 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
     return imageUrl;
   }
 
-  Future postRecipe(BuildContext context) async {
-    showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('Loading...')
-                ],
-              ),
-            ),
-          );
-        });
-    await uploadFile();
-    PostSendItem post = PostSendItem(
-        name: title.text,
-        cookingMethodId: selectedMethod!.id,
-        recipeRegionId: selectedRegion!.id,
-        imageUrl: imageURL.toString(),
-        videoUrl: linkVideo.text,
-        usesId: selectedUse!.id,
-        description: description.text,
-        categoriesId: selectedCategorys.map((e) => e.id).toList(),
-        ingredient: ingredients.text,
-        processing: processing.text,
-        cooking: cooking.text,
-        tool: tools.text,
-        processingTime: selectedTimeProcessing!.toInt(),
-        cookingTime: selectedTimeCooking!.toInt(),
-        preparingTime: selectedTimePreparing!.toInt(),
-        serving: selectedServe!.toInt());
-    int data = await submitData(post).whenComplete(() {
-      Navigator.of(context).pop();
-    });
-    if (data == 200) {
-      showDialog(
-          // The user CANNOT close this dialog  by pressing outsite it
-          barrierDismissible: false,
-          context: context,
-          builder: (_) {
-            return Dialog(
-              // The background color
-              backgroundColor: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    // The loading indicator
-                    Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 40.0,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // Some text
-                    Text('Uploaded')
-                  ],
-                ),
-              ),
-            );
-          });
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.of(context).pop();
-      }).whenComplete(() {
-        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UserProfile(userInfoProvider: getUserID),
-        ));
-      });
-    } else {
-      showDialog(
-          // The user CANNOT close this dialog  by pressing outsite it
-          barrierDismissible: false,
-          context: context,
-          builder: (_) {
-            return Dialog(
-              // The background color
-              backgroundColor: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    // The loading indicator
-                    Icon(
-                      Icons.error_outline_outlined,
-                      color: Colors.red,
-                      size: 40.0,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // Some text
-                    Text('Uploaded')
-                  ],
-                ),
-              ),
-            );
-          });
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.of(context).pop();
-      });
-    }
+  Future updateRecipe(BuildContext context) async {
+    // showDialog(
+    //     // The user CANNOT close this dialog  by pressing outsite it
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (_) {
+    //       return Dialog(
+    //         // The background color
+    //         backgroundColor: Colors.white,
+    //         child: Padding(
+    //           padding: const EdgeInsets.symmetric(vertical: 20),
+    //           child: Column(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: const [
+    //               // The loading indicator
+    //               CircularProgressIndicator(),
+    //               SizedBox(
+    //                 height: 15,
+    //               ),
+    //               // Some text
+    //               Text('Loading...')
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
+    // await uploadFile();
+    // PostSendItem post = PostSendItem(
+    //     name: title.text,
+    //     cookingMethodId: selectedMethod!.id,
+    //     recipeRegionId: selectedRegion!.id,
+    //     imageUrl: imageURL.toString(),
+    //     videoUrl: linkVideo.text,
+    //     usesId: selectedUse!.id,
+    //     description: description.text,
+    //     categoriesId: selectedCategorys.map((e) => e.id).toList(),
+    //     ingredient: ingredients.text,
+    //     processing: processing.text,
+    //     cooking: cooking.text,
+    //     tool: tools.text,
+    //     processingTime: selectedTimeProcessing!.toInt(),
+    //     cookingTime: selectedTimeCooking!.toInt(),
+    //     preparingTime: selectedTimePreparing!.toInt(),
+    //     serving: selectedServe!.toInt());
+    // int data = await submitData(post).whenComplete(() {
+    //   Navigator.of(context).pop();
+    // });
+    // if (data == 200) {
+    //   showDialog(
+    //       // The user CANNOT close this dialog  by pressing outsite it
+    //       barrierDismissible: false,
+    //       context: context,
+    //       builder: (_) {
+    //         return Dialog(
+    //           // The background color
+    //           backgroundColor: Colors.white,
+    //           child: Padding(
+    //             padding: const EdgeInsets.symmetric(vertical: 20),
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.min,
+    //               children: const [
+    //                 // The loading indicator
+    //                 Icon(
+    //                   Icons.check_circle_outline,
+    //                   color: Colors.green,
+    //                   size: 40.0,
+    //                 ),
+    //                 SizedBox(
+    //                   height: 15,
+    //                 ),
+    //                 // Some text
+    //                 Text('Uploaded')
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       });
+    //   Future.delayed(const Duration(seconds: 2), () {
+    //     Navigator.of(context).pop();
+    //   });
+    //   Future.delayed(const Duration(seconds: 2), () {
+    //     final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+    //     Navigator.of(context).push(MaterialPageRoute(
+    //       builder: (context) => UserProfile(userInfoProvider: getUserID),
+    //     ));
+    //   });
+    // } else {
+    //   showDialog(
+    //       // The user CANNOT close this dialog  by pressing outsite it
+    //       barrierDismissible: false,
+    //       context: context,
+    //       builder: (_) {
+    //         return Dialog(
+    //           // The background color
+    //           backgroundColor: Colors.white,
+    //           child: Padding(
+    //             padding: const EdgeInsets.symmetric(vertical: 20),
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.min,
+    //               children: const [
+    //                 // The loading indicator
+    //                 Icon(
+    //                   Icons.error_outline_outlined,
+    //                   color: Colors.red,
+    //                   size: 40.0,
+    //                 ),
+    //                 SizedBox(
+    //                   height: 15,
+    //                 ),
+    //                 // Some text
+    //                 Text('Uploaded')
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       });
+    //   Future.delayed(const Duration(seconds: 2), () {
+    //     Navigator.of(context).pop();
+    //   });
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Recipe'),
-        centerTitle: true,
-        elevation: 1,
-        foregroundColor: Colors.orange,
-        backgroundColor: Colors.white,
-        titleTextStyle: const TextStyle(
-            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
+      drawer: SideBarMenu(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55),
+        child: HeadBar(),
       ),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+          padding: const EdgeInsets.only(left: 15, right: 15),
           child: SingleChildScrollView(
             child: Column(
               children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20, top: 15),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'EDIT RECIPE',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.orange),
+                  ),
+                ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -311,16 +316,23 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.cover,
                       )
-                    : Container(
-                        alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        color: Colors.grey,
-                        child: const Text(
-                          'Poster',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30),
-                        ),
-                      ),
+                    : (imageURL != null)
+                        ? Image.network(
+                            imageURL!,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            color: Colors.grey,
+                            child: const Text(
+                              'Poster',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                          ),
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.orange, width: 2),
@@ -545,13 +557,14 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      postRecipe(context);
+                      updateRecipe(context);
                     }
                   },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
+                const Copyright()
               ],
             ),
           ),
