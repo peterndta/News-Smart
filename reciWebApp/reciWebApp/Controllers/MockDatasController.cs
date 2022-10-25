@@ -69,48 +69,48 @@ namespace reciWebApp.Controllers
             //    _reciContext.Collections.Add(collections[i]);
             //}
 
-            var foodCollections = new List<FoodCollection>()
-            {
-                new FoodCollection
-                {
-                    CollectionId=1,
-                    PostsId = "202210112212062089",
-                },
-                new FoodCollection
-                {
-                    CollectionId=2,
-                    PostsId = "202210112218256336",
-                },
-                new FoodCollection
-                {
-                    CollectionId=3,
-                    PostsId = "202210112221273997",
-                },
-                new FoodCollection
-                {
-                    CollectionId=4,
-                    PostsId = "202210112225587000",
-                },
-                new FoodCollection
-                {
-                    CollectionId=5,
-                    PostsId = "202210112235104632",
-                },
-                new FoodCollection
-                {
-                    CollectionId=6,
-                    PostsId = "202210112238099640",
-                },
-                new FoodCollection
-                {
-                    CollectionId=7,
-                    PostsId = "202210112240229328",
-                },
-                new FoodCollection
-                {
-                    CollectionId=8,
-                    PostsId = "202210121429283081",
-                },
+            //var foodCollections = new List<FoodCollection>()
+            //{
+            //    new FoodCollection
+            //    {
+            //        CollectionId=1,
+            //        PostsId = "202210112212062089",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=2,
+            //        PostsId = "202210112218256336",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=3,
+            //        PostsId = "202210112221273997",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=4,
+            //        PostsId = "202210112225587000",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=5,
+            //        PostsId = "202210112235104632",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=6,
+            //        PostsId = "202210112238099640",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=7,
+            //        PostsId = "202210112240229328",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=8,
+            //        PostsId = "202210121429283081",
+            //    },
                 //new FoodCollection
                 //{
                 //    CollectionId=9,
@@ -121,11 +121,11 @@ namespace reciWebApp.Controllers
                 //    CollectionId=10,
                 //    PostsId = "202210112210281267",
                 //},
-            };
-            for (int i = 0; i < foodCollections.Count(); i++)
-            {
-                _reciContext.FoodCollections.Add(foodCollections[i]);
-            }
+            //};
+            //for (int i = 0; i < foodCollections.Count(); i++)
+            //{
+            //    _reciContext.FoodCollections.Add(foodCollections[i]);
+            //}
 
             //var foodCollections = new List<FoodCollection>()
             //{

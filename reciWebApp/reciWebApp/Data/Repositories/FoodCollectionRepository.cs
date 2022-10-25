@@ -1,4 +1,5 @@
-﻿using reciWebApp.Data.IRepositories;
+﻿using Microsoft.EntityFrameworkCore;
+using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 
 namespace reciWebApp.Data.Repositories
@@ -14,17 +15,9 @@ namespace reciWebApp.Data.Repositories
             Create(foodCollection);
         }
 
-        public List<FoodCollection> GetFoodCollectionsByCollections(List<Collection?> collections)
+        public async Task<List<FoodCollection>> GetFoodCollectionsAsync(string subCollectionId)
         {
-            var foodCollections = new List<FoodCollection>();
-            if (collections.Count > 0)
-            {
-                foreach (var collection in collections)
-                {
-                    foodCollections.AddRange(GetByCondition(x => x.CollectionId == collection.Id));
-                }
-            }
-            return foodCollections;
+            return await GetByCondition(x => x.SubCollectionId.Equals(subCollectionId)).ToListAsync();
         }
     }
 }
