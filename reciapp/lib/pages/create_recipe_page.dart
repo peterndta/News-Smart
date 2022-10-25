@@ -235,8 +235,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
           });
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.of(context).pop();
-      });
-      Future.delayed(const Duration(seconds: 2), () {
+      }).whenComplete(() {
         final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => UserProfile(userInfoProvider: getUserID),
@@ -281,29 +280,22 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Create Recipe'),
+        centerTitle: true,
+        elevation: 1,
+        foregroundColor: Colors.orange,
+        backgroundColor: Colors.white,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20, top: 15),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'CREATE RECIPE',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.orange),
-                  ),
-                ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -560,7 +552,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                const Copyright()
               ],
             ),
           ),
