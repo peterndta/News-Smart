@@ -15,8 +15,6 @@ import useRecipe from '../../../recoil/recipe/action'
 import Loading from '../../Loading'
 import Paging from './Pagination'
 import Recipes from './Recipes'
-import SearchBox from './Search'
-import Sort from './Sort'
 
 const filterStringGenerator = ({ search, sort }) => {
     let filterString = `?PageSize=${6}`
@@ -114,10 +112,6 @@ const Mine = () => {
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <SearchBox />
-                        <Sort />
-                    </Box>
                     {recipes.list.length ? (
                         <React.Fragment>
                             <NumberItemPagination
