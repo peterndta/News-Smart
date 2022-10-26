@@ -15,7 +15,7 @@ const labels = {
     5: 'Excellent',
 }
 
-const RecipeRating = ({ open, onClose, postId, setStar }) => {
+const RecipeRating = ({ open, onClose, postId, setStar, setIsStar }) => {
     const ratingAction = useRating()
     const [hover, setHover] = React.useState(-1)
     const showSnackbar = useSnackbar()
@@ -26,6 +26,7 @@ const RecipeRating = ({ open, onClose, postId, setStar }) => {
             .then((res) => {
                 const { averageRating } = res.data.data
                 setStar(averageRating)
+                setIsStar(true)
                 onClose()
             })
             .catch((error) => {

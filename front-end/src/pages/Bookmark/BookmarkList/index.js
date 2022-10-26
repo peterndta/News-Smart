@@ -84,6 +84,10 @@ const BookmarkList = () => {
                     }, 500)
                 })
         }
+        return () => {
+            setRecipes({})
+            setIsLoading(false)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, sort, pageNum])
     return (
