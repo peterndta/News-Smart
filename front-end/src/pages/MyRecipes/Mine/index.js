@@ -94,7 +94,6 @@ const Mine = () => {
         setIsLoading(true)
         deleteRecipe(postId)
             .then(() => {
-                console.log(true)
                 const cloneRecipes = { ...recipes }
                 const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== postId)
                 setIsLoading(false)

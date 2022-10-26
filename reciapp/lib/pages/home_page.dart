@@ -9,9 +9,7 @@ import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_page.dart';
-import '../components/copyright.dart';
 import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
 
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';

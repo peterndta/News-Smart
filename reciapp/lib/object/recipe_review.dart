@@ -35,16 +35,13 @@ class RecipeReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        UserData userData =
-            UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              RecipeDetailPage(id: post.id, token: userData.token),
+          builder: (context) => RecipeDetailPage(id: post.id),
         ));
       },
       splashColor: const Color.fromARGB(255, 211, 210, 210),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsets.only(top: 1),
         child: Container(
           padding: const EdgeInsets.all(5),
           decoration: const BoxDecoration(
@@ -96,16 +93,17 @@ class RecipeDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
+            overflow: TextOverflow.fade,
+            softWrap: false,
             title,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14.0,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
@@ -121,6 +119,8 @@ class RecipeDetail extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.04,
             child: Text(
               description,
+              overflow: TextOverflow.fade,
+              softWrap: false,
               maxLines: 2,
               style: const TextStyle(
                 fontSize: 10.0,
@@ -128,7 +128,7 @@ class RecipeDetail extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+          // const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
           Container(
             alignment: Alignment.centerRight,
             child: Text.rich(
@@ -138,16 +138,16 @@ class RecipeDetail extends StatelessWidget {
                     child: Text(
                       'By',
                       style: TextStyle(
-                        fontSize: 12.0,
+                        fontSize: 10.0,
                       ),
                     ),
                   ),
                   WidgetSpan(
                     child: Text(
                       ' $author',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 12.0,
+                        fontSize: 10.0,
                       ),
                     ),
                   ),
@@ -192,8 +192,8 @@ class ListRecipeReview extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Center(
                       child: hasMore
-                          ? CircularProgressIndicator()
-                          : Text('No more data to load'),
+                          ? const CircularProgressIndicator()
+                          : const Text('No more data to load'),
                     ),
                   );
                 }

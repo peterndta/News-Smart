@@ -4,8 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reciapp/pages/collection_page.dart';
-import 'package:reciapp/pages/home_page.dart';
+import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
@@ -89,7 +88,7 @@ class _HeadBarState extends State<HeadBar> {
               InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CollectionPage(userData.userID)));
+                        builder: (context) => BookmarkPage()));
                   },
                   child: Icon(
                     size: 32,
