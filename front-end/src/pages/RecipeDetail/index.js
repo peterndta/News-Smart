@@ -54,6 +54,7 @@ const RecipeDetail = () => {
     const bookmarkAction = useBookmark()
     const auth = useRecoilValue(authAtom)
     const [error, setError] = useState(false)
+    const [isStar, setIsStar] = useState(false)
     const handleClickOpenReport = () => {
         setOpen(true)
     }
@@ -324,11 +325,13 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                disabled={recipe.rating !== null || star !== 0}
+                                                disabled={
+                                                    recipe.rating !== null || isStar !== false
+                                                }
                                                 onClick={openCreateFeedbackHandler}
                                             >
                                                 <ListItemIcon>
-                                                    {recipe.rating === null || star === 0 ? (
+                                                    {recipe.rating === null && isStar === false ? (
                                                         <Star sx={{ color: blueGrey[800] }} />
                                                     ) : (
                                                         <Verified color="primary" />
@@ -641,6 +644,7 @@ const RecipeDetail = () => {
                             onClose={closeCreateFeedbackHandler}
                             setStar={setStar}
                             postId={recipe.id}
+                            setIsStar={setIsStar}
                         />
                     )}
                 </React.Fragment>

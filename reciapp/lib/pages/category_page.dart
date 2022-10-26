@@ -3,9 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import '../components/filter_category.dart';
-import '../components/sidebar_menu.dart';
-import '../components/copyright.dart';
-import '../components/head_bar.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../login_support/user_preference.dart';
@@ -196,7 +193,7 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),

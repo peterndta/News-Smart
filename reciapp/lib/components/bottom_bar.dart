@@ -1,16 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/pages/collection_page.dart';
+import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/recipes_page.dart';
-
-import '../login_support/check_auth.dart';
 import '../pages/category_page.dart';
 
 Widget bottomMenuBar(BuildContext context, String checkPage) {
-  final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
   return BottomAppBar(
     elevation: 10,
     child: Container(
@@ -107,8 +103,7 @@ Widget bottomMenuBar(BuildContext context, String checkPage) {
                 : InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              CollectionPage(getUserInfo.userID)));
+                          builder: (context) => BookmarkPage()));
                     },
                     child: Column(
                       children: [
@@ -154,12 +149,12 @@ Widget bottomMenuBar(BuildContext context, String checkPage) {
                             height: MediaQuery.of(context).size.height * 0.01),
                         checkPage == 'continent & use'
                             ? const Text(
-                                'CONTINENT/USE',
+                                'CON/USE',
                                 style: TextStyle(
                                     color: Colors.orange, fontSize: 9),
                               )
                             : const Text(
-                                'CONTINENT/USE',
+                                'CON/USE',
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 9),
                               ),
@@ -188,7 +183,7 @@ Widget bottomMenuBar(BuildContext context, String checkPage) {
                             height: MediaQuery.of(context).size.height * 0.01),
                         checkPage == 'continent & use'
                             ? const Text(
-                                'CONTINENT/USE',
+                                'CONT/USE',
                                 style: TextStyle(
                                     color: Colors.orange, fontSize: 9),
                               )

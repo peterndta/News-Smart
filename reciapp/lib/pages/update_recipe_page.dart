@@ -1,22 +1,18 @@
 import 'dart:io';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/components/copyright.dart';
-import 'package:reciapp/components/dropdown_button.dart';
 import 'package:reciapp/components/textbox_form.dart';
-import 'package:reciapp/object/post_send_item.dart';
-import 'package:reciapp/pages/user_profile.dart';
+import 'package:reciapp/pages/recipe_detail.dart';
+import '../components/bottom_bar.dart';
 import '../components/dropdown_multiple_choice_button.dart';
-import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
-import '../login_support/check_auth.dart';
 import '../object/category_item.dart';
 import '../object/method_item.dart';
+import '../object/post_send_item.dart';
 import '../object/region_item.dart';
 import '../object/use_item.dart';
 import 'package:reciapp/object/post_detail.dart';
@@ -96,10 +92,10 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
     linkVideo = TextEditingController(text: widget.postDetail.videoUrl);
     imageURL = widget.postDetail.imageUrl;
 
-    userId = widget.postDetail.userId;
+    postd = widget.postDetail.id;
   }
 
-  int? userId;
+  String? postd;
   List<CategoryItem> categories = [];
   List<CategoryItem> selectedCategorys = [];
 
@@ -130,7 +126,6 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
         this.image = imageTemporary;
       });
     } on PlatformException catch (e) {
-      print('Fail to pick image: $e');
     }
   }
 
@@ -153,154 +148,147 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
     return imageUrl;
   }
 
-  Future updateRecipe(BuildContext context) async {
-    // showDialog(
-    //     // The user CANNOT close this dialog  by pressing outsite it
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (_) {
-    //       return Dialog(
-    //         // The background color
-    //         backgroundColor: Colors.white,
-    //         child: Padding(
-    //           padding: const EdgeInsets.symmetric(vertical: 20),
-    //           child: Column(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: const [
-    //               // The loading indicator
-    //               CircularProgressIndicator(),
-    //               SizedBox(
-    //                 height: 15,
-    //               ),
-    //               // Some text
-    //               Text('Loading...')
-    //             ],
-    //           ),
-    //         ),
-    //       );
-    //     });
-    // await uploadFile();
-    // PostSendItem post = PostSendItem(
-    //     name: title.text,
-    //     cookingMethodId: selectedMethod!.id,
-    //     recipeRegionId: selectedRegion!.id,
-    //     imageUrl: imageURL.toString(),
-    //     videoUrl: linkVideo.text,
-    //     usesId: selectedUse!.id,
-    //     description: description.text,
-    //     categoriesId: selectedCategorys.map((e) => e.id).toList(),
-    //     ingredient: ingredients.text,
-    //     processing: processing.text,
-    //     cooking: cooking.text,
-    //     tool: tools.text,
-    //     processingTime: selectedTimeProcessing!.toInt(),
-    //     cookingTime: selectedTimeCooking!.toInt(),
-    //     preparingTime: selectedTimePreparing!.toInt(),
-    //     serving: selectedServe!.toInt());
-    // int data = await submitData(post).whenComplete(() {
-    //   Navigator.of(context).pop();
-    // });
-    // if (data == 200) {
-    //   showDialog(
-    //       // The user CANNOT close this dialog  by pressing outsite it
-    //       barrierDismissible: false,
-    //       context: context,
-    //       builder: (_) {
-    //         return Dialog(
-    //           // The background color
-    //           backgroundColor: Colors.white,
-    //           child: Padding(
-    //             padding: const EdgeInsets.symmetric(vertical: 20),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: const [
-    //                 // The loading indicator
-    //                 Icon(
-    //                   Icons.check_circle_outline,
-    //                   color: Colors.green,
-    //                   size: 40.0,
-    //                 ),
-    //                 SizedBox(
-    //                   height: 15,
-    //                 ),
-    //                 // Some text
-    //                 Text('Uploaded')
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     Navigator.of(context).pop();
-    //   });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-    //     Navigator.of(context).push(MaterialPageRoute(
-    //       builder: (context) => UserProfile(userInfoProvider: getUserID),
-    //     ));
-    //   });
-    // } else {
-    //   showDialog(
-    //       // The user CANNOT close this dialog  by pressing outsite it
-    //       barrierDismissible: false,
-    //       context: context,
-    //       builder: (_) {
-    //         return Dialog(
-    //           // The background color
-    //           backgroundColor: Colors.white,
-    //           child: Padding(
-    //             padding: const EdgeInsets.symmetric(vertical: 20),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: const [
-    //                 // The loading indicator
-    //                 Icon(
-    //                   Icons.error_outline_outlined,
-    //                   color: Colors.red,
-    //                   size: 40.0,
-    //                 ),
-    //                 SizedBox(
-    //                   height: 15,
-    //                 ),
-    //                 // Some text
-    //                 Text('Uploaded')
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       });
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     Navigator.of(context).pop();
-    //   });
-    // }
+  Future updateRecipe(BuildContext context, String postId) async {
+    showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            // The background color
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Loading...')
+                ],
+              ),
+            ),
+          );
+        });
+    await uploadFile();
+    PostSendItem post = PostSendItem(
+        name: title.text,
+        cookingMethodId: selectedMethod!.id,
+        recipeRegionId: selectedRegion!.id,
+        imageUrl: imageURL.toString(),
+        videoUrl: linkVideo.text,
+        usesId: selectedUse!.id,
+        description: description.text,
+        categoriesId: selectedCategorys.map((e) => e.id).toList(),
+        ingredient: ingredients.text,
+        processing: processing.text,
+        cooking: cooking.text,
+        tool: tools.text,
+        processingTime: selectedTimeProcessing!.toInt(),
+        cookingTime: selectedTimeCooking!.toInt(),
+        preparingTime: selectedTimePreparing!.toInt(),
+        serving: selectedServe!.toInt());
+    int data = await updateData(post, postId).whenComplete(() {
+      Navigator.of(context).pop();
+    });
+    if (data == 200) {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Updated')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => RecipeDetailPage(id: postId),
+        ));
+      });
+    } else {
+      showDialog(
+          // The user CANNOT close this dialog  by pressing outsite it
+          barrierDismissible: false,
+          context: context,
+          builder: (_) {
+            return Dialog(
+              // The background color
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    // The loading indicator
+                    Icon(
+                      Icons.error_outline_outlined,
+                      color: Colors.red,
+                      size: 40.0,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Some text
+                    Text('Fail to update')
+                  ],
+                ),
+              ),
+            );
+          });
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Create Recipe'),
+        centerTitle: true,
+        elevation: 1,
+        foregroundColor: Colors.orange,
+        backgroundColor: Colors.white,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'update'),
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20, top: 15),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'EDIT RECIPE',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.orange),
-                  ),
-                ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -357,7 +345,6 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                //
                 DropDowmMultipleChoice(
                     text: 'Category',
                     categories: categories,
@@ -365,23 +352,371 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Method', datas: methods, data: selectedMethod),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Method',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select Method.';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select Method',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: methods
+                            .map((item) => DropdownMenuItem<MethodItem>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedMethod,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedMethod = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Use', datas: uses, data: selectedUse),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Use',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select Use.';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select Use',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: uses
+                            .map((item) => DropdownMenuItem<UseItem>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedUse,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedUse = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Region', datas: regions, data: selectedRegion),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Region',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select Region.';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select Region',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: regions
+                            .map((item) => DropdownMenuItem<RegionItem>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedRegion,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedRegion = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Serving', datas: serving, data: selectedServe),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Serving',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select Serving.';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select Serving',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: serving
+                            .map((item) => DropdownMenuItem<int>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedServe,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedServe = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
@@ -416,12 +751,96 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                     ),
                   ),
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Time Preparing (minutes)',
-                    datas: times,
-                    data: selectedTimePreparing,
-                    sizeText: 15,
-                    fontWeight: FontWeight.normal),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Preparing (minutes)',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: times
+                            .map((item) => DropdownMenuItem<int>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedTimePreparing,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTimePreparing = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
@@ -458,12 +877,96 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                     ),
                   ),
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Time Processing (minutes)',
-                    datas: times,
-                    data: selectedTimeProcessing,
-                    sizeText: 15,
-                    fontWeight: FontWeight.normal),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Processing (minutes)',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: times
+                            .map((item) => DropdownMenuItem<int>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedTimeProcessing,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTimeProcessing = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
@@ -495,12 +998,96 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                     ),
                   ),
                 ),
-                DropdownOneChoiceButton(
-                    text: 'Time Cooking (minutes)',
-                    datas: times,
-                    data: selectedTimeCooking,
-                    sizeText: 15,
-                    fontWeight: FontWeight.normal),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Time Cooking (minutes)',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.006,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField2(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        hint: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            '  Select',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                        items: times
+                            .map((item) => DropdownMenuItem<int>(
+                                  value: item,
+                                  child: Text(
+                                    '  $item',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedTimeCooking,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTimeCooking = value;
+                          });
+                        },
+                        buttonHeight: MediaQuery.of(context).size.height * 0.05,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.black26,
+                            ),
+                            color: Colors.white),
+                        itemHeight: 40,
+                        buttonElevation: 2,
+                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                        dropdownMaxHeight: 200,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        dropdownElevation: 8,
+                        scrollbarRadius: const Radius.circular(40),
+                        scrollbarThickness: 6,
+                        scrollbarAlwaysShow: true,
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
@@ -557,14 +1144,13 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      updateRecipe(context);
+                      updateRecipe(context, postd!);
                     }
                   },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                const Copyright()
               ],
             ),
           ),

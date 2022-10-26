@@ -1,20 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import '../components/copyright.dart';
+import '../components/bottom_bar.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
-
 import '../object/recipe_review.dart';
 import '../object/user_info.dart';
 
 class UserRecipesPage extends StatefulWidget {
-  final int userId;
-  UserRecipesPage(this.userId, {super.key});
-
   @override
   State<UserRecipesPage> createState() => _UserRecipesPageState();
 }
@@ -33,9 +27,11 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
     const limit = 6;
     String searchKey =
         keywords.text.isNotEmpty ? '&Search=${keywords.text}' : '';
+    print(
+        'https://reciapp.azurewebsites.net/api/user/${userData.userID}/post/page/$page?PageSize=$limit$searchKey');
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit$searchKey'),
+          'https://reciapp.azurewebsites.net/api/user/${userData.userID}/post/page/$page?PageSize=$limit$searchKey'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
@@ -63,12 +59,9 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
     }
   }
 
-  int userId = 0;
-
   @override
   void initState() {
     super.initState();
-    userId = widget.userId;
     fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -98,18 +91,19 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topCenter,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Form(
-                key: _formKey,
-                child: TextFormField(
-                    onFieldSubmitted: (value) {
-                      if (_formKey.currentState!.validate()) {
+      bottomNavigationBar: bottomMenuBar(context, 'user recipes'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                      onFieldSubmitted: (value) {
                         isLoading = false;
                         hasMore = true;
                         page = 1;
@@ -117,26 +111,21 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
                           _listReciepReviews.clear();
                         });
                         fetchInfinitePosts();
-                      }
-                    },
-                    validator: (String? value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Please enter'
-                          : null;
-                    },
-                    controller: keywords,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Search Key',
-                      alignLabelWithHint: false,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    )),
+                      },
+                      controller: keywords,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search Key',
+                        alignLabelWithHint: false,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      )),
+                ),
               ),
-            ),
-            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
-          ],
+              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+            ],
+          ),
         ),
       ),
     );

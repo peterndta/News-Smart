@@ -7,6 +7,8 @@ import Navs from '../../components/Navs'
 import { Box, Breadcrumbs, Grid, Typography } from '@mui/material'
 
 import RatingList from './RatingList'
+import SearchBox from './RatingList/Search'
+import Sort from './RatingList/Sort'
 
 const Bookmark = () => {
     return (
@@ -32,6 +34,10 @@ const Bookmark = () => {
                         <ButtonAddRecipe />
                     </Grid>
                     <Grid item md={9} display="flex" flexDirection="column">
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <SearchBox />
+                            <Sort />
+                        </Box>
                         <RatingList />
                     </Grid>
                 </Grid>
