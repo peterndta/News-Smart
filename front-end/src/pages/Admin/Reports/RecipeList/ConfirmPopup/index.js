@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Divider,
     Slide,
 } from '@mui/material'
 
@@ -33,25 +34,25 @@ const ConfirmPopup = (props) => {
                 onClose={props.onClose}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {/* <Typography
-                        // variant="h5"
-                        sx={{
-                            fontWeight: 700,
-                        }}
-                        // color="primary"
-                    > */}
-                    {'Confirm'}
-                    {/* </Typography> */}
-                </DialogTitle>
-                <DialogContent dividers={true}>
+                <DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
+                <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
                         Are you sure you want to continue?
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={confirmHandler}>Confirm</Button>
+                <Divider />
+                <DialogActions sx={{ my: 0.5 }}>
+                    <Button onClick={props.onClose} variant="contained" color="error">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={confirmHandler}
+                        variant="contained"
+                        color="primary"
+                        sx={{ color: 'white' }}
+                    >
+                        Confirm
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box>
