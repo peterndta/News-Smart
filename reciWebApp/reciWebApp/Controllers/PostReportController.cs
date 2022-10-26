@@ -81,12 +81,12 @@ namespace reciWebApp.Controllers
             try
             {
                 var postReport = _repoManager.PostReport.GetPostReportById(reportId);
-                var currentUser = await _servicesManager.AuthService.GetUser(Request);
+                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
 
-                if (currentUser == null)
-                {
-                    return BadRequest(new Response(400, "invalid user"));
-                }
+                //if (currentUser == null)
+                //{
+                //    return BadRequest(new Response(400, "invalid user"));
+                //}
 
                 if (postReport == null)
                 {
@@ -138,7 +138,7 @@ namespace reciWebApp.Controllers
                 
                 foreach (Post post in postList)
                 {
-                    var reportList = _repoManager.PostReport.GetPostReportByPostId(post.Id);   
+                    var reportList = _repoManager.PostReport.GetPendingPostReportByPostId(post.Id);   
                     var user = await _repoManager.User.GetUserByIdAsync(post.UserId);
                     postReports.AddRange(reportList);
                     userList.Add(user);
