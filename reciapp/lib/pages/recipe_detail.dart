@@ -8,8 +8,8 @@ import 'package:reciapp/object/step_iteam.dart';
 import 'package:reciapp/pages/update_recipe_page.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../components/bottom_bar.dart';
 import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
 import 'package:http/http.dart' as http;
 
 import '../login_support/user_preference.dart';
@@ -155,11 +155,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: SideBarMenu(),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(55),
           child: HeadBar(),
         ),
+        bottomNavigationBar: bottomMenuBar(context, 'detail'),
         body: FutureBuilder(
             future: fetchData(widget.id),
             builder: (ctx, snapshot) {
@@ -196,8 +196,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: TextStyle(
+                                      color: Color.fromARGB(255, 49, 48, 48),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 30),
+                                      fontSize: 25),
                                 ),
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height *
@@ -217,8 +218,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                           : false,
                                       onRated: (rate) {
                                         // if(rating != null){
-                                        ratingPost(widget.id,
-                                            rate!.toInt());
+                                        ratingPost(widget.id, rate!.toInt());
                                         // }
                                       },
                                       allowHalfRating: true,
@@ -283,6 +283,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     ),
                                     Text(
                                       snapshot.data.listCategories.join(', '),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
                                       style: TextStyle(fontSize: 13),
                                     ),
                                   ],
@@ -303,8 +306,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      bookmarkPost(widget.id,
-                                          !snapshot.data.bookmark);
+                                      bookmarkPost(
+                                          widget.id, !snapshot.data.bookmark);
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.all(4.0),
@@ -406,7 +409,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   'About this recipe',
                                   style: TextStyle(
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
                                 ),
                               ),
                               SizedBox(
@@ -428,7 +432,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             child: Image(
                               // width: MediaQuery.of(context).size.width * 0.95,
                               height: MediaQuery.of(context).size.height * 0.25,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                               image: NetworkImage(
                                 '${snapshot.data.imageUrl}',
                               ),
@@ -516,9 +520,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       child: Text(
                                         'Preparing',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey),
                                       ),
                                     ),
                                     Expanded(
@@ -562,7 +566,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                         'Ingredients:',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17),
+                                            fontSize: 15),
                                       ),
                                       SizedBox(height: 5),
                                       Padding(
@@ -588,7 +592,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                         'Tool needed:',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17),
+                                            fontSize: 15),
                                       ),
                                       SizedBox(height: 5),
                                       Padding(
@@ -633,9 +637,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Processing',
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -664,9 +668,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Cooking',
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -697,9 +701,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'Video',
                                   style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
                                 ),
                               ),
                               controller != null

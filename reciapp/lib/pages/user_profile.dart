@@ -6,16 +6,13 @@ import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
-import '../components/head_bar.dart';
-import '../components/copyright.dart';
-import '../components/sidebar_menu.dart';
 import '../login_support/auth_service.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../main.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
-import 'collection_page.dart';
+import 'user_bookmark_page.dart';
 import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,16 +30,26 @@ class IconDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      iconSize: 35,
-      color: color,
-      icon: Icon(icon),
-      tooltip: text,
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => page,
-        ));
-      },
+    return Column(
+      children: [
+        IconButton(
+          iconSize: 35,
+          color: color,
+          icon: Icon(icon),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => page,
+            ));
+          },
+        ),
+        Text(
+          'Your $text',
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        )
+      ],
     );
   }
 }
@@ -113,7 +120,6 @@ class _UserProfileState extends State<UserProfile> {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts(widget.userInfoProvider.userID);
-        print(' more');
       }
     });
   }
@@ -230,7 +236,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 2),
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: Colors.orange, width: 2.0))),
@@ -240,20 +246,20 @@ class _UserProfileState extends State<UserProfile> {
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
-                    text: "Press to your recipes",
-                    page: UserRecipesPage(widget.userInfoProvider.userID),
+                    text: "recipes",
+                    page: UserRecipesPage(),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
-                    text: "Press to your bookmarks",
-                    page: CollectionPage(widget.userInfoProvider.userID),
+                    text: "bookmarks",
+                    page: BookmarkPage(),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
-                    text: "Press to your ratings",
-                    page: UserRatingsPage(widget.userInfoProvider.userID),
+                    text: "ratings",
+                    page: UserRatingsPage(),
                   ),
                 ],
               ),
@@ -270,7 +276,7 @@ class _UserProfileState extends State<UserProfile> {
                 ],
               ),
             ),
-            ListRecipeReview(0.55, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.47, _listReciepReviews, controller, hasMore)
           ]),
         ),
       ),
