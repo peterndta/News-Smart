@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import '../components/filter_recipes.dart';
 
 import '../components/copyright.dart';
@@ -116,10 +117,14 @@ class _RecipesPageState extends State<RecipesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Continent/Use'),
+        centerTitle: true,
+        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.orange,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
       body: SingleChildScrollView(
         // controller: scrollController,
@@ -140,7 +145,7 @@ class _RecipesPageState extends State<RecipesPage> {
                     top: 20,
                     left: 20,
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border:
@@ -149,7 +154,7 @@ class _RecipesPageState extends State<RecipesPage> {
                           margin:
                               EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                           child: Text(
-                            'Recipes',
+                            'Continent and Use',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -215,7 +220,7 @@ class _RecipesPageState extends State<RecipesPage> {
           )
         ],
       ),
-      bottomNavigationBar: Copyright(),
+      bottomNavigationBar: bottomMenuBar(context, 'continent & use'),
     );
   }
 }
