@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/components/filter_course.dart';
 import 'package:provider/provider.dart';
 
@@ -102,6 +103,7 @@ class _CollectionPageState extends State<CollectionPage> {
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'collection'),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Column(
@@ -138,7 +140,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         ),
                       ))),
             ),
-            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.663, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
