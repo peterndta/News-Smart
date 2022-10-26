@@ -6,47 +6,35 @@ import { useLocation } from 'react-router-dom'
 import { Grid } from '@mui/material'
 
 import { useSnackbar } from '../../../../HOCs/SnackbarContext'
-import useRecipe from '../../../../recoil/recipe/action'
+import useReport from '../../../../recoil/report/action'
 import Loading from '../../../Loading'
 import Paging from '../Pagination'
 import Recipes from './RecipesCompo'
 
-const filterStringGenerator = ({ search, continent, use, sort }) => {
+const filterStringGenerator = ({ search }) => {
     let filterString = `?PageSize=${6}`
 
     if (search && search.trim() !== '') filterString += '&search=' + search
-
-    if (continent && Array.isArray(continent))
-        continent.forEach((continent) => (filterString += `&continent=${continent}`))
-    else if (continent !== undefined) filterString += `&continent=${continent}`
-
-    if (use && Array.isArray(use)) use.forEach((use) => (filterString += `&use=${use}`))
-    else if (use !== undefined) filterString += `&use=${use}`
-
-    if (sort !== undefined) filterString += `&sort=${sort}`
 
     return filterString
 }
 
 const RecipeList = () => {
     const { search: query } = useLocation()
-    const { use, continent, search, sort, pageNum } = queryString.parse(query)
-    const recipeAction = useRecipe()
+    const { search, pageNum } = queryString.parse(query)
+    const recipeAction = useReport()
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
 
-    if (Array.isArray(continent)) continent.sort((a, b) => a.localeCompare(b))
-    if (Array.isArray(use)) use.sort((a, b) => a.localeCompare(b))
-
     useEffect(() => {
-        const params = filterStringGenerator({ search, continent, use, sort })
+        const params = filterStringGenerator({ search })
         setIsLoading(true)
-
         if (pageNum === undefined) {
             recipeAction
-                .getRecipes(params)
+                .getReports(params)
                 .then((res) => {
+                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
@@ -65,8 +53,9 @@ const RecipeList = () => {
                 })
         } else {
             recipeAction
-                .getRecipes(params, pageNum)
+                .getReports(params, pageNum)
                 .then((res) => {
+                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
@@ -85,14 +74,34 @@ const RecipeList = () => {
                 })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(use), JSON.stringify(continent), search, sort, pageNum])
+    }, [search, pageNum])
+
+    const reportHandler = (reportId) => {
+        setIsLoading(true)
+        recipeAction
+            .denyReport(reportId)
+            .then(() => {
+                const cloneRecipes = { ...recipes }
+                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== reportId)
+                setIsLoading(false)
+                setRecipes({ ...recipes, list: newRecipes })
+            })
+            .catch((error) => {
+                const message = error.response.data.message
+                setIsLoading(false)
+                showSnackBar({
+                    severity: 'error',
+                    children: message || 'Something went wrong, please try again later.',
+                })
+            })
+    }
     return (
         <Grid item md={12} display="flex" flexDirection="column">
             {isLoading ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Recipes posts={recipes.list} />
+                    <Recipes posts={recipes.list} reportHandler={reportHandler} />
                     {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                 </React.Fragment>
             )}

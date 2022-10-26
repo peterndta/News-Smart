@@ -4,10 +4,10 @@ import { Box } from '@mui/material'
 
 import LatestList from './Recipes'
 
-const Recipes = ({ posts }) => {
+const Recipes = ({ posts, reportHandler }) => {
     return (
         <Box mt={3}>
-            <LatestList posts={posts} />
+            <LatestList posts={posts} reportHandler={reportHandler} />
         </Box>
     )
 }
