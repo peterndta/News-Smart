@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
@@ -158,6 +159,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ],
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'profile'),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
