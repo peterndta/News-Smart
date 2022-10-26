@@ -7,9 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import '../components/filter_recipes.dart';
 
-import '../components/copyright.dart';
-import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
@@ -208,7 +205,7 @@ class _RecipesPageState extends State<RecipesPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
