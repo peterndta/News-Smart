@@ -15,6 +15,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 const ConfirmPopup = (props) => {
+    console.log(props)
+    const confirmHandler = () => {
+        if (props.isApprove == true) {
+            props.onClose()
+        } else if (props.isDeny == true) {
+            props.reportHandler(props.reportId)
+            props.onClose()
+        }
+    }
     return (
         <Box>
             <Dialog
@@ -35,14 +44,14 @@ const ConfirmPopup = (props) => {
                     {'Confirm'}
                     {/* </Typography> */}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent dividers={true}>
                     <DialogContentText id="alert-dialog-slide-description">
                         Are you sure you want to continue?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={props.onClose}>Confirm</Button>
+                    <Button onClick={confirmHandler}>Confirm</Button>
                 </DialogActions>
             </Dialog>
         </Box>

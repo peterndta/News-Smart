@@ -19,21 +19,37 @@ import { grey } from '@mui/material/colors'
 import ConfirmPopup from '../ConfirmPopup'
 import DetailPopup from '../DetailPopup'
 
-const LatestRecipe = ({ post }) => {
+const LatestRecipe = ({ post, reportHandler }) => {
     const [open, setOpen] = React.useState(false)
     const [openConfirm, setOpenConfirm] = React.useState(false)
+    const [isDeny, setDeny] = React.useState(false)
+    const [isApprove, setApprove] = React.useState(false)
     const history = useHistory()
     const handleClickOpen = () => {
         setOpen(true)
     }
-    const handleOpenConfirm = () => {
+    const handleOpenConfirmApprove = () => {
+        setApprove(true)
+        setOpenConfirm(true)
+    }
+    const handleOpenConfirmDeny = () => {
+        setDeny(true)
         setOpenConfirm(true)
     }
     return (
         <React.Fragment>
-            {open && <DetailPopup status={open} onClose={() => setOpen(false)} />}
+            {open && (
+                <DetailPopup reason={post.reason} status={open} onClose={() => setOpen(false)} />
+            )}
             {openConfirm && (
-                <ConfirmPopup status={openConfirm} onClose={() => setOpenConfirm(false)} />
+                <ConfirmPopup
+                    reportId={post.id}
+                    isDeny={isDeny}
+                    isApprove={isApprove}
+                    status={openConfirm}
+                    onClose={() => setOpenConfirm(false)}
+                    reportHandler={reportHandler}
+                />
             )}
             <Grid item md={4}>
                 <Card sx={{ maxWidth: 392, height: '1' }}>
@@ -59,7 +75,7 @@ const LatestRecipe = ({ post }) => {
                                 textOverflow: 'ellipsis',
                             }}
                         >
-                            {post.name}
+                            {post.postName}
                         </Typography>
                         <Typography
                             variant="body1"
@@ -72,11 +88,11 @@ const LatestRecipe = ({ post }) => {
                                 textOverflow: 'ellipsis',
                             }}
                         >
-                            {post.description}
+                            {post.postDescription}
                         </Typography>
                         <Rating
                             name="half-rating-read"
-                            value={post.averageRating}
+                            value={post.rating}
                             precision={0.5}
                             readOnly
                             sx={{ mt: 2 }}
@@ -86,7 +102,7 @@ const LatestRecipe = ({ post }) => {
                                 By
                             </Typography>
                             <Typography component="span" ml={1.5} variant="body2" fontWeight={700}>
-                                {post.userName}
+                                {post.postUserName}
                             </Typography>
                         </Box>
                         <Divider
@@ -101,7 +117,7 @@ const LatestRecipe = ({ post }) => {
                                 Reporter:
                             </Typography>
                             <Typography component="span" ml={1} variant="body2" fontWeight={700}>
-                                Ke Giau Ten
+                                {post.userName}
                             </Typography>
                         </Box>
                         <Box
@@ -118,7 +134,7 @@ const LatestRecipe = ({ post }) => {
                                     minWidth: 100,
                                 }}
                                 startIcon={<Approval />}
-                                onClick={handleOpenConfirm}
+                                onClick={handleOpenConfirmApprove}
                             >
                                 Approve
                             </Button>
@@ -130,7 +146,7 @@ const LatestRecipe = ({ post }) => {
                                     minWidth: 100,
                                 }}
                                 startIcon={<DoNotDisturb />}
-                                onClick={handleOpenConfirm}
+                                onClick={handleOpenConfirmDeny}
                             >
                                 Deny
                             </Button>
