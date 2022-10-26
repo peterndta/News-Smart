@@ -5,13 +5,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
+import 'package:reciapp/pages/update_recipe_page.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../components/bottom_bar.dart';
 import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
 import 'package:http/http.dart' as http;
 
+import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
+import '../object/user_info.dart';
 
 class Rating {
   Rating({
@@ -47,21 +50,22 @@ class Bookmark {
 
 class RecipeDetailPage extends StatefulWidget {
   final String id;
-  final String token;
-  RecipeDetailPage({required this.id, required this.token});
+  RecipeDetailPage({required this.id});
 
   @override
   State<RecipeDetailPage> createState() => _RecipeDetailPageState();
 }
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  Future fetchPosts(String id, String token) async {
+  Future fetchPosts(String id) async {
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     http.Response response = await http.get(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$id'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer $token'
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     if (response.statusCode == 200) {
@@ -73,13 +77,15 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
-  Future fetchStep(String postId, String token) async {
+  Future fetchStep(String postId) async {
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     http.Response response = await http.get(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/step'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer $token'
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     if (response.statusCode == 200) {
@@ -91,21 +97,26 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
-  Future fetchData(String id, String token) async {
-    final post = await fetchPosts(id, token);
-    final step = await fetchStep(id, token);
+  Future fetchData(String id) async {
+    final post = await fetchPosts(id);
+    final step = await fetchStep(id);
     PostDetail postDetail = PostDetail.fromJson(post.toJson(), step.toJson());
+    if (postDetail.userId == userData.userID) {
+      checkAuth = true;
+    }
     return postDetail;
   }
 
-  Future ratingPost(String postId, String token, int rating) async {
+  Future ratingPost(String postId, int rating) async {
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     http.Response response = await http.post(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/rating'),
       body: json.encode(Rating(rating: rating).toJson()),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer $token'
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     if (response.statusCode == 200) {
@@ -115,14 +126,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
-  Future bookmarkPost(String postId, String token, bool bookmark) async {
+  Future bookmarkPost(String postId, bool bookmark) async {
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     http.Response response = await http.post(
       Uri.parse('https://reciapp.azurewebsites.net/api/post/$postId/bookmark'),
       body: json.encode(Bookmark(bookmark: bookmark).toJson()),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer $token'
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     var responseJson = json.decode(response.body);
@@ -131,6 +144,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+  bool checkAuth = false;
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
   @override
   void initState() {
     super.initState();
@@ -139,13 +155,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: SideBarMenu(),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(55),
           child: HeadBar(),
         ),
+        bottomNavigationBar: bottomMenuBar(context, 'detail'),
         body: FutureBuilder(
-            future: fetchData(widget.id, widget.token),
+            future: fetchData(widget.id),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 YoutubePlayerController? controller;
@@ -163,162 +179,216 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                   ),
                 );
                 return SingleChildScrollView(
-                  // controller: scrollController,
                   padding: EdgeInsets.all(15),
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Ink(
-                            decoration: BoxDecoration(
-                              color: (snapshot.data.bookmark)
-                                  ? Colors.orange
-                                  : Color.fromARGB(255, 219, 214, 214),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                bookmarkPost(widget.id, widget.token,
-                                    !snapshot.data.bookmark);
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.bookmark_border_outlined,
-                                  size: 25.0,
-                                  color: Colors.black,
+                          Flexible(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data.name,
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 49, 48, 48),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25),
                                 ),
-                              ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.025,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Rating: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13),
+                                    ),
+                                    SimpleStarRating(
+                                      isReadOnly: (snapshot.data.rating != null)
+                                          ? true
+                                          : false,
+                                      onRated: (rate) {
+                                        // if(rating != null){
+                                        ratingPost(widget.id, rate!.toInt());
+                                        // }
+                                      },
+                                      allowHalfRating: true,
+                                      starCount: 5,
+                                      rating: snapshot.data.averageRating * 1.0,
+                                      size: 13,
+                                      spacing: 10,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.015,
+                                ),
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Method: ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13),
+                                        ),
+                                        Text(
+                                          snapshot.data.method,
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.08,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Region: ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13),
+                                        ),
+                                        Text(
+                                          snapshot.data.continents,
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.015,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Categories: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13),
+                                    ),
+                                    Text(
+                                      snapshot.data.listCategories.join(', '),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                      style: TextStyle(fontSize: 13),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(width: 3),
-                          Ink(
-                            decoration: BoxDecoration(
-                              color: (snapshot.data.rating != null)
-                                  ? Colors.orange
-                                  : Color.fromARGB(255, 221, 218, 218),
-                            ),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.star_outline,
-                                  size: 25.0,
-                                  color: Colors.black,
+                          Flexible(
+                            flex: 1,
+                            child: Column(
+                              // crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Ink(
+                                  decoration: BoxDecoration(
+                                    color: (snapshot.data.bookmark)
+                                        ? Colors.orange
+                                        : Color.fromARGB(255, 219, 214, 214),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      bookmarkPost(
+                                          widget.id, !snapshot.data.bookmark);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Icon(
+                                        Icons.bookmark_border_outlined,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 3),
-                          Ink(
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 221, 218, 218),
-                            ),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.flag,
-                                  size: 25.0,
-                                  color: Colors.black,
+                                SizedBox(height: 3),
+                                Ink(
+                                  decoration: BoxDecoration(
+                                    color: (snapshot.data.rating != null)
+                                        ? Colors.orange
+                                        : Color.fromARGB(255, 221, 218, 218),
+                                  ),
+                                  child: InkWell(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Icon(
+                                        Icons.star_outline,
+                                        size: 20.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: 3),
+                                Ink(
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 221, 218, 218),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Icon(
+                                        Icons.flag,
+                                        size: 20.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 3),
+                                checkAuth
+                                    ? Ink(
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UpdateRecipePage(
+                                                      postDetail:
+                                                          snapshot.data),
+                                            ));
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            snapshot.data.name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 35),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.025,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Rating: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              SimpleStarRating(
-                                isReadOnly: (snapshot.data.rating != null)
-                                    ? true
-                                    : false,
-                                onRated: (rate) {
-                                  // if(rating != null){
-                                  ratingPost(
-                                      widget.id, widget.token, rate!.toInt());
-                                  // }
-                                },
-                                allowHalfRating: true,
-                                starCount: 5,
-                                rating: snapshot.data.averageRating * 1.0,
-                                size: 16,
-                                spacing: 10,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.015,
-                          ),
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Method: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                  Text(
-                                    snapshot.data.method,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.08,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Region: ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                  Text(
-                                    snapshot.data.continents,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.015,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Categories: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              Text(
-                                snapshot.data.listCategories.join(', '),
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,
                           ),
@@ -338,8 +408,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'About this recipe',
                                   style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
                                 ),
                               ),
                               SizedBox(
@@ -348,7 +419,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               ),
                               Text(
                                 snapshot.data.description,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 13),
                               )
                             ],
                           ),
@@ -361,7 +432,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             child: Image(
                               // width: MediaQuery.of(context).size.width * 0.95,
                               height: MediaQuery.of(context).size.height * 0.25,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                               image: NetworkImage(
                                 '${snapshot.data.imageUrl}',
                               ),
@@ -449,9 +520,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       child: Text(
                                         'Preparing',
                                         style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey),
                                       ),
                                     ),
                                     Expanded(
@@ -495,7 +566,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                         'Ingredients:',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17),
+                                            fontSize: 15),
                                       ),
                                       SizedBox(height: 5),
                                       Padding(
@@ -521,7 +592,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                         'Tool needed:',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 17),
+                                            fontSize: 15),
                                       ),
                                       SizedBox(height: 5),
                                       Padding(
@@ -566,9 +637,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Processing',
                                     style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -597,9 +668,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Cooking',
                                     style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
                                   ),
                                 ),
                                 Container(
@@ -630,9 +701,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'Video',
                                   style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
                                 ),
                               ),
                               controller != null
@@ -662,7 +733,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   children: <InlineSpan>[
                                     const WidgetSpan(
                                       child: Text(
-                                        'By',
+                                        'By ',
                                         style: TextStyle(
                                           fontSize: 14.0,
                                         ),

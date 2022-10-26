@@ -1,20 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import '../components/copyright.dart';
+import '../components/bottom_bar.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
-
 import '../object/recipe_review.dart';
 import '../object/user_info.dart';
 
 class UserRatingsPage extends StatefulWidget {
-  final int userId;
-  UserRatingsPage(this.userId, {super.key});
-
   @override
   State<UserRatingsPage> createState() => _UserRatingsPageState();
 }
@@ -63,12 +57,9 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
     }
   }
 
-  int userId = 0;
-
   @override
   void initState() {
     super.initState();
-    userId = widget.userId;
     fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -92,24 +83,25 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
       appBar: AppBar(
         title: const Text('User Ratings'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         foregroundColor: Colors.orange,
         backgroundColor: Colors.white,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topCenter,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Form(
-                  key: _formKey,
-                  child: TextFormField(
-                      onFieldSubmitted: (value) {
-                        if (_formKey.currentState!.validate()) {
+      bottomNavigationBar: bottomMenuBar(context, 'rating'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                        onFieldSubmitted: (value) {
                           isLoading = false;
                           hasMore = true;
                           page = 1;
@@ -117,28 +109,22 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
                             _listReciepReviews.clear();
                           });
                           fetchInfinitePosts();
-                        }
-                      },
-                      validator: (String? value) {
-                        return (value == null || value.isEmpty)
-                            ? 'Please enter'
-                            : null;
-                      },
-                      controller: keywords,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Key',
-                        alignLabelWithHint: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ))),
-            ),
-            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
-          ],
+                        },
+                        controller: keywords,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search Key',
+                          alignLabelWithHint: false,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                        ))),
+              ),
+              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: const Copyright(),
     );
   }
 }

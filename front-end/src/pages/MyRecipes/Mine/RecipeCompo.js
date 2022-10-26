@@ -6,7 +6,7 @@ import { Delete, Edit } from '@mui/icons-material'
 import { Box, Grid, IconButton, Rating, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, description, averageRating, imageUrl, id }) => {
+const RecipeCompo = ({ name, description, averageRating, imageUrl, id, deleteRecipeHandler }) => {
     const history = useHistory()
 
     return (
@@ -27,10 +27,18 @@ const RecipeCompo = ({ name, description, averageRating, imageUrl, id }) => {
                                 {name}
                             </Typography>
                             <Box>
-                                <IconButton component="label" size="large">
+                                <IconButton
+                                    component="label"
+                                    size="large"
+                                    onClick={() => history.push(`/recipes/${id}/update`)}
+                                >
                                     <Edit color="warning" />
                                 </IconButton>
-                                <IconButton component="label" size="large">
+                                <IconButton
+                                    component="label"
+                                    size="large"
+                                    onClick={() => deleteRecipeHandler(id)}
+                                >
                                     <Delete />
                                 </IconButton>
                             </Box>

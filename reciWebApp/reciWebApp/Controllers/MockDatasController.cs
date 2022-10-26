@@ -21,6 +21,119 @@ namespace reciWebApp.Controllers
         [HttpGet]
         public void Get()
         {
+            var reports = new List<PostReport>()
+            {
+                new PostReport
+                {
+                    UserId = 1,
+                    PostsId = "202210091528418428",
+                    Reason = "Post contain sensitive content (Budity, Porm, Violence, Gore)",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 2,
+                    PostsId = "202210110511008189",
+                    Reason = "Post contain child-related crime content",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 3,
+                    PostsId = "202210110512545658",
+                    Reason = "Post contain IP/Trademark violation",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 4,
+                    PostsId = "202210112204006283",
+                    Reason = "Post contain threat, incitement or illegal",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 5,
+                    PostsId = "202210112210281267",
+                    Reason = "Post contain unsolicicited advertising",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 6,
+                    PostsId = "202210112218256336",
+                    Reason = "Spam",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 7,
+                    PostsId = "202210112221273997",
+                    Reason = "Impersonation of backstage or another user",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 8,
+                    PostsId = "202210112225587000",
+                    Reason = "Posting personal information of another user",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 9,
+                    PostsId = "202210112235104632",
+                    Reason = "Not related to topic",
+                    Status = 1,
+                },
+                new PostReport
+                {
+                    UserId = 10,
+                    PostsId = "202210112238099640",
+                    Reason = "Duplicated post",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 11,
+                    PostsId = "202210112240229328",
+                    Reason = "Include copyrighted material",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 12,
+                    PostsId = "202210121429283081",
+                    Reason = "Pretending to be someone",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 13,
+                    PostsId = "202210132329525658",
+                    Reason = "Post contains sexual content",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 14,
+                    PostsId = "202210171700593372",
+                    Reason = "Caption issues",
+                    Status = 0,
+                },
+                new PostReport
+                {
+                    UserId = 15,
+                    PostsId = "202210171701246741",
+                    Reason = "Hateful or abusive content",
+                    Status = 0,
+                }
+        };
+            for (int i = 0; i < reports.Count(); i++)
+            {
+                _reciContext.PostReports.Add(reports[i]);
+            }
+
             //var collections = new List<Collection>()
             //{
             //    new Collection
@@ -69,48 +182,48 @@ namespace reciWebApp.Controllers
             //    _reciContext.Collections.Add(collections[i]);
             //}
 
-            var foodCollections = new List<FoodCollection>()
-            {
-                new FoodCollection
-                {
-                    CollectionId=1,
-                    PostsId = "202210112212062089",
-                },
-                new FoodCollection
-                {
-                    CollectionId=2,
-                    PostsId = "202210112218256336",
-                },
-                new FoodCollection
-                {
-                    CollectionId=3,
-                    PostsId = "202210112221273997",
-                },
-                new FoodCollection
-                {
-                    CollectionId=4,
-                    PostsId = "202210112225587000",
-                },
-                new FoodCollection
-                {
-                    CollectionId=5,
-                    PostsId = "202210112235104632",
-                },
-                new FoodCollection
-                {
-                    CollectionId=6,
-                    PostsId = "202210112238099640",
-                },
-                new FoodCollection
-                {
-                    CollectionId=7,
-                    PostsId = "202210112240229328",
-                },
-                new FoodCollection
-                {
-                    CollectionId=8,
-                    PostsId = "202210121429283081",
-                },
+            //var foodCollections = new List<FoodCollection>()
+            //{
+            //    new FoodCollection
+            //    {
+            //        CollectionId=1,
+            //        PostsId = "202210112212062089",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=2,
+            //        PostsId = "202210112218256336",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=3,
+            //        PostsId = "202210112221273997",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=4,
+            //        PostsId = "202210112225587000",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=5,
+            //        PostsId = "202210112235104632",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=6,
+            //        PostsId = "202210112238099640",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=7,
+            //        PostsId = "202210112240229328",
+            //    },
+            //    new FoodCollection
+            //    {
+            //        CollectionId=8,
+            //        PostsId = "202210121429283081",
+            //    },
                 //new FoodCollection
                 //{
                 //    CollectionId=9,
@@ -121,11 +234,11 @@ namespace reciWebApp.Controllers
                 //    CollectionId=10,
                 //    PostsId = "202210112210281267",
                 //},
-            };
-            for (int i = 0; i < foodCollections.Count(); i++)
-            {
-                _reciContext.FoodCollections.Add(foodCollections[i]);
-            }
+            //};
+            //for (int i = 0; i < foodCollections.Count(); i++)
+            //{
+            //    _reciContext.FoodCollections.Add(foodCollections[i]);
+            //}
 
             //var foodCollections = new List<FoodCollection>()
             //{

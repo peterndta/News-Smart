@@ -12,7 +12,7 @@ namespace reciWebApp.Data.IRepositories
         void DeleteUserInteract(UserInteract userInteract);
         bool CheckBookMark(int userId, string postId);
         int? GetRating(int userId, string postId);
-        Task<List<UserInteract>>? GetBookmarkAsync(int userId);
-        Task<List<UserInteract>>? GetRatingAsync(int userId);
+        Task<List<UserInteract>> GetBookmarkAsync(int userId);
+        Task<List<UserInteract>> GetRatingAsync(int userId);
     }
 }

@@ -37,11 +37,15 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
+        routes: {
+          '/home': (_) => const HomePage(),
+        },
         home: AuthService().handleAuthState(),
         //     MyHomePage(
         //   title: '',

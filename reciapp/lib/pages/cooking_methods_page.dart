@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:reciapp/components/filter_methods.dart';
-import '../components/sidebar_menu.dart';
-import '../components/copyright.dart';
-import '../components/head_bar.dart';
+import '../components/bottom_bar.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../login_support/user_preference.dart';
@@ -105,11 +103,14 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
-      ),
+      appBar: AppBar(
+          title: const Text('Cooking Method'),
+          centerTitle: true,
+          elevation: 1,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.orange,
+          titleTextStyle: const TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -191,7 +192,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
@@ -203,7 +204,7 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Copyright(),
+      bottomNavigationBar: bottomMenuBar(context, 'cooking method'),
     );
   }
 }

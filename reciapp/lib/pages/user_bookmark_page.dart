@@ -2,11 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:reciapp/components/filter_course.dart';
-import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 
-import '../login_support/check_auth.dart';
-import '../components/copyright.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/recipe_review.dart';
@@ -14,15 +11,12 @@ import 'package:http/http.dart' as http;
 
 import '../object/user_info.dart';
 
-class CollectionPage extends StatefulWidget {
-  CollectionPage(this.userId, {super.key});
-  final int userId;
-
+class BookmarkPage extends StatefulWidget {
   @override
-  State<CollectionPage> createState() => _CollectionPageState();
+  State<BookmarkPage> createState() => _BookmarkPageState();
 }
 
-class _CollectionPageState extends State<CollectionPage> {
+class _BookmarkPageState extends State<BookmarkPage> {
   TextEditingController keywords = TextEditingController();
   final controller = ScrollController();
   int page = 1;
@@ -36,6 +30,8 @@ class _CollectionPageState extends State<CollectionPage> {
     const limit = 6;
     String searchKey =
         keywords.text.isNotEmpty ? '&Search=${keywords.text}' : '';
+    print(
+        'https://reciapp.azurewebsites.net/api/post/bookmark/page/$page?PageSize=$limit$searchKey');
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/post/bookmark/page/$page?PageSize=$limit$searchKey'),
@@ -66,12 +62,9 @@ class _CollectionPageState extends State<CollectionPage> {
     }
   }
 
-  int userId = 0;
-
   @override
   void initState() {
     super.initState();
-    userId = widget.userId;
     fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -96,24 +89,25 @@ class _CollectionPageState extends State<CollectionPage> {
       appBar: AppBar(
         title: const Text('User Bookmark'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topCenter,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Form(
-                  key: _formKey,
-                  child: TextFormField(
-                      onFieldSubmitted: (value) {
-                        if (_formKey.currentState!.validate()) {
+      bottomNavigationBar: bottomMenuBar(context, 'bookmark'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                        onFieldSubmitted: (value) {
                           isLoading = false;
                           hasMore = true;
                           page = 1;
@@ -121,28 +115,22 @@ class _CollectionPageState extends State<CollectionPage> {
                             _listReciepReviews.clear();
                           });
                           fetchInfinitePosts();
-                        }
-                      },
-                      validator: (String? value) {
-                        return (value == null || value.isEmpty)
-                            ? 'Please enter'
-                            : null;
-                      },
-                      controller: keywords,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Key',
-                        alignLabelWithHint: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ))),
-            ),
-            ListRecipeReview(0.72, _listReciepReviews, controller, hasMore)
-          ],
+                        },
+                        controller: keywords,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search Key',
+                          alignLabelWithHint: false,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                        ))),
+              ),
+              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: const Copyright(),
     );
   }
 }
