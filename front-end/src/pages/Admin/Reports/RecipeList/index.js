@@ -82,15 +82,16 @@ const RecipeList = () => {
             .denyReport(reportId)
             .then(() => {
                 const cloneRecipes = { ...recipes }
-                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== postId)
+                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== reportId)
                 setIsLoading(false)
                 setRecipes({ ...recipes, list: newRecipes })
             })
-            .catch(() => {
+            .catch((error) => {
+                const message = error.response.data.message
                 setIsLoading(false)
                 showSnackBar({
                     severity: 'error',
-                    children: 'Something went wrong, please try again later.',
+                    children: message || 'Something went wrong, please try again later.',
                 })
             })
     }

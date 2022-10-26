@@ -36,6 +36,11 @@ const LatestRecipe = ({ post, reportHandler }) => {
         setDeny(true)
         setOpenConfirm(true)
     }
+    const handleCloseConfirm = () => {
+        setApprove(false)
+        setDeny(false)
+        setOpenConfirm(false)
+    }
     return (
         <React.Fragment>
             {open && (
@@ -45,9 +50,11 @@ const LatestRecipe = ({ post, reportHandler }) => {
                 <ConfirmPopup
                     reportId={post.id}
                     isDeny={isDeny}
+                    setDeny={setDeny}
+                    setApprove={setApprove}
                     isApprove={isApprove}
                     status={openConfirm}
-                    onClose={() => setOpenConfirm(false)}
+                    onClose={handleCloseConfirm}
                     reportHandler={reportHandler}
                 />
             )}
