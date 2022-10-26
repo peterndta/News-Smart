@@ -43,14 +43,14 @@ namespace reciWebApp.Data.Repositories
             return report != null;
         }
         
-        public List<PostReport> GetPostReportByPostId (string postId)
+        public List<PostReport> GetPendingPostReportByPostId (string postId)
         {
-            return GetByCondition(x => x.PostsId.Equals(postId)).ToList();
+            return GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0 ).ToList();
         }
 
-        public async Task<List<PostReport>> GetReportByPostIdAsync (string postId)
+        public async Task<List<PostReport>> GetPendingReportByPostIdAsync (string postId)
         {
-            return await GetByCondition(x => x.PostsId.Equals(postId)).ToListAsync();
+            return await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0).ToListAsync();
         }
     }
 }

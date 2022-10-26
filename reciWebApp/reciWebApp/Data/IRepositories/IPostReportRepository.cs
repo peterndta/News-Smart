@@ -14,7 +14,7 @@ namespace reciWebApp.Data.IRepositories
         PostReport GetPostReportById(int id);
         Task<PostReport> GetPostReportByIdAsync(int id);
         bool CheckReport(int userId, string postId);
-        List<PostReport> GetPostReportByPostId(string postId);
-        Task<List<PostReport>> GetReportByPostIdAsync(string postId);
+        List<PostReport> GetPendingPostReportByPostId(string postId);
+        Task<List<PostReport>> GetPendingReportByPostIdAsync(string postId);
     }
 }
