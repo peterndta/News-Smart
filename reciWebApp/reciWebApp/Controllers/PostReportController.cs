@@ -162,6 +162,8 @@ namespace reciWebApp.Controllers
                     report.PostName = _repoManager.Post.GetPostById(report.PostsId).Name;
                     report.PostDescription = _repoManager.Post.GetPostById(report.PostsId).Description;
                     report.Rating = _repoManager.UserInteract.GetAverageRating(report.PostsId);
+                    report.PostUserName = _repoManager.User.GetUserById(_repoManager.Post.GetPostById(report.PostsId).UserId).Name;
+                    report.ImageUrl = _repoManager.Post.GetPostById(report.PostsId).ImageUrl;
                 }
 
                 nameParam.PageNumber = pageNumber;

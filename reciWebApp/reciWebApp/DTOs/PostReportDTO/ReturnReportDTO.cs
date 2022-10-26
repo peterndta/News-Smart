@@ -8,6 +8,8 @@
         public string UserName { get; set; }
         public string PostName { get; set; }
         public string PostDescription { get; set; }
+        public string PostUserName { get; set; }
+        public string? ImageUrl { get; set; }
         public string Reason { get; set; }
         public int Status { get; set; }
         public double Rating { get; set; }
