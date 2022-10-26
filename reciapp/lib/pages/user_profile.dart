@@ -1,15 +1,18 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
+import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
 import '../components/head_bar.dart';
 import '../components/copyright.dart';
 import '../components/sidebar_menu.dart';
+import '../login_support/auth_service.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
+import '../main.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
 import 'collection_page.dart';
@@ -19,47 +22,34 @@ import 'package:http/http.dart' as http;
 class IconDetail extends StatelessWidget {
   final IconData icon;
   final Color color;
-  final int number;
   final String text;
   final dynamic page;
   const IconDetail(
       {super.key,
       required this.color,
-      required this.number,
       required this.icon,
       required this.text,
       required this.page});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          iconSize: 40,
-          color: color,
-          icon: Icon(icon),
-          tooltip: text,
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => page,
-            ));
-          },
-        ),
-        Text(
-          '$number',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        )
-      ],
+    return IconButton(
+      iconSize: 40,
+      color: color,
+      icon: Icon(icon),
+      tooltip: text,
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => page,
+        ));
+      },
     );
   }
 }
 
 class UserProfile extends StatefulWidget {
   final UserInfoProvider userInfoProvider;
-  const UserProfile({
-    required this.userInfoProvider,
-    super.key
-  });
+  const UserProfile({required this.userInfoProvider, super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -71,7 +61,6 @@ class _UserProfileState extends State<UserProfile> {
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts(int userId) async {
-    userId = 4;
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
@@ -85,6 +74,7 @@ class _UserProfileState extends State<UserProfile> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      if (!mounted) return;
       setState(() {
         //final List jsonData = responseJson['data'];
         isLoading = false;
@@ -95,6 +85,10 @@ class _UserProfileState extends State<UserProfile> {
         _listReciepReviews.addAll(responseJson['data']
             .map<GetPosts>((p) => GetPosts.fromJson(p))
             .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
       });
     }
   }
@@ -114,7 +108,8 @@ class _UserProfileState extends State<UserProfile> {
       widget.userInfoProvider.role = userData.role;
       widget.userInfoProvider.mail = userData.mail;
     }
-    fetchInfinitePosts(widget.userInfoProvider.userID);
+    userId = widget.userInfoProvider.userID;
+    fetchInfinitePosts(userId);
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts(widget.userInfoProvider.userID);
@@ -134,50 +129,115 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('User Profile'),
+        centerTitle: true,
+        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.orange,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () {
+              final getUserInfo =
+                  Provider.of<UserInfoProvider>(context, listen: false);
+              getUserInfo.token = '';
+              getUserInfo.role = '';
+              getUserInfo.mail = '';
+              getUserInfo.userID = 0;
+              getUserInfo.name = '';
+              getUserInfo.imageURL = '';
+              AuthService().signOut();
+              //      logoutAuth();
+
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: ((context) => const MyApp())));
+            },
+          ),
+        ],
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'profile'),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
               child: Container(
-                margin: const EdgeInsets.only(top: 25),
+                margin: const EdgeInsets.only(top: 5),
                 child: Row(
                   children: [
                     Container(
+                      height: MediaQuery.of(context).size.height * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.3,
                       margin: const EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
-                      child: Image(
-                        image: NetworkImage(widget.userInfoProvider.imageURL),
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                      ),
+                          image: DecorationImage(
+                            image:
+                                NetworkImage(widget.userInfoProvider.imageURL),
+                            fit: BoxFit.cover,
+                          ),
+                          shape: BoxShape.circle,
+                          // borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.white)),
+                      // child: Image(
+                      //   image: NetworkImage(widget.userInfoProvider.imageURL),
+                      // height: MediaQuery.of(context).size.height * 0.15,
+                      // width: MediaQuery.of(context).size.width * 0.3,
+                      // fit: BoxFit.fill,
+                      // ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(widget.userInfoProvider.name,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        const SizedBox(height: 20),
-                        Text(widget.userInfoProvider.mail)
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(widget.userInfoProvider.name,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          const SizedBox(height: 20),
+                          Text.rich(
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                            TextSpan(
+                              children: <InlineSpan>[
+                                const WidgetSpan(
+                                  child: Text(
+                                    'Email: ',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    widget.userInfoProvider.mail,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.13,
+              padding: const EdgeInsets.only(top: 10),
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: Colors.orange, width: 2.0))),
@@ -187,21 +247,18 @@ class _UserProfileState extends State<UserProfile> {
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
-                    number: 3,
                     text: "Press to your recipes",
                     page: UserRecipesPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
-                    number: 20,
                     text: "Press to your bookmarks",
                     page: CollectionPage(widget.userInfoProvider.userID),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
-                    number: 15,
                     text: "Press to your ratings",
                     page: UserRatingsPage(widget.userInfoProvider.userID),
                   ),
@@ -209,8 +266,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.04,
-              margin: const EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 2, bottom: 5),
               child: Row(
                 children: const [
                   Icon(Icons.assignment),
@@ -221,11 +277,19 @@ class _UserProfileState extends State<UserProfile> {
                 ],
               ),
             ),
-            ListRecipeReview(0.5, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.55, _listReciepReviews, controller, hasMore)
           ]),
         ),
       ),
-      bottomNavigationBar: const Copyright(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CreateRecipePage(),
+          ));
+        },
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

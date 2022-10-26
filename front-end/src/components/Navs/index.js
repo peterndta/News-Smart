@@ -65,27 +65,27 @@ const Navs = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
-                    <ListItemButton component={NavLink} to="/recipes/bookmark">
+                    <ListItemButton component={NavLink} to="/bookmark">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <Bookmark color="secondary" />
                         </ListItemIcon>
-                        <ListItemText primary="Saved recipes" sx={{ fontWeight: 500 }} />
+                        <ListItemText primary="Saved Recipes" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding sx={{ borderBottom: `1px solid ${blueGrey[200]}` }}>
-                    <ListItemButton component={NavLink} to="/recipes/my-ratings">
+                    <ListItemButton component={NavLink} to="/my-ratings">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <StarRateOutlined color="secondary" />
                         </ListItemIcon>
-                        <ListItemText primary="My rating" sx={{ fontWeight: 500 }} />
+                        <ListItemText primary="My Rating" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton component={NavLink} to="/recipes/me">
+                    <ListItemButton component={NavLink} to="/me">
                         <ListItemIcon sx={{ minWidth: 35 }}>
                             <Description color="secondary" />
                         </ListItemIcon>
-                        <ListItemText primary="My recipes" sx={{ fontWeight: 500 }} />
+                        <ListItemText primary="My Recipes" sx={{ fontWeight: 500 }} />
                     </ListItemButton>
                 </ListItem>
             </List>

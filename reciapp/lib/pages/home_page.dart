@@ -3,21 +3,21 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/object/user_info.dart';
-import 'package:reciapp/pages/recipes_result_page.dart';
-import 'package:simple_star_rating/clip_half.dart';
+import 'package:reciapp/pages/recipes_page.dart';
 import '../components/copyright.dart';
 import '../components/head_bar.dart';
 import '../components/sidebar_menu.dart';
-import '../components/back_to_top_button.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
+import 'package:http/http.dart' as http;
+
+import '../object/recipe_review.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,34 +27,66 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController scrollController = ScrollController();
-  bool showbtn = false;
+  final controller = ScrollController();
+  int page = 1;
+  bool isLoading = false;
+  bool hasMore = true;
+  Future fetchInfinitePosts() async {
+    if (isLoading) return;
+    isLoading = true;
+    const limit = 6;
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/post/page/$page?PageSize=$limit'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+      },
+    );
+    if (response.statusCode == 200) {
+      var responseJson = json.decode(response.body);
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+        page++;
+        if (responseJson['data'].length < limit) {
+          hasMore = false;
+        }
+        _listReciepReviews.addAll(responseJson['data']
+            .map<GetPosts>((p) => GetPosts.fromJson(p))
+            .toList());
+      });
+    } else if (response.statusCode == 400) {
+      setState(() {
+        hasMore = false;
+      });
+    }
+  }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  final List<GetPosts> _listReciepReviews = [];
+  @override
   void initState() {
-    scrollController.addListener(() {
-      //scroll listener
-      double showoffset =
-          10.0; //Back to top botton will show on scroll offset 10.0
-      if (scrollController.offset > showoffset) {
-        showbtn = true;
-        setState(() {
-          //update state
-        });
-      } else {
-        showbtn = false;
-        setState(() {
-          //update state
-        });
-      }
-    });
     super.initState();
     loadData();
+    fetchInfinitePosts();
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetchInfinitePosts();
+        print(' more');
+      }
+    });
   }
 
   loadData() async {
     if (userInfoProvider == null) {
       Timer(Duration(seconds: 4), () {
+        if (!mounted) return;
         final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         setState(() {
           if (getUserID.imageURL.isEmpty) {
@@ -78,175 +110,73 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    //print(
-    //    'token: ${getUserInfo.token}, role: ${getUserInfo.role}, id: ${getUserInfo.userID}, mail: ${getUserInfo.mail}, name: ${getUserInfo.name}, image url: ${getUserInfo.imageURL}');
-    // print('token: ${getUserInfo.token}');
     return Scaffold(
-      drawer: SideBarMenu(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
         child: HeadBar(),
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'home'),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
+        height: MediaQuery.of(context).size.height * 0.9,
         child: SingleChildScrollView(
-          controller: scrollController,
           child: Column(
             children: [
-              SizedBox(
+              Container(
+                margin: EdgeInsets.only(top: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: MediaQuery.of(context).size.width * 0.63,
+                      height: MediaQuery.of(context).size.height * 0.15,
                       fit: BoxFit.fill,
-                      image: NetworkImage(
-                          'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                      image: AssetImage('assets/logo.png'),
                     ),
                   ],
                 ),
               ),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 0.8))),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: ((context) => RecipesResult())));
-                          },
-                          child: Text(
-                            'Latest Post',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              fontFamily: 'Inter',
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 0.8))),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: ((context) => RecipesPage())));
+                              },
+                              child: Text(
+                                'Latest Post',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 1,
-                    child: FutureBuilder(
-                        future: fetchPosts(),
-                        builder: ((context, snapshot) {
-                          if (snapshot.data == null) {
-                            return Container();
-                          } else {
-                            return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Colors.grey,
-                                                  width: 0.5),
-                                              top: BorderSide(
-                                                  color: Colors.grey,
-                                                  width: 0.5))),
-                                      child: Row(
-                                        children: [
-                                          Image(
-                                            image: NetworkImage(
-                                                snapshot.data[index].imageUrl),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.4,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.14,
-                                          ),
-                                          SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.03),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                snapshot.data[index].name,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                                textAlign: TextAlign.end,
-                                              ),
-                                              snapshot.data[index].userId ==
-                                                      userInfoProvider?.userID
-                                                  ? Icon(
-                                                      Icons.bookmark,
-                                                      color: Colors.black,
-                                                    )
-                                                  : Container(),
-                                              Row(
-                                                children: [
-                                                  SmoothStarRating(
-                                                    isReadOnly: true,
-                                                    size: 16,
-                                                    color: Colors.amber[600],
-                                                    rating: snapshot.data[index]
-                                                        .averageRating
-                                                        .toDouble(),
-                                                    borderColor:
-                                                        Colors.amber[600],
-                                                  ),
-                                                ],
-                                              ),
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  child: Text(snapshot
-                                                      .data[index]
-                                                      .description)),
-                                              Row(
-                                                children: [
-                                                  Text('by '),
-                                                  Text(
-                                                    snapshot
-                                                        .data[index].userName,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                });
-                          }
-                        })),
-                  ),
-                ],
+                    ),
+                    ListRecipeReview(
+                        0.5, _listReciepReviews, controller, hasMore)
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: BackToTopButton(scrollController, showbtn),
-      bottomNavigationBar: Copyright(),
     );
   }
 }

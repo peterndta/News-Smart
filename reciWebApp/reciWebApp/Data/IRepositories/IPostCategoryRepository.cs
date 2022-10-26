@@ -8,5 +8,6 @@ namespace reciWebApp.Data.IRepositories
         List<PostCategory> GetPostCategoriesByPostId(string id);
         List<PostCategory> GetPostCategoriesByCategory(List<Category> categories);
         List<PostCategory>? GetAllPostCategories();
+        void RemovePostCategory(string postId);
     }
 }

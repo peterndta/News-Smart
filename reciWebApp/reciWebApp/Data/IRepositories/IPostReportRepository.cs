@@ -1,6 +1,7 @@
 ﻿using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Data.IRepositories
@@ -8,10 +9,12 @@ namespace reciWebApp.Data.IRepositories
     public interface IPostReportRepository
     {
         void CreatePostReport(PostReport report);
-        void ApproveReport(PostReport report);
+        void DenyReport(PostReport report);
 
         PostReport GetPostReportById(int id);
         Task<PostReport> GetPostReportByIdAsync(int id);
         bool CheckReport(int userId, string postId);
+        List<PostReport> GetPostReportByPostId(string postId);
+        Task<List<PostReport>> GetReportByPostIdAsync(string postId);
     }
 }

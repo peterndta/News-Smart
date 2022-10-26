@@ -2,32 +2,31 @@
 //
 //     final postSendItem = postSendItemFromJson(jsonString);
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:reciapp/object/user_info.dart';
+
+import '../login_support/user_preference.dart';
 
 PostSendItem postSendItemFromJson(String str) =>
     PostSendItem.fromJson(json.decode(str));
 
 String postSendItemToJson(PostSendItem data) => json.encode(data.toJson());
 
-Future submitData(PostSendItem post) async {
-  print(postSendItemToJson(post));
-  print('https://reciapp.azurewebsites.net/api/user/4/post');
+Future<int> submitData(PostSendItem post) async {
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
   var response = await http.post(
-    Uri.parse('https://reciapp.azurewebsites.net/api/user/4/post'),
+    Uri.parse(
+        'https://reciapp.azurewebsites.net/api/user/${userData.userID}/post'),
     body: postSendItemToJson(post),
     headers: {
       "content-type": "application/json",
       "accept": "application/json",
+      HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
     },
   );
-  var data = response.body;
-
-  if (response.statusCode == 200) {
-    String responseString = response.body;
-    print(responseString);
-  } else {
-    print(data);
-  }
+  return response.statusCode as int;
 }
 
 class PostSendItem {

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import ReactPlayer from 'react-player/youtube'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
+import NotFound from '../../components/NotFound'
 import {
     BookmarkAdded,
     BookmarkBorder,
@@ -21,7 +22,6 @@ import {
     Container,
     Divider,
     Grid,
-    Link,
     List,
     ListItem,
     ListItemButton,
@@ -50,10 +50,10 @@ const RecipeDetail = () => {
     const showSnackbar = useSnackbar()
     const [openCreateFeedback, setOpenCreateFeedback] = useState(false)
     const [isFirstRender, setIsFirstRender] = useState(true)
-    const [isBookmark, setIsBookmark] = useState(false)
     const [isReport, setIsReport] = useState(false)
     const bookmarkAction = useBookmark()
     const auth = useRecoilValue(authAtom)
+    const [error, setError] = useState(false)
     const handleClickOpenReport = () => {
         setOpen(true)
     }
@@ -70,19 +70,28 @@ const RecipeDetail = () => {
 
     const bookmarkHandler = () => {
         bookmarkAction
-            .handleBookmark(recipe.id, true)
+            .handleBookmark(recipe.id, !recipe.bookmark)
             .then(() => {
-                setIsBookmark(true)
-                showSnackbar({
-                    severity: 'success',
-                    children: 'Bookmark successfully.',
-                })
+                if (!recipe.bookmark) {
+                    showSnackbar({
+                        severity: 'success',
+                        children: 'Bookmark successfully.',
+                    })
+                } else {
+                    showSnackbar({
+                        severity: 'success',
+                        children: 'UnBookmark successfully.',
+                    })
+                }
+                const newBookmarkValue = !recipe.bookmark
+                setRecipe((previous) => ({ ...previous, bookmark: newBookmarkValue }))
             })
             .catch(() => {
                 showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later or reload the page.',
                 })
+                setError(true)
             })
     }
     useEffect(() => {
@@ -92,47 +101,36 @@ const RecipeDetail = () => {
                 setRecipe(data)
                 setCategories(data.listCategories)
                 setStar(data.averageRating)
-                setTimeout(() => {
-                    setIsFirstRender(false)
-                }, 1000)
-            })
-            .catch(() => {
-                showSnackbar({
-                    severity: 'error',
-                    children: 'Something went wrong, please try again later.',
-                })
-                setTimeout(() => {
-                    setIsFirstRender(false)
-                }, 1000)
-            })
 
-        getStep(id)
-            .then((response) => {
-                const data = response.data.data
-                setStep(data)
-                setIsFirstRender(false)
+                getStep(id)
+                    .then((response) => {
+                        const steps = response.data.data
+                        setStep(steps)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 1000)
+                    })
+                    .catch(() => {
+                        showSnackbar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                        setError(true)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 1000)
+                    })
             })
             .catch(() => {
-                showSnackbar({
-                    severity: 'error',
-                    children: 'Something went wrong, please try again later.',
-                })
-                setIsFirstRender(false)
+                setError(true)
+                setTimeout(() => {
+                    setIsFirstRender(false)
+                }, 1000)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href="/" fontWeight={700}>
-            Home
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/recipes" fontWeight={700}>
-            Recipes
-        </Link>,
-        <Typography key="3" color="text.primary" fontWeight={700}>
-            {recipe?.name}
-        </Typography>,
-    ]
+    if (error) return <NotFound isLoading={isFirstRender} />
 
     return (
         <React.Fragment>
@@ -152,7 +150,23 @@ const RecipeDetail = () => {
                     <Container maxWidth="xl">
                         <Box mt={4}>
                             <Breadcrumbs separator="›" aria-label="breadcrumb">
-                                {breadcrumbs}
+                                <Link
+                                    to="/"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Home
+                                </Link>
+                                <Link
+                                    to="/recipes"
+                                    style={{ color: '#637381', textDecoration: 'none' }}
+                                    fontWeight={700}
+                                >
+                                    Recipes
+                                </Link>
+                                <Typography color="text.primary" fontWeight={700}>
+                                    {recipe?.name}
+                                </Typography>
                             </Breadcrumbs>
                             <Typography
                                 mt={4}
@@ -288,11 +302,10 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                disabled={recipe.bookMark === true || isBookmark}
                                                 onClick={bookmarkHandler}
                                             >
                                                 <ListItemIcon>
-                                                    {recipe.bookMark || isBookmark ? (
+                                                    {recipe.bookmark === true ? (
                                                         <BookmarkAdded sx={{ color: '#fefefe' }} />
                                                     ) : (
                                                         <BookmarkBorder sx={{ color: '#fefefe' }} />

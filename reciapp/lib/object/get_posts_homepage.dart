@@ -17,6 +17,7 @@ Future fetchPosts() async {
       "accept": "application/json",
     },
   );
+  print(response.body);
   var responseJson = json.decode(response.body);
   return (responseJson['data'] as List)
       .map((p) => GetPosts.fromJson(p))
@@ -42,6 +43,9 @@ class GetPosts {
     required this.userName,
     required this.usesId,
     required this.averageRating,
+    required this.rating,
+    required this.bookmark,
+    required this.isReport,
   });
 
   String id;
@@ -61,6 +65,9 @@ class GetPosts {
   String userName;
   int usesId;
   int averageRating;
+  int rating;
+  bool bookmark;
+  bool isReport;
 
   factory GetPosts.fromJson(Map<String, dynamic> json) => GetPosts(
         id: json["id"],
@@ -81,6 +88,9 @@ class GetPosts {
         userName: json["userName"],
         usesId: json["usesId"],
         averageRating: json["averageRating"],
+        rating: json["rating"],
+        bookmark: json["bookmark"],
+        isReport: json["isReport"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -102,6 +112,9 @@ class GetPosts {
         "userName": userName,
         "usesId": usesId,
         "averageRating": averageRating,
+        "rating": rating,
+        "bookmark": bookmark,
+        "isReport": isReport,
       };
 }
 
