@@ -169,11 +169,18 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name)
         {
-            var posts = await GetAll().FilterPostByName(_reciContext, name).ToListAsync();
-            List<Post> result = new List<Post>();
+            var result = new List<Post>();
             foreach (var userInteract in userInteracts)
             {
-                result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
+                var post = GetPostById(userInteract.PostsId);
+                if (post != null)
+                {
+                    result.Add(post);
+                }
+            }
+            if (name != null)
+            {
+                return result.Where(x => x.Name.Contains(name)).ToList();
             }
             return result;
         }
@@ -252,6 +259,16 @@ namespace reciWebApp.Data.Repositories
         public async Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams)
         {
             return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Search).ToListAsync();
+        }
+
+        public async Task<List<Post>?> GetPostToAddToCollectionAsync(List<string>? postId)
+        {
+            var posts = GetAll();
+            foreach (var id in postId)
+            {
+                posts = posts.Except(GetByCondition(x => x.Id.Equals(id)));
+            }
+            return await posts.ToListAsync();
         }
     }
 }

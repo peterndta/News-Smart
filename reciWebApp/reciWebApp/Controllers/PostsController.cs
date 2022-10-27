@@ -127,7 +127,7 @@ namespace reciWebApp.Controllers
                     _repoManager.PostCategory.CreatePostCategory(postCategory);
                 }
                 await _repoManager.SaveChangesAsync();
-                return Ok(new Response(200));
+                return Ok(new Response(200, createPost.Id, "Create successfully"));
             }
             catch (Exception ex)
             {
@@ -557,7 +557,7 @@ namespace reciWebApp.Controllers
         //Get post to add collections recipe
         [HttpGet]
         [Route("~/api/addcollections/{id}/post/page/{pageNumber}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] AddPostToCollectionParams @params)
         {
             try
             {
@@ -567,7 +567,30 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Not found collection"));
                 }
 
-                return Ok(new Response(200, "", "Chua co lam dau"));
+                var subCollections = await _repoManager.SubCollection.GetAllSubCollectionAsync(id);
+                List<FoodCollection> foodCollectionList = new List<FoodCollection>();
+                foreach (var subCollection in subCollections)
+                {
+                    foodCollectionList.AddRange(await _repoManager.FoodCollection.GetFoodCollectionsAsync(subCollection.Id));
+                }
+
+                var postIdList = foodCollectionList.DistinctBy(x => x.PostsId).Select(x => x.PostsId).ToList();
+                var postList = await _repoManager.Post.GetPostToAddToCollectionAsync(postIdList);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(postList);
+                for (int i = 0; i < showPosts.Count; i++)
+                {
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                }
+
+                if (@params.Sort != null)
+                {
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, @params.Sort);
+                }
+
+                @params.PageNumber = pageNumber;
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, @params.PageNumber, @params.PageSize);
+
+                return Ok(new Response(200, showPosts, ""));
             }
             catch (Exception ex)
             {
