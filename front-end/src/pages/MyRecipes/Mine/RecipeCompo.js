@@ -6,11 +6,24 @@ import { Delete, Edit } from '@mui/icons-material'
 import { Box, Grid, IconButton, Rating, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
+import ConfirmPopup from './ConfirmPopup'
+
 const RecipeCompo = ({ name, description, averageRating, imageUrl, id, deleteRecipeHandler }) => {
     const history = useHistory()
-
+    const [openConfirm, setOpenConfirm] = React.useState(false)
+    const handleOpenConfirm = () => {
+        setOpenConfirm(true)
+    }
     return (
         <Grid item md={12} mt={1}>
+            {openConfirm && (
+                <ConfirmPopup
+                    postId={id}
+                    deleteRecipeHandler={deleteRecipeHandler}
+                    status={openConfirm}
+                    onClose={() => setOpenConfirm(false)}
+                />
+            )}
             <Box pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
                 <Box display="flex">
                     <Box
@@ -37,7 +50,8 @@ const RecipeCompo = ({ name, description, averageRating, imageUrl, id, deleteRec
                                 <IconButton
                                     component="label"
                                     size="large"
-                                    onClick={() => deleteRecipeHandler(id)}
+                                    // onClick={() => deleteRecipeHandler(id)}
+                                    onClick={handleOpenConfirm}
                                 >
                                     <Delete />
                                 </IconButton>

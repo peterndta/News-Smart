@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
 
+import NotFound from '../../../components/NotFound'
 import { Kitchen, ShoppingCart } from '@mui/icons-material'
 import GroupIcon from '@mui/icons-material/Group'
 import { Box, Divider, Grid, Rating, Typography } from '@mui/material'
@@ -20,43 +21,55 @@ const RecipeDetail = () => {
     const { id } = useParams()
     const { getRecipe, getStep } = useRecipe()
     const showSnackbar = useSnackbar()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isFirstRender, setIsFirstRender] = useState(true)
+    const [error, setError] = useState(false)
+
     useEffect(() => {
-        setIsLoading(true)
         getRecipe(id)
             .then((response) => {
                 const data = response.data.data
                 setRecipe(data)
                 setCategories(data.listCategories)
                 setStar(data.averageRating)
-                setIsLoading(false)
+
+                getStep(id)
+                    .then((response) => {
+                        const data = response.data.data
+                        setStep(data)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 500)
+                    })
+                    .catch(() => {
+                        showSnackbar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                        setError(true)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 500)
+                    })
             })
             .catch(() => {
                 showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later.',
                 })
-                setIsLoading(false)
+                setError(true)
+                setTimeout(() => {
+                    setIsFirstRender(false)
+                }, 500)
             })
 
-        getStep(id)
-            .then((response) => {
-                const data = response.data.data
-                setStep(data)
-                setIsLoading(false)
-            })
-            .catch(() => {
-                showSnackbar({
-                    severity: 'error',
-                    children: 'Something went wrong, please try again later.',
-                })
-                setIsLoading(false)
-            })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    if (error) return <NotFound isLoading={isFirstRender} />
+
     return (
         <React.Fragment>
-            {isLoading ? (
+            {isFirstRender ? (
                 <Loading />
             ) : (
                 <React.Fragment>

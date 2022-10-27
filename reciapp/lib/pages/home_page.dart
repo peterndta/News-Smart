@@ -5,12 +5,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
 import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_page.dart';
-import '../components/copyright.dart';
 import '../components/head_bar.dart';
-import '../components/sidebar_menu.dart';
 
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
@@ -110,33 +109,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
         child: HeadBar(),
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'home'),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
         height: MediaQuery.of(context).size.height * 0.9,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              Container(
+                margin: EdgeInsets.only(top: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: MediaQuery.of(context).size.width * 0.63,
+                      height: MediaQuery.of(context).size.height * 0.15,
                       fit: BoxFit.fill,
-                      image: NetworkImage(
-                          'https://cdn.tgdd.vn/Files/2022/04/06/1424264/cach-lam-ratatouille-dep-mat-chuan-nhu-phim-hoat-hinh-cua-pixar-202204061506305893.jpg'),
+                      image: AssetImage('assets/logo.png'),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
                 child: Column(
                   children: [
                     Padding(

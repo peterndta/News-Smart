@@ -7,6 +7,8 @@ import Navs from '../../components/Navs'
 import { Box, Breadcrumbs, Grid, Typography } from '@mui/material'
 
 import Mine from './Mine'
+import SearchBox from './Mine/Search'
+import Sort from './Mine/Sort'
 
 const MyRecipes = () => {
     return (
@@ -32,6 +34,10 @@ const MyRecipes = () => {
                         <ButtonAddRecipe />
                     </Grid>
                     <Grid item md={9} display="flex" flexDirection="column">
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <SearchBox />
+                            <Sort />
+                        </Box>
                         <Mine />
                     </Grid>
                 </Grid>

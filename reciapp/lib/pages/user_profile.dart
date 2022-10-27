@@ -2,19 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
 import 'package:reciapp/pages/user_rating_page.dart';
 import 'package:reciapp/pages/user_recipes_page.dart';
-import '../components/head_bar.dart';
-import '../components/copyright.dart';
-import '../components/sidebar_menu.dart';
 import '../login_support/auth_service.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../main.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
-import 'collection_page.dart';
+import 'user_bookmark_page.dart';
 import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,16 +30,26 @@ class IconDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      iconSize: 40,
-      color: color,
-      icon: Icon(icon),
-      tooltip: text,
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => page,
-        ));
-      },
+    return Column(
+      children: [
+        IconButton(
+          iconSize: 35,
+          color: color,
+          icon: Icon(icon),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => page,
+            ));
+          },
+        ),
+        Text(
+          'Your $text',
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        )
+      ],
     );
   }
 }
@@ -112,7 +120,6 @@ class _UserProfileState extends State<UserProfile> {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts(widget.userInfoProvider.userID);
-        print(' more');
       }
     });
   }
@@ -158,6 +165,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ],
       ),
+      bottomNavigationBar: bottomMenuBar(context, 'profile'),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: SingleChildScrollView(
@@ -178,14 +186,7 @@ class _UserProfileState extends State<UserProfile> {
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
-                          // borderRadius: BorderRadius.circular(50),
                           border: Border.all(color: Colors.white)),
-                      // child: Image(
-                      //   image: NetworkImage(widget.userInfoProvider.imageURL),
-                      // height: MediaQuery.of(context).size.height * 0.15,
-                      // width: MediaQuery.of(context).size.width * 0.3,
-                      // fit: BoxFit.fill,
-                      // ),
                     ),
                     Expanded(
                       child: Column(
@@ -197,7 +198,7 @@ class _UserProfileState extends State<UserProfile> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: const TextStyle(
-                                fontSize: 30,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
@@ -235,7 +236,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 2),
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: Colors.orange, width: 2.0))),
@@ -245,37 +246,37 @@ class _UserProfileState extends State<UserProfile> {
                   IconDetail(
                     icon: Icons.assignment,
                     color: Colors.red,
-                    text: "Press to your recipes",
-                    page: UserRecipesPage(widget.userInfoProvider.userID),
+                    text: "recipes",
+                    page: UserRecipesPage(),
                   ),
                   IconDetail(
                     icon: Icons.bookmark,
                     color: Colors.blue,
-                    text: "Press to your bookmarks",
-                    page: CollectionPage(widget.userInfoProvider.userID),
+                    text: "bookmarks",
+                    page: BookmarkPage(),
                   ),
                   IconDetail(
                     icon: Icons.star_outlined,
                     color: Colors.yellow,
-                    text: "Press to your ratings",
-                    page: UserRatingsPage(widget.userInfoProvider.userID),
+                    text: "ratings",
+                    page: UserRatingsPage(),
                   ),
                 ],
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 2, bottom: 5),
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
               child: Row(
                 children: const [
                   Icon(Icons.assignment),
                   Text(
                     ' Recently Recipes',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   )
                 ],
               ),
             ),
-            ListRecipeReview(0.55, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.47, _listReciepReviews, controller, hasMore)
           ]),
         ),
       ),

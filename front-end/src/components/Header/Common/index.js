@@ -134,7 +134,7 @@ const CommonHeader = () => {
                                     }}
                                 >
                                     <Typography component="span" variant="h5">
-                                        RECIPES
+                                        CONTINENT/USE
                                     </Typography>
                                 </Box>
                                 <Box

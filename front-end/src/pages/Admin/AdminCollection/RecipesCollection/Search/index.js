@@ -10,7 +10,7 @@ import { blueGrey } from '@mui/material/colors'
 const SearchBox = () => {
     const { search: query, pathname } = useLocation()
     const history = useHistory()
-    const { search, sort, pageNum } = queryString.parse(query)
+    const { search, pageNum, collection } = queryString.parse(query)
     const [searchValue, setSearchValue] = useState(search ? search : '')
 
     const searchChangeHandler = (event) => {
@@ -23,7 +23,7 @@ const SearchBox = () => {
             let route = pathname + '?'
             if (searchValue) route += '&search=' + searchValue
 
-            if (sort) route += `&sort=${sort}`
+            if (collection) route += '&collection=' + collection
 
             if (pageNum) route += `&pageNum=${pageNum}`
 

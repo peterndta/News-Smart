@@ -13,8 +13,6 @@ import useMyRatings from '../../../recoil/my-ratings/action'
 import Loading from '../../Loading'
 import Paging from './Pagination'
 import Ratings from './Ratings'
-import SearchBox from './Search'
-import Sort from './Sort'
 
 const filterStringGenerator = ({ search, sort }) => {
     let filterString = `?PageSize=${6}`
@@ -84,6 +82,10 @@ const RatingList = () => {
                     }, 500)
                 })
         }
+        return () => {
+            setRecipes({})
+            setIsLoading(false)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, sort, pageNum])
 
@@ -93,10 +95,6 @@ const RatingList = () => {
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <SearchBox />
-                        <Sort />
-                    </Box>
                     {recipes.list.length ? (
                         <React.Fragment>
                             <NumberItemPagination

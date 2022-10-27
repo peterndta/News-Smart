@@ -39,39 +39,7 @@ const DetailPopup = (props) => {
                 </DialogTitle>
                 <DialogContent dividers={true}>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running. Let Google help apps
-                        determine location. This means sending anonymous location data to Google,
-                        even when no apps are running. Let Google help apps determine location. This
-                        means sending anonymous location data to Google, even when no apps are
-                        running.Let Google help apps determine location. This means sending
-                        anonymous location data to Google, even when no apps are running.Let Google
-                        help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running. Let Google help apps determine
-                        location. This means sending anonymous location data to Google, even when no
-                        apps are running. Let Google help apps determine location. This means
-                        sending anonymous location data to Google, even when no apps are running.
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running. Let Google help apps
-                        determine location. This means sending anonymous location data to Google,
-                        even when no apps are running. Let Google help apps determine location. This
-                        means sending anonymous location data to Google, even when no apps are
-                        running. Let Google help apps determine location. This means sending
-                        anonymous location data to Google, even when no apps are running. Let Google
-                        help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running. Let Google help apps determine
-                        location. This means sending anonymous location data to Google, even when no
-                        apps are running. Let Google help apps determine location. This means
-                        sending anonymous location data to Google, even when no apps are running.
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running. Let Google help apps
-                        determine location. This means sending anonymous location data to Google,
-                        even when no apps are running.Let Google help apps determine location. This
-                        means sending anonymous location data to Google, even when no apps are
-                        running. Let Google help apps determine location. This means sending
-                        anonymous location data to Google, even when no apps are running. Let Google
-                        help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running.
+                        {props.reason}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

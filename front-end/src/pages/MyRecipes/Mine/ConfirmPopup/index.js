@@ -16,13 +16,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 const ConfirmPopup = (props) => {
-    const confirmHandler = () => {
-        if (props.isApprove == true) {
-            props.onClose()
-        } else if (props.isDeny == true) {
-            props.reportHandler(props.reportId)
-            props.onClose()
-        }
+    const handleConfirm = () => {
+        props.deleteRecipeHandler(props.postId)
+        props.onClose()
     }
     return (
         <Box>
@@ -45,7 +41,7 @@ const ConfirmPopup = (props) => {
                         Cancel
                     </Button>
                     <Button
-                        onClick={confirmHandler}
+                        onClick={handleConfirm}
                         variant="contained"
                         color="primary"
                         sx={{ color: 'white' }}

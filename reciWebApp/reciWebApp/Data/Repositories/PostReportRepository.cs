@@ -42,6 +42,16 @@ namespace reciWebApp.Data.Repositories
             var report = GetByCondition(x => x.UserId == userId && x.PostsId.Equals(postId)).FirstOrDefault();
             return report != null;
         }
+        
+        public List<PostReport> GetPendingPostReportByPostId (string postId)
+        {
+            return GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0 ).ToList();
+        }
+
+        public async Task<List<PostReport>> GetPendingReportByPostIdAsync (string postId)
+        {
+            return await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0).ToListAsync();
+        }
 
         public async Task ApproveReportAsync(string postReportId)
         {

@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/components/bottom_bar.dart';
 import '../components/filter_category.dart';
-import '../components/sidebar_menu.dart';
-import '../components/copyright.dart';
-import '../components/head_bar.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../login_support/user_preference.dart';
@@ -105,10 +103,14 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideBarMenu(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+      appBar: AppBar(
+        title: const Text('Category'),
+        centerTitle: true,
+        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.orange,
+        titleTextStyle: const TextStyle(
+            fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -191,7 +193,7 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.7, _listReciepReviews, controller, hasMore)
+            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
           ],
         ),
       ),
@@ -203,7 +205,7 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Copyright(),
+      bottomNavigationBar: bottomMenuBar(context, 'category'),
     );
   }
 }

@@ -258,7 +258,7 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams)
         {
-            return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Name).ToListAsync();
+            return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Search).ToListAsync();
         }
 
         public async Task<List<Post>?> GetPostToAddToCollectionAsync(List<string>? postId)
