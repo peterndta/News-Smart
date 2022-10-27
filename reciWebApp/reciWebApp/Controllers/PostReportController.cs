@@ -176,7 +176,6 @@ namespace reciWebApp.Controllers
                 return BadRequest(new Response(400, e.Message));
             }
         }
-        }
 
         [HttpPut]
         [Route("~/api/report/{id}")]
