@@ -55,6 +55,7 @@ const RecipeDetail = () => {
     const auth = useRecoilValue(authAtom)
     const [error, setError] = useState(false)
     const [isStar, setIsStar] = useState(false)
+
     const handleClickOpenReport = () => {
         setOpen(true)
     }
@@ -109,7 +110,7 @@ const RecipeDetail = () => {
                         setStep(steps)
                         setTimeout(() => {
                             setIsFirstRender(false)
-                        }, 1000)
+                        }, 500)
                     })
                     .catch(() => {
                         showSnackbar({
@@ -119,14 +120,14 @@ const RecipeDetail = () => {
                         setError(true)
                         setTimeout(() => {
                             setIsFirstRender(false)
-                        }, 1000)
+                        }, 500)
                     })
             })
             .catch(() => {
                 setError(true)
                 setTimeout(() => {
                     setIsFirstRender(false)
-                }, 1000)
+                }, 500)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

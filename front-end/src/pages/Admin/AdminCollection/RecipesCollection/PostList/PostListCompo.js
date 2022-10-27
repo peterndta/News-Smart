@@ -7,13 +7,19 @@ import { blueGrey } from '@mui/material/colors'
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
-const PostListCompo = ({ name, description, rating, image }) => {
+const PostListCompo = ({ name, description, rating, image, id, selectHandler, options }) => {
     return (
         <Grid item md={12} mt={1}>
             <Box display="flex" pt={3} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
-                <Checkbox edge="start" {...label} />
+                <Checkbox
+                    edge="start"
+                    {...label}
+                    value={id}
+                    onChange={() => selectHandler(id)}
+                    checked={options.indexOf(id) !== -1}
+                />
                 <Box display="flex" width="100%">
-                    <RouterLink to={`${window.location.pathname}/${1}`}>
+                    <RouterLink to={`${window.location.pathname}/${id}`}>
                         <Box
                             component="img"
                             width={120}
@@ -25,7 +31,7 @@ const PostListCompo = ({ name, description, rating, image }) => {
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center" justifyContent="space-between">
                             <Link
-                                href={`${window.location.pathname}/${1}`}
+                                href={`${window.location.pathname}/${id}`}
                                 underline="hover"
                                 variant="h5"
                                 fontWeight={700}
