@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../components/bottom_bar.dart';
 import '../login_support/user_preference.dart';
+import '../object/auth_recipe_review.dart';
 import '../object/get_posts_homepage.dart';
 import 'package:http/http.dart' as http;
 import '../object/recipe_review.dart';
@@ -123,7 +124,8 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
                       )),
                 ),
               ),
-              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+              ListAuthRecipeReview(
+                  0.67, _listReciepReviews, controller, hasMore, "user_recipes_page")
             ],
           ),
         ),
