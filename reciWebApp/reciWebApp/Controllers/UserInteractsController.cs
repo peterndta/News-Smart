@@ -95,7 +95,7 @@ namespace reciWebApp.Controllers
                 }
 
                 var userInteract = await _repoManager.UserInteract.GetUserInteractAsync(currentUser.Id, id);
-                if (userInteract == null)
+                if (userInteract == null && bookmarkDTO.Bookmark == true)
                 {
                     _repoManager.UserInteract.CreateUserInteract(new UserInteract
                     {
@@ -104,7 +104,7 @@ namespace reciWebApp.Controllers
                         Bookmark = bookmarkDTO.Bookmark,
                     });
                 }
-                else
+                else if (userInteract != null)
                 {
                     if (bookmarkDTO.Bookmark == false && userInteract.Rating == null)
                     {
@@ -117,7 +117,7 @@ namespace reciWebApp.Controllers
                     }
                 }
                 await _repoManager.SaveChangesAsync();
-                return Ok(new Response(200, "", "Add bookmark successflly"));
+                return Ok(new Response(200, "", "Successflly"));
             }
             catch (Exception ex)
             {

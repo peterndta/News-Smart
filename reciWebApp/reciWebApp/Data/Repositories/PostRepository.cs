@@ -169,11 +169,18 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name)
         {
-            var posts = await GetAll().FilterPostByName(_reciContext, name).ToListAsync();
-            List<Post> result = new List<Post>();
+            var result = new List<Post>();
             foreach (var userInteract in userInteracts)
             {
-                result.Add(posts.Where(x => x.Id == userInteract.PostsId).First());
+                var post = GetPostById(userInteract.PostsId);
+                if (post != null)
+                {
+                    result.Add(post);
+                }
+            }
+            if (name != null)
+            {
+                return result.Where(x => x.Name.Contains(name)).ToList();
             }
             return result;
         }
