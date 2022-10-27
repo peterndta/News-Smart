@@ -16,7 +16,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 const ConfirmPopup = (props) => {
-    console.log(props)
     const confirmHandler = () => {
         if (props.isApprove == true) {
             props.onClose()
