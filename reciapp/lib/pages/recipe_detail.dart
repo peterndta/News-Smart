@@ -258,12 +258,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:
-            // PreferredSize(
-            //   preferredSize: const Size.fromHeight(55),
-            //   child: HeadBar(),
-            // ),
-            AppBar(
+        appBar: AppBar(
           title: const Text('Recipe Detail'),
           centerTitle: true,
           elevation: 1,
@@ -413,7 +408,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               children: [
                                 Ink(
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 219, 214, 214),
+                                    color: (snapshot.data.bookmark != null)
+                                        ? Colors.orange
+                                        : Color.fromARGB(255, 221, 218, 218),
                                   ),
                                   child: InkWell(
                                     onTap: () {
@@ -422,17 +419,11 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.all(4.0),
-                                      child: snapshot.data.bookmark
-                                          ? Icon(
-                                              Icons.bookmark_add,
-                                              size: 20,
-                                              color: Colors.orange,
-                                            )
-                                          : Icon(
-                                              Icons.bookmark_border_outlined,
-                                              size: 20,
-                                              color: Colors.black,
-                                            ),
+                                      child: Icon(
+                                        Icons.bookmark_add_outlined,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
