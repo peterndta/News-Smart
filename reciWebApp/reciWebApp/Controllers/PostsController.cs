@@ -455,7 +455,7 @@ namespace reciWebApp.Controllers
                     getPostsByFoodCollection = _repoManager.Post.GetPostByFoodCollection(foodCollections);
                 }
 
-                var posts = await _repoManager.Post.GetPostFilter(getPostsByFoodCollection, filter.Search);
+                var posts = _repoManager.Post.GetPostFilter(getPostsByFoodCollection, filter.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
