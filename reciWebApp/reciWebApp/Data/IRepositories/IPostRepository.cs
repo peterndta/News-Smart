@@ -25,6 +25,6 @@ namespace reciWebApp.Data.IRepositories
         Task<List<Post>?> GetPostByUserInteractsAsync(List<UserInteract> userInteracts, string? name);
         Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams);
         List<Post> GetPostByFoodCollection(List<FoodCollection> foodCollections);
-        Task<List<Post>> GetPostFilter(List<Post>? post, string? name);
+        List<Post>? GetPostFilter(List<Post>? post, string? name);
     }
 }

@@ -455,7 +455,7 @@ namespace reciWebApp.Controllers
                     getPostsByFoodCollection = _repoManager.Post.GetPostByFoodCollection(foodCollections);
                 }
 
-                var posts = _repoManager.Post.GetPostFilter(getPostsByFoodCollection, filter.Search);
+                var posts = await _repoManager.Post.GetPostFilter(getPostsByFoodCollection, filter.Search);
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
@@ -467,7 +467,7 @@ namespace reciWebApp.Controllers
                     showPosts = _repoManager.Post.SortPostByCondition(showPosts, filter.Sort);
                 }
 
-                var result = PaginatedList<ShowPostDTO>.Create(showPosts, filter.PageNumber, filter.PageSize);
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, pageNumber, filter.PageSize);
                 return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
