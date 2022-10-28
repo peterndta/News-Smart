@@ -22,5 +22,6 @@ namespace reciWebApp.DTOs.PostDTOs
         public int UsesId { get; set; }
         public double AverageRating { get; set; }
         public string UsesOfFood { get; set; }
+        public bool IsOwn { get; set; }
     }
 }
