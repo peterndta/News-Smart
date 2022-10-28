@@ -8,7 +8,6 @@ using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.DTOs.RecipeRegionDTOs;
 using reciWebApp.DTOs.StepDTOs;
-using reciWebApp.DTOs.SubCollectionDTOs;
 using reciWebApp.DTOs.UseDTOs;
 using reciWebApp.DTOs.UserDTOs;
 
@@ -45,7 +44,6 @@ namespace reciWebApp.Configs
             CreateMap<PostReport, ReturnReportDTO>();
             CreateMap<PostReportParams, ReturnReportDTO>();
             CreateMap<UserReportParams, ReturnReportDTO>();
-            CreateMap<SubCollection, ShowSubCollectionDTO>();
             CreateMap<UpdatePostDTO, Step>();
         }
     }

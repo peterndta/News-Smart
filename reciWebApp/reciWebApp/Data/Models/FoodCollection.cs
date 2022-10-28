@@ -7,9 +7,9 @@ namespace reciWebApp.Data.Models
     {
         public int Id { get; set; }
         public string PostsId { get; set; } = null!;
-        public string SubCollectionId { get; set; } = null!;
+        public int CollectionId { get; set; }
 
+        public virtual Collection Collection { get; set; } = null!;
         public virtual Post Posts { get; set; } = null!;
-        public virtual SubCollection SubCollection { get; set; } = null!;
     }
 }

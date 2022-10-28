@@ -18,7 +18,6 @@ namespace reciWebApp.Data.Repositories
         private ICollectionRepository _collectionRepository;
         private IFoodCollectionRepository _foodCollectionRepository;
         private IPostReportRepository _postReportRepository;
-        private ISubCollectionRepository _subCollectionRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -167,17 +166,6 @@ namespace reciWebApp.Data.Repositories
             }
         }
 
-        public ISubCollectionRepository SubCollection
-        {
-            get
-            {
-                if (_subCollectionRepository == null)
-                {
-                    _subCollectionRepository = new SubCollectionRepository(_context);
-                }
-                return _subCollectionRepository;
-            }
-        }
         public Task SaveChangesAsync()
         {
             return _context.SaveChangesAsync();
