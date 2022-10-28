@@ -10,7 +10,6 @@ import { useSnackbar } from '../../../../HOCs/SnackbarContext'
 import useRecipe from '../../../../recoil/recipe/action'
 import Loading from '../../../Loading'
 import Paging from '../Pagination'
-import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
 const filterStringGenerator = ({ search, continent, use, sort }) => {
@@ -89,12 +88,11 @@ const RecipeList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(use), JSON.stringify(continent), search, sort, pageNum])
     return (
-        <Grid item md={9} display="flex" flexDirection="column">
+        <Grid item md={12} display="flex" flexDirection="column">
             {isLoading ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Sort />
                     {recipes.list.length ? (
                         <React.Fragment>
                             <Recipes posts={recipes.list} />
