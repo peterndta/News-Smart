@@ -139,11 +139,11 @@ deleteRecipe(BuildContext context, String postId, String page) async {
       Navigator.of(context).pop();
     });
     Future.delayed(const Duration(seconds: 2), () {
-      if(page == 'user_recipes_page'){
+      if (page == 'user_recipes_page') {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => UserRecipesPage(),
         ));
-      }else{
+      } else {
         final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => UserProfile(userInfoProvider: getUserID),
@@ -186,7 +186,8 @@ deleteRecipe(BuildContext context, String postId, String page) async {
   }
 }
 
-showAlertDialog(BuildContext context, String title, String postId, String page) {
+showAlertDialog(
+    BuildContext context, String title, String postId, String page) {
   // set up the buttons
   Widget cancelButton = TextButton(
     child: const Text(
@@ -261,13 +262,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                widget.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.0,
+              Flexible(
+                child: Text(
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  maxLines: 1,
+                  widget.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.0,
+                  ),
                 ),
               ),
               IconButton(
@@ -277,7 +281,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 color: Colors.red,
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  showAlertDialog(context, widget.title, widget.id, widget.page);
+                  showAlertDialog(
+                      context, widget.title, widget.id, widget.page);
                 },
               ),
             ],
@@ -295,7 +300,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
             height: MediaQuery.of(context).size.height * 0.04,
             child: Text(
               widget.description,
-              overflow: TextOverflow.fade,
               softWrap: false,
               maxLines: 2,
               style: const TextStyle(
@@ -308,6 +312,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
           Container(
             alignment: Alignment.centerRight,
             child: Text.rich(
+              overflow: TextOverflow.fade,
+              softWrap: false,
               TextSpan(
                 children: <InlineSpan>[
                   const WidgetSpan(
@@ -318,13 +324,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
                       ),
                     ),
                   ),
-                  WidgetSpan(
-                    child: Text(
-                      ' ${widget.author}      ',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10.0,
-                      ),
+                  TextSpan(
+                    text: ' ${widget.author}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10.0,
                     ),
                   ),
                 ],
@@ -344,12 +348,8 @@ class ListAuthRecipeReview extends StatelessWidget {
   final bool hasMore;
   final String page;
 
-  const ListAuthRecipeReview(
-      this.heightValue,
-      this.list,
-      this.scrollController,
-      this.hasMore,
-      this.page);
+  const ListAuthRecipeReview(this.heightValue, this.list, this.scrollController,
+      this.hasMore, this.page);
 
   @override
   Widget build(BuildContext context) {
