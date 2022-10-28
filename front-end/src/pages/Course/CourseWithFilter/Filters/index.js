@@ -12,9 +12,9 @@ import collectionAtom from '../../../../recoil/collection'
 const Filter = () => {
     const collectionList = useRecoilValue(collectionAtom)
     const { search: query, pathname } = useLocation()
-    const { collection, sort, pageNum } = queryString.parse(query)
+    const { collection, sort, pageNum, search } = queryString.parse(query)
     const history = useHistory()
-    const [searchValue, setSearchValue] = useState(collection ? collection : null)
+    const [searchValue, setSearchValue] = useState(collection ? collection : 'Breakfast')
 
     const searchChangeHandler = (__, value) => {
         setSearchValue(value)
@@ -23,6 +23,8 @@ const Filter = () => {
     const filterHandler = () => {
         let route = pathname + '?'
         if (searchValue) route += '&collection=' + searchValue
+
+        if (search && search.trim() !== '') route += '&search=' + search
 
         if (sort) route += `&sort=${sort}`
 

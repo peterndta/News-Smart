@@ -4,16 +4,7 @@ import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
-import {
-    Box,
-    Button,
-    Divider,
-    FormControl,
-    Grid,
-    InputLabel,
-    OutlinedInput,
-    Typography,
-} from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
 import methodsAtom from '../../../../recoil/methods'
@@ -25,7 +16,6 @@ const Filter = () => {
     const { search, method, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
     const [methods, setMethods] = useState(method ? method : [])
-    const [searchValue, setSearchValue] = useState(search ? search : '')
     const isClearAll = useRef(false)
 
     const selectHandler = (value) => () => {
@@ -42,20 +32,13 @@ const Filter = () => {
     }
 
     const clearAllHandler = () => {
-        setSearchValue('')
         setMethods([])
         isClearAll.current = true
     }
 
-    const searchChangeHandler = (event) => {
-        const searchText = event.target.value
-        setSearchValue(searchText)
-        isClearAll.current = false
-    }
-
     const searchSubmitHandler = () => {
         let route = pathname + '?'
-        if (searchValue) route += '&search=' + searchValue
+        if (search) route += '&search=' + search
 
         if (methods.length !== 0) methods.forEach((method) => (route += `&method=${method}`))
 
@@ -89,44 +72,6 @@ const Filter = () => {
                         Clear all
                     </Button>
                 </Box>
-                <Box mt={3} mb={1}>
-                    <Typography variant="h6" fontWeight={700} sx={{ color: blueGrey[800] }} mb={2}>
-                        Recipe or keyword
-                    </Typography>
-
-                    <FormControl
-                        sx={{
-                            width: '100%',
-                            '& label.Mui-focused': {
-                                color: blueGrey[800],
-                            },
-                            '& .css-1xnpwac-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
-                                {
-                                    borderColor: blueGrey[800],
-                                },
-                            '& .MuiOutlinedInput-input': {
-                                height: '0.8em',
-                            },
-                        }}
-                    >
-                        <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
-                            Keyword
-                        </InputLabel>
-                        <OutlinedInput
-                            id="component-outlined"
-                            label="Keyword"
-                            onChange={searchChangeHandler}
-                            value={searchValue}
-                        />
-                    </FormControl>
-                </Box>
-                <Divider
-                    sx={{
-                        backgroundColor: (theme) => theme.palette.primary.main,
-                        height: 2,
-                        mt: 2,
-                    }}
-                />
                 <MethodsFilter
                     methods={methodList}
                     checks={methods}

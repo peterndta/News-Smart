@@ -76,13 +76,6 @@ const CreateRecipe = () => {
                     >
                         Home
                     </Link>
-                    <Link
-                        to="/recipes/me"
-                        style={{ color: '#637381', textDecoration: 'none' }}
-                        fontWeight={700}
-                    >
-                        My Recipes
-                    </Link>
                     <Typography color="text.primary" fontWeight={700}>
                         Add A Recipe
                     </Typography>

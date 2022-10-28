@@ -68,7 +68,6 @@ const DetailPopup = (props) => {
                         sx={{
                             fontWeight: 700,
                         }}
-                        // color="primary"
                     >
                         Report
                     </Typography>
