@@ -34,7 +34,7 @@ class IconDetail extends StatelessWidget {
     return Column(
       children: [
         IconButton(
-          iconSize: 35,
+          iconSize: 30,
           color: color,
           icon: Icon(icon),
           onPressed: () {
@@ -199,31 +199,27 @@ class _UserProfileState extends State<UserProfile> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               style: const TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
                           Text.rich(
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            softWrap: false,
+                            maxLines: 2,
                             TextSpan(
                               children: <InlineSpan>[
                                 const WidgetSpan(
                                   child: Text(
                                     'Email: ',
                                     style: TextStyle(
-                                      fontSize: 12.0,
+                                      fontSize: 10.0,
                                     ),
                                   ),
                                 ),
-                                WidgetSpan(
-                                  child: Text(
-                                    widget.userInfoProvider.mail,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12.0,
-                                    ),
+                                TextSpan(
+                                  text: widget.userInfoProvider.mail,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10.0,
                                   ),
                                 ),
                               ],
