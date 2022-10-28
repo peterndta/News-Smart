@@ -47,8 +47,6 @@ namespace reciWebApp.Controllers
                 {
                     return BadRequest(new Response(400, "Collection id is invalid"));
                 }
-;
-                var subCollectionId = _repoManager.SubCollection.CreateSubCollection(id);
 
                 if (foodCollecitionDTO.PostsId != null)
                 {
@@ -60,7 +58,7 @@ namespace reciWebApp.Controllers
                             _repoManager.FoodCollection.CreateFoodCollection(new FoodCollection
                             {
                                 PostsId = postId,
-                                SubCollectionId = subCollectionId,
+                                CollectionId = id,
                             });
                         }
                         else

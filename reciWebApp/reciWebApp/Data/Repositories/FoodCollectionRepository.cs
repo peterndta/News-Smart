@@ -15,14 +15,9 @@ namespace reciWebApp.Data.Repositories
             Create(foodCollection);
         }
 
-        public Task<List<FoodCollection>> GetFoodCollectionAsync()
+        public async Task<List<FoodCollection>> GetFoodCollectionsAsync(int collectionId)
         {
-            return GetAll().ToListAsync();
-        }
-
-        public async Task<List<FoodCollection>> GetFoodCollectionsAsync(string subCollectionId)
-        {
-            return await GetByCondition(x => x.SubCollectionId.Equals(subCollectionId)).ToListAsync();
+            return await GetByCondition(x => x.CollectionId == collectionId).ToListAsync();
         }
     }
 }

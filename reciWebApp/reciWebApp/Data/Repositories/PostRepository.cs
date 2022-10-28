@@ -46,41 +46,6 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.UserId == id).ToListAsync();
         }
 
-        //public async Task<List<Post>?> GetAllPostsAsync(PostParams postParams)
-        //{
-        //    var posts =  GetAll().ToList();
-        //    if (postParams.PostsByCategories != null)
-        //    {
-        //        posts = posts.Intersect(postParams.PostsByCategories).ToList();
-        //    }
-        //    if (postParams.PostsByCookingMethods != null)
-        //    {
-        //        posts = (posts.Intersect(postParams.PostsByCookingMethods)).ToList();
-        //    }
-        //    if (postParams.PostsByCollections != null)
-        //    {
-        //        posts = (posts.Intersect(postParams.PostsByCollections)).ToList();
-        //    }
-        //    if (postParams.PostsRecipeRegions != null && postParams.PostsByUses != null)
-        //    {
-        //        posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
-        //        posts = posts.Union(postParams.PostsByUses).DistinctBy(x => x.Id).ToList();
-        //    }            
-        //    else if (postParams.PostsRecipeRegions != null && postParams.PostsByUses == null)
-        //    {
-        //        posts = (posts.Intersect(postParams.PostsRecipeRegions)).ToList();
-        //    }
-        //    else if (postParams.PostsRecipeRegions == null && postParams.PostsByUses != null)
-        //    {
-        //        posts = posts.Intersect(postParams.PostsByUses).ToList();
-        //    }
-        //    if (postParams.Name != null)
-        //    {
-        //        posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
-        //    }
-        //    return posts;
-        //}
-
         public async Task<List<Post>?> GetAllPostsByUserIdAsync(string? name, int userId)
         {
             var posts = await GetByCondition(x => x.UserId == userId)
@@ -98,7 +63,11 @@ namespace reciWebApp.Data.Repositories
                 postCategories.DistinctBy(x => x.PostId);
                 foreach (var postCategory in postCategories)
                 {
-                    result.Add(GetPostById(postCategory.PostId));
+                    var post = GetPostById(postCategory.PostId);
+                    if (post != null)
+                    {
+                        result.Add(post);
+                    }
                 }              
             }
             return result;
@@ -185,24 +154,6 @@ namespace reciWebApp.Data.Repositories
             return result;
         }
 
-        public List<Post> GetPostsByFoodCollections(List<FoodCollection> foodCollections)
-        {
-            var posts = new List<Post>();
-            if (foodCollections.Count > 0)
-            {
-                foodCollections = foodCollections.DistinctBy(x => x.PostsId).ToList();
-                foreach (var foodCollection in foodCollections)
-                {
-                    var validResult = GetByCondition(x => x.Id.Equals(foodCollection.PostsId)).FirstOrDefault();
-                    if (validResult != null)
-                    {
-                        posts.Add(validResult);
-                    }                   
-                }
-            }
-            return posts;
-        }
-
         public async Task<List<Post>?> GetPostsFilterByMethodsAsync(PostParams postParams)
         {
             var posts = GetAll();
@@ -261,17 +212,39 @@ namespace reciWebApp.Data.Repositories
             return await GetAll().FilterPostByName(_reciContext, postFilterByNameParams.Search).ToListAsync();
         }
 
-        public async Task<List<Post>?> GetPostToAddToCollectionAsync(List<string>? postId)
+        public List<Post> GetPostByFoodCollection(List<FoodCollection> foodCollections)
         {
-            var posts = GetAll();
-            if (postId != null)
+            var posts = GetAll().ToList();
+            var result = new List<Post>();
+            if (posts.Count > 0 && foodCollections.Count > 0)
             {
-                foreach (var id in postId)
+                foodCollections.DistinctBy(x => x.PostsId);
+                foreach (var foodCollection in foodCollections)
                 {
-                    posts = posts.Except(GetByCondition(x => x.Id.Equals(id)));
+                    var post = GetPostById(foodCollection.PostsId);
+                    if (post != null)
+                    {
+                        result.Add(post);
+                    }
                 }
-            }            
-            return await posts.ToListAsync();
+            }
+            return result;
+        }
+
+        public async Task<List<Post>> GetPostFilter(List<Post>? post, string? name)
+        {
+            var allPosts = GetAll();
+            if (post != null)
+            {
+                allPosts = (allPosts.Intersect(post));
+            }
+
+            if (name != null)
+            {
+                allPosts = allPosts.Where(x => x.Name.Contains(name));
+            }
+
+            return await allPosts.ToListAsync();
         }
     }
 }
