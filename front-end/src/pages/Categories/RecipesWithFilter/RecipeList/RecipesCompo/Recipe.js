@@ -59,7 +59,7 @@ const LatestRecipe = ({ post }) => {
                             By
                         </Typography>
                         <Typography component="span" ml={1.5} variant="body2" fontWeight={700}>
-                            {post.author}
+                            {post.userName}
                         </Typography>
                     </Box>
                 </CardContent>
