@@ -45,7 +45,6 @@ namespace reciWebApp.Configs
             CreateMap<PostReport, ReturnReportDTO>();
             CreateMap<PostReportParams, ReturnReportDTO>();
             CreateMap<UserReportParams, ReturnReportDTO>();
-            CreateMap<SubCollection, ShowSubCollectionDTO>();
             CreateMap<UpdatePostDTO, Step>();
         }
     }

@@ -559,23 +559,12 @@ namespace reciWebApp.Controllers
 
         //Get post to add collections recipe
         [HttpGet]
-        [Route("~/api/addcollections/{id}/post/page/{pageNumber}")]
+        [Route("~/api/post/non-collection/page/{pageNumber}")]
         public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] AddPostToCollectionParams @params)
         {
             try
             {
-                var collection = await _repoManager.Collection.GetCollectionAsync(id);
-                if (collection == null)
-                {
-                    return BadRequest(new Response(400, "Not found collection"));
-                }
-
-                var subCollections = await _repoManager.SubCollection.GetAllSubCollectionAsync(id);
-                List<FoodCollection> foodCollectionList = new List<FoodCollection>();
-                foreach (var subCollection in subCollections)
-                {
-                    foodCollectionList.AddRange(await _repoManager.FoodCollection.GetFoodCollectionsAsync(subCollection.Id));
-                }
+                var foodCollectionList = await _repoManager.FoodCollection.GetFoodCollectionAsync();
 
                 var postIdList = foodCollectionList.DistinctBy(x => x.PostsId).Select(x => x.PostsId).ToList();
                 var postList = await _repoManager.Post.GetPostToAddToCollectionAsync(postIdList);

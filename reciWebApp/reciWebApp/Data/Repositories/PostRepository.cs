@@ -264,10 +264,13 @@ namespace reciWebApp.Data.Repositories
         public async Task<List<Post>?> GetPostToAddToCollectionAsync(List<string>? postId)
         {
             var posts = GetAll();
-            foreach (var id in postId)
+            if (postId != null)
             {
-                posts = posts.Except(GetByCondition(x => x.Id.Equals(id)));
-            }
+                foreach (var id in postId)
+                {
+                    posts = posts.Except(GetByCondition(x => x.Id.Equals(id)));
+                }
+            }            
             return await posts.ToListAsync();
         }
     }
