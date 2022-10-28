@@ -136,11 +136,11 @@ const UpdateRecipe = () => {
                                 Home
                             </Link>
                             <Link
-                                to="/recipes"
+                                to="/me"
                                 style={{ color: '#637381', textDecoration: 'none' }}
                                 fontWeight={700}
                             >
-                                Recipes
+                                My Recipes
                             </Link>
                             <Link
                                 to={`/recipes/${id}`}
