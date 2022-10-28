@@ -198,7 +198,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 49, 48, 48),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25),
+                                      fontSize: 20),
                                 ),
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height *
@@ -224,7 +224,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       allowHalfRating: true,
                                       starCount: 5,
                                       rating: snapshot.data.averageRating * 1.0,
-                                      size: 13,
+                                      size: 11,
                                       spacing: 10,
                                     ),
                                   ],
@@ -408,7 +408,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'About this recipe',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 ),
@@ -419,7 +419,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               ),
                               Text(
                                 snapshot.data.description,
-                                style: TextStyle(fontSize: 13),
+                                style: TextStyle(fontSize: 11),
                               )
                             ],
                           ),
@@ -450,12 +450,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Preparing',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                        '${snapshot.data.preparingTime} minutes')
+                                        '${snapshot.data.preparingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                                 VerticalDivider(
@@ -470,12 +471,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Processing',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                        '${snapshot.data.processingTime} minutes')
+                                        '${snapshot.data.processingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                                 const VerticalDivider(
@@ -490,11 +492,12 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Cooking',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
-                                    Text('${snapshot.data.cookingTime} minutes')
+                                    Text('${snapshot.data.cookingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                               ],
@@ -520,7 +523,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       child: Text(
                                         'Preparing',
                                         style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 17,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey),
                                       ),
@@ -541,15 +544,15 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                             TextSpan(
                                                 text: " Serving: ",
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                )),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 11)),
                                             TextSpan(
                                                 text:
                                                     "${snapshot.data.serving} people",
                                                 style: TextStyle(
-                                                  color: Colors.black,
-                                                ))
+                                                    color: Colors.black,
+                                                    fontSize: 11))
                                           ]))
                                         ],
                                       ),
@@ -637,7 +640,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Processing',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
@@ -668,7 +671,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Cooking',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
@@ -701,7 +704,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'Video',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 ),
