@@ -10,6 +10,7 @@ import '../login_support/auth_service.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../main.dart';
+import '../object/auth_recipe_review.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
 import 'user_bookmark_page.dart';
@@ -276,7 +277,8 @@ class _UserProfileState extends State<UserProfile> {
                 ],
               ),
             ),
-            ListRecipeReview(0.47, _listReciepReviews, controller, hasMore)
+            ListAuthRecipeReview(
+                0.47, _listReciepReviews, controller, hasMore, "profile")
           ]),
         ),
       ),

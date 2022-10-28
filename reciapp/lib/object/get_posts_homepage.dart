@@ -1,9 +1,14 @@
 // To parse this JSON data, do
 //
 //     final getPosts = getPostsFromJson(jsonString);
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+import 'package:reciapp/object/user_info.dart';
 
 import 'dart:convert';
+
+import '../login_support/user_preference.dart';
 
 GetPosts getPostsFromJson(String str) => GetPosts.fromJson(json.decode(str));
 
@@ -22,6 +27,22 @@ Future fetchPosts() async {
   return (responseJson['data'] as List)
       .map((p) => GetPosts.fromJson(p))
       .toList();
+}
+
+Future deletePosts(String postID) async {
+  UserData userData =
+      UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+  http.Response response = await http.delete(
+    Uri.parse('https://reciapp.azurewebsites.net/api/post/$postID'),
+    headers: {
+      "content-type": "application/json",
+      "accept": "application/json",
+      HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+    },
+  );
+  var responseJson = json.decode(response.body);
+  print(responseJson);
+  return response.statusCode;
 }
 
 class GetPosts {
