@@ -36,10 +36,14 @@ namespace reciWebApp.Services
         public ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO)
         {
             var listPostCategories = _repoManager.PostCategory.GetPostCategoriesByPostId(showPostDTO.Id);
-            List<Category> categories = new List<Category>();
+            var categories = new List<Category>();
             foreach (var postCategory in listPostCategories)
             {
-                categories.Add(_repoManager.Category.GetCategoryById(postCategory.CategoryId));
+                var category = _repoManager.Category.GetCategoryById(postCategory.CategoryId);
+                if (category != null)
+                {
+                    categories.Add(category);
+                }               
             }
             showPostDTO.ListCategories = _mapper.Map<List<ShowCategoryDTO>>(categories);
             showPostDTO.Continents = _repoManager.RecipeRegion.GetRecipeRegionsById(showPostDTO.RecipeRegionId).Continents;
