@@ -9,7 +9,10 @@ const useCollection = () => {
     const addPostsToCollection = (collectionId, postsId) =>
         post({ endpoint: `/api/collection/${collectionId}/foodcollection`, body: postsId })
 
-    return { createCollection, getCollections, addPostsToCollection }
+    const getRecipesWithCollection = (filters, pageNum = 1) =>
+        get({ endpoint: `/api/collections/post/page/${pageNum}${filters}` })
+
+    return { createCollection, getCollections, addPostsToCollection, getRecipesWithCollection }
 }
 
 export default useCollection

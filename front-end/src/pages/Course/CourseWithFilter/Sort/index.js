@@ -8,7 +8,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 const Sort = () => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { collection, sort, pageNum } = queryString.parse(query)
+    const { collection, sort, pageNum, search } = queryString.parse(query)
     const [type, setType] = React.useState(sort ? sort : '')
 
     const handleChange = (event) => {
@@ -18,6 +18,8 @@ const Sort = () => {
     const filterHandler = () => {
         let route = pathname + '?'
         if (collection && collection.trim() !== '') route += '&collection=' + collection
+
+        if (search && search.trim() !== '') route += '&search=' + search
 
         if (!!type) route += `&sort=${type}`
 

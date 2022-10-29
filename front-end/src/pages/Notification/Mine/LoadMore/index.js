@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Pagination } from '@mui/material'
+import { Typography } from '@mui/material'
+import { grey } from '@mui/material/colors'
 
-const Paging = ({ size }) => {
+const LoadMore = ({ size }) => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { search, pageNum, collection } = queryString.parse(query)
+    const { search, sort, pageNum } = queryString.parse(query)
     const [pageNumber, setPageNumber] = useState(pageNum ? +pageNum : 1)
 
     const pagingHandler = (__, value) => setPageNumber(value)
@@ -17,7 +18,7 @@ const Paging = ({ size }) => {
         let route = pathname + '?'
         if (search && search.trim() !== '') route += '&search=' + search
 
-        if (collection && collection.trim() !== '') route += '&collection=' + collection
+        if (sort) route += `&sort=${sort}`
 
         if (pageNumber !== 1) route += `&pageNum=${pageNumber}`
 
@@ -30,14 +31,10 @@ const Paging = ({ size }) => {
     }, [pageNumber])
 
     return (
-        <Pagination
-            count={size}
-            variant="outlined"
-            sx={{ alignSelf: 'center', mt: 6 }}
-            onChange={pagingHandler}
-            page={pageNumber}
-        />
+        <Typography fontWeight={700} sx={{ alignSelf: 'center', mt: 6, color: grey[600] }}>
+            Load more activities
+        </Typography>
     )
 }
 
-export default Paging
+export default LoadMore

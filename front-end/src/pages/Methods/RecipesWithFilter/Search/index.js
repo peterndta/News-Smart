@@ -10,7 +10,7 @@ import { blueGrey } from '@mui/material/colors'
 const SearchBox = () => {
     const { search: query, pathname } = useLocation()
     const history = useHistory()
-    const { search, pageNum, collection } = queryString.parse(query)
+    const { search, sort, pageNum, method } = queryString.parse(query)
     const [searchValue, setSearchValue] = useState(search ? search : '')
 
     const searchChangeHandler = (event) => {
@@ -23,7 +23,11 @@ const SearchBox = () => {
             let route = pathname + '?'
             if (searchValue && searchValue.trim() !== '') route += '&search=' + searchValue
 
-            if (collection && collection.trim() !== '') route += '&collection=' + collection
+            if (method && Array.isArray(method))
+                method.forEach((method) => (route += `&method=${method}`))
+            else if (method !== undefined) route += `&method=${method}`
+
+            if (sort) route += `&sort=${sort}`
 
             if (pageNum) route += `&pageNum=${pageNum}`
 
@@ -51,6 +55,7 @@ const SearchBox = () => {
                 inputProps={{ 'aria-label': 'search recipe name' }}
                 onChange={searchChangeHandler}
                 onKeyDown={searchSubmitHandler}
+                size="small"
             />
         </Box>
     )

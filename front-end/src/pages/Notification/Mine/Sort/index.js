@@ -8,7 +8,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 const Sort = () => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { category, search, sort, pageNum } = queryString.parse(query)
+    const { search, sort, pageNum } = queryString.parse(query)
     const [type, setType] = React.useState(sort ? sort : '')
 
     const handleChange = (event) => {
@@ -18,10 +18,6 @@ const Sort = () => {
     const filterHandler = () => {
         let route = pathname + '?'
         if (search && search.trim() !== '') route += '&search=' + search
-
-        if (category && Array.isArray(category))
-            category.forEach((category) => (route += `&category=${category}`))
-        else if (category !== undefined) route += `&category=${category}`
 
         if (!!type) route += `&sort=${type}`
 
@@ -36,7 +32,7 @@ const Sort = () => {
     }, [type])
 
     return (
-        <FormControl sx={{ minWidth: 100, alignSelf: 'flex-start' }} size="small">
+        <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">
             <InputLabel id="demo-select-small">Sort</InputLabel>
             <Select
                 labelId="demo-select-small"
