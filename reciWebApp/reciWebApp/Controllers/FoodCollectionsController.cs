@@ -30,46 +30,98 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (currentUser == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
-
-                //if (!currentUser.Role.Equals("admin"))
-                //{
-                //    return BadRequest(new Response(400, "You do not have permission"));
-                //}
-
                 var collection = await _repoManager.Collection.GetCollectionAsync(id);
                 if (collection == null)
                 {
                     return BadRequest(new Response(400, "Collection id is invalid"));
                 }
 
-                if (foodCollecitionDTO.PostsId != null)
+                if (foodCollecitionDTO.PostsId == null)
                 {
-                    foreach (var postId in foodCollecitionDTO.PostsId)
-                    {
-                        var post = await _repoManager.Post.GetPostByIdAsync(postId);
-                        if (post != null)
-                        {
-                            _repoManager.FoodCollection.CreateFoodCollection(new FoodCollection
-                            {
-                                PostsId = postId,
-                                CollectionId = id,
-                            });
-                        }
-                        else
-                        {
-                            return BadRequest(new Response(400, "Post id is invalid"));
-                        }
-                    }
-                    await _repoManager.SaveChangesAsync();
-                    return Ok(new Response(200, "", "Create food collection successfully"));
+                    return BadRequest(new Response(400, "Post id is empty"));
                 }
-                return BadRequest(new Response(400, "Post id is empty"));
+                
+                var count = 0;
+                var numberOfPostIncollection = (await _repoManager.FoodCollection.GetFoodCollectionsAsync(id)).Count;
+                foreach (var postId in foodCollecitionDTO.PostsId)
+                {
+                    var post = await _repoManager.Post.GetPostByIdAsync(postId);
+                    var foodCollection = await _repoManager.FoodCollection.GetFoodCollectionAsync(postId, id);
+                    if (post != null && foodCollection == null)
+                    {
+                        count++;
+                        _repoManager.FoodCollection.CreateFoodCollection(new FoodCollection
+                        {
+                            PostsId = postId,
+                            CollectionId = id,
+                        });
+                    }
+                    else if (post == null)
+                    {
+                        return BadRequest(new Response(400, "Post id is invalid"));
+                    }
+                }
+
+                if (count == 0)
+                {
+                    return BadRequest(new Response(400, "No posts added"));
+                }
+
+                await _repoManager.SaveChangesAsync();
+                return Ok(new Response(200, new
+                                            {
+                                                AlreadyExist = numberOfPostIncollection,
+                                                Added = count,
+                                            }, "Create food collection successfully"));                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
+
+        [HttpPut]
+        [Route("~/api/post/{id}/foodcollection")]
+        public async Task<IActionResult> Put(string id, [FromBody] UpdateFoodCollectionDTO foodCollectionDTO)
+        {
+            try
+            {
+                var post = await _repoManager.Post.GetPostByIdAsync(id);
+                if (post == null)
+                {
+                    return BadRequest(new Response(400, "Invalid post id"));
+                }
+
+                var getListCollection = _repoManager.FoodCollection.GetFoodCollectionsByPostId(id);
+                if (getListCollection != null)
+                {
+                    _repoManager.FoodCollection.BulkDeleteFoodCollection(getListCollection);
+                }
+
+                if (foodCollectionDTO.CollectionsId == null)
+                {
+                    return BadRequest(new Response(400, "Collection id is empty"));
+                }
+
+                foreach (var collectionId  in foodCollectionDTO.CollectionsId)
+                {
+                    var collection = await _repoManager.Collection.GetCollectionAsync(collectionId);
+                    if (collection != null)
+                    {
+                        _repoManager.FoodCollection.CreateFoodCollection(new FoodCollection
+                        {
+                            PostsId = id,
+                            CollectionId = collectionId,
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest(new Response(400, "Invalid collection id"));
+                    }
+                }
+
+                await _repoManager.SaveChangesAsync();
+                return Ok(new Response(200, "", "Update successfully"));
             }
             catch (Exception ex)
             {
