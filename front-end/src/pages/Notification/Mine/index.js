@@ -11,7 +11,6 @@ import { grey } from '@mui/material/colors'
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import authAtom from '../../../recoil/auth/atom'
 import useMyRecipe from '../../../recoil/my-recipe/action'
-import useRecipe from '../../../recoil/recipe/action'
 import Loading from '../../Loading'
 import LoadMore from './LoadMore'
 import Recipes from './Recipes'
@@ -30,7 +29,6 @@ const Mine = () => {
     const { search, sort, pageNum } = queryString.parse(query)
     const auth = useRecoilValue(authAtom)
     const myRecipesAction = useMyRecipe()
-    const { deleteRecipe } = useRecipe()
     const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
