@@ -19,7 +19,7 @@ const PostListCompo = ({ name, description, rating, imageUrl, id, selectHandler,
                     checked={options.indexOf(id) !== -1}
                 />
                 <Box display="flex" width="100%">
-                    <RouterLink to={`${window.location.pathname}/${id}`}>
+                    <RouterLink to={`/admin/posts-management/${id}`}>
                         <Box
                             component="img"
                             width={120}
@@ -31,7 +31,7 @@ const PostListCompo = ({ name, description, rating, imageUrl, id, selectHandler,
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center" justifyContent="space-between">
                             <Link
-                                href={`${window.location.pathname}/${id}`}
+                                to={`/admin/posts-management/${id}`}
                                 underline="hover"
                                 variant="h5"
                                 fontWeight={700}
