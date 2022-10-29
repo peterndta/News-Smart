@@ -1,4 +1,4 @@
-import { get, post } from '../../utils/ApiCaller'
+import { get, post, put } from '../../utils/ApiCaller'
 
 const useCollection = () => {
     const createCollection = (value) =>
@@ -12,7 +12,16 @@ const useCollection = () => {
     const getRecipesWithCollection = (filters, pageNum = 1) =>
         get({ endpoint: `/api/collections/post/page/${pageNum}${filters}` })
 
-    return { createCollection, getCollections, addPostsToCollection, getRecipesWithCollection }
+    const updatePostsToCollection = (postId, collectionsId) =>
+        put({ endpoint: `/api/post/${postId}/foodcollection`, body: collectionsId })
+
+    return {
+        createCollection,
+        getCollections,
+        addPostsToCollection,
+        getRecipesWithCollection,
+        updatePostsToCollection,
+    }
 }
 
 export default useCollection
