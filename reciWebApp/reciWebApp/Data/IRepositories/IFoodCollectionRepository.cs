@@ -7,7 +7,7 @@ namespace reciWebApp.Data.IRepositories
         void CreateFoodCollection(FoodCollection foodCollection);
         Task<List<FoodCollection>> GetFoodCollectionsAsync(int collectionId);
         List<FoodCollection> GetFoodCollectionsByPostId(string postId);
-        Task<List<FoodCollection>> GetFoodCollectionAsync(string postId, int collectionId);
+        Task<FoodCollection?> GetFoodCollectionAsync(string postId, int collectionId);
         void BulkDeleteFoodCollection(List<FoodCollection> foodCollections);
     }
 }

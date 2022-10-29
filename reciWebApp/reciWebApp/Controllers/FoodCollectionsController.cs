@@ -64,7 +64,7 @@ namespace reciWebApp.Controllers
 
                 if (count == 0)
                 {
-                return BadRequest(new Response(400, "No posts added"));
+                    return BadRequest(new Response(400, "No posts added"));
                 }
 
                 await _repoManager.SaveChangesAsync();

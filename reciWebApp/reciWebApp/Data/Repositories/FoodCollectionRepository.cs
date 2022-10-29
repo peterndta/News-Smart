@@ -25,9 +25,9 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.PostsId.Equals(postId)).ToList();
         }
 
-        public async Task<List<FoodCollection>> GetFoodCollectionAsync(string postId, int collectionId)
+        public async Task<FoodCollection?> GetFoodCollectionAsync(string postId, int collectionId)
         {
-            return await GetByCondition(x => x.PostsId.Equals(postId) && x.CollectionId == collectionId).ToListAsync();
+            return await GetByCondition(x => x.PostsId.Equals(postId) && x.CollectionId == collectionId).SingleOrDefaultAsync();
         }
 
         public void BulkDeleteFoodCollection(List<FoodCollection> foodCollections)
