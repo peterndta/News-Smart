@@ -5,6 +5,7 @@ import { Box, Grid } from '@mui/material'
 import CollectionTab from './CollectionTab'
 import PostList from './PostList'
 import RecipeFilterName from './RecipeFilterName'
+import SearchBox from './Search'
 
 const RecipesCollection = () => {
     const [selectionOptions, setSelectOptions] = useState([])
@@ -28,6 +29,7 @@ const RecipesCollection = () => {
                         <CollectionTab options={selectionOptions} />
                     </Grid>
                     <Grid item md={9} display="flex" flexDirection="column">
+                        <SearchBox />
                         <PostList selectHandler={selectHandler} options={selectionOptions} />
                     </Grid>
                 </Grid>

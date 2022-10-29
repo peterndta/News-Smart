@@ -21,9 +21,9 @@ const SearchBox = () => {
     const searchSubmitHandler = (event) => {
         if (event.key === 'Enter') {
             let route = pathname + '?'
-            if (searchValue) route += '&search=' + searchValue
+            if (searchValue && searchValue.trim() !== '') route += '&search=' + searchValue
 
-            if (collection) route += '&collection=' + collection
+            if (collection && collection.trim() !== '') route += '&collection=' + collection
 
             if (pageNum) route += `&pageNum=${pageNum}`
 

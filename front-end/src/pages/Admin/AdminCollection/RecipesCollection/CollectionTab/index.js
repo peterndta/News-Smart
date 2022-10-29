@@ -22,7 +22,7 @@ const CollectionTab = ({ options }) => {
 
     const filterHandler = () => {
         let route = pathname + '?'
-        if (searchValue) route += '&collection=' + searchValue
+        if (searchValue) route += '&collection=' + searchValue.collectionName
 
         if (search && search.trim() !== '') route += '&search=' + search
 
@@ -71,7 +71,8 @@ const CollectionTab = ({ options }) => {
                         value={searchValue}
                         onChange={searchChangeHandler}
                         id="controllable-states-demo"
-                        options={collectionList.list.map((option) => option.collectionName)}
+                        options={collectionList.list}
+                        getOptionLabel={(option) => option.collectionName}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -85,6 +86,7 @@ const CollectionTab = ({ options }) => {
                             />
                         )}
                         placeholder="Summer Course"
+                        disableClearable={searchValue !== undefined}
                     />
                 </FormControl>
             </Box>
@@ -93,7 +95,7 @@ const CollectionTab = ({ options }) => {
                 <Button
                     variant="contained"
                     sx={{ color: grey[100] }}
-                    disabled={!collection}
+                    disabled={!searchValue}
                     onClick={addToCollectionHandler}
                 >
                     ADD TO COLLECTION
