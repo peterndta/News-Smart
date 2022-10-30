@@ -7,7 +7,6 @@ import { blueGrey } from '@mui/material/colors'
 
 const RecipeCompo = ({ name, imageUrl, id, index }) => {
     const history = useHistory()
-    console.log(index)
     return (
         <Grid item md={12} mt={1}>
             <Box mt={2} sx={{ backgroundColor: index % 2 ? '#F2F2F2' : '#F6EEE4' }}>

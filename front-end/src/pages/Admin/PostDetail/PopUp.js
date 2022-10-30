@@ -16,18 +16,47 @@ import {
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
-import collectionAtom from '../../../recoil/collection'
+import { useSnackbar } from '../../../HOCs/SnackbarContext'
+import collectionAtom, { useCollection } from '../../../recoil/collection'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
 })
 
-const PopUp = ({ open, onClose }) => {
+const PopUp = ({ open, onClose, collection, postId, setCollections }) => {
     const collections = useRecoilValue(collectionAtom)
-    const [searchValue, setSearchValue] = useState(null)
+    const [searchValue, setSearchValue] = useState(collection)
+    const collectionAction = useCollection()
+    const showSnackbar = useSnackbar()
 
     const searchChangeHandler = (__, value) => {
         setSearchValue(value)
+    }
+
+    const updateToCollectionHandler = () => {
+        let collectionsId = []
+        collections.list.forEach((collect) => {
+            if (searchValue.includes(collect.collectionName)) {
+                collectionsId.push(collect.id)
+            }
+        })
+
+        collectionAction
+            .updatePostsToCollection(postId, { collectionsId: collectionsId })
+            .then(() => {
+                showSnackbar({
+                    severity: 'success',
+                    children: 'Update to collection successfully.',
+                })
+                setCollections(searchValue)
+                onClose()
+            })
+            .catch(() => {
+                showSnackbar({
+                    severity: 'error',
+                    children: 'Something went wrong, please refresh page then try again!',
+                })
+            })
     }
 
     return (
@@ -44,17 +73,19 @@ const PopUp = ({ open, onClose }) => {
                         Choose collection
                     </Typography>
                     <Autocomplete
-                        size="small"
                         value={searchValue}
+                        size="small"
                         onChange={searchChangeHandler}
                         id="controllable-states-demo"
-                        sx={{ ml: 3, width: '1' }}
+                        sx={{ ml: 3, width: '50%' }}
                         options={collections.list.map((option) => option.collectionName)}
+                        multiple
+                        limitTags={2}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
                                 label="Collection"
-                                placeholder="e.g. Summer Food"
+                                placeholder="e.g. Summer"
                                 sx={{
                                     '& .css-1xcbdvh-MuiInputBase-root-MuiOutlinedInput-root': {
                                         paddingBottom: '12px',
@@ -63,6 +94,7 @@ const PopUp = ({ open, onClose }) => {
                             />
                         )}
                         placeholder="Summer Course"
+                        disableClearable={!searchValue.length !== 0}
                     />
                 </Box>
             </DialogContent>
@@ -70,7 +102,11 @@ const PopUp = ({ open, onClose }) => {
                 <Button variant="contained" color="error" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button variant="contained" sx={{ color: grey[100] }}>
+                <Button
+                    variant="contained"
+                    sx={{ color: grey[100] }}
+                    onClick={updateToCollectionHandler}
+                >
                     Update
                 </Button>
             </DialogActions>

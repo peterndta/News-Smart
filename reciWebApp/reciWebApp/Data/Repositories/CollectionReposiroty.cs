@@ -15,6 +15,11 @@ namespace reciWebApp.Data.Repositories
             Create(collection);
         }
 
+        public Collection? GetCollection(int id)
+        {
+            return GetByCondition(x => x.Id == id).SingleOrDefault();
+        }
+
         public Task<Collection?> GetCollectionAsync(int id)
         {
             return GetByCondition(x => x.Id == id).SingleOrDefaultAsync();
