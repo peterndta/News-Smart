@@ -20,6 +20,7 @@ namespace reciWebApp.Data.Models
         public virtual DbSet<Collection> Collections { get; set; } = null!;
         public virtual DbSet<CookingMethod> CookingMethods { get; set; } = null!;
         public virtual DbSet<FoodCollection> FoodCollections { get; set; } = null!;
+        public virtual DbSet<Notification> Notifications { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<PostCategory> PostCategories { get; set; } = null!;
         public virtual DbSet<PostMetum> PostMeta { get; set; } = null!;
@@ -89,6 +90,33 @@ namespace reciWebApp.Data.Models
                     .HasConstraintName("FK_FoodCollections_Posts");
             });
 
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(e => e.PostReportId);
+
+                entity.ToTable("Notification");
+
+                entity.Property(e => e.PostReportId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("post_report_id");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("create_date");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Message).HasColumnName("message");
+
+                entity.HasOne(d => d.PostReport)
+                    .WithOne(p => p.Notification)
+                    .HasForeignKey<Notification>(d => d.PostReportId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Notification_PostReports1");
+            });
+
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -132,6 +160,12 @@ namespace reciWebApp.Data.Models
                     .HasForeignKey(d => d.RecipeRegionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Posts_RecipeRegions");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Posts_Users");
 
                 entity.HasOne(d => d.Uses)
                     .WithMany(p => p.Posts)
