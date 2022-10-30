@@ -43,6 +43,7 @@ const RecipeDetail = () => {
     const [open, setOpen] = React.useState(false)
     const [recipe, setRecipe] = useState({})
     const [categories, setCategories] = useState([])
+    const [collections, setCollections] = useState([])
     const [step, setStep] = useState({})
     const [star, setStar] = useState(0)
     const { id } = useParams()
@@ -102,6 +103,12 @@ const RecipeDetail = () => {
                 const data = response.data.data
                 setRecipe(data)
                 setCategories(data.listCategories)
+                if (data.listCollections !== null) {
+                    const collections = data.listCollections.map(
+                        (collection) => collection.collectionName
+                    )
+                    setCollections(collections)
+                }
                 setStar(data.averageRating)
 
                 getStep(id)
@@ -265,6 +272,30 @@ const RecipeDetail = () => {
                                     </Typography>
                                 )}
                             </Box>
+                            {collections.length && (
+                                <Box display="flex">
+                                    <Typography
+                                        variant="subtitle1"
+                                        sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                                        fontWeight={700}
+                                        mr={1}
+                                    >
+                                        Collections:{' '}
+                                    </Typography>
+                                    <Box display="flex">
+                                        {collections.map((item, index) => (
+                                            <Typography
+                                                key={index}
+                                                variant="subtitle1"
+                                                fontWeight={400}
+                                                sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                                            >
+                                                {(index ? ', ' : '') + item}
+                                            </Typography>
+                                        ))}
+                                    </Box>
+                                </Box>
+                            )}
                             <Typography
                                 mt={4}
                                 variant="h4"

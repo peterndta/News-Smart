@@ -47,11 +47,18 @@ const CollectionTab = ({ options }) => {
                     children: `Successfully adding ${options.length} items into collection ${searchValue.collectionName}`,
                 })
             })
-            .catch(() => {
-                showSnackbar({
-                    severity: 'error',
-                    children: `Something went wrong, please refresh the page and try again!`,
-                })
+            .catch((error) => {
+                if (error.response.status === 400) {
+                    showSnackbar({
+                        severity: 'error',
+                        children: `${options.length} items has been already added into this collection`,
+                    })
+                } else {
+                    showSnackbar({
+                        severity: 'error',
+                        children: `Something went wrong, please refresh the page and try again!`,
+                    })
+                }
             })
     }
 
