@@ -53,14 +53,22 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0).ToListAsync();
         }
 
-        public async Task ApproveReportAsync(string postReportId)
+        public async Task ApproveReportAsync(int postReportId)
         {
-            var reportList = await GetByCondition(x => x.PostsId.Equals(postReportId)).ToListAsync();
-            foreach (var report in reportList)
+            var report = await GetByCondition(x => x.Id == postReportId).FirstAsync();
+            report.Status = 1;
+            Update(report);
+            var listReport = await GetByCondition(x => x.PostsId.Equals(report.PostsId) && x.Id != report.Id).ToListAsync();
+            if (listReport.Count > 0)
             {
-                report.Status = 1;
-                Update(report);
+                BulkDelete(listReport);
             }
+        }
+
+        public async Task<PostReport?> GetApprovedReportByPostIdAsync(string postId)
+        {
+            var report = await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 1).SingleOrDefaultAsync();
+            return report;
         }
     }
 }

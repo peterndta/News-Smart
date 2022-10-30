@@ -18,6 +18,7 @@ namespace reciWebApp.Data.Repositories
         private ICollectionRepository _collectionRepository;
         private IFoodCollectionRepository _foodCollectionRepository;
         private IPostReportRepository _postReportRepository;
+        public INotificationRepository _notificationRepository;
         public RepositoryManager(ReciContext context)
         {
             _context = context;
@@ -163,6 +164,18 @@ namespace reciWebApp.Data.Repositories
                     _postReportRepository = new PostReportRepository(_context);
                 }
                 return _postReportRepository;
+            }
+        }
+
+        public INotificationRepository Notification
+        {
+            get
+            {
+                if (_notificationRepository == null)
+                {
+                    _notificationRepository = new NotificationRepository(_context);
+                }
+                return _notificationRepository;
             }
         }
 

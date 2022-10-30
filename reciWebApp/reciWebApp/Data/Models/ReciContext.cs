@@ -104,6 +104,10 @@ namespace reciWebApp.Data.Models
                     .HasColumnType("datetime")
                     .HasColumnName("create_date");
 
+                entity.Property(e => e.HaveSeen)
+                    .HasColumnName("have_seen")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");

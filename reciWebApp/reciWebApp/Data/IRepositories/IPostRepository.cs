@@ -8,7 +8,8 @@ namespace reciWebApp.Data.IRepositories
     public interface IPostRepository
     {
         Task<Post?> GetPostByIdAsync(string id);
-        Task<List<Post>?> GetPostByUserIdAsync(int id);
+        Task<List<Post>> GetPostByUserIdAsync(int id);
+        Task<List<Post>> GetBannedPostByUserIdAsync(int id);
         void CreatePost(Post post);
         Post? GetPostById(string id);
         void DeletePost(Post post); 
