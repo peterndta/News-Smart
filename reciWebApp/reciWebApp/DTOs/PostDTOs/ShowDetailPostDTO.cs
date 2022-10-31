@@ -1,4 +1,5 @@
 ﻿using reciWebApp.DTOs.CategoryDTOs;
+using reciWebApp.DTOs.CollectionDTOs;
 
 namespace reciWebApp.DTOs.PostDTOs
 {
@@ -24,5 +25,6 @@ namespace reciWebApp.DTOs.PostDTOs
         public bool Bookmark { get; set; }
         public int? Rating { get; set; }
         public bool IsReport { get; set; }  
+        public List<ShowCollectionDTO>? ListCollections { get; set; }
     }
 }

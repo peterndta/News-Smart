@@ -47,7 +47,7 @@ const SearchBox = () => {
             </IconButton>
             <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                placeholder="Search recipe name"
+                placeholder="Search name"
                 inputProps={{ 'aria-label': 'search recipe name' }}
                 value={searchValue}
                 onChange={searchChangeHandler}

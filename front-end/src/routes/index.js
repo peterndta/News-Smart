@@ -80,6 +80,13 @@ const privateRoutes = [
         role: 'user',
     },
     {
+        path: '/notification',
+        name: 'my notification',
+        component: lazy(() => import('../pages/Notification')),
+        layout: 'common',
+        role: 'user',
+    },
+    {
         path: '/recipes/create',
         name: 'create recipe',
         component: lazy(() => import('../pages/CreateRecipe')),

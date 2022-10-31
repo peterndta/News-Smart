@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:reciapp/pages/collection_page.dart';
 import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/recipes_page.dart';
@@ -103,7 +104,7 @@ Widget bottomMenuBar(BuildContext context, String checkPage) {
                 : InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => BookmarkPage()));
+                          builder: (context) => CollectionPage()));
                     },
                     child: Column(
                       children: [

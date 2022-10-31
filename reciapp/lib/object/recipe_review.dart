@@ -1,12 +1,7 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reciapp/object/user_info.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
-import '../login_support/check_auth.dart';
-import '../login_support/user_preference.dart';
 import '../pages/recipe_detail.dart';
 import 'get_posts_homepage.dart';
 

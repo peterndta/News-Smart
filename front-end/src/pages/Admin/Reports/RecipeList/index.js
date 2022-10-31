@@ -34,7 +34,6 @@ const RecipeList = () => {
             recipeAction
                 .getReports(params)
                 .then((res) => {
-                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
@@ -55,7 +54,6 @@ const RecipeList = () => {
             recipeAction
                 .getReports(params, pageNum)
                 .then((res) => {
-                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
@@ -74,7 +72,7 @@ const RecipeList = () => {
                 })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, pageNum])
+    }, [search, pageNum, JSON.stringify(recipes)])
 
     const reportHandler = (reportId) => {
         setIsLoading(true)

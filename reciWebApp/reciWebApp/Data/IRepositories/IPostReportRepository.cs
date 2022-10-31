@@ -10,11 +10,12 @@ namespace reciWebApp.Data.IRepositories
     {
         void CreatePostReport(PostReport report);
         void DenyReport(PostReport report);
-
+        Task ApproveReportAsync(int postReportId);
         PostReport GetPostReportById(int id);
         Task<PostReport> GetPostReportByIdAsync(int id);
         bool CheckReport(int userId, string postId);
         List<PostReport> GetPendingPostReportByPostId(string postId);
         Task<List<PostReport>> GetPendingReportByPostIdAsync(string postId);
+        Task<PostReport?> GetApprovedReportByPostIdAsync(string postId);
     }
 }

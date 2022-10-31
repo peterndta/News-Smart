@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { Link, useHistory, useParams } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import { v4 } from 'uuid'
 
 import { Box, Breadcrumbs, Typography } from '@mui/material'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
+import atom from '../../recoil/auth'
 import useRecipe from '../../recoil/recipe/action'
 import { storage } from '../../utils/Firebase'
 import Loading from '../Loading'
@@ -20,15 +22,33 @@ const UpdateRecipe = () => {
     const [recipe, setRecipe] = useState(null)
     const [step, setStep] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const auth = useRecoilValue(atom)
     useEffect(() => {
         setIsLoading(true)
         recipeAction
             .getRecipe(id)
             .then((response) => {
                 const data = response.data.data
-                setRecipe(data)
-                console.log(data)
-                setIsLoading(false)
+                if (+auth.userId !== data.userId) history.push('/')
+                else {
+                    recipeAction
+                        .getStep(id)
+                        .then((response) => {
+                            const steps = response.data.data
+                            setRecipe(data)
+                            setStep(steps)
+                            setIsLoading(false)
+                        })
+                        .catch((error) => {
+                            const message = error.response.data.message
+                            showSnackbar({
+                                severity: 'error',
+                                children:
+                                    message || 'Something went wrong, please try again later.',
+                            })
+                            setIsLoading(false)
+                        })
+                }
             })
             .catch((error) => {
                 const message = error.response.data.message
@@ -37,26 +57,11 @@ const UpdateRecipe = () => {
                     children: message || 'Something went wrong, please try again later.',
                 })
                 setIsLoading(false)
-            })
-        recipeAction
-            .getStep(id)
-            .then((response) => {
-                const steps = response.data.data
-                setStep(steps)
-                console.log(steps)
-            })
-            .catch((error) => {
-                const message = error.response.data.message
-                showSnackbar({
-                    severity: 'error',
-                    children: message || 'Something went wrong, please try again later.',
-                })
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const createRecipeHandler = (poster, recipe) => {
         if (poster.file == null) {
-            console.log(false)
             recipe.imageUrl = poster.src
             recipeAction
                 .updateRecipe(id, recipe)
@@ -74,7 +79,6 @@ const UpdateRecipe = () => {
                     })
                 })
         } else if (poster.file) {
-            console.log(true)
             let fileType = 'png'
             if (poster.file.type.endsWith('jpg')) fileType = 'jpg'
             else if (poster.file.type.endsWith('jpeg')) fileType = 'jpeg'
@@ -136,11 +140,11 @@ const UpdateRecipe = () => {
                                 Home
                             </Link>
                             <Link
-                                to="/recipes"
+                                to="/me"
                                 style={{ color: '#637381', textDecoration: 'none' }}
                                 fontWeight={700}
                             >
-                                Recipes
+                                My Recipes
                             </Link>
                             <Link
                                 to={`/recipes/${id}`}

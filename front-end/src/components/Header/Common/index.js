@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil'
 
 import { AccountCircle, AddCircleOutline, Bookmark, Description, Logout } from '@mui/icons-material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import {
     AppBar,
     Avatar,
@@ -21,6 +21,7 @@ import {
     Toolbar,
     Tooltip,
     Typography,
+    Badge,
 } from '@mui/material'
 import { grey, yellow } from '@mui/material/colors'
 
@@ -221,12 +222,18 @@ const CommonHeader = () => {
                                 },
                             }}
                         >
-                            <Box component={Link} to="/bookmark" sx={{ textDecoration: ' none' }}>
+                            <Box
+                                component={Link}
+                                to="/notification"
+                                sx={{ textDecoration: ' none' }}
+                            >
                                 <IconButton component="label" size="large" sx={{ ml: 3 }}>
-                                    <BookmarkBorderIcon
-                                        fontSize="large"
-                                        sx={{ color: '#fefefe' }}
-                                    />
+                                    <Badge badgeContent={100} color="secondary">
+                                        <NotificationsIcon
+                                            fontSize="large"
+                                            sx={{ color: '#fefefe' }}
+                                        />
+                                    </Badge>
                                 </IconButton>
                             </Box>
                             {auth.email ? (

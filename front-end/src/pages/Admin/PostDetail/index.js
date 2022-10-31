@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { useParams } from 'react-router-dom'
 
+import NotFound from '../../../components/NotFound'
 import { Kitchen, ShoppingCart } from '@mui/icons-material'
 import GroupIcon from '@mui/icons-material/Group'
-import { Box, Divider, Grid, Rating, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid, Rating, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import { useRecipe } from '../../../recoil/recipe'
 import Loading from '../../Loading'
+import PopUp from './PopUp'
 
 const RecipeDetail = () => {
     const [recipe, setRecipe] = useState({})
@@ -20,43 +22,71 @@ const RecipeDetail = () => {
     const { id } = useParams()
     const { getRecipe, getStep } = useRecipe()
     const showSnackbar = useSnackbar()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isFirstRender, setIsFirstRender] = useState(true)
+    const [error, setError] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [collections, setCollections] = useState([])
+
+    const openPopUp = () => {
+        setOpen(true)
+    }
+
+    const closePopUp = () => {
+        setOpen(false)
+    }
+
     useEffect(() => {
-        setIsLoading(true)
         getRecipe(id)
             .then((response) => {
                 const data = response.data.data
                 setRecipe(data)
                 setCategories(data.listCategories)
+                if (data.listCollections !== null) {
+                    const collections = data.listCollections.map(
+                        (collection) => collection.collectionName
+                    )
+                    setCollections(collections)
+                }
                 setStar(data.averageRating)
-                setIsLoading(false)
+
+                getStep(id)
+                    .then((response) => {
+                        const data = response.data.data
+                        setStep(data)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 500)
+                    })
+                    .catch(() => {
+                        showSnackbar({
+                            severity: 'error',
+                            children: 'Something went wrong, please try again later.',
+                        })
+                        setError(true)
+                        setTimeout(() => {
+                            setIsFirstRender(false)
+                        }, 500)
+                    })
             })
             .catch(() => {
                 showSnackbar({
                     severity: 'error',
                     children: 'Something went wrong, please try again later.',
                 })
-                setIsLoading(false)
+                setError(true)
+                setTimeout(() => {
+                    setIsFirstRender(false)
+                }, 500)
             })
 
-        getStep(id)
-            .then((response) => {
-                const data = response.data.data
-                setStep(data)
-                setIsLoading(false)
-            })
-            .catch(() => {
-                showSnackbar({
-                    severity: 'error',
-                    children: 'Something went wrong, please try again later.',
-                })
-                setIsLoading(false)
-            })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    if (error) return <NotFound isLoading={isFirstRender} />
+
     return (
         <React.Fragment>
-            {isLoading ? (
+            {isFirstRender ? (
                 <Loading />
             ) : (
                 <React.Fragment>
@@ -69,7 +99,16 @@ const RecipeDetail = () => {
                         >
                             {recipe.name}
                         </Typography>
-                        <Box mt={4} display="flex">
+                        {collections.length && (
+                            <Button
+                                variant="contained"
+                                sx={{ mt: 2, color: grey[100] }}
+                                onClick={openPopUp}
+                            >
+                                Update to collection
+                            </Button>
+                        )}
+                        <Box mt={2} display="flex">
                             <Typography
                                 variant="subtitle1"
                                 sx={{ fontSize: 20, mt: 0.3, color: blueGrey[700] }}
@@ -156,6 +195,30 @@ const RecipeDetail = () => {
                                 </Typography>
                             )}
                         </Box>
+                        {collections.length && (
+                            <Box display="flex">
+                                <Typography
+                                    variant="subtitle1"
+                                    sx={{ fontSize: 20, mt: 0.75, color: blueGrey[700] }}
+                                    fontWeight={700}
+                                    mr={1}
+                                >
+                                    Collections:{' '}
+                                </Typography>
+                                <Box display="flex">
+                                    {collections.map((item, index) => (
+                                        <Typography
+                                            key={index}
+                                            variant="subtitle1"
+                                            fontWeight={400}
+                                            sx={{ fontSize: 20, mt: 0.75, color: grey[600] }}
+                                        >
+                                            {(index ? ', ' : '') + item}
+                                        </Typography>
+                                    ))}
+                                </Box>
+                            </Box>
+                        )}
                         <Typography
                             mt={4}
                             variant="h4"
@@ -437,6 +500,15 @@ const RecipeDetail = () => {
                             </Grid>
                         </Box>
                     </Box>
+                    {open && (
+                        <PopUp
+                            open={open}
+                            onClose={closePopUp}
+                            collection={collections}
+                            postId={recipe.id}
+                            setCollections={setCollections}
+                        />
+                    )}
                 </React.Fragment>
             )}
         </React.Fragment>

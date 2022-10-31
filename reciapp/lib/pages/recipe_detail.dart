@@ -1,17 +1,20 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reciapp/components/textbox_form.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
 import 'package:reciapp/pages/update_recipe_page.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/bottom_bar.dart';
-import '../components/head_bar.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:reciapp/components/textbox_form.dart';
+import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
@@ -36,15 +39,29 @@ class Bookmark {
   Bookmark({
     required this.bookmark,
   });
-
   bool bookmark;
-
   factory Bookmark.fromJson(Map<String, dynamic> json) => Bookmark(
         bookmark: json["bookmark"],
       );
-
   Map<String, dynamic> toJson() => {
         "bookmark": bookmark,
+      };
+}
+
+class PostReport {
+  PostReport({
+    required this.postsId,
+    required this.reason,
+  });
+  String postsId;
+  String reason;
+  factory PostReport.fromJson(Map<String, dynamic> json) => PostReport(
+        postsId: json["postsId"],
+        reason: json["reason"],
+      );
+  Map<String, dynamic> toJson() => {
+        "postsId": postsId,
+        "reason": reason,
       };
 }
 
@@ -144,6 +161,94 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     }
   }
 
+  Future sendReport(int userId, String postId, String reason) async {
+    http.Response response = await http.post(
+      Uri.parse('https://reciapp.azurewebsites.net/api/user/$userId/report'),
+      body: json.encode(PostReport(postsId: postId, reason: reason).toJson()),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    print(responseJson);
+    if (response.statusCode == 200) {
+      //setState(() {});
+      Navigator.of(context).pop();
+    }
+  }
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController reportController = TextEditingController();
+
+  Future confirmDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Confirm'),
+            content: Text('Are you sure you want to continue?'),
+            actions: [
+              InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Text('Cancel',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15))),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              InkWell(
+                  onTap: () {
+                    sendReport(
+                        userData.userID, widget.id, reportController.text);
+                    print(reportController.text);
+                  },
+                  child: Text('Confirm',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)))
+            ],
+          ));
+
+  Future openDialog(/*BuildContext context*/) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Report'),
+            content: Form(
+              key: _formKey,
+              child: TextBoxForm(
+                text: 'Your report reason',
+                controller: reportController,
+                maxLines: 3,
+              ),
+            ),
+            actions: [
+              InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Text('Close',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15))),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              InkWell(
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      await confirmDialog();
+                      Navigator.of(context).pop();
+                    }
+                    // await confirmDialog();
+                    // Navigator.of(context).pop();
+                  },
+                  child: Text('Submit',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)))
+            ],
+          ));
+
   bool checkAuth = false;
   UserData userData =
       UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
@@ -154,10 +259,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(55),
-          child: HeadBar(),
+        appBar: AppBar(
+          title: const Text('Recipe Detail'),
+          centerTitle: true,
+          elevation: 1,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.orange,
+          titleTextStyle: const TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
         ),
         bottomNavigationBar: bottomMenuBar(context, 'detail'),
         body: FutureBuilder(
@@ -198,7 +309,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 49, 48, 48),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25),
+                                      fontSize: 20),
                                 ),
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height *
@@ -224,7 +335,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       allowHalfRating: true,
                                       starCount: 5,
                                       rating: snapshot.data.averageRating * 1.0,
-                                      size: 13,
+                                      size: 11,
                                       spacing: 10,
                                     ),
                                   ],
@@ -300,9 +411,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               children: [
                                 Ink(
                                   decoration: BoxDecoration(
-                                    color: (snapshot.data.bookmark)
+                                    color: (snapshot.data.bookmark != null)
                                         ? Colors.orange
-                                        : Color.fromARGB(255, 219, 214, 214),
+                                        : Color.fromARGB(255, 221, 218, 218),
                                   ),
                                   child: InkWell(
                                     onTap: () {
@@ -312,7 +423,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     child: Padding(
                                       padding: EdgeInsets.all(4.0),
                                       child: Icon(
-                                        Icons.bookmark_border_outlined,
+                                        Icons.bookmark_add_outlined,
                                         size: 20,
                                         color: Colors.black,
                                       ),
@@ -342,17 +453,47 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 221, 218, 218),
                                   ),
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.flag,
-                                        size: 20.0,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
+                                  child: snapshot.data.isReport &&
+                                          snapshot.data.userId ==
+                                              getUserInfo.userID
+                                      ? InkWell(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                Icons.flag,
+                                                size: 20.0,
+                                                color: Colors.orange,
+                                              )),
+                                        )
+                                      : InkWell(
+                                          onTap: () async {
+                                            await openDialog();
+                                            // Timer? timer = Timer(
+                                            //     Duration(seconds: 6), (() {
+                                            //   Navigator.of(context).pop();
+                                            // }));
+                                            // if (snapshot.data.isReport) {
+                                            //   showDialog(
+                                            //           context: context,
+                                            //           builder: (context) =>
+                                            //               AlertDialog(
+                                            //                   content: Text(
+                                            //                       'Report sucessfully')))
+                                            //       .then((value) {
+                                            //     timer?.cancel();
+                                            //     timer = null;
+                                            //   });
+                                            // }
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Icon(
+                                              Icons.flag,
+                                              size: 20.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
                                 ),
                                 SizedBox(height: 3),
                                 checkAuth
@@ -408,7 +549,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'About this recipe',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 ),
@@ -419,7 +560,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               ),
                               Text(
                                 snapshot.data.description,
-                                style: TextStyle(fontSize: 13),
+                                style: TextStyle(fontSize: 11),
                               )
                             ],
                           ),
@@ -450,12 +591,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Preparing',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                        '${snapshot.data.preparingTime} minutes')
+                                        '${snapshot.data.preparingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                                 VerticalDivider(
@@ -470,12 +612,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Processing',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                        '${snapshot.data.processingTime} minutes')
+                                        '${snapshot.data.processingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                                 const VerticalDivider(
@@ -490,11 +633,12 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     Text(
                                       'Cooking',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11),
                                     ),
                                     SizedBox(height: 10),
-                                    Text('${snapshot.data.cookingTime} minutes')
+                                    Text('${snapshot.data.cookingTime} minutes',
+                                        style: TextStyle(fontSize: 11))
                                   ],
                                 ),
                               ],
@@ -520,7 +664,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       child: Text(
                                         'Preparing',
                                         style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 17,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey),
                                       ),
@@ -541,15 +685,15 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                             TextSpan(
                                                 text: " Serving: ",
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                )),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 11)),
                                             TextSpan(
                                                 text:
                                                     "${snapshot.data.serving} people",
                                                 style: TextStyle(
-                                                  color: Colors.black,
-                                                ))
+                                                    color: Colors.black,
+                                                    fontSize: 11))
                                           ]))
                                         ],
                                       ),
@@ -637,7 +781,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Processing',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
@@ -668,7 +812,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   child: Text(
                                     'Cooking',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
@@ -701,7 +845,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 child: Text(
                                   'Video',
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 ),
