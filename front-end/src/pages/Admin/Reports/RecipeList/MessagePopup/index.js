@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-import ConfirmPopup from './ConfirmPopup'
+import ConfirmPopup from '../ConfirmPopup'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
@@ -22,7 +22,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const isEmpty = (incomeValue) => incomeValue.trim().length === 0
 const defaultTextFieldValue = { value: '', isTouched: false }
 
-const DetailPopup = (props) => {
+const MessagePopup = (props) => {
     const [openConfirm, setOpenConfirm] = React.useState(false)
     const [description, setDescription] = useState(defaultTextFieldValue)
     const descriptionChangeHandler = (event) => {
@@ -46,11 +46,10 @@ const DetailPopup = (props) => {
                 <ConfirmPopup
                     status={openConfirm}
                     onClose={handleClickCloseConfirm}
-                    userId={props.userId}
-                    postId={props.postId}
-                    reason={description}
-                    setIsReport={props.setIsReport}
-                    closeReport={props.onClose}
+                    reportId={props.reportId}
+                    message={description}
+                    closeMessage={props.onClose}
+                    isApprove={props.isApprove}
                 />
             )}
             <Dialog
@@ -69,7 +68,7 @@ const DetailPopup = (props) => {
                             fontWeight: 700,
                         }}
                     >
-                        Report
+                        Message
                     </Typography>
                 </DialogTitle>
                 <DialogContent dividers={true}>
@@ -78,7 +77,7 @@ const DetailPopup = (props) => {
                         autoFocus
                         margin="dense"
                         id="name"
-                        label="Your report reason"
+                        label="Your message"
                         fullWidth
                         variant="standard"
                         multiline
@@ -94,13 +93,12 @@ const DetailPopup = (props) => {
                             sx={{ fontSize: 13, color: blueGrey[400] }}
                             fontWeight={400}
                         >
-                            For flagged posts, the Admin team will review flagged posts to determine
-                            if they have a problem. Problematic posts will be removed, and severe or
-                            repeated infractions may result in account termination.
+                            This will be the message displayed on the user notification tab for
+                            providing information about why the post is removed.
                         </Typography>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ my: 0.5 }}>
                     <Button onClick={props.onClose} variant="outlined" color="error">
                         Close
                     </Button>
@@ -119,4 +117,4 @@ const DetailPopup = (props) => {
     )
 }
 
-export default DetailPopup
+export default MessagePopup
