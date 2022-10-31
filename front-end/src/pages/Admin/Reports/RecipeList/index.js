@@ -72,7 +72,7 @@ const RecipeList = () => {
                 })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, pageNum])
+    }, [search, pageNum, JSON.stringify(recipes)])
 
     const reportHandler = (reportId) => {
         setIsLoading(true)
