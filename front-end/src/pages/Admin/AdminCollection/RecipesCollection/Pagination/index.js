@@ -8,7 +8,7 @@ import { Pagination } from '@mui/material'
 const Paging = ({ size }) => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { search, sort, pageNum } = queryString.parse(query)
+    const { search, pageNum, collection } = queryString.parse(query)
     const [pageNumber, setPageNumber] = useState(pageNum ? +pageNum : 1)
 
     const pagingHandler = (__, value) => setPageNumber(value)
@@ -17,7 +17,7 @@ const Paging = ({ size }) => {
         let route = pathname + '?'
         if (search && search.trim() !== '') route += '&search=' + search
 
-        if (sort) route += `&sort=${sort}`
+        if (collection && collection.trim() !== '') route += '&collection=' + collection
 
         if (pageNumber !== 1) route += `&pageNum=${pageNumber}`
 

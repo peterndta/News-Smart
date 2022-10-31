@@ -7,14 +7,17 @@ import { useRecoilValue } from 'recoil'
 import { Autocomplete, Box, Button, FormControl, TextField, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-import collectionAtom from '../../../../../recoil/collection'
+import { useSnackbar } from '../../../../../HOCs/SnackbarContext'
+import collectionAtom, { useCollection } from '../../../../../recoil/collection'
 
 const CollectionTab = ({ options }) => {
     const collectionList = useRecoilValue(collectionAtom)
     const { search: query, pathname } = useLocation()
     const { collection, pageNum, search } = queryString.parse(query)
     const history = useHistory()
-    const [searchValue, setSearchValue] = useState(collection ? collection : null)
+    const [searchValue, setSearchValue] = useState(collection ? collection : 'Breakfast')
+    const collectionAction = useCollection()
+    const showSnackbar = useSnackbar()
 
     const searchChangeHandler = (__, value) => {
         setSearchValue(value)
@@ -31,7 +34,33 @@ const CollectionTab = ({ options }) => {
         history.push(route)
     }
 
-    const addToCollectionHandler = () => {}
+    const addToCollectionHandler = () => {
+        const item = collectionList.list.find(
+            (collection) => collection.collectionName === searchValue
+        )
+
+        collectionAction
+            .addPostsToCollection(item.id, { postsId: options })
+            .then(() => {
+                showSnackbar({
+                    severity: 'success',
+                    children: `Successfully adding ${options.length} items into collection ${searchValue.collectionName}`,
+                })
+            })
+            .catch((error) => {
+                if (error.response.status === 400) {
+                    showSnackbar({
+                        severity: 'error',
+                        children: `${options.length} items has been already added into this collection`,
+                    })
+                } else {
+                    showSnackbar({
+                        severity: 'error',
+                        children: `Something went wrong, please refresh the page and try again!`,
+                    })
+                }
+            })
+    }
 
     useEffect(() => {
         filterHandler()
@@ -85,6 +114,7 @@ const CollectionTab = ({ options }) => {
                             />
                         )}
                         placeholder="Summer Course"
+                        disableClearable={searchValue !== undefined}
                     />
                 </FormControl>
             </Box>
@@ -93,7 +123,7 @@ const CollectionTab = ({ options }) => {
                 <Button
                     variant="contained"
                     sx={{ color: grey[100] }}
-                    disabled={!collection}
+                    disabled={!searchValue}
                     onClick={addToCollectionHandler}
                 >
                     ADD TO COLLECTION

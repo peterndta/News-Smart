@@ -1,4 +1,5 @@
 ﻿using reciWebApp.DTOs.CategoryDTOs;
+using reciWebApp.DTOs.CollectionDTOs;
 
 namespace reciWebApp.DTOs.PostDTOs
 {
@@ -22,6 +23,6 @@ namespace reciWebApp.DTOs.PostDTOs
         public int UsesId { get; set; }
         public double AverageRating { get; set; }
         public string UsesOfFood { get; set; }
-        public bool IsOwn { get; set; }
+        public List<ShowCollectionDTO>? ListCollections { get; set; }
     }
 }

@@ -59,7 +59,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                 />
             )}
             <Grid item md={4}>
-                <Card sx={{ maxWidth: 392, height: '1' }}>
+                <Card sx={{ maxWidth: 392, height: '1', display: 'flex', flexDirection: 'column' }}>
                     <CardMedia
                         component="img"
                         alt="green iguana"
@@ -68,7 +68,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                         onClick={() => history.push(`/recipes/${post.id}`)}
                         sx={{ cursor: 'pointer' }}
                     />
-                    <CardContent>
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
                         <Typography
                             gutterBottom
                             variant="h5"
@@ -119,7 +119,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                                 mt: 2,
                             }}
                         />
-                        <Box mt={2}>
+                        <Box my={2}>
                             <Typography component="span" sx={{ color: grey[700] }}>
                                 Reporter:
                             </Typography>
@@ -128,7 +128,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                             </Typography>
                         </Box>
                         <Box
-                            mt={2}
+                            sx={{ marginTop: 'auto' }}
                             display="flex"
                             justifyContent="space-evenly"
                             alignItems="center"

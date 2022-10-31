@@ -13,5 +13,6 @@ namespace reciWebApp.Data.Models
 
         public virtual Post Posts { get; set; } = null!;
         public virtual User User { get; set; } = null!;
+        public virtual Notification? Notification { get; set; }
     }
 }
