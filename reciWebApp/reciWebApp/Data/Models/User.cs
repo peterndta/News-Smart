@@ -8,6 +8,7 @@ namespace reciWebApp.Data.Models
         public User()
         {
             PostReports = new HashSet<PostReport>();
+            Posts = new HashSet<Post>();
             UserInteracts = new HashSet<UserInteract>();
         }
 
@@ -19,6 +20,7 @@ namespace reciWebApp.Data.Models
         public string? ImageUrl { get; set; }
 
         public virtual ICollection<PostReport> PostReports { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<UserInteract> UserInteracts { get; set; }
     }
 }

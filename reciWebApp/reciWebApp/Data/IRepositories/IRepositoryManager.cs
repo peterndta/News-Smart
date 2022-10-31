@@ -14,6 +14,7 @@
         ICollectionRepository Collection { get; }  
         IFoodCollectionRepository FoodCollection { get; }
         IPostReportRepository PostReport { get; }
+        INotificationRepository Notification { get; }
         Task SaveChangesAsync();
     }
 }

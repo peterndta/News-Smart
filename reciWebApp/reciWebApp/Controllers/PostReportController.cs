@@ -179,17 +179,11 @@ namespace reciWebApp.Controllers
 
         [HttpPut]
         [Route("~/api/report/{id}")]
-        public async Task<IActionResult> ApproveReport(int id)
+        public async Task<IActionResult> ApproveReport(int id, [FromBody] ApproveMessageDTO messageDTO)
         {
             try
             {
                 var postReport = _repoManager.PostReport.GetPostReportById(id);
-                var currentUser = await _servicesManager.AuthService.GetUser(Request);
-
-                if (currentUser == null)
-                {
-                    return BadRequest(new Response(400, "invalid user"));
-                }
 
                 if (postReport == null)
                 {
@@ -213,7 +207,15 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Report has already processed"));
                 }
 
-                await _repoManager.PostReport.ApproveReportAsync(post.Id);
+                post.Status = 1;
+                await _repoManager.PostReport.ApproveReportAsync(id);
+                _repoManager.Notification.CreateNotification(new Notification
+                {
+                    PostReportId = id,
+                    Message = messageDTO.Message,
+                    CreateDate = DateTime.Now,
+                });
+                _repoManager.Post.UpdatePost(post);
                 await _repoManager.SaveChangesAsync();
 
                 return Ok(new Response(200, "", "Approved"));
