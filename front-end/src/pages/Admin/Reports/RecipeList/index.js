@@ -34,7 +34,6 @@ const RecipeList = () => {
             recipeAction
                 .getReports(params)
                 .then((res) => {
-                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })
@@ -55,7 +54,6 @@ const RecipeList = () => {
             recipeAction
                 .getReports(params, pageNum)
                 .then((res) => {
-                    console.log(res.data.data)
                     const listRecipe = res.data.data
                     const { totalPages } = res.data.meta
                     setRecipes({ list: listRecipe, pageCount: totalPages })

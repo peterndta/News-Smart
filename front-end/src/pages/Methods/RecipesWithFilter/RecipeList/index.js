@@ -10,7 +10,6 @@ import { useSnackbar } from '../../../../HOCs/SnackbarContext'
 import useMethodsAction from '../../../../recoil/methods/action'
 import Loading from '../../../Loading'
 import Paging from '../Pagination'
-import Sort from '../Sort'
 import Recipes from './RecipesCompo'
 
 const filterStringGenerator = ({ search, method, sort }) => {
@@ -85,12 +84,11 @@ const RecipeList = () => {
     }, [search, sort, pageNum, JSON.stringify(method)])
 
     return (
-        <Grid item md={9} display="flex" flexDirection="column">
+        <Grid item md={12} display="flex" flexDirection="column">
             {isLoading ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Sort />
                     {recipes.list.length ? (
                         <React.Fragment>
                             <Recipes posts={recipes.list} />
@@ -99,7 +97,7 @@ const RecipeList = () => {
                     ) : (
                         <Box alignItems="center" textAlign="center" mt={10}>
                             <Typography fontSize={38} fontWeight={700} sx={{ color: grey[700] }}>
-                                Sorry, we couldn’t find any results
+                                Sorry, we couldn&apos;t find any results
                             </Typography>
                             <Typography fontSize={20} mt={3} sx={{ color: grey[700] }}>
                                 Feel free to add your own recipe by clicking{' '}

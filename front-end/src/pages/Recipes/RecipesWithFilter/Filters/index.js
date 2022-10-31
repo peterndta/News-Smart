@@ -4,16 +4,7 @@ import queryString from 'query-string'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
-import {
-    Box,
-    Button,
-    Divider,
-    FormControl,
-    Grid,
-    InputLabel,
-    OutlinedInput,
-    Typography,
-} from '@mui/material'
+import { Box, Button, Divider, Grid, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
 import continentAtom from '../../../../recoil/continents'
@@ -27,9 +18,8 @@ const Filter = () => {
     const { search: query, pathname } = useLocation()
     const { search, continent, use, sort, pageNum } = queryString.parse(query)
     const history = useHistory('')
-    const [continents, setContinents] = React.useState(continent ? continent : [])
-    const [uses, setUses] = React.useState(use ? use : [])
-    const [searchValue, setSearchValue] = useState(search ? search : '')
+    const [continents, setContinents] = useState(continent ? continent : [])
+    const [uses, setUses] = useState(use ? use : [])
     const isClearAll = useRef(false)
 
     const selectHandler = (value, type) => () => {
@@ -55,14 +45,7 @@ const Filter = () => {
         isClearAll.current = false
     }
 
-    const searchChangeHandler = (event) => {
-        const searchText = event.target.value
-        setSearchValue(searchText)
-        isClearAll.current = false
-    }
-
     const clearAllHandler = () => {
-        setSearchValue('')
         setContinents([])
         setUses([])
         isClearAll.current = true
@@ -70,7 +53,7 @@ const Filter = () => {
 
     const searchSubmitHandler = () => {
         let route = pathname + '?'
-        if (searchValue) route += '&search=' + searchValue
+        if (search) route += '&search=' + search
 
         if (continents.length !== 0)
             continents.forEach((continent) => (route += `&continent=${continent}`))
@@ -107,44 +90,6 @@ const Filter = () => {
                         Clear all
                     </Button>
                 </Box>
-                <Box mt={3} mb={1}>
-                    <Typography variant="h6" fontWeight={700} sx={{ color: blueGrey[800] }} mb={2}>
-                        Recipe or keyword
-                    </Typography>
-
-                    <FormControl
-                        sx={{
-                            width: '100%',
-                            '& label.Mui-focused': {
-                                color: blueGrey[800],
-                            },
-                            '& .css-1xnpwac-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
-                                {
-                                    borderColor: blueGrey[800],
-                                },
-                            '& .MuiOutlinedInput-input': {
-                                height: '0.8em',
-                            },
-                        }}
-                    >
-                        <InputLabel htmlFor="component-outlined" sx={{ top: -5 }}>
-                            Keyword
-                        </InputLabel>
-                        <OutlinedInput
-                            id="component-outlined"
-                            label="Keyword"
-                            value={searchValue}
-                            onChange={searchChangeHandler}
-                        />
-                    </FormControl>
-                </Box>
-                <Divider
-                    sx={{
-                        backgroundColor: (theme) => theme.palette.primary.main,
-                        height: 2,
-                        mt: 2,
-                    }}
-                />
                 <ContinentsFilter
                     continents={continentsList}
                     checks={continents}

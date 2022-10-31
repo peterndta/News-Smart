@@ -12,9 +12,9 @@ import collectionAtom from '../../../../recoil/collection'
 const Filter = () => {
     const collectionList = useRecoilValue(collectionAtom)
     const { search: query, pathname } = useLocation()
-    const { collection, sort, pageNum } = queryString.parse(query)
-    const history = useHistory('')
-    const [searchValue, setSearchValue] = useState(collection ? collection : null)
+    const { collection, sort, pageNum, search } = queryString.parse(query)
+    const history = useHistory()
+    const [searchValue, setSearchValue] = useState(collection ? collection : 'Breakfast')
 
     const searchChangeHandler = (__, value) => {
         setSearchValue(value)
@@ -23,6 +23,8 @@ const Filter = () => {
     const filterHandler = () => {
         let route = pathname + '?'
         if (searchValue) route += '&collection=' + searchValue
+
+        if (search && search.trim() !== '') route += '&search=' + search
 
         if (sort) route += `&sort=${sort}`
 
@@ -36,11 +38,6 @@ const Filter = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchValue])
-
-    useEffect(() => {
-        if (collectionList.list) setSearchValue(collectionList.list[0].collectionName)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(collectionList)])
 
     return (
         <Grid item md={3}>
@@ -78,9 +75,18 @@ const Filter = () => {
                         id="controllable-states-demo"
                         onChange={searchChangeHandler}
                         options={collectionList.list.map((option) => option.collectionName)}
-                        renderInput={(params) => <TextField {...params} label="Collection" />}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Collection"
+                                sx={{
+                                    '& .css-1xcbdvh-MuiInputBase-root-MuiOutlinedInput-root': {
+                                        paddingBottom: '12px',
+                                    },
+                                }}
+                            />
+                        )}
                         disableClearable={searchValue !== null}
-                        sx={{ height: '1.1 em' }}
                     />
                 </FormControl>
             </Box>

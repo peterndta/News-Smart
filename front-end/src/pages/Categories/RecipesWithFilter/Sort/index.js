@@ -36,7 +36,7 @@ const Sort = () => {
     }, [type])
 
     return (
-        <FormControl sx={{ minWidth: 100, alignSelf: 'flex-end' }} size="small">
+        <FormControl sx={{ minWidth: 100, alignSelf: 'flex-start' }} size="small">
             <InputLabel id="demo-select-small">Sort</InputLabel>
             <Select
                 labelId="demo-select-small"

@@ -7,7 +7,6 @@ using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
-using reciWebApp.DTOs.SubCollectionDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -127,7 +126,7 @@ namespace reciWebApp.Controllers
                     _repoManager.PostCategory.CreatePostCategory(postCategory);
                 }
                 await _repoManager.SaveChangesAsync();
-                return Ok(new Response(200));
+                return Ok(new Response(200, createPost.Id, "Create successfully"));
             }
             catch (Exception ex)
             {
@@ -221,87 +220,6 @@ namespace reciWebApp.Controllers
                 return BadRequest(new Response(500, ex.Message));
             }
         }
-            
-        //[HttpGet("page/{pageNumber}")]
-        //public async Task<IActionResult> Post(int pageNumber, [FromQuery] FilterAndSortPostParams filterAndSort)
-        //{
-        //    try
-        //    {
-        //        //var user = await _servicesManager.AuthService.GetUser(Request);
-
-        //        //if (user == null)
-        //        //{
-        //        //    return BadRequest(new Response(400, "Invalid user"));
-        //        //}
-        //        List<Post>? getPostsByCategories = null;
-        //        if (filterAndSort.Category != null)
-        //        {
-        //            var categories = _repoManager.Category.GetCategoryByName(filterAndSort.Category);
-        //            var postCategories = _repoManager.PostCategory.GetPostCategoriesByCategory(categories);
-        //            getPostsByCategories = _repoManager.Post.GetPostsByPostCategories(postCategories);
-        //        }
-
-        //        List<Post>? getPostsByCookingMethods = null;
-        //        if (filterAndSort.Method != null)
-        //        {
-        //            var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filterAndSort.Method);
-        //            getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
-        //        }
-
-        //        List<Post>? getPostsByRecipeRegions = null;
-        //        if (filterAndSort.Continent != null)
-        //        {
-        //            var recipeRegions = _repoManager.RecipeRegion.GetRecipeRegionsByName(filterAndSort.Continent);
-        //            getPostsByRecipeRegions = _repoManager.Post.GetPostsByRecipeRegions(recipeRegions);
-        //        }
-
-        //        List<Post>? getPostsByUses = null;
-        //        if (filterAndSort.Uses != null)
-        //        {
-        //            var uses = _repoManager.Use.GetUsesByName(filterAndSort.Uses);
-        //            getPostsByUses = _repoManager.Post.GetPostsByUses(uses);
-        //        }
-
-        //        List<Post>? getPostsByCollections = null;
-        //        if (filterAndSort.Collection != null)
-        //        {
-        //            var collection = _repoManager.Collection.GetCollectionsByNames(filterAndSort.Collection);
-        //            var foodCollections = _repoManager.FoodCollection.GetFoodCollectionsByCollections(collection);
-        //            getPostsByCollections = _repoManager.Post.GetPostsByFoodCollections(foodCollections);
-        //        }
-        //        var postParams = new PostParams
-        //        {
-        //            Name = filterAndSort.Search,
-        //            PostsByCookingMethods = getPostsByCookingMethods,
-        //            PostsRecipeRegions = getPostsByRecipeRegions,
-        //            PostsByCategories = getPostsByCategories,
-        //            PageNumber = filterAndSort.PageNumber,
-        //            PageSize = filterAndSort.PageSize,
-        //            Type = filterAndSort.Sort,
-        //            PostsByUses = getPostsByUses,
-        //            PostsByCollections = getPostsByCollections,
-        //        };
-        //        postParams.PageNumber = pageNumber;
-        //        var posts = await _repoManager.Post.GetAllPostsAsync(postParams);
-        //        var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
-        //        for (int i = 0; i < showPosts.Count; i++)
-        //        {
-        //            showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
-        //        }
-
-        //        if (postParams.Type != null)
-        //        {
-        //            showPosts = _repoManager.Post.SortPostByCondition(showPosts, postParams.Type);
-        //        }
-
-        //        var result = PaginatedList<ShowPostDTO>.Create(showPosts, postParams.PageNumber, postParams.PageSize);
-        //        return Ok(new Response(200, result, "", result.Meta));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new Response(500, ex.Message));
-        //    }
-        //}
 
         //Get my bookmark recipes
         [HttpGet("bookmark/page/{pageNumber}")]
@@ -397,6 +315,7 @@ namespace reciWebApp.Controllers
                     PostsByCookingMethods = getPostsByCookingMethods,
                     PageNumber = filter.PageNumber,
                     PageSize = filter.PageSize,
+                    Type = filter.Sort,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByMethodsAsync(postParams);
@@ -441,6 +360,7 @@ namespace reciWebApp.Controllers
                     PostsByCategories = getPostsByCategories,
                     PageNumber = filter.PageNumber,
                     PageSize = filter.PageSize,
+                    Type = filter.Sort,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByCategoriesAsync(postParams);
@@ -492,6 +412,7 @@ namespace reciWebApp.Controllers
                     PostsByUses = getPostsByUses,
                     PageNumber = filter.PageNumber,
                     PageSize = filter.PageSize,
+                    Type = filter.Sort,
                 };
                 postParams.PageNumber = pageNumber;
                 var posts = await _repoManager.Post.GetPostsFilterByUsesAndRegionsAsync(postParams);
@@ -517,57 +438,37 @@ namespace reciWebApp.Controllers
 
         //Get collections recipe
         [HttpGet]
-        [Route("~/api/collections/post")]
-        public async Task<IActionResult> Get( [FromQuery] FilterByCollectionParams filter)
+        [Route("~/api/collections/post/page/{pageNumber}")]
+        public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByCollectionParams filter)
         {
             try
             {
-                var collection = await _repoManager.Collection.GetCollectionByNameAsync(filter.Collection);
-                if (collection == null)
+                List<Post>? getPostsByFoodCollection = null;
+                if (filter.Collection != null)
                 {
-                    return BadRequest(new Response(400, "Not found collection"));
-                }
-
-                var subCollections = await _repoManager.SubCollection.GetAllSubCollectionAsync(collection.Id);
-                var showSubCollectionDTOs = _mapper.Map<List<ShowSubCollectionDTO>>(subCollections);
-                
-                List<FoodCollection> foodCollectionList;
-                foreach (var showSubCollectionDTO in showSubCollectionDTOs)
-                {
-                    foodCollectionList = await _repoManager.FoodCollection.GetFoodCollectionsAsync(showSubCollectionDTO.Id);
-                    foreach (var foodCollection in foodCollectionList)
+                    var collection = await _repoManager.Collection.GetCollectionByNameAsync(filter.Collection);
+                    if (collection == null)
                     {
-                        var post = _repoManager.Post.GetPostById(foodCollection.PostsId);
-                        var showPost = _mapper.Map<ShowPostDTO>(post);
-                        if (showPost != null)
-                        {
-                            showSubCollectionDTO.Post.Add(_servicesManager.PostService.GetPostInfo(showPost));
-                        }
+                        return BadRequest(new Response(400, "Not found collection"));
                     }
+                    var foodCollections = await _repoManager.FoodCollection.GetFoodCollectionsAsync(collection.Id);
+                    getPostsByFoodCollection = _repoManager.Post.GetPostByFoodCollection(foodCollections);
                 }
 
-                return Ok(new Response(200, showSubCollectionDTOs, ""));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new Response(500, ex.Message));
-            }
-        }
-
-        //Get post to add collections recipe
-        [HttpGet]
-        [Route("~/api/addcollections/{id}/post/page/{pageNumber}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            try
-            {
-                var collection = await _repoManager.Collection.GetCollectionAsync(id);
-                if (collection == null)
+                var posts = _repoManager.Post.GetPostFilter(getPostsByFoodCollection, filter.Search);
+                var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
+                for (int i = 0; i < showPosts.Count; i++)
                 {
-                    return BadRequest(new Response(400, "Not found collection"));
+                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
-                return Ok(new Response(200, "", "Chua co lam dau"));
+                if (filter.Sort != null)
+                {
+                    showPosts = _repoManager.Post.SortPostByCondition(showPosts, filter.Sort);
+                }
+
+                var result = PaginatedList<ShowPostDTO>.Create(showPosts, pageNumber, filter.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
             {
