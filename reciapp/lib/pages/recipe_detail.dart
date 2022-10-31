@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reciapp/components/textbox_form.dart';
 import 'package:reciapp/object/post_detail.dart';
 import 'package:reciapp/object/step_iteam.dart';
@@ -13,6 +14,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../components/bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:reciapp/components/textbox_form.dart';
+import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
@@ -257,6 +259,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Recipe Detail'),
@@ -450,7 +453,9 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 221, 218, 218),
                                   ),
-                                  child: snapshot.data.isReport
+                                  child: snapshot.data.isReport &&
+                                          snapshot.data.userId ==
+                                              getUserInfo.userID
                                       ? InkWell(
                                           child: Padding(
                                               padding: EdgeInsets.all(4.0),
