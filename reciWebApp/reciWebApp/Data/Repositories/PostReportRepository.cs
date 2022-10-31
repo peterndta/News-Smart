@@ -7,6 +7,7 @@ using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.Services.Utils;
 using reciWebApp.DTOs.PostReportDTO;
+using reciWebApp.Services.Commons;
 
 namespace reciWebApp.Data.Repositories
 {
@@ -45,18 +46,18 @@ namespace reciWebApp.Data.Repositories
         
         public List<PostReport> GetPendingPostReportByPostId (string postId)
         {
-            return GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0 ).ToList();
+            return GetByCondition(x => x.PostsId.Equals(postId) && x.Status == ReportStatus.Pending).ToList();
         }
 
         public async Task<List<PostReport>> GetPendingReportByPostIdAsync (string postId)
         {
-            return await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 0).ToListAsync();
+            return await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == ReportStatus.Pending).ToListAsync();
         }
 
         public async Task ApproveReportAsync(int postReportId)
         {
             var report = await GetByCondition(x => x.Id == postReportId).FirstAsync();
-            report.Status = 1;
+            report.Status = ReportStatus.Approve;
             Update(report);
             var listReport = await GetByCondition(x => x.PostsId.Equals(report.PostsId) && x.Id != report.Id).ToListAsync();
             if (listReport.Count > 0)
@@ -67,7 +68,7 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<PostReport?> GetApprovedReportByPostIdAsync(string postId)
         {
-            var report = await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == 1).SingleOrDefaultAsync();
+            var report = await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == ReportStatus.Approve).SingleOrDefaultAsync();
             return report;
         }
     }

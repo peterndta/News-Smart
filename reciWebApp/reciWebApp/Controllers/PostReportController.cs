@@ -8,6 +8,7 @@ using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.PostReportDTO;
 using reciWebApp.DTOs.UserDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 using System.Net.WebSockets;
@@ -202,12 +203,12 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "User id does not exist"));
                 }
 
-                if (postReport.Status != 0)
+                if (postReport.Status != ReportStatus.Pending)
                 {
                     return BadRequest(new Response(400, "Report has already processed"));
                 }
 
-                post.Status = 1;
+                post.Status = PostStatus.Ban;
                 await _repoManager.PostReport.ApproveReportAsync(id);
                 _repoManager.Notification.CreateNotification(new Notification
                 {

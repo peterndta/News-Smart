@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.NotificationDTOs;
+using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -26,8 +28,8 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet]
-        [Route("~/api/user/{id}/notifications")]
-        public async Task<IActionResult> Get(int id)
+        [Route("~/api/user/{id}/notifications/page/{pageNumber}")]
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] NotificationParams @params)
         {
             try
             {
@@ -51,7 +53,13 @@ namespace reciWebApp.Controllers
                 }
 
                 var showNotification = _mapper.Map<List<ShowNotificationDTO>>(listNotification);
-                return BadRequest(new Response(200, showNotification));
+                if (@params.Sort != null)
+                {
+                    showNotification = _repoManager.Notification.SortNotificationsByCondition(showNotification, @params.Sort);
+                }
+
+                var result = PaginatedList<ShowNotificationDTO>.Create(showNotification, pageNumber, @params.PageSize);
+                return BadRequest(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
             {
