@@ -43,9 +43,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
-        routes: {
-          '/home': (_) => const HomePage(),
-        },
+        // routes: {
+        //   '/home': (_) => const HomePage(),
+        // },
         home: AuthService().handleAuthState(),
         //     MyHomePage(
         //   title: '',
