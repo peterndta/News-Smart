@@ -18,21 +18,29 @@ import { grey } from '@mui/material/colors'
 
 import ConfirmPopup from '../ConfirmPopup'
 import DetailPopup from '../DetailPopup'
+import MessagePopup from '../MessagePopup'
 
 const LatestRecipe = ({ post, reportHandler }) => {
     const [open, setOpen] = React.useState(false)
     const [openConfirm, setOpenConfirm] = React.useState(false)
+    const [openMessageApprove, setOpenMessageApprove] = React.useState(false)
     const [isDeny, setDeny] = React.useState(false)
     const [isApprove, setApprove] = React.useState(false)
     const history = useHistory()
     const handleClickOpen = () => {
         setOpen(true)
     }
-    const handleOpenConfirmApprove = () => {
+    const handleOpenMessageApprove = () => {
         setApprove(true)
-        setOpenConfirm(true)
+        setDeny(false)
+        setOpenMessageApprove(true)
+    }
+    const handleClickCloseMessageApprove = () => {
+        setApprove(false)
+        setOpenMessageApprove(false)
     }
     const handleOpenConfirmDeny = () => {
+        setApprove(false)
         setDeny(true)
         setOpenConfirm(true)
     }
@@ -46,12 +54,18 @@ const LatestRecipe = ({ post, reportHandler }) => {
             {open && (
                 <DetailPopup reason={post.reason} status={open} onClose={() => setOpen(false)} />
             )}
+            {openMessageApprove && (
+                <MessagePopup
+                    reportId={post.id}
+                    isApprove={isApprove}
+                    status={openMessageApprove}
+                    onClose={handleClickCloseMessageApprove}
+                />
+            )}
             {openConfirm && (
                 <ConfirmPopup
                     reportId={post.id}
                     isDeny={isDeny}
-                    setDeny={setDeny}
-                    setApprove={setApprove}
                     isApprove={isApprove}
                     status={openConfirm}
                     onClose={handleCloseConfirm}
@@ -59,7 +73,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                 />
             )}
             <Grid item md={4}>
-                <Card sx={{ maxWidth: 392, height: '1' }}>
+                <Card sx={{ maxWidth: 392, height: '1', display: 'flex', flexDirection: 'column' }}>
                     <CardMedia
                         component="img"
                         alt="green iguana"
@@ -68,7 +82,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                         onClick={() => history.push(`/recipes/${post.id}`)}
                         sx={{ cursor: 'pointer' }}
                     />
-                    <CardContent>
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
                         <Typography
                             gutterBottom
                             variant="h5"
@@ -119,7 +133,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                                 mt: 2,
                             }}
                         />
-                        <Box mt={2}>
+                        <Box my={2}>
                             <Typography component="span" sx={{ color: grey[700] }}>
                                 Reporter:
                             </Typography>
@@ -128,7 +142,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                             </Typography>
                         </Box>
                         <Box
-                            mt={2}
+                            sx={{ marginTop: 'auto' }}
                             display="flex"
                             justifyContent="space-evenly"
                             alignItems="center"
@@ -141,7 +155,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                                     minWidth: 100,
                                 }}
                                 startIcon={<Approval />}
-                                onClick={handleOpenConfirmApprove}
+                                onClick={handleOpenMessageApprove}
                             >
                                 Approve
                             </Button>
