@@ -111,7 +111,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpPost("mobile")]
-        public async Task<IActionResult> Post([FromBody] AuthMobile authMobile)
+        public async Task<IActionResult> Post([FromBody] AuthMobileDTO authMobile)
         {
             try
             {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs.FoodCollectionDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -12,6 +13,7 @@ namespace reciWebApp.Controllers
 {
     [Route("api/foodcollection")]
     [ApiController]
+    [RoleAuthorization(RoleTypes.Admin)]
     public class FoodCollectionsController : ControllerBase
     {
         private readonly IRepositoryManager _repoManager;

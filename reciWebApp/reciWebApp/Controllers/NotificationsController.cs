@@ -5,6 +5,7 @@ using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.NotificationDTOs;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -29,6 +30,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/notifications/page/{pageNumber}")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] NotificationParams @params)
         {
             try
@@ -69,6 +71,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/new-notifications")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> GetNewNotification(int id)
         {
             try
@@ -108,6 +111,7 @@ namespace reciWebApp.Controllers
         // PUT api/<NotificationsController>/5
         [HttpPut()]
         [Route("~/api/user/{id}/mark-read")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Put(int id)
         {
             try

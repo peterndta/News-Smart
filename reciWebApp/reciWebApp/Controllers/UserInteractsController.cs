@@ -4,6 +4,7 @@ using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.DTOs;
 using reciWebApp.DTOs.UserInteractDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -28,6 +29,7 @@ namespace reciWebApp.Controllers
         // GET: api/<IUserInteractsController>
         [HttpPost]
         [Route("~/api/post/{id}/rating")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Post(string id, [FromBody] RatingDTO ratingDTO)
         {
             try
@@ -78,6 +80,7 @@ namespace reciWebApp.Controllers
 
         [HttpPost]
         [Route("~/api/post/{id}/bookmark")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Post(string id, [FromBody] BookmarkDTO bookmarkDTO)
         {
             try

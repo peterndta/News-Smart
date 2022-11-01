@@ -21,7 +21,7 @@ namespace reciWebApp.Configs
             CreateMap<CreatePostDTO, Post>();
             CreateMap<Post, ShowPostDTO>();
             CreateMap<UpdatePostDTO, Post>().ForMember(x => x.CreateDate, otp => otp.Ignore());
-            CreateMap<AuthMobile, User>();
+            CreateMap<AuthMobileDTO, User>();
             CreateMap<CreateStepDTO, Step>();
             CreateMap<Step, ShowStepDTO>();
             CreateMap<UpdateStepDTO, Step>();
