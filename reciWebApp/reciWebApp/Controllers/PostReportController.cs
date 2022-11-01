@@ -180,6 +180,7 @@ namespace reciWebApp.Controllers
 
         [HttpPut]
         [Route("~/api/report/{id}")]
+        [RoleAuthorization(RoleTypes.Admin)]
         public async Task<IActionResult> ApproveReport(int id, [FromBody] ApproveMessageDTO messageDTO)
         {
             try

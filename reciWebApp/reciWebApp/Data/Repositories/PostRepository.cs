@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
@@ -150,7 +151,8 @@ namespace reciWebApp.Data.Repositories
             }
             if (name != null)
             {
-                return result.Where(x => x.Name.Contains(name)).ToList();
+                //return result.Where(x => x.Name.Contains(name)).ToList();
+                return SearchByName(result, name);
             }
             return result;
         }
@@ -165,7 +167,8 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                return SearchByName(posts, postParams.Name);
             }
             return posts;
         }
@@ -180,7 +183,8 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                return SearchByName(posts, postParams.Name);
             }
             return posts;
         }
@@ -203,7 +207,8 @@ namespace reciWebApp.Data.Repositories
             }
             if (postParams.Name != null)
             {
-                posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
+                return SearchByName(posts, postParams.Name);
             }
             return posts;
         }
@@ -242,7 +247,8 @@ namespace reciWebApp.Data.Repositories
 
             if (name != null)
             {
-                allPosts = allPosts.Where(x => x.Name.Contains(name)).ToList();
+                //allPosts = allPosts.Where(x => x.Name.Contains(name)).ToList();
+                allPosts = SearchByName(allPosts, name);
             }
             return allPosts;
         }
@@ -251,6 +257,11 @@ namespace reciWebApp.Data.Repositories
         {
             var listBannedPost = GetByCondition(x => x.UserId == id && x.Status == PostStatus.Ban).ToListAsync();
             return await listBannedPost;
+        }
+
+        private List<Post> SearchByName(List<Post> posts, string name)
+        {
+            return posts.Where(x => x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
     }
 }
