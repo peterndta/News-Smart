@@ -4,21 +4,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/object/get_posts_homepage.dart';
-import 'package:reciapp/object/user_info.dart';
 import 'package:reciapp/pages/recipes_page.dart';
 import '../components/head_bar.dart';
 
-import '../login_support/check_auth.dart';
-import '../login_support/user_preference.dart';
 import 'package:http/http.dart' as http;
 
 import '../object/recipe_review.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({required this.imageUrl, super.key});
+  String imageUrl;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -71,7 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    // loadData();
     fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -81,37 +78,37 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  loadData() async {
-    if (userInfoProvider == null) {
-      Timer(Duration(seconds: 4), () {
-        if (!mounted) return;
-        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
-        setState(() {
-          if (getUserID.imageURL.isEmpty) {
-            UserData userData =
-                UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
-            getUserID.userID = userData.userID;
-            getUserID.imageURL = userData.imageURL;
-            getUserID.name = userData.name;
-            getUserID.token = userData.token;
-            getUserID.role = userData.role;
-            getUserID.mail = userData.mail;
-          }
-          userInfoProvider = getUserID;
-        });
-      });
-    }
-    return;
-  }
+  // loadData() async {
+  //   if (userInfoProvider == null) {
+  //     Timer(Duration(seconds: 4), () {
+  //       if (!mounted) return;
+  //       final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
+  //       setState(() {
+  //         if (getUserID.imageURL.isEmpty) {
+  //           UserData userData =
+  //               UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+  //           getUserID.userID = userData.userID;
+  //           getUserID.imageURL = userData.imageURL;
+  //           getUserID.name = userData.name;
+  //           getUserID.token = userData.token;
+  //           getUserID.role = userData.role;
+  //           getUserID.mail = userData.mail;
+  //         }
+  //         userInfoProvider = getUserID;
+  //       });
+  //     });
+  //   }
+  //   return;
+  // }
 
-  UserInfoProvider? userInfoProvider;
+  // UserInfoProvider? userInfoProvider;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55),
-        child: HeadBar(),
+        child: HeadBar(imageUrl: widget.imageUrl),
       ),
       bottomNavigationBar: bottomMenuBar(context, 'home'),
       body: Container(

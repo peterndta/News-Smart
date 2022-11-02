@@ -18,7 +18,7 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePage();
+            return HomePage(imageUrl: snapshot.data?.photoURL as String,);
           } else {
             return const LoginPage();
           }
