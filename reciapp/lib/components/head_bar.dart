@@ -11,7 +11,8 @@ import '../login_support/user_preference.dart';
 import '../object/user_info.dart';
 
 class HeadBar extends StatefulWidget {
-  const HeadBar({super.key});
+  HeadBar({required this.imageUrl, super.key});
+  String imageUrl;
 
   @override
   State<HeadBar> createState() => _HeadBarState();
@@ -22,8 +23,7 @@ class _HeadBarState extends State<HeadBar> {
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    UserData userData =
-        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    // String imageUrl = Ima.getUserImage();
     return AppBar(
       elevation: 5,
       titleSpacing: -12,
@@ -97,15 +97,18 @@ class _HeadBarState extends State<HeadBar> {
                   )),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               ClipOval(
-                child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              UserProfile(userInfoProvider: getUserInfo)));
-                    },
-                    child: Image(
-                      image: NetworkImage(userData.imageURL),
-                    )),
+                  child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          UserProfile(userInfoProvider: getUserInfo)));
+                },
+                child: 
+                // Icon(Icons.person),
+                Image(
+                  image: NetworkImage(widget.imageUrl),
+                ),
+                )
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.02),
             ],
