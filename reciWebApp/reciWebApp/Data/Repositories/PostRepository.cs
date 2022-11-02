@@ -263,5 +263,15 @@ namespace reciWebApp.Data.Repositories
         {
             return posts.Where(x => x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
+
+        public async Task<int> TotalPostsAsync()
+        {
+            return await GetByCondition(x => x.Status == PostStatus.Active).CountAsync();
+        }
+
+        //public async Task<List<Post>> GetTop5BookmarkAsync()
+        //{
+        //    return await;
+        //}
     }
 }

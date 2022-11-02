@@ -52,6 +52,11 @@ namespace reciWebApp.Data.Repositories
         {
             return GetByCondition(x => x.Name.Contains(search) || x.Email.Contains(search)).ToList();
         }
+
+        public async Task<int> TotalAccountsAsync()
+        {
+            return await GetAll().CountAsync();
+        }
     }
 }
     

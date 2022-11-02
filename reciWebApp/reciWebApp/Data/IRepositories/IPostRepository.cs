@@ -27,5 +27,7 @@ namespace reciWebApp.Data.IRepositories
         Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams);
         List<Post> GetPostByFoodCollection(List<FoodCollection> foodCollections);
         List<Post>? GetPostFilter(List<Post>? post, string? name);
+        Task<int> TotalPostsAsync();
+        //Task<List<Post>> GetTop5BookmarkAsync();
     }
 }
