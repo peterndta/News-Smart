@@ -47,7 +47,8 @@ namespace reciWebApp.Data.Repositories
 
         public void UpdateUserInteract(UserInteract userInteract)
         {
-            Update(userInteract);
+            //Update(userInteract);
+            _reciContext.UserInteracts.Update(userInteract).Property(x => x.Id).IsModified = false;
         }
 
         public void DeleteUserInteract(UserInteract userInteract)

@@ -55,7 +55,8 @@ namespace reciWebApp.Data.Repositories
 
         public void UpdateCategory(Category category)
         {
-            Update(category);
+            //Update(category);
+            _reciContext.Update(category).Property(x => x.Id).IsModified = false;
         }
 
         public Category? GetCategoryByName(string name)
