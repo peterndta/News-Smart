@@ -1,11 +1,12 @@
 import React from 'react'
 
+import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 
 import { Box, Divider, Grid, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, imageUrl, id, index }) => {
+const RecipeCompo = ({ name, imageUrl, id, index, message, createDate }) => {
     const history = useHistory()
     return (
         <Grid item md={12} mt={1}>
@@ -50,8 +51,7 @@ const RecipeCompo = ({ name, imageUrl, id, index }) => {
                                 color: blueGrey[700],
                             }}
                         >
-                            This post is removed due to: “
-                            {'Violates community standards and racism'}”.
+                            This post is removed due to: “{message}”.
                         </Typography>
                         <Typography
                             sx={{
@@ -59,7 +59,7 @@ const RecipeCompo = ({ name, imageUrl, id, index }) => {
                                 color: blueGrey[700],
                             }}
                         >
-                            Reported 10 mins ago
+                            Reported {moment(new Date(createDate)).fromNow(true)}
                         </Typography>
                     </Box>
                 </Box>
