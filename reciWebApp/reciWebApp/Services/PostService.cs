@@ -4,6 +4,7 @@ using reciWebApp.Data.Models;
 using reciWebApp.DTOs.CategoryDTOs;
 using reciWebApp.DTOs.CollectionDTOs;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -23,7 +24,7 @@ namespace reciWebApp.Services
         public bool CheckPostAuthority(int userId, string postId)
         {
             bool checkAuthority = true;
-            if (!(_repoManager.User.GetUserById(userId)).Role.Equals("admin"))
+            if (!(_repoManager.User.GetUserById(userId)).Role.Equals(RoleTypes.Admin))
             {
                 var post = _repoManager.Post.GetPostById(postId);
                 if (userId != post.UserId)
