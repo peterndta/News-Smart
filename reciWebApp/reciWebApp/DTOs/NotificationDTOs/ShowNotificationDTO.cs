@@ -7,5 +7,7 @@
         public string? Message { get; set; }
         public DateTime? CreateDate { get; set; }
         public bool? HaveSeen { get; set; }
+        public string? ImageUrl { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -119,7 +119,7 @@ namespace reciWebApp.Controllers
                     return BadRequest (new Response(400, "Invalid step id"));
                 }
 
-                var post = await _repoManager.Post.GetPostByIdAsync(step.PostsId);
+                var post = await _repoManager.Post.GetActivePostByIdAsync(step.PostsId);
                 if(post == null)
                 {
                     return BadRequest (new Response(400, "Invalid post id"));

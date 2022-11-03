@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using reciWebApp.Services.Utils;
 using reciWebApp.DTOs;
 using AutoMapper;
+using reciWebApp.Services.Commons;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -53,7 +54,7 @@ namespace reciWebApp.Controllers
 
             if (await _repoManager.User.GetUserByEmailAsync(userLogin.Email) == null)
             {
-                userLogin.Role = "user";
+                userLogin.Role = RoleTypes.User;
                 _repoManager.User.CreateUser(userLogin);
                 await _repoManager.SaveChangesAsync();
             }
@@ -117,7 +118,7 @@ namespace reciWebApp.Controllers
                 if (await _repoManager.User.GetUserByEmailAsync(authMobile.Email) == null)
                 {
                     User userAuth = _mapper.Map<User>(authMobile);
-                    userAuth.Role = "user";
+                    userAuth.Role = RoleTypes.User;
                     _repoManager.User.CreateUser(userAuth);
                     await _repoManager.SaveChangesAsync();
                 }
