@@ -30,7 +30,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/notifications/page/{pageNumber}")]
-        //[RoleAuthorization(RoleTypes.User)]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] NotificationParams @params)
         {
             try
