@@ -43,7 +43,8 @@ namespace reciWebApp.Data.Repositories
 
         public void UpdateNotification(Notification notification)
         {
-            Update(notification);
+            //Update(notification);
+            _reciContext.Notifications.Update(notification).Property(x => x.Id).IsModified = false;
         }
     }
 }

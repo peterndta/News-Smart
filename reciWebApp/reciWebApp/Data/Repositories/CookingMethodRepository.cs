@@ -62,7 +62,8 @@ namespace reciWebApp.Data.Repositories
 
         public void UpdateCookingMethod(CookingMethod cookingMethod)
         {
-            Update(cookingMethod);
+            //Update(cookingMethod);
+            _reciContext.CookingMethods.Update(cookingMethod).Property(x => x.Id).IsModified = false;
         }
     }
 }
