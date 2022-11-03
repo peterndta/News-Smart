@@ -47,7 +47,7 @@ namespace reciWebApp.Controllers
                 var numberOfPostIncollection = (await _repoManager.FoodCollection.GetFoodCollectionsAsync(id)).Count;
                 foreach (var postId in foodCollecitionDTO.PostsId)
                 {
-                    var post = await _repoManager.Post.GetPostByIdAsync(postId);
+                    var post = await _repoManager.Post.GetActivePostByIdAsync(postId);
                     var foodCollection = await _repoManager.FoodCollection.GetFoodCollectionAsync(postId, id);
                     if (post != null && foodCollection == null)
                     {
@@ -88,7 +88,7 @@ namespace reciWebApp.Controllers
         {
             try
             {
-                var post = await _repoManager.Post.GetPostByIdAsync(id);
+                var post = await _repoManager.Post.GetActivePostByIdAsync(id);
                 if (post == null)
                 {
                     return BadRequest(new Response(400, "Invalid post id"));

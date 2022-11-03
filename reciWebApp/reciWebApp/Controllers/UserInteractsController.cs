@@ -41,7 +41,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid user"));
                 }
 
-                if (await _repoManager.Post.GetPostByIdAsync(id) == null)
+                if (await _repoManager.Post.GetActivePostByIdAsync(id) == null)
                 {
                     return BadRequest(new Response(400, "Invalid post id"));
                 }
@@ -92,7 +92,7 @@ namespace reciWebApp.Controllers
                     return BadRequest(new Response(400, "Invalid user"));
                 }
 
-                if (await _repoManager.Post.GetPostByIdAsync(id) == null)
+                if (await _repoManager.Post.GetActivePostByIdAsync(id) == null)
                 {
                     return BadRequest(new Response(400, "Invalid post id"));
                 }

@@ -64,7 +64,7 @@ namespace reciWebApp.Controllers
 
                 var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(id);
                 var ratings = await _repoManager.UserInteract.GetRatingAsync(id);
-                var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
+                var posts = await _repoManager.Post.GetActivePostByUserIdAsync(id);
                 var activity = _mapper.Map<ActivityDTO>(user);
                 activity.TotalPosts = posts.Count;
                 activity.TotalBookmarks = bookmarks.Count;

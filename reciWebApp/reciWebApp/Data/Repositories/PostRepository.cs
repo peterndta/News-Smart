@@ -38,12 +38,12 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id.Equals(id) && x.Status == PostStatus.Active).FirstOrDefault();
         }
 
-        public async Task<Post?> GetPostByIdAsync(string id)
+        public async Task<Post?> GetActivePostByIdAsync(string id)
         {
             return await GetByCondition(x => x.Id.Equals(id) && x.Status == PostStatus.Active).SingleOrDefaultAsync();
         }
 
-        public async Task<List<Post>> GetPostByUserIdAsync(int id)
+        public async Task<List<Post>> GetActivePostByUserIdAsync(int id)
         {
             return await GetByCondition(x => x.UserId == id && x.Status == PostStatus.Active).ToListAsync();
         }
@@ -267,6 +267,11 @@ namespace reciWebApp.Data.Repositories
         public async Task<int> TotalPostsAsync()
         {
             return await GetByCondition(x => x.Status == PostStatus.Active).CountAsync();
+        }
+
+        public async Task<Post?> GetBannedPostByIdAsync(string id)
+        {
+            return await GetByCondition(x => x.Id.Equals(id) && x.Status == PostStatus.Ban).SingleOrDefaultAsync();
         }
 
         //public async Task<List<Post>> GetTop5BookmarkAsync()
