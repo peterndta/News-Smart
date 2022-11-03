@@ -411,7 +411,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                               children: [
                                 Ink(
                                   decoration: BoxDecoration(
-                                    color: (snapshot.data.bookmark != null)
+                                    color: (snapshot.data.bookmark == true)
                                         ? Colors.orange
                                         : Color.fromARGB(255, 221, 218, 218),
                                   ),
@@ -422,11 +422,17 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.bookmark_add_outlined,
-                                        size: 20,
-                                        color: Colors.black,
-                                      ),
+                                      child: snapshot.data.bookmark == true
+                                          ? Icon(
+                                              Icons.bookmark_added_outlined,
+                                              size: 20,
+                                              color: Colors.black,
+                                            )
+                                          : Icon(
+                                              Icons.bookmark,
+                                              size: 20,
+                                              color: Colors.black,
+                                            ),
                                     ),
                                   ),
                                 ),
