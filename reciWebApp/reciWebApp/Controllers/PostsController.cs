@@ -52,7 +52,7 @@ namespace reciWebApp.Controllers
                 }
 
                 var showPost = _mapper.Map<ShowPostDTO>(post);
-                showPost = _servicesManager.PostService.GetPostInfo(showPost);
+                showPost = await _servicesManager.PostService.GetPostInfo(showPost);
                 var showDetailPost = _mapper.Map<ShowDetailPostDTO>(showPost);
                 showDetailPost.Bookmark = _repoManager.UserInteract.CheckBookMark(currentUser.Id, id);
                 showDetailPost.Rating = _repoManager.UserInteract.GetRating(currentUser.Id, id);
@@ -79,7 +79,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (myPostParams.Sort != null)
@@ -247,7 +247,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (bookmarkParams.Sort != null)
@@ -286,7 +286,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (ratingParams.Sort != null)
@@ -306,7 +306,6 @@ namespace reciWebApp.Controllers
         //Get all recipes by method
         [HttpGet]
         [Route("~/api/method/post/page/{pageNumber}")]
-        //[RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByMethodParams filter)
         {
             try
@@ -331,7 +330,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (postParams.Type != null)
@@ -351,7 +350,6 @@ namespace reciWebApp.Controllers
         //Get all recipes by category
         [HttpGet]
         [Route("~/api/category/post/page/{pageNumber}")]
-        //[RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByCategoryParams filter)
         {
             try
@@ -377,7 +375,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (postParams.Type != null)
@@ -397,7 +395,6 @@ namespace reciWebApp.Controllers
         //Get all recipes by use and region
         [HttpGet]
         [Route("~/api/recipes/post/page/{pageNumber}")]
-        [RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByUsesAndRegionsParams filter)
         {
             try
@@ -430,7 +427,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (postParams.Type != null)
@@ -450,7 +447,6 @@ namespace reciWebApp.Controllers
         //Get collections recipe
         [HttpGet]
         [Route("~/api/collections/post/page/{pageNumber}")]
-        [RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByCollectionParams filter)
         {
             try
@@ -471,7 +467,7 @@ namespace reciWebApp.Controllers
                 var showPosts = _mapper.Map<List<ShowPostDTO>>(posts);
                 for (int i = 0; i < showPosts.Count; i++)
                 {
-                    showPosts[i] = _servicesManager.PostService.GetPostInfo(showPosts[i]);
+                    showPosts[i] = await _servicesManager.PostService.GetPostInfo(showPosts[i]);
                 }
 
                 if (filter.Sort != null)

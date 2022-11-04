@@ -151,7 +151,6 @@ namespace reciWebApp.Data.Repositories
             }
             if (name != null)
             {
-                //return result.Where(x => x.Name.Contains(name)).ToList();
                 return SearchByName(result, name);
             }
             return result;
@@ -167,7 +166,6 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -183,7 +181,6 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -207,7 +204,6 @@ namespace reciWebApp.Data.Repositories
             }
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -247,7 +243,6 @@ namespace reciWebApp.Data.Repositories
 
             if (name != null)
             {
-                //allPosts = allPosts.Where(x => x.Name.Contains(name)).ToList();
                 allPosts = SearchByName(allPosts, name);
             }
             return allPosts;
