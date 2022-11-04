@@ -9,7 +9,9 @@ const useReport = () => {
 
     const denyReport = (id) => put({ endpoint: '/api/admin/report', params: { reportId: id } })
 
-    return { createReport, getReports, denyReport }
+    const approveReport = (id, message) => put({ endpoint: `/api/report/${id}`, body: message })
+
+    return { createReport, getReports, denyReport, approveReport }
 }
 
 export default useReport
