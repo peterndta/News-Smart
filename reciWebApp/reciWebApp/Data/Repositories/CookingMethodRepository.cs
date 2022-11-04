@@ -30,13 +30,6 @@ namespace reciWebApp.Data.Repositories
             return GetByCondition(x => x.Id == id).FirstOrDefault();
         }
 
-        public int? GetCookingMethodIdByName(string? name)
-        {
-            return string.IsNullOrWhiteSpace(name)
-                ? null
-                : GetByCondition(x => x.Method.Equals(name)).FirstOrDefault().Id;
-        }
-
         public List<CookingMethod> GetCookingMethodsByName(List<string>? names)
         {
             var cookingMethods = GetAll().ToList();
