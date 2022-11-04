@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,6 @@ import '../object/auth_recipe_review.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
 import 'user_bookmark_page.dart';
-import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
 
 class IconDetail extends StatelessWidget {
@@ -71,6 +71,8 @@ class _UserProfileState extends State<UserProfile> {
   Future fetchInfinitePosts(int userId) async {
     if (isLoading) return;
     isLoading = true;
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
@@ -78,13 +80,13 @@ class _UserProfileState extends State<UserProfile> {
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
       },
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
-        //final List jsonData = responseJson['data'];
         isLoading = false;
         page++;
         if (responseJson['data'].length < limit) {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/login_support/check_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../components/copyright.dart';
 import '../login_support/auth_service.dart';
 import '../login_support/data.dart';
@@ -54,7 +55,11 @@ class _LoginPageState extends State<LoginPage> {
             token: json.decode(responseString)['data']);
         String userString = jsonEncode(user.toJson());
         await UserPreferences.setUserInfo(userString);
-
+        SharedPreferences share = await SharedPreferences.getInstance();
+        share.setString(
+          'user',
+          userString
+        );
         print(getUserInfo.token);
         print(getUserInfo.role);
         print(getUserInfo.mail);
