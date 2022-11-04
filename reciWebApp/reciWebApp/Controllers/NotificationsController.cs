@@ -111,7 +111,7 @@ namespace reciWebApp.Controllers
         // PUT api/<NotificationsController>/5
         [HttpPut()]
         [Route("~/api/user/{id}/mark-read")]
-        //[RoleAuthorization(RoleTypes.User)]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Put(int id)
         {
             try

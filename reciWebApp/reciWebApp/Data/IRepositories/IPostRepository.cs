@@ -16,7 +16,7 @@ namespace reciWebApp.Data.IRepositories
         void DeletePost(Post post); 
         void UpdatePost(Post post);
         List<Post> GetPostsByPostCategories(List<PostCategory> postCategories);
-        List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
+        List<Post> GetPostsByCookingMethods(List<int> cookingMethods);
         List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
         List<Post> GetPostsByUses(List<Use> uses);
         List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
@@ -29,6 +29,7 @@ namespace reciWebApp.Data.IRepositories
         List<Post> GetPostByFoodCollection(List<FoodCollection> foodCollections);
         List<Post>? GetPostFilter(List<Post>? post, string? name);
         Task<int> TotalPostsAsync();
+        List<Post> SearchByName(List<Post> posts, string name);
         //Task<List<Post>> GetTop5BookmarkAsync();
     }
 }

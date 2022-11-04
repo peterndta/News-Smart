@@ -306,7 +306,7 @@ namespace reciWebApp.Controllers
         //Get all recipes by method
         [HttpGet]
         [Route("~/api/method/post/page/{pageNumber}")]
-        [RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
+        //[RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByMethodParams filter)
         {
             try
@@ -315,7 +315,7 @@ namespace reciWebApp.Controllers
                 if (filter.Method != null)
                 {
                     var cookingMethods = _repoManager.CookingMethod.GetCookingMethodsByName(filter.Method);
-                    getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods);
+                    getPostsByCookingMethods = _repoManager.Post.GetPostsByCookingMethods(cookingMethods.Select(x => x.Id).ToList());
                 }
 
                 var postParams = new PostParams
@@ -351,7 +351,7 @@ namespace reciWebApp.Controllers
         //Get all recipes by category
         [HttpGet]
         [Route("~/api/category/post/page/{pageNumber}")]
-        [RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
+        //[RoleAuthorization(RoleTypes.Admin, RoleTypes.User)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] FilterByCategoryParams filter)
         {
             try
