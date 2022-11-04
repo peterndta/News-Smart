@@ -8,6 +8,7 @@ import 'package:reciapp/login_support/user_preference.dart';
 import 'package:reciapp/pages/home_page.dart';
 import 'package:reciapp/pages/login_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../object/user_info.dart';
 
@@ -18,7 +19,9 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return HomePage(imageUrl: snapshot.data?.photoURL as String,);
+            return HomePage(
+              imageUrl: snapshot.data?.photoURL as String,
+            );
           } else {
             return const LoginPage();
           }
@@ -49,6 +52,8 @@ class AuthService {
     UserData user = UserData(
         userID: 0, name: '', imageURL: '', role: '', mail: '', token: '');
     String userString = jsonEncode(user.toJson());
+    SharedPreferences data = await SharedPreferences.getInstance();
+    await data.clear();
     await UserPreferences.setUserInfo(userString);
   }
 

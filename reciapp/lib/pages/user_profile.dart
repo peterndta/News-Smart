@@ -56,8 +56,7 @@ class IconDetail extends StatelessWidget {
 }
 
 class UserProfile extends StatefulWidget {
-  final UserInfoProvider userInfoProvider;
-  const UserProfile({required this.userInfoProvider, super.key});
+  const UserProfile({super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -68,19 +67,17 @@ class _UserProfileState extends State<UserProfile> {
   int page = 1;
   bool isLoading = false;
   bool hasMore = true;
-  Future fetchInfinitePosts(int userId) async {
+  Future fetchInfinitePosts() async {
     if (isLoading) return;
     isLoading = true;
-    UserData userData =
-        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/user/${userData?.userID}/post/page/$page?PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+        HttpHeaders.authorizationHeader: 'Bearer ${userData?.token}'
       },
     );
     if (response.statusCode == 200) {
@@ -103,30 +100,19 @@ class _UserProfileState extends State<UserProfile> {
     }
   }
 
-  int userId = 0;
-
   @override
   void initState() {
     super.initState();
-    if (widget.userInfoProvider.name.isEmpty) {
-      UserData userData =
-          UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
-      widget.userInfoProvider.userID = userData.userID;
-      widget.userInfoProvider.imageURL = userData.imageURL;
-      widget.userInfoProvider.name = userData.name;
-      widget.userInfoProvider.token = userData.token;
-      widget.userInfoProvider.role = userData.role;
-      widget.userInfoProvider.mail = userData.mail;
-    }
-    userId = widget.userInfoProvider.userID;
-    fetchInfinitePosts(userId);
+    userData = UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetchInfinitePosts(widget.userInfoProvider.userID);
+        fetchInfinitePosts();
       }
     });
   }
 
+  UserData? userData;
   @override
   void dispose() {
     controller.dispose();
@@ -185,7 +171,7 @@ class _UserProfileState extends State<UserProfile> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                             image:
-                                NetworkImage(widget.userInfoProvider.imageURL),
+                                NetworkImage(userData!.imageURL),
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
@@ -196,7 +182,7 @@ class _UserProfileState extends State<UserProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(widget.userInfoProvider.name,
+                          Text(userData!.name,
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
@@ -218,7 +204,7 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: widget.userInfoProvider.mail,
+                                  text: userData!.mail,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10.0,

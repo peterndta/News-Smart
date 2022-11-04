@@ -5,7 +5,6 @@ import 'package:reciapp/login_support/user_preference.dart';
 import 'package:reciapp/object/filter_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../login_support/auth_service.dart';
-import 'pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,30 +42,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           fontFamily: 'Inter',
         ),
-        // routes: {
-        //   '/home': (_) => const HomePage(),
-        // },
         home: AuthService().handleAuthState(),
-        //     MyHomePage(
-        //   title: '',
-        // ),
       ),
     );
   }
 }
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-
-//   final String title;
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return HomePage();
-//   }
-// }

@@ -6,47 +6,42 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
 import '../object/user_info.dart';
 
 class HeadBar extends StatefulWidget {
-  HeadBar({required this.imageUrl, super.key});
-  String imageUrl;
+  HeadBar({super.key});
 
   @override
   State<HeadBar> createState() => _HeadBarState();
 }
 
 class _HeadBarState extends State<HeadBar> {
+  String? imageUrl;
+
+  @override
+  void initState() {
+    loadData();
+  }
+
+  loadData() async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    UserData userData =
+        UserData.fromJson(jsonDecode(data.getString('user') as String));
+    setState(() {
+      imageUrl = userData.imageURL;
+    });
+  }
+
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    // String imageUrl = Ima.getUserImage();
     return AppBar(
       elevation: 5,
       titleSpacing: -12,
-      // title: Container(
-      //     margin: EdgeInsets.symmetric(horizontal: 7),
-      //     child: InkWell(
-      //       onTap: () {
-      //         Navigator.of(context)
-      //             .push(MaterialPageRoute(builder: (context) => HomePage()));
-      //       },
-      //       child: Image(image: AssetImage('assets/logo.png')),
-      //     )),
-      // leading: Builder(
-      //   builder: (context) => IconButton(
-      //     icon: Icon(
-      //       Icons.menu,
-      //       color: Colors.white,
-      //     ),
-      //     onPressed: () {
-      //       Scaffold.of(context).openDrawer();
-      //     },
-      //   ),
-      // ),
       actions: [
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -101,15 +96,14 @@ class _HeadBarState extends State<HeadBar> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          UserProfile(userInfoProvider: getUserInfo)));
+                          UserProfile()));
                 },
-                child: 
-                // Icon(Icons.person),
-                Image(
-                  image: NetworkImage(widget.imageUrl),
+                child: imageUrl == null?
+                    Icon(Icons.person):
+                    Image(
+                  image: NetworkImage(imageUrl!),
                 ),
-                )
-              ),
+              )),
               SizedBox(width: MediaQuery.of(context).size.width * 0.02),
             ],
           ),
