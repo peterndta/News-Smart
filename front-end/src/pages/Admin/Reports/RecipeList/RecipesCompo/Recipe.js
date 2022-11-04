@@ -20,7 +20,7 @@ import ConfirmPopup from '../ConfirmPopup'
 import DetailPopup from '../DetailPopup'
 import MessagePopup from '../MessagePopup'
 
-const LatestRecipe = ({ post, reportHandler }) => {
+const LatestRecipe = ({ post, reportHandler, confirmHandler }) => {
     const [open, setOpen] = React.useState(false)
     const [openConfirm, setOpenConfirm] = React.useState(false)
     const [openMessageApprove, setOpenMessageApprove] = React.useState(false)
@@ -60,6 +60,7 @@ const LatestRecipe = ({ post, reportHandler }) => {
                     isApprove={isApprove}
                     status={openMessageApprove}
                     onClose={handleClickCloseMessageApprove}
+                    confirmHandler={confirmHandler}
                 />
             )}
             {openConfirm && (

@@ -50,6 +50,7 @@ const MessagePopup = (props) => {
                     message={description}
                     closeMessage={props.onClose}
                     isApprove={props.isApprove}
+                    confirmHandler={props.confirmHandler}
                 />
             )}
             <Dialog
