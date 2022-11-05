@@ -192,6 +192,12 @@ class _UserProfileState extends State<UserProfile> {
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
+                          const Text(
+                            'Email:',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                            ),
+                          ),
                           Text(
                             userData!.mail,
                             style: const TextStyle(
