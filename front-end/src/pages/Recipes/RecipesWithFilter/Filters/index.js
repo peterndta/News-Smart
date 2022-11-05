@@ -84,7 +84,7 @@ const Filter = () => {
                     sx={{ borderBottom: (theme) => `3px solid ${theme.palette.primary.main}` }}
                 >
                     <Typography variant="h4" fontWeight={700} sx={{ color: blueGrey[800] }}>
-                        Filters
+                        Select
                     </Typography>
                     <Button variant="outlined" onClick={clearAllHandler}>
                         Clear all

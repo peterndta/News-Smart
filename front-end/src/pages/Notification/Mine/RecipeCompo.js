@@ -1,13 +1,11 @@
 import React from 'react'
 
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
 
 import { Box, Divider, Grid, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, imageUrl, id, index, message, createDate }) => {
-    const history = useHistory()
+const RecipeCompo = ({ name, imageUrl, index, message, createDate }) => {
     return (
         <Grid item md={12} mt={1}>
             <Box mt={2} sx={{ backgroundColor: index % 2 ? '#F2F2F2' : '#F6EEE4' }}>
@@ -27,7 +25,6 @@ const RecipeCompo = ({ name, imageUrl, id, index, message, createDate }) => {
                         height={120}
                         sx={{ aspectRatio: '1 / 1', cursor: 'pointer' }}
                         src={imageUrl}
-                        onClick={() => history.push(`/recipes/${id}`)}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center">
