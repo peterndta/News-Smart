@@ -1,4 +1,5 @@
 ﻿using reciWebApp.Data.Models;
+using reciWebApp.DTOs.BookmarkDTOs;
 
 namespace reciWebApp.Data.IRepositories
 {
@@ -14,5 +15,6 @@ namespace reciWebApp.Data.IRepositories
         int? GetRating(int userId, string postId);
         Task<List<UserInteract>> GetBookmarkAsync(int userId);
         Task<List<UserInteract>> GetRatingAsync(int userId);
+        Task<List<TopBookmarkDTO>> GetTopBookmarkAsync(int topNumber);
     }
 }

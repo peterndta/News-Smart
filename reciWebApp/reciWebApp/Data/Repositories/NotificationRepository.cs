@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.DTOs.NotificationDTOs;
+using reciWebApp.Services.Commons;
 
 namespace reciWebApp.Data.Repositories
 {
@@ -25,9 +27,24 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.PostReportId == reportId).SingleOrDefaultAsync();
         }
 
+        public List<ShowNotificationDTO> SortNotificationsByCondition(List<ShowNotificationDTO> shows, string sort)
+        {
+            if (sort.Equals(SortTypes.Newest))
+            {
+                shows = shows.OrderByDescending(x => x.CreateDate).ToList();
+            }
+            else if (sort.Equals(SortTypes.Oldest))
+            {
+                shows = shows.OrderBy(x => x.CreateDate).ToList();
+            }
+
+            return shows;
+        }
+
         public void UpdateNotification(Notification notification)
         {
-            Update(notification);
+            //Update(notification);
+            _reciContext.Notifications.Update(notification).Property(x => x.Id).IsModified = false;
         }
     }
 }

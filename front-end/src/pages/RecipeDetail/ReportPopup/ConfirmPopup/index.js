@@ -24,7 +24,7 @@ const ConfirmPopup = (props) => {
     const reportHandler = () => {
         reportAction
             .createReport(props.userId, props.postId, props.reason.value)
-            .then((res) => {
+            .then(() => {
                 showSnackbar({
                     severity: 'success',
                     children: 'Report successfully.',

@@ -7,15 +7,16 @@ namespace reciWebApp.Data.IRepositories
 {
     public interface IPostRepository
     {
-        Task<Post?> GetPostByIdAsync(string id);
-        Task<List<Post>> GetPostByUserIdAsync(int id);
+        Task<Post?> GetActivePostByIdAsync(string id);
+        Task<Post?> GetBannedPostByIdAsync(string id);
+        Task<List<Post>> GetActivePostByUserIdAsync(int id);
         Task<List<Post>> GetBannedPostByUserIdAsync(int id);
         void CreatePost(Post post);
         Post? GetPostById(string id);
         void DeletePost(Post post); 
         void UpdatePost(Post post);
         List<Post> GetPostsByPostCategories(List<PostCategory> postCategories);
-        List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods);
+        List<Post> GetPostsByCookingMethods(List<int> cookingMethods);
         List<Post> GetPostsByRecipeRegions(List<RecipeRegion> recipeRegions);
         List<Post> GetPostsByUses(List<Use> uses);
         List<ShowPostDTO> SortPostByCondition(List<ShowPostDTO> posts, string? condition);
@@ -27,5 +28,8 @@ namespace reciWebApp.Data.IRepositories
         Task<List<Post>?> GetPostByNameAsync(PostFilterByNameParams postFilterByNameParams);
         List<Post> GetPostByFoodCollection(List<FoodCollection> foodCollections);
         List<Post>? GetPostFilter(List<Post>? post, string? name);
+        Task<int> TotalPostsAsync();
+        List<Post> SearchByName(List<Post> posts, string name);
+        //Task<List<Post>> GetTop5BookmarkAsync();
     }
 }

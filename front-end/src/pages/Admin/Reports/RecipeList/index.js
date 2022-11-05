@@ -82,6 +82,10 @@ const RecipeList = () => {
                 const cloneRecipes = { ...recipes }
                 const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== reportId)
                 setIsLoading(false)
+                showSnackBar({
+                    severity: 'success',
+                    children: 'Deny report successfully',
+                })
                 setRecipes({ ...recipes, list: newRecipes })
             })
             .catch((error) => {
@@ -93,13 +97,42 @@ const RecipeList = () => {
                 })
             })
     }
+
+    const confirmHandler = (reportId, message) => {
+        setIsLoading(true)
+        recipeAction
+            .approveReport(reportId, { message: message })
+            .then(() => {
+                const cloneRecipes = { ...recipes }
+                const newRecipes = cloneRecipes.list.filter((recipe) => recipe.id !== reportId)
+                setIsLoading(false)
+                showSnackBar({
+                    severity: 'success',
+                    children: 'approve report successfully',
+                })
+                setRecipes({ ...recipes, list: newRecipes })
+            })
+            .catch((error) => {
+                const message = error.response.data.message
+                setIsLoading(false)
+                showSnackBar({
+                    severity: 'error',
+                    children: message || 'Something went wrong, please try again later.',
+                })
+            })
+    }
+
     return (
         <Grid item md={12} display="flex" flexDirection="column">
             {isLoading ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    <Recipes posts={recipes.list} reportHandler={reportHandler} />
+                    <Recipes
+                        posts={recipes.list}
+                        reportHandler={reportHandler}
+                        confirmHandler={confirmHandler}
+                    />
                     {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}
                 </React.Fragment>
             )}

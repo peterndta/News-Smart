@@ -5,6 +5,7 @@ using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.UserDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -27,22 +28,11 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/page/{pageNumber}")]
+        [RoleAuthorization(RoleTypes.Admin)]
         public async Task<IActionResult> Get(int pageNumber, [FromQuery] UserParams userParams)
         {
             try
             {
-                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (currentUser == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
-
-                //if (!currentUser.Role.Equals("admin"))
-                //{
-                //    return BadRequest(new Response(400, "You do not have permission"));
-                //}
-
                 var userList = await _repoManager.User.GetAllUserAsync(userParams);
 
                 var showUserList = _mapper.Map<List<ShowUserDTO>>(userList);
@@ -61,22 +51,11 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/allactivity")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                //var currentUser = await _servicesManager.AuthService.GetUser(Request);
-
-                //if (currentUser == null)
-                //{
-                //    return BadRequest(new Response(400, "Invalid user"));
-                //}
-
-                //if (!currentUser.Role.Equals("admin"))
-                //{
-                //    return BadRequest(new Response(400, "You do not have permission"));
-                //}
-
                 var user = await _repoManager.User.GetUserByIdAsync(id);
                 if (user == null)
                 {
@@ -85,7 +64,7 @@ namespace reciWebApp.Controllers
 
                 var bookmarks = await _repoManager.UserInteract.GetBookmarkAsync(id);
                 var ratings = await _repoManager.UserInteract.GetRatingAsync(id);
-                var posts = await _repoManager.Post.GetPostByUserIdAsync(id);
+                var posts = await _repoManager.Post.GetActivePostByUserIdAsync(id);
                 var activity = _mapper.Map<ActivityDTO>(user);
                 activity.TotalPosts = posts.Count;
                 activity.TotalBookmarks = bookmarks.Count;

@@ -7,6 +7,6 @@ namespace reciWebApp.Services.Interfaces
     public interface IPostService
     {
         bool CheckPostAuthority(int userId, string postId);
-        ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO);
+        Task<ShowPostDTO> GetPostInfo(ShowPostDTO showPostDTO);
     }
 }

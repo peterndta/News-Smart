@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.DTOs.BookmarkDTOs;
+using reciWebApp.DTOs.UserInteractDTOs;
+using System.Collections.Immutable;
 
 namespace reciWebApp.Data.Repositories
 {
@@ -44,7 +47,8 @@ namespace reciWebApp.Data.Repositories
 
         public void UpdateUserInteract(UserInteract userInteract)
         {
-            Update(userInteract);
+            //Update(userInteract);
+            _reciContext.UserInteracts.Update(userInteract).Property(x => x.Id).IsModified = false;
         }
 
         public void DeleteUserInteract(UserInteract userInteract)
@@ -82,6 +86,20 @@ namespace reciWebApp.Data.Repositories
         {
             var ratings = GetByCondition(x => x.UserId == userId && x.Rating != null).ToListAsync();
             return ratings;
+        }
+
+        public async Task<List<TopBookmarkDTO>> GetTopBookmarkAsync(int topNumber)
+        {
+            var topBookmark = await GetAll().GroupBy(x => x.PostsId)
+                                        .Select(x => new TopBookmarkDTO
+                                        {
+                                            PostId = x.Key,
+                                            TotalBookmark = x.Count(),
+                                        })
+                                        .OrderByDescending(x => x.TotalBookmark)
+                                        .Take(topNumber)
+                                        .ToListAsync();
+            return topBookmark;
         }
     }
 }
