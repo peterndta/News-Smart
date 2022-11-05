@@ -125,7 +125,7 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
                 ),
               ),
               ListAuthRecipeReview(
-                  0.67, _listReciepReviews, controller, hasMore, "user_recipes_page")
+                  0.69, _listReciepReviews, controller, hasMore, "user_recipes_page")
             ],
           ),
         ),

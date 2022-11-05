@@ -192,7 +192,11 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: ListRecipeReview(
+                  0.62, _listReciepReviews, controller, hasMore),
+            )
           ],
         ),
       ),

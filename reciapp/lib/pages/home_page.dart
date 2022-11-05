@@ -18,16 +18,16 @@ import '../object/recipe_review.dart';
 import '../object/user_info.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({required this.imageUrl, super.key});
-  String imageUrl;
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
   final controller = ScrollController();
   int page = 1;
+  int numOfNoti = 0;
   bool isLoading = false;
   bool hasMore = true;
   Future fetchInfinitePosts() async {
@@ -37,8 +37,6 @@ class _HomePageState extends State<HomePage>{
     SharedPreferences data = await SharedPreferences.getInstance();
     UserData userData =
         UserData.fromJson(jsonDecode(data.getString('user') as String));
-    // print('Call: ' +
-    //     'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit');
     http.Response response = await http.get(
       Uri.parse(
           'https://reciapp.azurewebsites.net/api/recipes/post/page/$page?PageSize=$limit'),
@@ -50,7 +48,6 @@ class _HomePageState extends State<HomePage>{
     );
     var responseJson = json.decode(response.body);
     if (response.statusCode == 200) {
-      // print(responseJson);
       if (!mounted) return;
       setState(() {
         isLoading = false;
@@ -70,6 +67,32 @@ class _HomePageState extends State<HomePage>{
     }
   }
 
+  Future fetchNoti() async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    UserData userData =
+        UserData.fromJson(jsonDecode(data.getString('user') as String));
+    http.Response response = await http.get(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/${userData.userID}/new-notifications'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+    var responseJson = json.decode(response.body);
+    if (response.statusCode == 200) {
+      // print(responseJson);
+      if (!mounted) return;
+      // print(responseJson);
+      setState(() {
+        numOfNoti = responseJson['data']['newNotification'] as int;
+      });
+    } else {
+      // print(responseJson);
+    }
+  }
+
   @override
   void dispose() {
     controller.dispose();
@@ -83,7 +106,6 @@ class _HomePageState extends State<HomePage>{
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetchInfinitePosts();
-        print(' more');
       }
     });
   }
@@ -93,6 +115,7 @@ class _HomePageState extends State<HomePage>{
     if (data.getString('user') == null) {
       setState(() {});
     } else {
+      fetchNoti();
       fetchInfinitePosts();
       return data.getString('user');
     }
@@ -107,7 +130,7 @@ class _HomePageState extends State<HomePage>{
             return Scaffold(
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(55),
-                child: HeadBar(),
+                child: HeadBar(numOfNoti: numOfNoti),
               ),
               bottomNavigationBar: bottomMenuBar(context, 'home'),
               body: Container(
@@ -131,11 +154,11 @@ class _HomePageState extends State<HomePage>{
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 children: [
                                   Container(
@@ -165,18 +188,8 @@ class _HomePageState extends State<HomePage>{
                                 ],
                               ),
                             ),
-                            // FutureBuilder(
-                            //     future: fetchInfinitePosts()
-                            //         .whenComplete(() => 'ok'),
-                            //     builder: (context, snapshot) {
-                            //       if (snapshot.hasData) {
-                            // return
                             ListRecipeReview(
-                                0.55, _listReciepReviews, controller, hasMore)
-                            // ;
-                            //   }
-                            //   return CircularProgressIndicator();
-                            // })
+                                0.6, _listReciepReviews, controller, hasMore)
                           ],
                         ),
                       ),

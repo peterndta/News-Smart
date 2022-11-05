@@ -125,7 +125,9 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: const Text(
+          'User Profile',
+        ),
         centerTitle: true,
         elevation: 1,
         backgroundColor: Colors.white,
@@ -170,8 +172,7 @@ class _UserProfileState extends State<UserProfile> {
                       margin: const EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image:
-                                NetworkImage(userData!.imageURL),
+                            image: NetworkImage(userData!.imageURL),
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
@@ -191,26 +192,11 @@ class _UserProfileState extends State<UserProfile> {
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
-                          Text.rich(
-                            maxLines: 2,
-                            TextSpan(
-                              children: <InlineSpan>[
-                                const WidgetSpan(
-                                  child: Text(
-                                    'Email: ',
-                                    style: TextStyle(
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: userData!.mail,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10.0,
-                                  ),
-                                ),
-                              ],
+                          Text(
+                            userData!.mail,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10.0,
                             ),
                           ),
                         ],
@@ -262,7 +248,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             ListAuthRecipeReview(
-                0.47, _listReciepReviews, controller, hasMore, "profile")
+                0.49, _listReciepReviews, controller, hasMore, "profile")
           ]),
         ),
       ),

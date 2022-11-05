@@ -120,7 +120,7 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
                           ),
                         ))),
               ),
-              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+              ListRecipeReview(0.69, _listReciepReviews, controller, hasMore)
             ],
           ),
         ),
