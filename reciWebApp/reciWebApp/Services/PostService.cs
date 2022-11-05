@@ -35,35 +35,43 @@ namespace reciWebApp.Services
             return checkAuthority;
         }
 
-        public ShowPostDTO GetPostInfo(ShowPostDTO showPostDTO)
+        public async Task<ShowPostDTO> GetPostInfo(ShowPostDTO showPostDTO)
         {
-            var listPostCategories = _repoManager.PostCategory.GetPostCategoriesByPostId(showPostDTO.Id);
-            var categories = new List<Category>();
-            foreach (var postCategory in listPostCategories)
-            {
-                var category = _repoManager.Category.GetCategoryById(postCategory.CategoryId);
-                if (category != null)
-                {
-                    categories.Add(category);
-                }               
-            }
+            var listPostCategories = _repoManager.PostCategory.GetPostCategoriesByPostId(showPostDTO.Id).AsQueryable();
+            //var categories = new List<Category>();
+            //foreach (var postCategory in listPostCategories)
+            //{
+            //    var category = _repoManager.Category.GetCategoryById(postCategory.CategoryId);
+            //    if (category != null)
+            //    {
+            //        categories.Add(category);
+            //    }               
+            //}
+            var x = _repoManager.Category.GetAllCategories().AsQueryable();
+            var categories = listPostCategories.Join(x,
+                                                    pc => pc.CategoryId, c => c.Id,
+                                                    (pc, c) => new { result = c }).Select(x => x.result).ToList();
 
-            var listFoodCollection = _repoManager.FoodCollection.GetFoodCollectionsByPostId(showPostDTO.Id);
+            var listFoodCollection = _repoManager.FoodCollection.GetFoodCollectionsByPostId(showPostDTO.Id).AsQueryable();
             var collections = new List<Collection>();
-            if (listFoodCollection.Count == 0)
+            var y = (await _repoManager.Collection.GetCollectionsAsync()).AsQueryable();
+            if (listFoodCollection == null)
             {
                 showPostDTO.ListCollections = null;
             }
             else
-            {               
-                foreach (var foodCollection in listFoodCollection)
-                {
-                    var collection = _repoManager.Collection.GetCollection(foodCollection.CollectionId);
-                    if (collection != null)
-                    {
-                        collections.Add(collection);
-                    }
-                }
+            {
+                //foreach (var foodCollection in listFoodCollection)
+                //{
+                //    var collection = _repoManager.Collection.GetCollection(foodCollection.CollectionId);
+                //    if (collection != null)
+                //    {
+                //        collections.Add(collection);
+                //    }
+                //}
+                collections = listFoodCollection.Join(y,
+                                                        fc => fc.CollectionId, c => c.Id,
+                                                        (fc, c) => new { result = c }).Select(x => x.result).ToList();
             }
             
             showPostDTO.ListCategories = _mapper.Map<List<ShowCategoryDTO>>(categories);

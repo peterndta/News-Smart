@@ -5,7 +5,6 @@ import { useRecoilValue } from 'recoil'
 
 import { AccountCircle, AddCircleOutline, Bookmark, Description, Logout } from '@mui/icons-material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import {
     AppBar,
     Avatar,
@@ -21,13 +20,13 @@ import {
     Toolbar,
     Tooltip,
     Typography,
-    Badge,
 } from '@mui/material'
 import { grey, yellow } from '@mui/material/colors'
 
 import logo from '../../../assets/images/logo.png'
 import { useAuthAction } from '../../../recoil/auth'
 import authAtom from '../../../recoil/auth/atom'
+import Notification from '../../Noti'
 import Search from '../../Search'
 
 const CommonHeader = () => {
@@ -222,20 +221,7 @@ const CommonHeader = () => {
                                 },
                             }}
                         >
-                            <Box
-                                component={Link}
-                                to="/notification"
-                                sx={{ textDecoration: ' none' }}
-                            >
-                                <IconButton component="label" size="large" sx={{ ml: 3 }}>
-                                    <Badge badgeContent={100} color="secondary">
-                                        <NotificationsIcon
-                                            fontSize="large"
-                                            sx={{ color: '#fefefe' }}
-                                        />
-                                    </Badge>
-                                </IconButton>
-                            </Box>
+                            {auth.email && <Notification />}
                             {auth.email ? (
                                 <React.Fragment>
                                     <Tooltip title="Account settings">

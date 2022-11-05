@@ -4,11 +4,14 @@ import { useSetRecoilState } from 'recoil'
 
 import { post } from '../../utils/ApiCaller'
 import LocalStorageUtils from '../../utils/LocalStorageUtils'
+import notificationAtom, { useNotification } from '../notification'
 import authAtom from './atom'
 
 const useAuthAction = () => {
     const history = useHistory()
     const setAuth = useSetRecoilState(authAtom)
+    const setNotification = useSetRecoilState(notificationAtom)
+    const notificationAction = useNotification()
 
     const autoLogin = () => {
         const token = LocalStorageUtils.getToken()
@@ -24,6 +27,12 @@ const useAuthAction = () => {
                     role: user.role,
                     exp: user.exp,
                     userId: user.userId,
+                })
+                notificationAction.getNewNotifications(+user.userId).then((res) => {
+                    const newNotifications = res.data.data.newNotification
+                    setNotification({
+                        notification: newNotifications,
+                    })
                 })
             } else {
                 logout()
@@ -52,7 +61,15 @@ const useAuthAction = () => {
                 setAuth({ token, email, name, image, role, exp, userId: userId })
                 if (role === 'admin') {
                     history.push('/admin/users')
-                } else history.push('/')
+                } else {
+                    notificationAction.getNewNotifications(+userId).then((res) => {
+                        const newNotifications = res.data.data.newNotification
+                        setNotification({
+                            notification: newNotifications,
+                        })
+                        history.push('/')
+                    })
+                }
             } else {
                 throw new Error('Something went wrong')
             }

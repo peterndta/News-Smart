@@ -75,15 +75,15 @@ namespace reciWebApp.Data.Repositories
             return result;
         }
 
-        public List<Post> GetPostsByCookingMethods(List<CookingMethod> cookingMethods)
+        public List<Post> GetPostsByCookingMethods(List<int> cookingMethodsId)
         {
             var posts = GetByCondition(x => x.Status == PostStatus.Active).ToList();
             var result = new List<Post>();
-            if (posts.Count > 0 && cookingMethods.Count > 0)
+            if (posts.Count > 0 && cookingMethodsId.Count > 0)
             {
-                foreach (var cookingMethod in cookingMethods)
+                foreach (var cookingMethodId in cookingMethodsId)
                 {
-                    var validResult = posts.Where(x => x.CookingMethodId == cookingMethod.Id).ToList();
+                    var validResult = posts.Where(x => x.CookingMethodId == cookingMethodId).ToList();
                     if (validResult != null)
                     {
                         result.AddRange(validResult);
@@ -151,7 +151,6 @@ namespace reciWebApp.Data.Repositories
             }
             if (name != null)
             {
-                //return result.Where(x => x.Name.Contains(name)).ToList();
                 return SearchByName(result, name);
             }
             return result;
@@ -167,7 +166,6 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -183,7 +181,6 @@ namespace reciWebApp.Data.Repositories
 
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -207,7 +204,6 @@ namespace reciWebApp.Data.Repositories
             }
             if (postParams.Name != null)
             {
-                //posts = posts.Where(x => x.Name.Contains(postParams.Name)).ToList();
                 return SearchByName(posts, postParams.Name);
             }
             return posts;
@@ -247,7 +243,6 @@ namespace reciWebApp.Data.Repositories
 
             if (name != null)
             {
-                //allPosts = allPosts.Where(x => x.Name.Contains(name)).ToList();
                 allPosts = SearchByName(allPosts, name);
             }
             return allPosts;
@@ -259,7 +254,7 @@ namespace reciWebApp.Data.Repositories
             return await listBannedPost;
         }
 
-        private List<Post> SearchByName(List<Post> posts, string name)
+        public List<Post> SearchByName(List<Post> posts, string name)
         {
             return posts.Where(x => x.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }

@@ -8,8 +8,8 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 const Sort = () => {
     const history = useHistory()
     const { search: query, pathname } = useLocation()
-    const { search, sort, pageNum } = queryString.parse(query)
-    const [type, setType] = React.useState(sort ? sort : '')
+    const { sort } = queryString.parse(query)
+    const [type, setType] = React.useState(sort ? sort : 'Newest')
 
     const handleChange = (event) => {
         setType(event.target.value)
@@ -17,11 +17,8 @@ const Sort = () => {
 
     const filterHandler = () => {
         let route = pathname + '?'
-        if (search && search.trim() !== '') route += '&search=' + search
 
         if (!!type) route += `&sort=${type}`
-
-        if (pageNum) route += `&pageNum=${pageNum}`
 
         history.push(route)
     }
@@ -41,7 +38,6 @@ const Sort = () => {
                 label="Sort"
                 onChange={handleChange}
             >
-                <MenuItem value={'Popularity'}>Popularity</MenuItem>
                 <MenuItem value={'Newest'}>Newest</MenuItem>
                 <MenuItem value={'Oldest'}>Oldest</MenuItem>
             </Select>
