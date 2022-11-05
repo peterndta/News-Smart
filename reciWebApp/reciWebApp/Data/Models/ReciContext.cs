@@ -29,7 +29,7 @@ namespace reciWebApp.Data.Models
         public virtual DbSet<Step> Steps { get; set; } = null!;
         public virtual DbSet<Use> Uses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
-        public virtual DbSet<UserInteract> UserInteracts { get; set; } = null!;
+        public DbSet<UserInteract> UserInteracts { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

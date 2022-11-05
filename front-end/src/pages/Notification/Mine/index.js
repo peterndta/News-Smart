@@ -1,106 +1,123 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import queryString from 'query-string'
 import { useLocation } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import NumberItemPagination from '../../../components/NumberItemPagination'
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../../HOCs/SnackbarContext'
 import authAtom from '../../../recoil/auth/atom'
-import useMyRecipe from '../../../recoil/my-recipe/action'
+import notificationAtom from '../../../recoil/notification'
+import useNotification from '../../../recoil/notification/action'
 import Loading from '../../Loading'
-import LoadMore from './LoadMore'
 import Recipes from './Recipes'
 
-const filterStringGenerator = ({ search, sort }) => {
+const filterStringGenerator = () => {
     let filterString = `?PageSize=${6}`
-
-    if (search && search.trim() !== '') filterString += '&search=' + search
-
-    if (sort !== undefined) filterString += `&sort=${sort}`
 
     return filterString
 }
 const Mine = () => {
     const { search: query } = useLocation()
-    const { search, sort, pageNum } = queryString.parse(query)
+    const { sort } = queryString.parse(query)
     const auth = useRecoilValue(authAtom)
-    const myRecipesAction = useMyRecipe()
-    const [recipes, setRecipes] = useState({ list: [], pageCount: 1 })
+    const [recipes, setRecipes] = useState([])
     const showSnackBar = useSnackbar()
     const [isLoading, setIsLoading] = useState(false)
-    const [fromTo, setFromTo] = useState({ from: 1, to: 1, totalCount: 1 })
+    const [pageNumber, setPageNumber] = useState(1)
+    const notificationAction = useNotification()
+    const initialLoadingComments = useRef(true)
+    const [hasMore, setHasMore] = useState(false)
+    const setNotification = useSetRecoilState(notificationAtom)
+
+    const markRead = () => {
+        notificationAction.markReadNotifications(+auth.userId).then(() => {
+            setNotification({ notification: 0 })
+        })
+    }
+
+    const loadMoreHandler = () => {
+        setPageNumber((previousValue) => previousValue + 1)
+    }
 
     useEffect(() => {
-        const params = filterStringGenerator({ search, sort })
+        const params = filterStringGenerator()
         setIsLoading(true)
 
-        if (pageNum === undefined) {
-            myRecipesAction
-                .getRecipes(auth.userId, params)
-                .then((res) => {
-                    const listRecipe = res.data.data
-                    const { totalPages, from, to, totalCount } = res.data.meta
-                    setRecipes({ list: listRecipe, pageCount: totalPages })
-                    setFromTo({ from, to, totalCount })
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 500)
+        if (initialLoadingComments.current) markRead()
+
+        notificationAction
+            .getNotifications(+auth.userId, pageNumber, params)
+            .then((res) => {
+                setHasMore(res.data.meta.hasNext)
+                initialLoadingComments.current = false
+                const listRecipe = res.data.data
+                setRecipes((prev) => [...prev, ...listRecipe])
+                setTimeout(() => {
+                    setIsLoading(false)
+                }, 500)
+            })
+            .catch((error) => {
+                initialLoadingComments.current = false
+                const message = error.response.data.message
+                showSnackBar({
+                    severity: message == 'Do not have any post' ? 'info' : 'error',
+                    children: message || 'Something went wrong, please try again later.',
                 })
-                .catch((error) => {
-                    const message = error.response.data.message
-                    showSnackBar({
-                        severity: message == 'Do not have any post' ? 'info' : 'error',
-                        children: message || 'Something went wrong, please try again later.',
-                    })
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 500)
-                })
-        } else {
-            myRecipesAction
-                .getRecipes(auth.userId, params, pageNum)
-                .then((res) => {
-                    const listRecipe = res.data.data
-                    const { totalPages, from, to, totalCount } = res.data.meta
-                    setRecipes({ list: listRecipe, pageCount: totalPages })
-                    setFromTo({ from, to, totalCount })
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 500)
-                })
-                .catch((error) => {
-                    const message = error.response.data.message
-                    showSnackBar({
-                        severity: message == 'Do not have any post' ? 'info' : 'error',
-                        children: message || 'Something went wrong, please try again later.',
-                    })
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 500)
-                })
+                setTimeout(() => {
+                    setIsLoading(false)
+                }, 500)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageNumber])
+
+    useEffect(() => {
+        if (sort === 'Newest') {
+            const sortedArray = [...recipes]
+            sortedArray.sort(
+                (a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+            )
+            setRecipes(sortedArray)
+        } else if (sort === 'Oldest') {
+            const sortedArray = [...recipes]
+            sortedArray.sort(
+                (a, b) => new Date(a.createDate).getTime() - new Date(b.createDate).getTime()
+            )
+            setRecipes(sortedArray)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, sort, pageNum])
+    }, [sort])
 
     return (
         <React.Fragment>
-            {isLoading ? (
+            {isLoading && initialLoadingComments.current ? (
                 <Loading />
             ) : (
                 <React.Fragment>
-                    {recipes.list.length ? (
+                    {recipes.length ? (
                         <React.Fragment>
-                            <NumberItemPagination
-                                from={fromTo.from}
-                                to={fromTo.to}
-                                all={fromTo.totalCount}
-                            />
-                            <Recipes posts={recipes.list} />
-                            <LoadMore size={recipes.pageCount} />
+                            <Recipes posts={recipes} />
+                            {isLoading && (
+                                <Box display="flex" justifyContent="center" mt={4}>
+                                    <CircularProgress disableShrink size={20} />
+                                </Box>
+                            )}
+                            {hasMore && (
+                                <Typography
+                                    fontWeight={700}
+                                    sx={{
+                                        alignSelf: 'center',
+                                        mt: 6,
+                                        color: grey[600],
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={loadMoreHandler}
+                                >
+                                    Load more activities
+                                </Typography>
+                            )}
                         </React.Fragment>
                     ) : (
                         <Box alignItems="center" textAlign="center" mt={5}>

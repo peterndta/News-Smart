@@ -65,7 +65,7 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateCollection()
+        public async Task<IActionResult> Get()
         { 
             try
             {

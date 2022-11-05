@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
+using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.NotificationDTOs;
+using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.Services.Commons;
 using reciWebApp.Services.Interfaces;
 using reciWebApp.Services.Utils;
 
@@ -26,8 +29,9 @@ namespace reciWebApp.Controllers
         }
 
         [HttpGet]
-        [Route("~/api/user/{id}/notifications")]
-        public async Task<IActionResult> Get(int id)
+        [Route("~/api/user/{id}/notifications/page/{pageNumber}")]
+        [RoleAuthorization(RoleTypes.User)]
+        public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] NotificationParams @params)
         {
             try
             {
@@ -38,7 +42,7 @@ namespace reciWebApp.Controllers
                 }
 
                 var listPosts = await _repoManager.Post.GetBannedPostByUserIdAsync(currentUser.Id);
-                var listNotification = new List<Notification>();
+                var showNotification = new List<ShowNotificationDTO>();
 
                 if (listPosts.Count != 0)
                 {
@@ -46,12 +50,18 @@ namespace reciWebApp.Controllers
                     {
                         var report = await _repoManager.PostReport.GetApprovedReportByPostIdAsync(postId);
                         var notification = await _repoManager.Notification.GetNotificationByReportId(report.Id);
-                        listNotification.Add(notification);
+                        var showNoti = _mapper.Map<ShowNotificationDTO>(notification);
+                        var post = await _repoManager.Post.GetBannedPostByIdAsync(postId);
+                        showNoti.Name = post.Name;
+                        showNoti.ImageUrl = post.ImageUrl;
+                        showNotification.Add(showNoti);
                     }
                 }
 
-                var showNotification = _mapper.Map<List<ShowNotificationDTO>>(listNotification);
-                return BadRequest(new Response(200, showNotification));
+                showNotification = showNotification.OrderByDescending(x => x.CreateDate).ToList();
+
+                var result = PaginatedList<ShowNotificationDTO>.Create(showNotification, pageNumber, @params.PageSize);
+                return Ok(new Response(200, result, "", result.Meta));
             }
             catch (Exception ex)
             {
@@ -61,6 +71,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/new-notifications")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> GetNewNotification(int id)
         {
             try
@@ -86,7 +97,7 @@ namespace reciWebApp.Controllers
                         }
                     }
                 }
-                return BadRequest(new Response(200, new
+                return Ok(new Response(200, new
                                                     {
                                                         NewNotification = newNotification,
                                                     }));
@@ -100,6 +111,7 @@ namespace reciWebApp.Controllers
         // PUT api/<NotificationsController>/5
         [HttpPut()]
         [Route("~/api/user/{id}/mark-read")]
+        [RoleAuthorization(RoleTypes.User)]
         public async Task<IActionResult> Put(int id)
         {
             try
@@ -111,7 +123,6 @@ namespace reciWebApp.Controllers
                 }
 
                 var listPosts = await _repoManager.Post.GetBannedPostByUserIdAsync(currentUser.Id);
-                var newNotification = 0;
 
                 if (listPosts.Count != 0)
                 {
@@ -127,7 +138,7 @@ namespace reciWebApp.Controllers
                     }
                     await _repoManager.SaveChangesAsync();
                 }
-                return BadRequest(new Response(200, "Mark read successfully"));
+                return Ok(new Response(200, "Mark read successfully"));
             }
             catch (Exception ex)
             {
