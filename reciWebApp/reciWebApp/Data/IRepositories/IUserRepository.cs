@@ -1,4 +1,5 @@
 ﻿using reciWebApp.Data.Models;
+using reciWebApp.DTOs;
 using reciWebApp.DTOs.UserDTOs;
 
 namespace reciWebApp.Data.IRepositories
@@ -15,5 +16,7 @@ namespace reciWebApp.Data.IRepositories
         List<User> SearchUser (string search);
         Task<List<User>?> GetAllUserAsync(UserParams userParams);
         Task<int> TotalAccountsAsync();
+        IQueryable<TopUserHighRating> GetTopUserHighRatings(int topNumber, IQueryable<UserInteract> userInteracts, IQueryable<Post> posts);  
+        IQueryable<TopUserMostPosts> GetTopUserMostPost(IQueryable<GetTopUserHaveMostPost> posts);
     }
 }

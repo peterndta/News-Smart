@@ -17,5 +17,6 @@ namespace reciWebApp.Data.IRepositories
         List<PostReport> GetPendingPostReportByPostId(string postId);
         Task<List<PostReport>> GetPendingReportByPostIdAsync(string postId);
         Task<PostReport?> GetApprovedReportByPostIdAsync(string postId);
+        Task<int> TotalReportAsync();
     }
 }

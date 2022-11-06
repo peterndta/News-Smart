@@ -2,7 +2,9 @@
 using reciWebApp.Data.IRepositories;
 using reciWebApp.Data.Models;
 using reciWebApp.Data.Repositories.Extensions;
+using reciWebApp.DTOs;
 using reciWebApp.DTOs.UserDTOs;
+using reciWebApp.Services.Commons;
 
 namespace reciWebApp.Data.Repositories
 {
@@ -55,7 +57,56 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<int> TotalAccountsAsync()
         {
-            return await GetAll().CountAsync();
+            return await GetByCondition(x => x.Role == RoleTypes.User).CountAsync();
+        }
+
+        public IQueryable<TopUserHighRating> GetTopUserHighRatings(int topNumber, IQueryable<UserInteract> userInteracts, IQueryable<Post> posts)
+        {
+            var topRatings = userInteracts.GroupBy(x => x.PostsId, r => r.Rating)
+                                           .Select(x => new
+                                           {
+                                               PostId = x.Key,
+                                               AvgRating = x.Average()
+                                           });
+
+            var avgRatingOfPosts = topRatings.Join(posts,
+                                                    topRating => topRating.PostId, post => post.Id,
+                                                    (topRating, post) => new
+                                                    {
+                                                        UserId = post.UserId,
+                                                        AvgRating = topRating.AvgRating
+                                                    });
+
+            var avgRatingsOfUsers = avgRatingOfPosts.GroupBy(x => x.UserId, r => r.AvgRating)
+                                                    .Select(x => new
+                                                    {
+                                                        UserId = x.Key,
+                                                        AvgRating = x.Average()
+                                                    });
+
+            var topUserHighRating = avgRatingsOfUsers.Join(GetAll(),
+                                                        avgRatingOfUser => avgRatingOfUser.UserId, allUser => allUser.Id,
+                                                        (avgRatingOfUser, allUser) => new TopUserHighRating
+                                                        {
+                                                            Name = allUser.Name,
+                                                            Average = avgRatingOfUser.AvgRating
+                                                        })
+                                                        .OrderByDescending(x => x.Average)
+                                                        .Take(topNumber);
+            return topUserHighRating;
+        }
+
+        public IQueryable<TopUserMostPosts> GetTopUserMostPost(IQueryable<GetTopUserHaveMostPost> posts)
+        {
+            var topUserMostPost = GetAll().Join(posts,
+                                                user => user.Id, post => post.UserId,
+                                                (user, post) => new TopUserMostPosts
+                                                {
+                                                    Name = user.Name,
+                                                    TotalPost = post.TotalPost
+                                                })
+                                                .OrderByDescending(x => x.TotalPost);
+            return topUserMostPost;
         }
     }
 }
