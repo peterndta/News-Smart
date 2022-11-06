@@ -465,23 +465,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                 ),
                                 SizedBox(height: 3),
-                                Ink(
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 221, 218, 218),
-                                  ),
-                                  child: snapshot.data.isReport ||
-                                          snapshot.data.userId ==
-                                              getUserInfo.userID
-                                      ? InkWell(
-                                          child: Padding(
-                                              padding: EdgeInsets.all(4.0),
-                                              child: Icon(
-                                                Icons.flag,
-                                                size: 20.0,
-                                                color: Colors.orange,
-                                              )),
-                                        )
-                                      : InkWell(
+                                snapshot.data.isReport ||
+                                        snapshot.data.userId ==
+                                            getUserInfo.userID
+                                    ? SizedBox()
+                                    : Ink(
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                              255, 221, 218, 218),
+                                        ),
+                                        child: InkWell(
                                           onTap: () async {
                                             await openDialog();
                                           },
@@ -494,7 +487,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                             ),
                                           ),
                                         ),
-                                ),
+                                      ),
                                 SizedBox(height: 3),
                                 checkAuth
                                     ? Ink(
