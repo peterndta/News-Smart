@@ -15,6 +15,7 @@ namespace reciWebApp.Data.IRepositories
         int? GetRating(int userId, string postId);
         Task<List<UserInteract>> GetBookmarkAsync(int userId);
         Task<List<UserInteract>> GetRatingAsync(int userId);
-        Task<List<TopBookmarkDTO>> GetTopBookmarkAsync(int topNumber);
+        Task<List<TopBookmarkDTO>> GetTopBookmarkAsync();
+        IQueryable<UserInteract> GetAllUserInteracts();
     }
 }

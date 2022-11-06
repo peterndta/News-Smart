@@ -88,18 +88,22 @@ namespace reciWebApp.Data.Repositories
             return ratings;
         }
 
-        public async Task<List<TopBookmarkDTO>> GetTopBookmarkAsync(int topNumber)
+        public async Task<List<TopBookmarkDTO>> GetTopBookmarkAsync()
         {
-            var topBookmark = await GetAll().GroupBy(x => x.PostsId)
+            var topBookmark = await GetAll().GroupBy(x => x.PostsId, y => y.Bookmark)
                                         .Select(x => new TopBookmarkDTO
                                         {
                                             PostId = x.Key,
                                             TotalBookmark = x.Count(),
                                         })
                                         .OrderByDescending(x => x.TotalBookmark)
-                                        .Take(topNumber)
                                         .ToListAsync();
             return topBookmark;
+        }
+
+        public IQueryable<UserInteract> GetAllUserInteracts()
+        {
+            return GetAll();
         }
     }
 }

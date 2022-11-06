@@ -71,5 +71,10 @@ namespace reciWebApp.Data.Repositories
             var report = await GetByCondition(x => x.PostsId.Equals(postId) && x.Status == ReportStatus.Approve).SingleOrDefaultAsync();
             return report;
         }
+
+        public async Task<int> TotalReportAsync()
+        {
+            return await GetAll().CountAsync();
+        }
     }
 }
