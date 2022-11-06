@@ -2,118 +2,91 @@
 
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reciapp/pages/notification_page.dart';
 import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/user_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../login_support/check_auth.dart';
 import '../login_support/user_preference.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../object/user_info.dart';
 
 class HeadBar extends StatefulWidget {
-  HeadBar({required this.imageUrl, super.key});
-  String imageUrl;
+  HeadBar({required this.numOfNoti, super.key});
+  int numOfNoti;
 
   @override
   State<HeadBar> createState() => _HeadBarState();
 }
 
 class _HeadBarState extends State<HeadBar> {
-  final _controller = TextEditingController();
+  String? imageUrl;
+
+  @override
+  void initState() {
+    loadData();
+  }
+
+  loadData() async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    UserData userData =
+        UserData.fromJson(jsonDecode(data.getString('user') as String));
+    setState(() {
+      imageUrl = userData.imageURL;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
-    // String imageUrl = Ima.getUserImage();
     return AppBar(
+      automaticallyImplyLeading: false,
+      title: Text(
+        'Home',
+        style: GoogleFonts.satisfy(
+          color: const Color.fromARGB(255, 59, 59, 61),
+          fontSize: 35,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       elevation: 5,
-      titleSpacing: -12,
-      // title: Container(
-      //     margin: EdgeInsets.symmetric(horizontal: 7),
-      //     child: InkWell(
-      //       onTap: () {
-      //         Navigator.of(context)
-      //             .push(MaterialPageRoute(builder: (context) => HomePage()));
-      //       },
-      //       child: Image(image: AssetImage('assets/logo.png')),
-      //     )),
-      // leading: Builder(
-      //   builder: (context) => IconButton(
-      //     icon: Icon(
-      //       Icons.menu,
-      //       color: Colors.white,
-      //     ),
-      //     onPressed: () {
-      //       Scaffold.of(context).openDrawer();
-      //     },
-      //   ),
-      // ),
       actions: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          width: MediaQuery.of(context).size.width * 0.94,
-          child: Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: _controller,
-                  textAlignVertical: TextAlignVertical.bottom,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'Find a recipe',
-                    hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        fontStyle: FontStyle.italic),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: _controller.clear,
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-              InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BookmarkPage()));
-                  },
-                  child: Icon(
-                    size: 32,
-                    Icons.bookmark,
-                    color: Colors.white,
-                  )),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-              ClipOval(
-                  child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          UserProfile(userInfoProvider: getUserInfo)));
-                },
-                child: 
-                // Icon(Icons.person),
-                Image(
-                  image: NetworkImage(widget.imageUrl),
-                ),
-                )
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-            ],
+        Badge(
+          badgeContent: Text('${widget.numOfNoti}'),
+          position: BadgePosition.topEnd(),
+          padding: EdgeInsets.only(top: 17, bottom: 17, right: 10, left: 10),
+          child: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
+            },
+            icon: Icon(
+              Icons.notifications,
+              size: 40,
+              color: const Color.fromARGB(255, 59, 59, 61),
+            ),
           ),
-        )
+        ),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 7),
+          width: MediaQuery.of(context).size.width * 0.1,
+          child: ClipOval(
+              child: InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => UserProfile()));
+            },
+            child: imageUrl == null
+                ? Icon(Icons.person)
+                : Image(
+                    image: NetworkImage(imageUrl!),
+                  ),
+          )),
+        ),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.02)
       ],
     );
   }

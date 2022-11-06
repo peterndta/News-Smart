@@ -174,8 +174,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     var responseJson = json.decode(response.body);
     print(responseJson);
     if (response.statusCode == 200) {
-      //setState(() {});
-      Navigator.of(context).pop();
+      // setState(() {});
+      // Navigator.of(context).pop();
     }
   }
 
@@ -199,7 +199,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               InkWell(
                   onTap: () {
                     sendReport(
-                        userData.userID, widget.id, reportController.text);
+                            userData.userID, widget.id, reportController.text)
+                        .whenComplete(
+                      () => Navigator.of(context).pop(),
+                    );
                     print(reportController.text);
                   },
                   child: Text('Confirm',
@@ -474,22 +477,6 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       : InkWell(
                                           onTap: () async {
                                             await openDialog();
-                                            // Timer? timer = Timer(
-                                            //     Duration(seconds: 6), (() {
-                                            //   Navigator.of(context).pop();
-                                            // }));
-                                            // if (snapshot.data.isReport) {
-                                            //   showDialog(
-                                            //           context: context,
-                                            //           builder: (context) =>
-                                            //               AlertDialog(
-                                            //                   content: Text(
-                                            //                       'Report sucessfully')))
-                                            //       .then((value) {
-                                            //     timer?.cancel();
-                                            //     timer = null;
-                                            //   });
-                                            // }
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.all(4.0),
