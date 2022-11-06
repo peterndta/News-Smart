@@ -28,12 +28,14 @@ const useAuthAction = () => {
                     exp: user.exp,
                     userId: user.userId,
                 })
-                notificationAction.getNewNotifications(+user.userId).then((res) => {
-                    const newNotifications = res.data.data.newNotification
-                    setNotification({
-                        notification: newNotifications,
+                if (user.role !== 'admin') {
+                    notificationAction.getNewNotifications(+user.userId).then((res) => {
+                        const newNotifications = res.data.data.newNotification
+                        setNotification({
+                            notification: newNotifications,
+                        })
                     })
-                })
+                }
             } else {
                 logout()
             }

@@ -67,7 +67,7 @@ namespace reciWebApp.Controllers
 
         //View list my recipes
         [Route("~/api/user/{id}/post/page/{pageNumber}")]
-        [RoleAuthorization(RoleTypes.User)]
+        [RoleAuthorization(RoleTypes.User, RoleTypes.Admin)]
         [HttpGet]
         public async Task<IActionResult> Get(int id, int pageNumber, [FromQuery] MyPostParams myPostParams)
         {

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
@@ -14,7 +16,6 @@ import '../object/auth_recipe_review.dart';
 import '../object/get_posts_homepage.dart';
 import '../object/user_info.dart';
 import 'user_bookmark_page.dart';
-import '../object/recipe_review.dart';
 import 'package:http/http.dart' as http;
 
 class IconDetail extends StatelessWidget {
@@ -56,8 +57,7 @@ class IconDetail extends StatelessWidget {
 }
 
 class UserProfile extends StatefulWidget {
-  final UserInfoProvider userInfoProvider;
-  const UserProfile({required this.userInfoProvider, super.key});
+  const UserProfile({super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -68,23 +68,23 @@ class _UserProfileState extends State<UserProfile> {
   int page = 1;
   bool isLoading = false;
   bool hasMore = true;
-  Future fetchInfinitePosts(int userId) async {
+  Future fetchInfinitePosts() async {
     if (isLoading) return;
     isLoading = true;
     const limit = 6;
     http.Response response = await http.get(
       Uri.parse(
-          'https://reciapp.azurewebsites.net/api/user/$userId/post/page/$page?PageSize=$limit'),
+          'https://reciapp.azurewebsites.net/api/user/${userData?.userID}/post/page/$page?PageSize=$limit'),
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData?.token}'
       },
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       if (!mounted) return;
       setState(() {
-        //final List jsonData = responseJson['data'];
         isLoading = false;
         page++;
         if (responseJson['data'].length < limit) {
@@ -101,30 +101,19 @@ class _UserProfileState extends State<UserProfile> {
     }
   }
 
-  int userId = 0;
-
   @override
   void initState() {
     super.initState();
-    if (widget.userInfoProvider.name.isEmpty) {
-      UserData userData =
-          UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
-      widget.userInfoProvider.userID = userData.userID;
-      widget.userInfoProvider.imageURL = userData.imageURL;
-      widget.userInfoProvider.name = userData.name;
-      widget.userInfoProvider.token = userData.token;
-      widget.userInfoProvider.role = userData.role;
-      widget.userInfoProvider.mail = userData.mail;
-    }
-    userId = widget.userInfoProvider.userID;
-    fetchInfinitePosts(userId);
+    userData = UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    fetchInfinitePosts();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        fetchInfinitePosts(widget.userInfoProvider.userID);
+        fetchInfinitePosts();
       }
     });
   }
 
+  UserData? userData;
   @override
   void dispose() {
     controller.dispose();
@@ -137,11 +126,17 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: Text(
+          'User Profile',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
         actions: [
@@ -182,8 +177,7 @@ class _UserProfileState extends State<UserProfile> {
                       margin: const EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image:
-                                NetworkImage(widget.userInfoProvider.imageURL),
+                            image: NetworkImage(userData!.imageURL),
                             fit: BoxFit.cover,
                           ),
                           shape: BoxShape.circle,
@@ -194,7 +188,7 @@ class _UserProfileState extends State<UserProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(widget.userInfoProvider.name,
+                          Text(userData!.name,
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
@@ -203,26 +197,17 @@ class _UserProfileState extends State<UserProfile> {
                                 fontWeight: FontWeight.bold,
                               )),
                           const SizedBox(height: 20),
-                          Text.rich(
-                            maxLines: 2,
-                            TextSpan(
-                              children: <InlineSpan>[
-                                const WidgetSpan(
-                                  child: Text(
-                                    'Email: ',
-                                    style: TextStyle(
-                                      fontSize: 10.0,
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: widget.userInfoProvider.mail,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10.0,
-                                  ),
-                                ),
-                              ],
+                          const Text(
+                            'Email:',
+                            style: TextStyle(
+                              fontSize: 10.0,
+                            ),
+                          ),
+                          Text(
+                            userData!.mail,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10.0,
                             ),
                           ),
                         ],
@@ -274,7 +259,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             ListAuthRecipeReview(
-                0.47, _listReciepReviews, controller, hasMore, "profile")
+                0.49, _listReciepReviews, controller, hasMore, "profile")
           ]),
         ),
       ),

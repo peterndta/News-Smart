@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../components/bottom_bar.dart';
 import '../login_support/user_preference.dart';
 import '../object/auth_recipe_review.dart';
@@ -84,11 +85,17 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('User Recipes'),
+        title: Text(
+          'User Recipes',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        foregroundColor: Colors.orange,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -124,8 +131,8 @@ class _UserRecipesPageState extends State<UserRecipesPage> {
                       )),
                 ),
               ),
-              ListAuthRecipeReview(
-                  0.67, _listReciepReviews, controller, hasMore, "user_recipes_page")
+              ListAuthRecipeReview(0.69, _listReciepReviews, controller,
+                  hasMore, "user_recipes_page")
             ],
           ),
         ),

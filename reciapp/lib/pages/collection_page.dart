@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reciapp/components/filter_collections.dart';
 import 'package:reciapp/object/collection_item.dart';
 import '../components/bottom_bar.dart';
@@ -32,6 +33,7 @@ class _CollectionPageState extends State<CollectionPage> {
 
   Future getAllData() async {
     var collections = await fetchCollections();
+    if (!mounted) return;
     setState(() {
       this.listCollections = collections;
     });
@@ -112,11 +114,17 @@ class _CollectionPageState extends State<CollectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Collection'),
+        title: Text(
+          'Collection',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -183,6 +191,8 @@ class _CollectionPageState extends State<CollectionPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(collectionName, keywords, 1);
                     },
@@ -201,7 +211,11 @@ class _CollectionPageState extends State<CollectionPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: ListRecipeReview(
+                  0.62, _listReciepReviews, controller, hasMore),
+            )
           ],
         ),
       ),

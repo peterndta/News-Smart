@@ -3,6 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -125,8 +126,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
       setState(() {
         this.image = imageTemporary;
       });
-    } on PlatformException catch (e) {
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future<File> saveImagePermantly(String path) async {
@@ -136,16 +136,17 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
     return File(path).copy(image.path);
   }
 
-  Future<String> uploadFile() async {
-    final pathUpload = 'images${image!.path}';
-    final ref = FirebaseStorage.instance.ref().child(pathUpload);
-    uploadTask = ref.putFile(image!);
-    final snapshot = await uploadTask!.whenComplete(() {});
-    final imageUrl = await snapshot.ref.getDownloadURL();
-    setState(() {
-      imageURL = imageUrl;
-    });
-    return imageUrl;
+  Future uploadFile() async {
+    if (image != null) {
+      final pathUpload = 'images${image!.path}';
+      final ref = FirebaseStorage.instance.ref().child(pathUpload);
+      uploadTask = ref.putFile(image!);
+      final snapshot = await uploadTask!.whenComplete(() {});
+      final imageUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        imageURL = imageUrl;
+      });
+    }
   }
 
   Future updateRecipe(BuildContext context, String postId) async {
@@ -273,11 +274,17 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Recipe'),
+        title: Text(
+          'Update Recipe',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        foregroundColor: Colors.orange,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -289,6 +296,9 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
                 TextBoxForm(text: 'Title', controller: title, maxLines: 1),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,

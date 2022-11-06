@@ -51,7 +51,7 @@ namespace reciWebApp.Controllers
 
         [HttpGet]
         [Route("~/api/user/{id}/allactivity")]
-        [RoleAuthorization(RoleTypes.User)]
+        [RoleAuthorization(RoleTypes.User, RoleTypes.Admin)]
         public async Task<IActionResult> Get(int id)
         {
             try

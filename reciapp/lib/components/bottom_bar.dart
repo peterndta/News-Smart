@@ -1,23 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:reciapp/pages/collection_page.dart';
-import 'package:reciapp/pages/user_bookmark_page.dart';
 import 'package:reciapp/pages/cooking_methods_page.dart';
 import 'package:reciapp/pages/recipes_page.dart';
-import '../login_support/user_preference.dart';
-import '../object/user_info.dart';
 import '../pages/category_page.dart';
 import '../pages/home_page.dart';
 
 Widget bottomMenuBar(BuildContext context, String checkPage) {
   return BottomAppBar(
-    elevation: 10,
+    elevation: 15,
     child: Container(
       color: Color.fromARGB(0, 157, 122, 17),
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.08,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(15, 8, 15, 0),
@@ -52,14 +47,8 @@ Widget bottomMenuBar(BuildContext context, String checkPage) {
                   )
                 : InkWell(
                     onTap: () {
-                      // Navigator.pushNamedAndRemoveUntil(
-                      //     context, '/home', (_) => false);
-                      UserData userData = UserData.fromJson(
-                          jsonDecode(UserPreferences.getUserInfo()));
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                imageUrl: userData.imageURL,
-                              )));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => HomePage()));
                     },
                     child: Column(
                       children: [
