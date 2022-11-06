@@ -182,6 +182,8 @@ class _CategoryPageState extends State<CategoryPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(listCategories, keywords, 1);
                     },

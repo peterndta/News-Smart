@@ -194,6 +194,8 @@ class _RecipesPageState extends State<RecipesPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(listContinets, listUses, keywords, 1);
                     },

@@ -191,6 +191,8 @@ class _CollectionPageState extends State<CollectionPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(collectionName, keywords, 1);
                     },

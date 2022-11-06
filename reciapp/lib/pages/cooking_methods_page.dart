@@ -181,6 +181,8 @@ class _CookingMethodsPageState extends State<CookingMethodsPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(listMethods, keywords, 1);
                     },
