@@ -83,7 +83,6 @@ const RecipeDetail = () => {
     }, [])
 
     if (error) return <NotFound isLoading={isFirstRender} />
-    console.log(collections.length)
     return (
         <React.Fragment>
             {isFirstRender ? (
