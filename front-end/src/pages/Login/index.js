@@ -7,8 +7,8 @@ import GoogleButton from '../../components/Buttons/GoogleButton'
 import Carousel from '../../components/Carousel'
 import Copyright from '../../components/Copyright'
 import HomeIcon from '@mui/icons-material/Home'
-import { Typography, Grid, CssBaseline, Box, Avatar, Paper } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { Typography, Grid, CssBaseline, Box, Avatar, Paper, Tooltip } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
 
 import { useSnackbar } from '../../HOCs/SnackbarContext'
 import Logo from '../../assets/images/logo.png'
@@ -90,10 +90,12 @@ const Login = () => {
                 elevation={12}
                 square
             >
-                <Box mt={2}>
-                    <Link to="/">
-                        <HomeIcon fontSize="large" sx={{ color: grey[800] }} />
-                    </Link>
+                <Box mt={2} display="flex" justifyContent="flex-start" width="1" ml={6}>
+                    <Tooltip title="Home">
+                        <Link to="/">
+                            <HomeIcon fontSize="large" sx={{ color: blueGrey[600] }} />
+                        </Link>
+                    </Tooltip>
                 </Box>
                 <Box
                     sx={{

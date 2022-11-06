@@ -24,32 +24,53 @@ namespace reciWebApp.Controllers
             _mapper = mapper;
         }
         //Get statis
-        //[HttpGet]
-        //public async Task<IActionResult> Get()
-        //{
-        //    try
-        //    {
-        //        var totalPosts = await _repoManager.Post.TotalPostsAsync();
-        //        var totalAccounts = await _repoManager.User.TotalAccountsAsync();
-        //        var topBookmarks = await _repoManager.UserInteract.GetTopBookmarkAsync(5);
-        //        var listTopPost = new List<ShowTopPostsByBookmark>();
-        //        foreach (var bookmark in topBookmarks)
-        //        {
-        //            var post = await _repoManager.Post.GetPostByIdAsync(bookmark.PostId);
-        //            if (post != null)
-        //            {
-        //                listTopPost.Add(new ShowTopPostsByBookmark
-        //                {
-        //                    Name = post.Name,
-        //                    TotalBookmark = bookmark.TotalBookmark,
-        //            });
-        //            }                   
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new Response(500, ex.Message));
-        //    }
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var totalPosts = await _repoManager.Post.TotalPostsAsync();
+                var totalAccounts = await _repoManager.User.TotalAccountsAsync();
+                var topBookmarks = await _repoManager.UserInteract.GetTopBookmarkAsync();
+                var listTopPost = new List<ShowTopPostsByBookmark>();
+                foreach (var bookmark in topBookmarks)
+                {
+                    var post = await _repoManager.Post.GetActivePostByIdAsync(bookmark.PostId);
+                    if (post != null)
+                    {
+                        listTopPost.Add(new ShowTopPostsByBookmark
+                        {
+                            Name = post.Name,
+                            TotalBookmark = bookmark.TotalBookmark,
+                        });
+                    }
+                }
+
+                var posts = _repoManager.Post.GetAllActivePost();
+                var userInteracts = _repoManager.UserInteract.GetAllUserInteracts();
+                var topPosts = _repoManager.Post.GetTopUserHaveMostPost(5);
+
+                var topUserHighRating = _repoManager.User.GetTopUserHighRatings(5, userInteracts, posts).ToList();
+                var topUserHaveMostPosts = _repoManager.User.GetTopUserMostPost(topPosts).ToList();
+
+                var tolalReport = await _repoManager.PostReport.TotalReportAsync();
+
+                var result = new StatisDTO
+                {
+                    TotalPosts = totalPosts,
+                    TotalAccounts = totalAccounts,
+                    TopPostByBookmark = listTopPost.Take(5).ToList(),
+                    TopUserByHighRating = topUserHighRating,
+                    TopUserByHighPost = topUserHaveMostPosts,
+                    TotalReport = tolalReport
+                };
+
+                return Ok(new Response(200, result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response(500, ex.Message));
+            }
+        }
     }
 }

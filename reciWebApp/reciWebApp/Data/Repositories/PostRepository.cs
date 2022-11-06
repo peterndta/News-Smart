@@ -7,6 +7,7 @@ using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.Data.Repositories.Extensions;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.UserDTOs;
 using reciWebApp.Services.Commons;
 using reciWebApp.Services.Utils;
 
@@ -269,9 +270,23 @@ namespace reciWebApp.Data.Repositories
             return await GetByCondition(x => x.Id.Equals(id) && x.Status == PostStatus.Ban).SingleOrDefaultAsync();
         }
 
-        //public async Task<List<Post>> GetTop5BookmarkAsync()
-        //{
-        //    return await;
-        //}
+        public IQueryable<Post> GetAllActivePost()
+        {
+            return GetByCondition(x => x.Status == 0);
+        }
+
+        public IQueryable<GetTopUserHaveMostPost> GetTopUserHaveMostPost(int topNumber)
+        {
+            var topUserIdHaveMostPost = GetByCondition(x => x.Status == 0)
+                                        .GroupBy(x => x.UserId, y => y.Id)
+                                        .Select(x => new GetTopUserHaveMostPost
+                                        {
+                                            UserId = x.Key,
+                                            TotalPost = x.Count()
+                                        })
+                                        .OrderByDescending(x => x.TotalPost)
+                                        .Take(topNumber);
+            return topUserIdHaveMostPost;
+        }
     }
 }

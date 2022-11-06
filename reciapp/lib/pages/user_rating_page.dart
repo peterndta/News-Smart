@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../components/bottom_bar.dart';
 import '../login_support/user_preference.dart';
 import '../object/get_posts_homepage.dart';
@@ -81,11 +82,17 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('User Ratings'),
+        title: Text(
+          'User Ratings',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        foregroundColor: Colors.orange,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -120,7 +127,7 @@ class _UserRatingsPageState extends State<UserRatingsPage> {
                           ),
                         ))),
               ),
-              ListRecipeReview(0.67, _listReciepReviews, controller, hasMore)
+              ListRecipeReview(0.69, _listReciepReviews, controller, hasMore)
             ],
           ),
         ),

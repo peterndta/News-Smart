@@ -1,6 +1,7 @@
 ﻿using reciWebApp.Data.Models;
 using reciWebApp.Data.Pagination;
 using reciWebApp.DTOs.PostDTOs;
+using reciWebApp.DTOs.UserDTOs;
 using reciWebApp.Services.Utils;
 
 namespace reciWebApp.Data.IRepositories
@@ -30,6 +31,7 @@ namespace reciWebApp.Data.IRepositories
         List<Post>? GetPostFilter(List<Post>? post, string? name);
         Task<int> TotalPostsAsync();
         List<Post> SearchByName(List<Post> posts, string name);
-        //Task<List<Post>> GetTop5BookmarkAsync();
+        IQueryable<Post> GetAllActivePost();
+        IQueryable<GetTopUserHaveMostPost> GetTopUserHaveMostPost(int topNumber);
     }
 }

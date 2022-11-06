@@ -40,12 +40,13 @@ const CreateRecipe = () => {
                             recipe.imageUrl = url
                             recipeAction
                                 .createRecipe(+auth.userId, recipe)
-                                .then(() => {
+                                .then((res) => {
+                                    const postId = res.data.data
                                     showSnackbar({
                                         severity: 'success',
                                         children: 'Create recipe successfully',
                                     })
-                                    history.push('/recipes/me')
+                                    history.push(`/recipes/${postId}`)
                                 })
                                 .catch(() => {
                                     showSnackbar({

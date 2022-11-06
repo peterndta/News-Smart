@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/components/textbox_form.dart';
 import 'package:reciapp/object/post_detail.dart';
@@ -174,8 +175,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     var responseJson = json.decode(response.body);
     print(responseJson);
     if (response.statusCode == 200) {
-      //setState(() {});
-      Navigator.of(context).pop();
+      // setState(() {});
+      // Navigator.of(context).pop();
     }
   }
 
@@ -199,7 +200,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
               InkWell(
                   onTap: () {
                     sendReport(
-                        userData.userID, widget.id, reportController.text);
+                            userData.userID, widget.id, reportController.text)
+                        .whenComplete(
+                      () => Navigator.of(context).pop(),
+                    );
                     print(reportController.text);
                   },
                   child: Text('Confirm',
@@ -262,11 +266,17 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     final getUserInfo = Provider.of<UserInfoProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Recipe Detail'),
+          title: Text(
+            'Recipe Detail',
+            style: GoogleFonts.satisfy(
+              color: const Color.fromARGB(255, 59, 59, 61),
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           centerTitle: true,
           elevation: 1,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.orange,
+          backgroundColor: Colors.orange,
           titleTextStyle: const TextStyle(
               fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
         ),
@@ -455,41 +465,18 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ),
                                 ),
                                 SizedBox(height: 3),
-                                Ink(
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 221, 218, 218),
-                                  ),
-                                  child: snapshot.data.isReport &&
-                                          snapshot.data.userId ==
-                                              getUserInfo.userID
-                                      ? InkWell(
-                                          child: Padding(
-                                              padding: EdgeInsets.all(4.0),
-                                              child: Icon(
-                                                Icons.flag,
-                                                size: 20.0,
-                                                color: Colors.orange,
-                                              )),
-                                        )
-                                      : InkWell(
+                                snapshot.data.isReport ||
+                                        snapshot.data.userId ==
+                                            getUserInfo.userID
+                                    ? SizedBox()
+                                    : Ink(
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                              255, 221, 218, 218),
+                                        ),
+                                        child: InkWell(
                                           onTap: () async {
                                             await openDialog();
-                                            // Timer? timer = Timer(
-                                            //     Duration(seconds: 6), (() {
-                                            //   Navigator.of(context).pop();
-                                            // }));
-                                            // if (snapshot.data.isReport) {
-                                            //   showDialog(
-                                            //           context: context,
-                                            //           builder: (context) =>
-                                            //               AlertDialog(
-                                            //                   content: Text(
-                                            //                       'Report sucessfully')))
-                                            //       .then((value) {
-                                            //     timer?.cancel();
-                                            //     timer = null;
-                                            //   });
-                                            // }
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.all(4.0),
@@ -500,7 +487,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                             ),
                                           ),
                                         ),
-                                ),
+                                      ),
                                 SizedBox(height: 3),
                                 checkAuth
                                     ? Ink(

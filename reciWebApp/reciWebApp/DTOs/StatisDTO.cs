@@ -1,5 +1,6 @@
 ﻿using reciWebApp.DTOs.PostDTOs;
 using reciWebApp.DTOs.UseDTOs;
+using reciWebApp.DTOs.UserDTOs;
 
 namespace reciWebApp.DTOs
 {
@@ -7,8 +8,9 @@ namespace reciWebApp.DTOs
     {
         public int TotalPosts { get; set; }
         public int TotalAccounts { get; set; }
-        public List<ShowDetailPostDTO> TopPostByBookmark { get; set; }
-        public List<ShowUseDTO> TopUserByHighRating { get; set; }
-        public List<ShowUseDTO> TopUserByHighPost { get; set; }
+        public List<ShowTopPostsByBookmark> TopPostByBookmark { get; set; }
+        public List<TopUserHighRating> TopUserByHighRating { get; set; }
+        public List<TopUserMostPosts> TopUserByHighPost { get; set; }
+        public int TotalReport { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import '../components/filter_category.dart';
 import 'dart:convert';
@@ -104,11 +105,17 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Category'),
+        title: Text(
+          'Category',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -175,6 +182,8 @@ class _CategoryPageState extends State<CategoryPage> {
                     onChanged: (String? newValue) {
                       setState(() {
                         sortKey = newValue!;
+                        _listReciepReviews.clear();
+                        hasMore = true;
                       });
                       fetchInfinitePosts(listCategories, keywords, 1);
                     },
@@ -193,7 +202,11 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            ListRecipeReview(0.6, _listReciepReviews, controller, hasMore)
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: ListRecipeReview(
+                  0.62, _listReciepReviews, controller, hasMore),
+            )
           ],
         ),
       ),
