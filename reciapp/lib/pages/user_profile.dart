@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 import 'package:reciapp/pages/create_recipe_page.dart';
@@ -125,13 +126,17 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'User Profile',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
         actions: [

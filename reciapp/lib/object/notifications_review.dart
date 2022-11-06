@@ -9,11 +9,6 @@ class NotificationsReviewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      // onTap: () {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => NotificationsDetailPage(id: post.id),
-      //   ));
-      // },
       splashColor: const Color.fromARGB(255, 211, 210, 210),
       child: Padding(
         padding: const EdgeInsets.only(top: 1),
@@ -60,7 +55,7 @@ class NotificationsDetail extends StatelessWidget {
 
   final String name;
   final String message;
-  final String createDate;
+  final DateTime createDate;
 
   @override
   Widget build(BuildContext context) {
@@ -71,20 +66,17 @@ class NotificationsDetail extends StatelessWidget {
         children: <Widget>[
           Text(
             overflow: TextOverflow.fade,
-            softWrap: false,
-            name,
+            maxLines: 2,
+            '$name is removed by Admin',
             style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.0,
-            ),
+                fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.red),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
             child: Text(
               message,
               overflow: TextOverflow.fade,
-              softWrap: false,
               maxLines: 2,
               style: const TextStyle(
                 fontSize: 10.0,
@@ -92,10 +84,10 @@ class NotificationsDetail extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.04,
+          SizedBox(
+            // height: MediaQuery.of(context).size.height * 0.04,
             child: Text(
-              createDate,
+              getDateRemain(createDate),
               overflow: TextOverflow.fade,
               softWrap: false,
               maxLines: 2,
@@ -111,18 +103,33 @@ class NotificationsDetail extends StatelessWidget {
   }
 }
 
+getDateRemain(DateTime reportDate) {
+  var now = DateTime.now();
+  var diffDate = now.difference(reportDate);
+  if (diffDate.inDays == 0) {
+    return "Reported 1 day";
+  }
+  return "Reported ${diffDate.inDays} days";
+}
+
 class ListNotificationsReview extends StatelessWidget {
   final List<NotificationItem> list;
   final double heightValue;
   final ScrollController scrollController;
   final bool hasMore;
+  final String sortKey;
 
-  const ListNotificationsReview(
-      this.heightValue, this.list, this.scrollController, this.hasMore,
+  const ListNotificationsReview(this.heightValue, this.list,
+      this.scrollController, this.hasMore, this.sortKey,
       {super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (sortKey == 'Oldest') {
+      list.sort((a, b) => a.createDate.compareTo(b.createDate));
+    } else {
+      list.sort((a, b) => b.createDate.compareTo(a.createDate));
+    }
     return SizedBox(
         height: MediaQuery.of(context).size.height * heightValue,
         child: Scrollbar(

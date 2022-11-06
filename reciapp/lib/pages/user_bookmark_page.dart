@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reciapp/components/bottom_bar.dart';
 
 import '../login_support/user_preference.dart';
@@ -87,11 +88,17 @@ class _BookmarkPageState extends State<BookmarkPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('User Bookmark'),
+        title: Text(
+          'User Bookmark',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),

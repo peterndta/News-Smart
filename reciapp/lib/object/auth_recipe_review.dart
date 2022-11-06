@@ -144,9 +144,8 @@ deleteRecipe(BuildContext context, String postId, String page) async {
           builder: (context) => UserRecipesPage(),
         ));
       } else {
-        final getUserID = Provider.of<UserInfoProvider>(context, listen: false);
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => UserProfile(),
+          builder: (context) => const UserProfile(),
         ));
       }
     });

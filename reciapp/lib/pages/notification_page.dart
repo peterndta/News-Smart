@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reciapp/object/notification_item.dart';
 import 'package:reciapp/object/notifications_review.dart';
 import '../components/bottom_bar.dart';
@@ -25,6 +26,7 @@ class _NotificationPageState extends State<NotificationPage> {
         fetchInfiniteNotifications(0);
       }
     });
+    markReadNotifications();
   }
 
   final controller = ScrollController();
@@ -32,7 +34,7 @@ class _NotificationPageState extends State<NotificationPage> {
   bool isLoading = false;
   bool hasMore = true;
   final List<NotificationItem> _listNotifications = [];
-  List<String> listSort = ['Newest', 'Popularity', 'Oldest'];
+  List<String> listSort = ['Newest', 'Oldest'];
   String sortKey = "Newest";
 
   Future fetchInfiniteNotifications(int pages) async {
@@ -55,6 +57,7 @@ class _NotificationPageState extends State<NotificationPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
+      print(responseJson);
       if (!mounted) return;
       setState(() {
         isLoading = false;
@@ -77,6 +80,22 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
+  Future markReadNotifications() async {
+    UserData userData =
+        UserData.fromJson(jsonDecode(UserPreferences.getUserInfo()));
+    print('Call: ' +
+        'https://reciapp.azurewebsites.net/api/user/${userData.userID}/mark-read');
+    http.Response response = await http.put(
+      Uri.parse(
+          'https://reciapp.azurewebsites.net/api/user/${userData.userID}/mark-read'),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer ${userData.token}'
+      },
+    );
+  }
+
   @override
   void dispose() {
     controller.dispose();
@@ -87,11 +106,17 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notification'),
+        title: Text(
+          'Notification',
+          style: GoogleFonts.satisfy(
+            color: const Color.fromARGB(255, 59, 59, 61),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         titleTextStyle: const TextStyle(
             fontSize: 28, fontWeight: FontWeight.bold, color: Colors.orange),
       ),
@@ -123,7 +148,6 @@ class _NotificationPageState extends State<NotificationPage> {
                       setState(() {
                         sortKey = newValue!;
                       });
-                      // fetchInfinitePosts(collectionName, keywords, 1);
                     },
                     items:
                         listSort.map<DropdownMenuItem<String>>((String value) {
@@ -140,12 +164,8 @@ class _NotificationPageState extends State<NotificationPage> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-            Container(
-              color: Colors.red,
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: ListNotificationsReview(
-                  0.7, _listNotifications, controller, hasMore),
-            )
+            ListNotificationsReview(
+                0.7, _listNotifications, controller, hasMore, sortKey)
           ],
         ),
       ),
