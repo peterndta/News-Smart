@@ -4,7 +4,7 @@ import { Description, Group, Bookmark, Flag } from '@mui/icons-material'
 import { Box, Grid, Paper, Typography } from '@mui/material'
 import { grey, blueGrey } from '@mui/material/colors'
 
-const StatisticCards = () => {
+const StatisticCards = ({ statis }) => {
     return (
         <Fragment>
             <Grid container spacing={3}>
@@ -34,7 +34,7 @@ const StatisticCards = () => {
                                         }}
                                         fontSize="1.6rem"
                                     >
-                                        69
+                                        {statis.totalPosts}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -42,7 +42,6 @@ const StatisticCards = () => {
                                 <Box
                                     display="flex"
                                     ml={2}
-                                    background
                                     sx={{
                                         background:
                                             'linear-gradient(191deg, rgb(66, 66, 74), rgb(25, 25, 25))',
@@ -87,7 +86,7 @@ const StatisticCards = () => {
                                         }}
                                         fontSize="1.6rem"
                                     >
-                                        100
+                                        {statis.totalAccounts}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -95,7 +94,6 @@ const StatisticCards = () => {
                                 <Box
                                     display="flex"
                                     ml={2}
-                                    background
                                     sx={{
                                         background:
                                             'linear-gradient(191deg, rgb(73, 163, 241), rgb(26, 115, 232))',
@@ -148,7 +146,6 @@ const StatisticCards = () => {
                                 <Box
                                     display="flex"
                                     ml={2}
-                                    background
                                     sx={{
                                         background:
                                             'linear-gradient(191deg, rgb(102, 187, 106), rgb(67, 160, 71))',
@@ -193,7 +190,7 @@ const StatisticCards = () => {
                                         }}
                                         fontSize="1.6rem"
                                     >
-                                        29
+                                        {statis.totalReport}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -201,7 +198,6 @@ const StatisticCards = () => {
                                 <Box
                                     display="flex"
                                     ml={2}
-                                    background
                                     sx={{
                                         background:
                                             'linear-gradient(191deg, rgb(236, 64, 122), rgb(216, 27, 96))',
