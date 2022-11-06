@@ -462,7 +462,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 221, 218, 218),
                                   ),
-                                  child: snapshot.data.isReport &&
+                                  child: snapshot.data.isReport ||
                                           snapshot.data.userId ==
                                               getUserInfo.userID
                                       ? InkWell(
