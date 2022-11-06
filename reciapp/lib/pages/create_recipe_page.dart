@@ -1101,9 +1101,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                     validator: (String? value) {
                       final youtubeValidator = RegExp(
                           r'^https:\/\/(?:www\.|m\.)?youtube\.com\/watch\?v=([_\-a-zA-Z0-9]{11}).*$');
+                      final youtubeSharedValidator =
+                          RegExp(r'^https:\/\/youtu.be\/([_\-a-zA-Z0-9]{11})$');
                       return (value == null ||
                               value.isEmpty ||
-                              !youtubeValidator.hasMatch(value))
+                              (!youtubeValidator.hasMatch(value) &&
+                                  !youtubeSharedValidator.hasMatch(value)))
                           ? 'Please enter valid link Video'
                           : null;
                     },
