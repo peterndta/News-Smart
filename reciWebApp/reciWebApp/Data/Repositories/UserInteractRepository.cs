@@ -13,17 +13,12 @@ namespace reciWebApp.Data.Repositories
         {
         }
 
-        public double GetAverageRating(string postId)
+        public double? GetAverageRating(string postId)
         {
             var userInteract = GetByCondition(x => x.PostsId.Equals(postId) && x.Rating != null);
-            if (userInteract.Count() != 0)
-            {
-                var avgRating = userInteract.GroupBy(x => x.PostsId, y => y.Rating)
-                                            .Select(x => x.Average());
-                return Convert.ToDouble(avgRating);
-            }
-            
-            return 0;
+            var avgRating = userInteract.GroupBy(x => x.PostsId, y => y.Rating)
+                                        .Select(x => x.Average()).FirstOrDefault();
+            return avgRating;
         }
 
         public async Task<UserInteract?> GetUserInteractAsync(int userId, string postId)

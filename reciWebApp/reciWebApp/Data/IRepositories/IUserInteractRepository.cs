@@ -5,7 +5,7 @@ namespace reciWebApp.Data.IRepositories
 {
     public interface IUserInteractRepository
     {
-        double GetAverageRating(string postId);
+        double? GetAverageRating(string postId);
         Task<UserInteract?> GetUserInteractAsync(int userId, string postId);
         List<UserInteract>? GetUserInteract(string postId);
         void CreateUserInteract(UserInteract userInteract);
