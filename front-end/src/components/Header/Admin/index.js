@@ -110,6 +110,24 @@ const AdminHeader = () => {
                                 >
                                     <Box
                                         component={NavLink}
+                                        to="/admin"
+                                        sx={{
+                                            textDecoration: 'none',
+                                            color: grey[100],
+                                            position: 'relative',
+                                            '&:hover:after': {
+                                                width: '100%',
+                                            },
+                                            fontFamily: 'Roboto',
+                                        }}
+                                        exact
+                                    >
+                                        <Typography component="span" variant="h5">
+                                            DASHBOARD
+                                        </Typography>
+                                    </Box>
+                                    <Box
+                                        component={NavLink}
                                         to="/admin/users"
                                         sx={{
                                             textDecoration: 'none',
@@ -118,6 +136,7 @@ const AdminHeader = () => {
                                             '&:hover:after': {
                                                 width: '100%',
                                             },
+                                            ml: 5,
                                             fontFamily: 'Roboto',
                                         }}
                                         exact

@@ -80,7 +80,7 @@ const LatestRecipe = ({ post, reportHandler, confirmHandler }) => {
                         alt="green iguana"
                         height="270"
                         image={post.imageUrl}
-                        onClick={() => history.push(`/recipes/${post.id}`)}
+                        onClick={() => history.push(`/admin/posts-management/${post.postsId}`)}
                         sx={{ cursor: 'pointer' }}
                     />
                     <CardContent sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>

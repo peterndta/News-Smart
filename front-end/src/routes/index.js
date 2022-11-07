@@ -106,6 +106,13 @@ const privateRoutes = [
         layout: 'common',
     },
     {
+        path: '/admin',
+        name: 'dashboard',
+        component: lazy(() => import('../pages/Admin/Dashboard')),
+        layout: 'admin',
+        role: 'admin',
+    },
+    {
         path: '/admin/users',
         name: 'users management',
         component: lazy(() => import('../pages/Admin/UserManagement')),
