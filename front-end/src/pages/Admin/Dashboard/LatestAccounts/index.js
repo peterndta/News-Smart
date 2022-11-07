@@ -18,7 +18,7 @@ const LatestAccounts = ({ statis }) => {
                         fontSize: 22,
                     }}
                 >
-                    Top 7 Posts with Highest Rating
+                    Top 6 Posts with Highest Rating
                 </Typography>
                 <Grid
                     pt={2}

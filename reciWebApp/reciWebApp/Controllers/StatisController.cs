@@ -53,7 +53,7 @@ namespace reciWebApp.Controllers
 
                 var topUserHighRating = _repoManager.User.GetTopUserHighRatings(5, userInteracts, posts).ToList();
                 var topUserHaveMostPosts = _repoManager.User.GetTopUserMostPost(topPosts).ToList();
-                var topPostsHighRating = _repoManager.Post.GetPostsHighRating(7, userInteracts).ToList();
+                var topPostsHighRating = _repoManager.Post.GetPostsHighRating(6, userInteracts).ToList();
 
                 var tolalReport = await _repoManager.PostReport.TotalReportAsync();
 

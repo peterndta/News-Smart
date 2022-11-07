@@ -62,7 +62,7 @@ const useAuthAction = () => {
                 const { email, name, image, role, exp, userId } = jwt_decode(token)
                 setAuth({ token, email, name, image, role, exp, userId: userId })
                 if (role === 'admin') {
-                    history.push('/admin/users')
+                    history.push('/admin')
                 } else {
                     notificationAction.getNewNotifications(+userId).then((res) => {
                         const newNotifications = res.data.data.newNotification
