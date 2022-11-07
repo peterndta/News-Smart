@@ -99,7 +99,7 @@ namespace reciWebApp.Data.Repositories
 
         public async Task<int> TotalBookmarkAsync()
         {
-            return await GetAll().CountAsync();
+            return await GetByCondition(x => x.Bookmark == true).CountAsync();
         }
     }
 }
