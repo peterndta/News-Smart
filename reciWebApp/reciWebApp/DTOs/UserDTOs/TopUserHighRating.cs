@@ -3,6 +3,6 @@
     public class TopUserHighRating
     {
         public string Name { get; set; }
-        public double? Average { get; set; }
+        public decimal? Average { get; set; }
     }
 }

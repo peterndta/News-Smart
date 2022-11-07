@@ -18,6 +18,12 @@ namespace reciWebApp.Data.Repositories
             var userInteract = GetByCondition(x => x.PostsId.Equals(postId) && x.Rating != null);
             var avgRating = userInteract.GroupBy(x => x.PostsId, y => y.Rating)
                                         .Select(x => x.Average()).FirstOrDefault();
+            if (avgRating != null)
+            {
+                var result = Convert.ToDecimal(avgRating);
+                return (double?)Math.Round(result);
+            }
+
             return avgRating;
         }
 

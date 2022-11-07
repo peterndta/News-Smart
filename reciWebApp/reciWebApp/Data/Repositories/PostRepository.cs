@@ -303,7 +303,7 @@ namespace reciWebApp.Data.Repositories
                                                                                             (x, y) => new ShowPostsHighRating
                                                                                             {
                                                                                                 Id = x.Id,
-                                                                                                AverageRating = y.AvgRating,
+                                                                                                AverageRating = Math.Round((decimal)y.AvgRating),
                                                                                                 ImageUrl = x.ImageUrl,
                                                                                                 Name = x.Name,
                                                                                                 CreateDate = x.CreateDate

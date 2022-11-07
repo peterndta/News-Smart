@@ -89,7 +89,7 @@ namespace reciWebApp.Data.Repositories
                                                         (avgRatingOfUser, allUser) => new TopUserHighRating
                                                         {
                                                             Name = allUser.Name,
-                                                            Average = avgRatingOfUser.AvgRating
+                                                            Average = Math.Round((decimal)avgRatingOfUser.AvgRating)
                                                         })
                                                         .OrderByDescending(x => x.Average)
                                                         .Take(topNumber);
