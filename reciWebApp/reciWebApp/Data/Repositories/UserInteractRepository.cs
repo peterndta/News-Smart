@@ -13,21 +13,12 @@ namespace reciWebApp.Data.Repositories
         {
         }
 
-        public double GetAverageRating(string postId)
+        public double? GetAverageRating(string postId)
         {
-            var listUserInteract = GetUserInteract(postId).Where(x => x.Rating != null);
-            var count = listUserInteract.Count();
-            var averageRating = 0;
-            if (count > 0)
-            {
-                var total = 0;
-                foreach(var item in listUserInteract)
-                {
-                    total += item.Rating.Value;
-                }
-                averageRating = total / count;
-            }
-            return averageRating;
+            var userInteract = GetByCondition(x => x.PostsId.Equals(postId) && x.Rating != null);
+            var avgRating = userInteract.GroupBy(x => x.PostsId, y => y.Rating)
+                                        .Select(x => x.Average()).FirstOrDefault();
+            return avgRating;
         }
 
         public async Task<UserInteract?> GetUserInteractAsync(int userId, string postId)
@@ -104,6 +95,11 @@ namespace reciWebApp.Data.Repositories
         public IQueryable<UserInteract> GetAllUserInteracts()
         {
             return GetAll();
+        }
+
+        public async Task<int> TotalBookmarkAsync()
+        {
+            return await GetAll().CountAsync();
         }
     }
 }

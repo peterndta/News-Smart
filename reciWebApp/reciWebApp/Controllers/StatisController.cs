@@ -32,6 +32,7 @@ namespace reciWebApp.Controllers
                 var totalPosts = await _repoManager.Post.TotalPostsAsync();
                 var totalAccounts = await _repoManager.User.TotalAccountsAsync();
                 var topBookmarks = await _repoManager.UserInteract.GetTopBookmarkAsync();
+                var totalBookmark = await _repoManager.UserInteract.TotalBookmarkAsync();
                 var listTopPost = new List<ShowTopPostsByBookmark>();
                 foreach (var bookmark in topBookmarks)
                 {
@@ -52,6 +53,7 @@ namespace reciWebApp.Controllers
 
                 var topUserHighRating = _repoManager.User.GetTopUserHighRatings(5, userInteracts, posts).ToList();
                 var topUserHaveMostPosts = _repoManager.User.GetTopUserMostPost(topPosts).ToList();
+                var topPostsHighRating = _repoManager.Post.GetPostsHighRating(7, userInteracts).ToList();
 
                 var tolalReport = await _repoManager.PostReport.TotalReportAsync();
 
@@ -62,7 +64,9 @@ namespace reciWebApp.Controllers
                     TopPostByBookmark = listTopPost.Take(5).ToList(),
                     TopUserByHighRating = topUserHighRating,
                     TopUserByHighPost = topUserHaveMostPosts,
-                    TotalReport = tolalReport
+                    TotalReport = tolalReport,
+                    TotalBookmark = totalBookmark,
+                    PostsWithHighRating = topPostsHighRating,
                 };
 
                 return Ok(new Response(200, result));

@@ -288,5 +288,29 @@ namespace reciWebApp.Data.Repositories
                                         .Take(topNumber);
             return topUserIdHaveMostPost;
         }
+
+        public IQueryable<ShowPostsHighRating> GetPostsHighRating(int topNumber, IQueryable<UserInteract> userInteracts)
+        {
+            var validResult = userInteracts.Where(x => x.Rating != null).GroupBy(x => x.PostsId, y => y.Rating)
+                                                                        .Select(x => new
+                                                                        {
+                                                                            PostId = x.Key,
+                                                                            AvgRating = x.Average(),
+                                                                        });
+
+            var postsHighRating = GetByCondition(x => x.Status == PostStatus.Active).Join(validResult,
+                                                                                            x => x.Id, y => y.PostId,
+                                                                                            (x, y) => new ShowPostsHighRating
+                                                                                            {
+                                                                                                Id = x.Id,
+                                                                                                AverageRating = y.AvgRating,
+                                                                                                ImageUrl = x.ImageUrl,
+                                                                                                Name = x.Name,
+                                                                                                CreateDate = x.CreateDate
+                                                                                            })
+                                                                                            .OrderByDescending(x => x.AverageRating)
+                                                                                            .Take(topNumber);
+            return postsHighRating;
+        }
     }
 }
