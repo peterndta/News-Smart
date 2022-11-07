@@ -1,162 +1,99 @@
 import React from 'react'
 
-import { Avatar, Box, Divider, Grid, Typography } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { useHistory } from 'react-router-dom'
 
-const LatestAccounts = () => {
+import { Avatar, Box, Divider, Grid, Typography } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
+
+const LatestAccounts = ({ statis }) => {
+    const history = useHistory()
     return (
         <React.Fragment>
             <Box p={2}>
                 <Typography
+                    p={1}
                     fontWeight={700}
                     sx={{
-                        color: grey[600],
+                        color: blueGrey[800],
+                        fontSize: 22,
                     }}
-                    fontSize="1.1rem"
                 >
-                    Latest Accounts
+                    Top 7 Posts with Highest Rating
                 </Typography>
-                <Divider sx={{ mt: 1 }} />
                 <Grid
+                    pt={2}
+                    pl={2}
+                    pb={1}
                     container
                     spacing={3}
-                    mt={1}
                     alignItems="center"
                     justifyContent="space-between"
                 >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
+                    <Grid item xs={4} md={4} lg={3}>
+                        <Typography variant="body1" fontWeight={700} textAlign="center">
+                            Create Date
+                        </Typography>
                     </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
+                    <Grid item xs={4} md={4} lg={2}></Grid>
+                    <Grid item xs={4} md={4} lg={5}>
                         <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
+                            Post’s name
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} md={4} lg={2}>
+                        <Typography variant="body1" fontWeight={700}>
+                            Rated
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
+                <Divider
+                    sx={{
+                        background: (theme) => theme.palette.primary.main,
+                        height: 1.25,
+                    }}
+                />
+                {statis.postsWithHighRating.map((data) => (
+                    <Grid
+                        key={data.id}
+                        pl={2}
+                        pb={1}
+                        pt={2}
+                        container
+                        spacing={3}
+                        alignItems="center"
+                        justifyContent="space-between"
+                    >
+                        <Grid item xs={4} md={4} lg={3}>
+                            <Typography>{data.createDate.substring(0, 10)}</Typography>
+                            <Typography>
+                                {data.createDate.substring(11, 16)}{' '}
+                                {parseInt(data.createDate.substring(11, 13)) > 12 ? 'pm' : 'am'}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} md={4} lg={2}>
+                            <Avatar
+                                variant="square"
+                                alt="avatar"
+                                src={data.imageUrl}
+                                sx={{ width: 65, height: 65, cursor: 'pointer' }}
+                                onClick={() => history.push(`/admin/posts-management/${data.id}`)}
+                            />
+                        </Grid>
+                        <Grid item xs={4} md={4} lg={5}>
+                            <Typography
+                                variant="body1"
+                                fontWeight={450}
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => history.push(`/admin/posts-management/${data.id}`)}
+                            >
+                                {data.name}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4} md={4} lg={2}>
+                            <Typography variant="body1">{data.averageRating}</Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    spacing={3}
-                    mt={1}
-                    alignItems="center"
-                    justifyContent="space-between"
-                >
-                    <Grid item xs={4} md={4} lg={2}>
-                        <Avatar
-                            alt="avatar"
-                            src="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-                            sx={{ width: 50, height: 50 }}
-                        />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={10}>
-                        <Typography variant="body1" fontWeight={700}>
-                            Nguyen Dang Truong Anh (K15HCM)
-                        </Typography>
-                    </Grid>
-                </Grid>
+                ))}
             </Box>
         </React.Fragment>
     )

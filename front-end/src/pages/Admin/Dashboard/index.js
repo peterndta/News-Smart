@@ -51,14 +51,14 @@ const Dashboard = () => {
                     <StatisticCards statis={statis} />
                     <Chart statis={statis} />
                     <Grid mt={1} container spacing={3}>
-                        <Grid item xs={12} md={6} lg={7}>
-                            <Paper elevation={3} sx={{ borderRadius: 4 }}>
+                        <Grid item xs={12} md={6} lg={6.5}>
+                            <Paper elevation={3} sx={{ borderRadius: 4, height: '100%' }}>
                                 <Doughnut statis={statis} />
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} md={6} lg={5}>
+                        <Grid item xs={12} md={6} lg={5.5}>
                             <Paper elevation={3} sx={{ borderRadius: 2, height: '100%' }}>
-                                <LatestAccounts />
+                                <LatestAccounts statis={statis} />
                             </Paper>
                         </Grid>
                     </Grid>

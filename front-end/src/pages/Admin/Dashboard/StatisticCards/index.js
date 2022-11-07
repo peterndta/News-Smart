@@ -138,7 +138,7 @@ const StatisticCards = ({ statis }) => {
                                         }}
                                         fontSize="1.6rem"
                                     >
-                                        50
+                                        {statis.totalBookmark}
                                     </Typography>
                                 </Box>
                             </Grid>
