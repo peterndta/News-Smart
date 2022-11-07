@@ -98,7 +98,7 @@ const RecipeDetail = () => {
                         >
                             {recipe.name}
                         </Typography>
-                        {collections.length && (
+                        {collections.length > 0 && (
                             <Button
                                 variant="contained"
                                 sx={{ mt: 2, color: grey[100] }}
@@ -194,7 +194,7 @@ const RecipeDetail = () => {
                                 </Typography>
                             )}
                         </Box>
-                        {collections.length && (
+                        {collections.length > 0 && (
                             <Box display="flex">
                                 <Typography
                                     variant="subtitle1"
