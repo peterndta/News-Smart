@@ -12,5 +12,7 @@ namespace reciWebApp.DTOs
         public List<TopUserHighRating> TopUserByHighRating { get; set; }
         public List<TopUserMostPosts> TopUserByHighPost { get; set; }
         public int TotalReport { get; set; }
+        public int TotalBookmark { get; set; }
+        public List<ShowPostsHighRating> PostsWithHighRating { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace reciWebApp.DTOs.PostDTOs
         public List<ShowCategoryDTO> ListCategories { get; set; }
         public string UserName { get; set; }
         public int UsesId { get; set; }
-        public double AverageRating { get; set; }
+        public double? AverageRating { get; set; }
         public string UsesOfFood { get; set; }
         public List<ShowCollectionDTO>? ListCollections { get; set; }
     }
