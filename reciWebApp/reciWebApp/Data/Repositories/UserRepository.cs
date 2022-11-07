@@ -62,12 +62,12 @@ namespace reciWebApp.Data.Repositories
 
         public IQueryable<TopUserHighRating> GetTopUserHighRatings(int topNumber, IQueryable<UserInteract> userInteracts, IQueryable<Post> posts)
         {
-            var topRatings = userInteracts.GroupBy(x => x.PostsId, r => r.Rating)
-                                           .Select(x => new
-                                           {
-                                               PostId = x.Key,
-                                               AvgRating = x.Average()
-                                           });
+            var topRatings = userInteracts.Where(x => x.Rating != null).GroupBy(x => x.PostsId, r => r.Rating)
+                                                                       .Select(x => new
+                                                                       {
+                                                                           PostId = x.Key,
+                                                                           AvgRating = x.Average()
+                                                                       });
 
             var avgRatingOfPosts = topRatings.Join(posts,
                                                     topRating => topRating.PostId, post => post.Id,

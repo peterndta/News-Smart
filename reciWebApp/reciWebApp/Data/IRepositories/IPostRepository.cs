@@ -33,5 +33,6 @@ namespace reciWebApp.Data.IRepositories
         List<Post> SearchByName(List<Post> posts, string name);
         IQueryable<Post> GetAllActivePost();
         IQueryable<GetTopUserHaveMostPost> GetTopUserHaveMostPost(int topNumber);
+        IQueryable<ShowPostsHighRating> GetPostsHighRating(int topNumber, IQueryable<UserInteract> userInteracts);
     }
 }

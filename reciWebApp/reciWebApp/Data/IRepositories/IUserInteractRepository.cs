@@ -17,5 +17,6 @@ namespace reciWebApp.Data.IRepositories
         Task<List<UserInteract>> GetRatingAsync(int userId);
         Task<List<TopBookmarkDTO>> GetTopBookmarkAsync();
         IQueryable<UserInteract> GetAllUserInteracts();
+        Task<int> TotalBookmarkAsync();
     }
 }
