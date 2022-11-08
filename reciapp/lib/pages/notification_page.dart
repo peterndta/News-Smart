@@ -57,7 +57,6 @@ class _NotificationPageState extends State<NotificationPage> {
     );
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
-      print(responseJson);
       if (!mounted) return;
       setState(() {
         isLoading = false;
@@ -73,7 +72,6 @@ class _NotificationPageState extends State<NotificationPage> {
       });
       print('Sucessfully');
     } else {
-      print(json.decode(response.body));
       setState(() {
         hasMore = false;
       });
