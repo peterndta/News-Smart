@@ -71,8 +71,8 @@ class _HeadBarState extends State<HeadBar> {
         ),
         SizedBox(width: MediaQuery.of(context).size.width * 0.05),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 7),
-          width: MediaQuery.of(context).size.width * 0.1,
+          margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
+          // width: MediaQuery.of(context).size.width * 0.1,
           child: ClipOval(
               child: InkWell(
             onTap: () {

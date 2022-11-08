@@ -307,7 +307,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
-                            flex: 3,
+                            flex: 4,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -351,43 +351,37 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.015,
-                                ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.015),
                                 Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Method: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13),
-                                        ),
-                                        Text(
-                                          snapshot.data.method,
-                                          style: TextStyle(fontSize: 13),
-                                        ),
-                                      ],
+                                    Text(
+                                      'Method: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13),
                                     ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
+                                    Text(
+                                      snapshot.data.method,
+                                      style: TextStyle(fontSize: 13),
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Region: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13),
-                                        ),
-                                        Text(
-                                          snapshot.data.continents,
-                                          style: TextStyle(fontSize: 13),
-                                        ),
-                                      ],
-                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.015),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Region: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13),
+                                    ),
+                                    Text(
+                                      snapshot.data.continents,
+                                      style: TextStyle(fontSize: 13),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(

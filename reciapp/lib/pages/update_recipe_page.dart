@@ -741,7 +741,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 5),
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.55,
                     height: MediaQuery.of(context).size.height * 0.035,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24.0),
@@ -867,7 +867,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 5),
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.55,
                     height: MediaQuery.of(context).size.height * 0.035,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24.0),
@@ -988,7 +988,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 5),
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.48,
                     height: MediaQuery.of(context).size.height * 0.035,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24.0),
@@ -1003,7 +1003,7 @@ class _UpdateRecipePageState extends State<UpdateRecipePage> {
                           color: Colors.orange,
                           height: 1,
                         ),
-                        textAlign: TextAlign.start,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
