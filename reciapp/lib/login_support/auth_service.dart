@@ -54,7 +54,7 @@ class AuthService {
     await UserPreferences.setUserInfo(userString);
   }
 
-  signOut() {
+  Future signOut() async {
     logoutAuth();
     GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
