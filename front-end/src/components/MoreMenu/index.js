@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 
 import { Link as RouterLink } from 'react-router-dom'
 
-import { RemoveCircle, Visibility, MoreVert } from '@mui/icons-material'
+import { MoreVert, Visibility } from '@mui/icons-material'
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 
 const AdminStudentMoreMenu = ({ userId }) => {
@@ -38,7 +38,7 @@ const AdminStudentMoreMenu = ({ userId }) => {
                         primaryTypographyProps={{ variant: 'body2' }}
                     />
                 </MenuItem>
-
+                {/* 
                 <MenuItem sx={{ color: 'text.secondary' }}>
                     <ListItemIcon>
                         <RemoveCircle color="warning" />
@@ -47,7 +47,7 @@ const AdminStudentMoreMenu = ({ userId }) => {
                         primary="Ban Account"
                         primaryTypographyProps={{ variant: 'body2' }}
                     />
-                </MenuItem>
+                </MenuItem> */}
             </Menu>
         </>
     )
