@@ -170,7 +170,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                             // color: Colors.yellow,
                           ),
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.703,
+                            height: MediaQuery.of(context).size.height * 0.635,
                             padding: EdgeInsets.only(top: 5, left: 15),
                             alignment: Alignment.topLeft,
                             child: Column(
@@ -185,7 +185,7 @@ class _FilterRecipeResultState extends State<FilterRecipeResult> {
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.61,
+                                      MediaQuery.of(context).size.height * 0.55,
                                   child: FutureBuilder(
                                       future: fetchRegions(),
                                       builder: ((context, snapshot) {
