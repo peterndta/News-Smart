@@ -8,10 +8,10 @@ import AdminStudentMoreMenu from '../../../../components/MoreMenu'
 import {
     Paper,
     Table,
-    TableHead,
     TableBody,
     TableCell,
     TableContainer,
+    TableHead,
     TableRow,
 } from '@mui/material'
 
@@ -24,8 +24,8 @@ const columns = [
     { id: 'name', label: 'Name', minWidth: 60, align: 'left' },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left' },
     {
-        id: 'status',
-        label: 'Status',
+        id: 'role',
+        label: 'Role',
         minWidth: 100,
         align: 'left',
     },
@@ -143,17 +143,8 @@ export default function StickyHeadTable() {
                                                 <TableCell align="left">{row.name}</TableCell>
                                                 <TableCell align="left">{row.email}</TableCell>
                                                 <TableCell align="left">
-                                                    {' '}
-                                                    <Label
-                                                        variant="ghost"
-                                                        color={
-                                                            row.banTime !== null
-                                                                ? 'error'
-                                                                : 'success'
-                                                        }
-                                                    >
-                                                        {' '}
-                                                        {row.banTime !== null ? 'Ban' : 'Active'}
+                                                    <Label variant="ghost" color={'success'}>
+                                                        {row.role.toUpperCase()}
                                                     </Label>
                                                 </TableCell>
                                                 <TableCell align="right" style={{ width: '5%' }}>

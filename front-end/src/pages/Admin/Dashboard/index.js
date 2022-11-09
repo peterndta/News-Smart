@@ -23,7 +23,6 @@ const Dashboard = () => {
             .then((response) => {
                 const data = response.data.data
                 setStatis(data)
-                console.log(data)
                 setIsFirstRender(false)
             })
             .catch(() => {

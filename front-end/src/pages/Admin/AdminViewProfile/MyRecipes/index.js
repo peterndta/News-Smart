@@ -107,7 +107,7 @@ const MyRecipes = () => {
                         </Box>
                         <SearchBox />
                     </Box>
-                    {recipes.length ? (
+                    {recipes.list.length ? (
                         <React.Fragment>
                             <RecipeList posts={recipes.list} />
                             {recipes.pageCount !== 1 && <Paging size={recipes.pageCount} />}

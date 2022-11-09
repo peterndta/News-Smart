@@ -1,9 +1,12 @@
 import React from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 import { Box, Grid, Rating, Typography } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 
-const RecipeCompo = ({ name, description, averageRating, userName, imageUrl }) => {
+const RecipeCompo = ({ id, name, description, averageRating, userName, imageUrl }) => {
+    const history = useHistory()
     return (
         <Grid item md={12} mt={1}>
             <Box mx={10} pt={4} mt={2} sx={{ borderTop: `1px solid ${blueGrey[200]}` }}>
@@ -12,8 +15,9 @@ const RecipeCompo = ({ name, description, averageRating, userName, imageUrl }) =
                         component="img"
                         width={120}
                         height={120}
-                        sx={{ aspectRatio: '1 / 1' }}
+                        sx={{ aspectRatio: '1 / 1', cursor: 'pointer' }}
                         src={imageUrl}
+                        onClick={() => history.push(`/admin/posts-management/${id}`)}
                     />
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5, width: '1' }}>
                         <Box display="flex" alignItems="center" justifyContent="space-between">

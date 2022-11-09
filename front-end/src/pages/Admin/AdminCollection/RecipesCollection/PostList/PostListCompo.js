@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Link as RouterLink } from 'react-router-dom'
 
-import { Box, Grid, Link, Rating, Typography, Checkbox } from '@mui/material'
+import { Box, Checkbox, Grid, Rating, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
@@ -10,7 +10,7 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 const PostListCompo = ({
     name,
     description,
-    rating,
+    averageRating,
     imageUrl,
     id,
     selectHandler,
@@ -39,19 +39,13 @@ const PostListCompo = ({
                     </RouterLink>
                     <Box display="flex" flexDirection="column" sx={{ ml: 2.5 }} width="100%">
                         <Box display="flex" alignItems="center" justifyContent="space-between">
-                            <Link
-                                to={`/admin/posts-management/${id}`}
-                                underline="hover"
-                                variant="h5"
-                                fontWeight={700}
-                                sx={{ color: blueGrey[700] }}
-                            >
+                            <Typography variant="h5" fontWeight={700} sx={{ color: blueGrey[700] }}>
                                 {name}
-                            </Link>
+                            </Typography>
                         </Box>
                         <Rating
                             name="half-rating"
-                            value={rating}
+                            value={averageRating}
                             precision={0.5}
                             sx={{ mt: 1 }}
                             readOnly
