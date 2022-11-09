@@ -866,7 +866,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       child: Text(
                                         'By ',
                                         style: TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 12.0,
                                         ),
                                       ),
                                     ),
@@ -875,7 +875,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                         snapshot.data.userName,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
+                                          fontSize: 12.0,
                                         ),
                                       ),
                                     ),
