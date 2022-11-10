@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
@@ -105,7 +104,7 @@ class RecipeDetail extends StatelessWidget {
           SimpleStarRating(
             allowHalfRating: true,
             starCount: 5,
-            rating: start * 1.0,
+            rating: start == null ? 0.0 : (start * 1.0),
             size: 13,
             spacing: 10,
           ),

@@ -344,7 +344,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                       },
                                       allowHalfRating: true,
                                       starCount: 5,
-                                      rating: snapshot.data.averageRating * 1.0,
+                                      rating: snapshot.data.averageRating ==
+                                              null
+                                          ? 0.0
+                                          : (snapshot.data.averageRating * 1.0),
                                       size: 11,
                                       spacing: 10,
                                     ),

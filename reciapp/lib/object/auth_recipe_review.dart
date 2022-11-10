@@ -290,7 +290,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
           SimpleStarRating(
             allowHalfRating: true,
             starCount: 5,
-            rating: widget.start == null ? 0.0 : widget.start * 1.0,
+            rating: widget.start == null ? 0.0 : (widget.start * 1.0),
             size: 11,
             spacing: 10,
           ),
