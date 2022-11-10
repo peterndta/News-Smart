@@ -15,7 +15,7 @@ namespace reciWebApp.Data.Repositories
 
         public double? GetAverageRating(string postId)
         {
-            var userInteract = GetByCondition(x => x.PostsId.Equals(postId) && x.Rating != null);
+            var userInteract = GetByCondition(x => x.PostsId.Equals(postId) && x.Rating != 0);
             var avgRating = userInteract.GroupBy(x => x.PostsId, y => y.Rating)
                                         .Select(x => x.Average()).FirstOrDefault();
             if (avgRating != null)
