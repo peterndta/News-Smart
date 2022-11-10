@@ -272,7 +272,7 @@ const RecipeDetail = () => {
                                     </Typography>
                                 )}
                             </Box>
-                            {collections.length && (
+                            {collections.length > 0 && (
                                 <Box display="flex">
                                     <Typography
                                         variant="subtitle1"
@@ -357,13 +357,11 @@ const RecipeDetail = () => {
                                         >
                                             <ListItemButton
                                                 sx={{ height: 50 }}
-                                                disabled={
-                                                    recipe.rating !== null || isStar !== false
-                                                }
+                                                disabled={recipe.rating !== 0 || isStar !== false}
                                                 onClick={openCreateFeedbackHandler}
                                             >
                                                 <ListItemIcon>
-                                                    {recipe.rating === null && isStar === false ? (
+                                                    {recipe.rating === 0 && isStar === false ? (
                                                         <Star sx={{ color: blueGrey[800] }} />
                                                     ) : (
                                                         <Verified color="primary" />
