@@ -24,4 +24,4 @@ To install and run the application on your local machine, follow these steps:
 Contributions are welcome! Please refer to our [contributing guidelines](CONTRIBUTING.md) for more information.
 
 ## License
-This project is licensed under the [MIT license](LICENSE).
+This project is licensed under the [MIT license](LICENSE.md).
