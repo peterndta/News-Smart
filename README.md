@@ -3,7 +3,7 @@
 Welcome to our food recipe sharing application repository! Our application is designed to help users discover new recipes, share their own favorite recipes, and connect with other food enthusiasts. With our user-friendly interface and intuitive design, users can easily search for recipes, save their favorites, and upload their own recipes to share with the community.
 
 ## Technologies Used
-We have utilized the latest technologies to bring you the best possible user experience. Our front-end web application is built using ReactJS, providing a fast and responsive interface for users to browse recipes on desktop and laptop devices. We have also developed a mobile version of our application using Flutter, ensuring that users can access their favorite recipes on-the-go, anytime and anywhere. To power our application's robust backend, we have utilized .NET 5, a modern and efficient framework for building web applications.
+We have utilized the latest technologies to bring you the best possible user experience. Our front-end web application is built using ReactJS, providing a fast and responsive interface for users to browse recipes on desktop and laptop devices. We have also developed a mobile version of our application using Flutter, ensuring that users can access their favorite recipes on-the-go, anytime and anywhere. To power our application's robust backend, we have utilized .NET 6, a modern and efficient framework for building web applications.
 
 ## Features
 - Discover new recipes
